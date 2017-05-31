@@ -94,7 +94,7 @@ static uint16_t GUI_Notice_GetNoticeLines(char* szNoticeText, uint16_t uiNoticeL
 /** Return:			Remaining text height display.							**/
 /** Notice:			None.													**/
 /*****************************************************************************/
-uint16_t GUI_Notice_ShowNotice(char* szNoticeText, uint16_t uiTextOffset, NOTICE_ICON eIcon)
+uint16_t GUI_Notice_RefreshNotice(char* szNoticeText, uint16_t uiTextOffset, NOTICE_ICON eIcon)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/

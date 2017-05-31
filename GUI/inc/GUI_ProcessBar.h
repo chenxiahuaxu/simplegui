@@ -32,6 +32,6 @@ typedef struct
 }GUI_PROCBAR_STRUCT;
 
 
-void GUI_UpdateProcessBar(GUI_PROCBAR_STRUCT *pProcessBarData);
+void GUI_RefreshProcessBar(GUI_PROCBAR_STRUCT *pProcessBarData);
 
 #endif // __INCLUDE_GUI_PROCESSBAR_H__

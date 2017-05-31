@@ -1,3 +1,12 @@
+/*************************************************************************/
+/** Copyright.															**/
+/** FileName: GUI_Frame.c												**/
+/** Author: Polarix														**/
+/** Version: 1.0.0.0													**/
+/** Description: Draw frames on screen.									**/
+/** History:															**/
+/**	Polarix	2017/5/24	1.0.0.0		New create.							**/
+/*************************************************************************/
 #include "GUI_Frame.h"
 
 void GUI_Frame_DrawFullScreenFrame(GUI_BOX_FRAME_STRUCT* pstFrameStyleData)

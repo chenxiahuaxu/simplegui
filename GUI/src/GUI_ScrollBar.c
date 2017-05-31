@@ -35,7 +35,7 @@
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void GUI_ScrollBar_UpdateScrollBar(GUI_SCROLLBAR_STRUCT* pstScrollBar)
+void GUI_ScrollBar_RefreshScrollBar(GUI_SCROLLBAR_STRUCT* pstScrollBar)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/

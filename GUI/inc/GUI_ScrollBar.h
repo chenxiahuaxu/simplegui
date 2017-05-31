@@ -32,6 +32,6 @@ typedef struct
 //#define SCROLLBAR_BLOCK_SIZE				(3)
 //#define SCROLLBAR_BAR_WIDTH					(SCROLLBAR_BLOCK_SIZE+2)
 //-- Function declare													--
-void	GUI_ScrollBar_UpdateScrollBar(GUI_SCROLLBAR_STRUCT* pstScrollBar);
+void	GUI_ScrollBar_RefreshScrollBar(GUI_SCROLLBAR_STRUCT* pstScrollBar);
 
 #endif // __INCLUDE_GUI_SCROLLBAR_STRUCT__

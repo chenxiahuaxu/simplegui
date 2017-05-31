@@ -1,12 +1,11 @@
 /*************************************************************************/
 /** Copyright.															**/
 /** FileName: GUI_Font.c												**/
-/** Author: XuYulin														**/
+/** Author: Polarix														**/
 /** Version: 1.0.0.0													**/
-/** Description: XML operations.										**/
+/** Description: Draw text.												**/
 /** History:															**/
-/**	XuyYulin	2017/2/24	2.0.0.0		New create.						**/
-/** XuYulin 2017/2/24 1.0 build this moudle								**/
+/**	Polarix	2017/2/24	1.0.0.0		New create.							**/
 /*************************************************************************/
 
 //=======================================================================//

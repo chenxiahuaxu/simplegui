@@ -60,6 +60,7 @@
 			<Add directory="../../User/inc" />
 			<Add directory="../../GUI/inc" />
 			<Add directory="../../Library/inc" />
+			<Add directory="../../HMI/inc" />
 		</Compiler>
 		<ResourceCompiler>
 			<Add directory="$(#wx31)/include" />
@@ -119,6 +120,22 @@
 		<Unit filename="../../GUI/src/GUI_VariableBox.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="../../HMI/inc/HMI_Data.h" />
+		<Unit filename="../../HMI/inc/HMI_Demo_01.h" />
+		<Unit filename="../../HMI/inc/HMI_Demo_02.h" />
+		<Unit filename="../../HMI/inc/HMI_Process.h" />
+		<Unit filename="../../HMI/src/HMI_Data.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../HMI/src/HMI_Demo_01.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../HMI/src/HMI_Demo_02.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../HMI/src/HMI_Procecss.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="../../Resource/Resource.rc">
 			<Option compilerVar="WINDRES" />
 		</Unit>
@@ -126,6 +143,7 @@
 		<Unit filename="../../User/src/UserAction.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="HMI_Data.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

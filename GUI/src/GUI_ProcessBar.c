@@ -36,7 +36,7 @@
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void GUI_UpdateProcessBar(GUI_PROCBAR_STRUCT *pProcessBarData)
+void GUI_RefreshProcessBar(GUI_PROCBAR_STRUCT *pProcessBarData)
 {
 	uint8_t uiProcessBlockStartX, uiProcessBlockStartY;
 	uint8_t uiProcessBlockWidth, uiProcessBlockHeight;

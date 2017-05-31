@@ -156,9 +156,9 @@ void GUI_List_RefreshListItems(GUI_LIST_STRUCT* pstList)
 		{
 			// Clear list item display area.
 			GUI_Basic_DrawRectangle(LIST_ITEM_RECT_POSX, pstListControl->FirstVisibleItemPosY, LIST_ITEM_RECT_WIDTH, pstListControl->VisibleItemsAreaHeight, GUI_COLOR_BKGCLR, GUI_COLOR_BKGCLR);
-			// Update scroll bar
+			// Refresh scroll bar
 			pstSubElement->ScrollBar.Data.Index = pstListControl->PageStartIndex;
-			GUI_ScrollBar_UpdateScrollBar(&(pstSubElement->ScrollBar));
+			GUI_ScrollBar_RefreshScrollBar(&(pstSubElement->ScrollBar));
 			// Draw all visible items.
 			while((uiCurrentItemIndex < pstListControl->PageStartIndex+pstListControl->VisibleItemsNum) && (uiCurrentItemIndex < pstListData->Count))
 			{
