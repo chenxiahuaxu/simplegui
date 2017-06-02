@@ -121,16 +121,29 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../../HMI/inc/HMI_Data.h" />
-		<Unit filename="../../HMI/inc/HMI_Demo_01.h" />
-		<Unit filename="../../HMI/inc/HMI_Demo_02.h" />
+		<Unit filename="../../HMI/inc/HMI_Demo01_Text.h" />
+		<Unit filename="../../HMI/inc/HMI_Demo02_List.h" />
+		<Unit filename="../../HMI/inc/HMI_Demo03_Notice1.h" />
+		<Unit filename="../../HMI/inc/HMI_Demo03_Notice2.c">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="../../HMI/inc/HMI_Demo03_Notice2.h" />
 		<Unit filename="../../HMI/inc/HMI_Process.h" />
 		<Unit filename="../../HMI/src/HMI_Data.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="../../HMI/src/HMI_Demo_01.c">
+		<Unit filename="../../HMI/src/HMI_Demo01_Text.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="../../HMI/src/HMI_Demo_02.c">
+		<Unit filename="../../HMI/src/HMI_Demo02_List.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../HMI/src/HMI_Demo03_Notice1.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../HMI/src/HMI_Demo03_Notice2.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../../HMI/src/HMI_Procecss.c">

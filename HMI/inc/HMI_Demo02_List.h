@@ -1,5 +1,5 @@
-#ifndef __INCLUDE_HMI_DEMO_01_H__
-#define __INCLUDE_HMI_DEMO_01_H__
+#ifndef __INCLUDE_HMI_DEMO_02_LIST_H__
+#define __INCLUDE_HMI_DEMO_02_LIST_H__
 #include <stdint.h>
 #include <stddef.h>
 #include "HMI_Data.h"

@@ -24,7 +24,7 @@
 //=======================================================================//
 //= Static variable declaration.									    =//
 //=======================================================================//
-static char				g_TextBuffer[VARBOX_TEXT_BUFFER_SIZE] = {0x00};	//Used when convert a number to text.
+static char				arrTextBuffer[VARBOX_TEXT_BUFFER_SIZE] = {0x00};	//Used when convert a number to text.
 
 //=======================================================================//
 //= Static function declaration.									    =//
@@ -80,7 +80,7 @@ void GUI_IntegerVariableBox_Refresh(GUI_INT_VARBOX_STRUCT* pstValue, GUI_VARBOX_
 			pstValue->Value = pstValue->Min;
 		}
 		// Convert number to string
-		uiTextLength = GUI_Common_IntegerToString(pstValue->Value, g_TextBuffer, 10, -1, ' ');
+		uiTextLength = GUI_Common_IntegerToString(pstValue->Value, arrTextBuffer, 10, -1, ' ');
 		uiTextWidth = VARBOX_TEXT_WIDTH(uiTextLength);
 		stTextDisplayArea.PosX = pstValue->PosX+1;
 		stTextDisplayArea.PosY = pstValue->PosY+1;
@@ -104,7 +104,7 @@ void GUI_IntegerVariableBox_Refresh(GUI_INT_VARBOX_STRUCT* pstValue, GUI_VARBOX_
 			}
 		}
 		stTextDataArea.PosY = 0;
-		GUI_Text_DrawSingleLineText(g_TextBuffer, VARBOX_FONT_SIZE, &stTextDisplayArea, &stTextDataArea, eMode);
+		GUI_Text_DrawSingleLineText(arrTextBuffer, VARBOX_FONT_SIZE, &stTextDisplayArea, &stTextDataArea, eMode);
 	}
 }
 

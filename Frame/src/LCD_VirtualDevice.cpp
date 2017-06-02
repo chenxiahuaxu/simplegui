@@ -163,6 +163,8 @@ BEGIN_EVENT_TABLE(LCD_VirtualDevice,wxFrame)
     EVT_TOOL(wxID_TOOLBAR_COPY, LCD_VirtualDevice::wxEvent_OnToolCopy)
     EVT_TOOL(wxID_TOOLBAR_SCREENSHOTS_FOLDER, LCD_VirtualDevice::wxEvent_OnOpenScreenshotsFolder)
     EVT_TOOL(wxID_TOOLBAR_EXIT, LCD_VirtualDevice::wxEvent_OnExit)
+    EVT_TIMER(WXID_TIMER , LCD_VirtualDevice::wxEvent_OnTimerEvent)
+    EVT_TIMER(WXID_RTCTIMER , LCD_VirtualDevice::wxEvent_OnRTCUpdate)
 END_EVENT_TABLE()
 
 LCD_VirtualDevice::LCD_VirtualDevice(wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style) :
@@ -209,12 +211,26 @@ LCD_VirtualDevice::LCD_VirtualDevice(wxWindow* parent, wxWindowID id, const wxSt
         wxMkdir(SCREENSHOTS_FOLDER);
 	}
 	UpdateWindow(GetHandle());
+
+	// Register timer.
+	m_pclsTimer = new wxTimer(this, WXID_TIMER);
+	m_pclsRTCTimer = new wxTimer(this, WXID_RTCTIMER);
 }
 
 LCD_VirtualDevice::~LCD_VirtualDevice()
 {
 	delete m_CtrlStatusBar;
 	delete m_CtrlToolBar;
+	if(NULL != m_pclsTimer)
+	{
+		m_pclsTimer->Stop();
+		delete m_pclsTimer;
+	}
+	if(NULL != m_pclsRTCTimer)
+	{
+		m_pclsRTCTimer->Stop();
+		delete m_pclsRTCTimer;
+	}
 }
 
 void LCD_VirtualDevice::SetStatusText(const wxString& cString)
@@ -271,6 +287,10 @@ void LCD_VirtualDevice::OnUpdateUI(wxUpdateUIEvent& event)
 		bInitialized = true;
 		m_CtrlPaintPanel->Paint();
 		SetStatusText(_T("Initialzied."));
+
+		// Start timer
+		m_pclsTimer->Start(1);
+		m_pclsRTCTimer->Start(1000);
 	}
 }
 
@@ -282,4 +302,21 @@ void LCD_VirtualDevice::OnPaint(wxPaintEvent &event)
 void LCD_VirtualDevice::OpenScreenshotsFolder(void)
 {
     wxExecute(wxString::Format(_T("explorer %s\\%s"), wxGetCwd(), _T(SCREENSHOTS_FOLDER_T)));
+}
+
+void LCD_VirtualDevice::OnTimer(wxTimerEvent& event)
+{
+	VTIF_TimerEvent();
+	m_CtrlPaintPanel->PartialPaint();
+}
+void LCD_VirtualDevice::OnRTCUpdate(wxTimerEvent& event)
+{
+	wxDateTime clsTime = wxDateTime::Now();
+	VTIF_RTCUpdateEvent(	clsTime.GetYear(),
+							clsTime.GetMonth(),
+							clsTime.GetDay(),
+							clsTime.GetHour(),
+							clsTime.GetMinute(),
+							clsTime.GetSecond());
+	//m_CtrlPaintPanel->PartialPaint();
 }

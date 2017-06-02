@@ -1,6 +1,6 @@
 /*************************************************************************/
 /** Copyright.															**/
-/** FileName: HMI_Demo_02.c												**/
+/** FileName: HMI_Demo03_Notice1.c												**/
 /** Author: Polarix														**/
 /** Version: 1.0.0.0													**/
 /** Description: HMI demo for notice box interface.						**/
@@ -10,34 +10,38 @@
 //=======================================================================//
 //= Include files.													    =//
 //=======================================================================//
-#include "HMI_Demo_01.h"
-#include "GUI_Notice.h"
+#include "HMI_Demo03_Notice1.h"
+#include "HMI_Data.h"
 #include "HMI_Process.h"
+#include "GUI_Notice.h"
 #include <stdio.h>
 
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
-static int32_t							HMI_DemoNotice_Initialize(void);
-static int32_t							HMI_DemoNotice_PreProcess(void* pstParameters);
-static int32_t							HMI_DemoNotice_UpdateScreen(void* pstParameters);
-static int32_t							HMI_DemoNotice_UserActions(uint16_t uiOptions, uint16_t* puiActions);
-static int32_t							HMI_DemoNotice_PostProcess(int32_t iActionResult);
+static int32_t			HMI_DemoNotice_Initialize(void);
+static int32_t			HMI_DemoNotice_PreProcess(void* pstParameters);
+static int32_t			HMI_DemoNotice_UpdateScreen(uint32_t uiScreenID, void* pstParameters);
+static int32_t			HMI_DemoNotice_UserActions(uint16_t uiOptions, uint16_t* puiActions);
+static int32_t			HMI_DemoNotice_PostProcess(int32_t iActionResult);
 
 //=======================================================================//
 //= Static variable declaration.									    =//
 //=======================================================================//
-static char								szDemoNoticeText[64] = {0x00};
+static char				szRTCNoticeText[64] = {0x00};
 
 //=======================================================================//
 //= Global variable declaration.									    =//
 //=======================================================================//
-HMI_SCREEN								g_stHMI_DemoNotice = {	HMI_DemoNotice_Initialize,
-																HMI_DemoNotice_PreProcess,
-																HMI_DemoNotice_UserActions,
-                                                                HMI_DemoNotice_UpdateScreen,
-                                                                HMI_DemoNotice_PostProcess,
-															};
+HMI_SCREEN_ACTION		stHMI_DemoRTCNoticeActions =	{	HMI_DemoNotice_Initialize,
+															HMI_DemoNotice_PreProcess,
+															HMI_DemoNotice_UserActions,
+															HMI_DemoNotice_UpdateScreen,
+															HMI_DemoNotice_PostProcess,
+														};
+HMI_SCREEN				g_stHMI_DemoRTCNotice =			{	HMI_REFRESH_DATA_LABEL_ANY,
+															&stHMI_DemoRTCNoticeActions
+														};
 
 //=======================================================================//
 //= Function implementation.										    =//
@@ -50,35 +54,35 @@ int32_t HMI_DemoNotice_Initialize(void)
 
 int32_t HMI_DemoNotice_PreProcess(void* pstParameters)
 {
+	return 0;
+}
+
+int32_t HMI_DemoNotice_UpdateScreen(uint32_t uiScreenID, void* pstParameters)
+{
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	size_t						uiListIndex;
-
-	/*----------------------------------*/
-	/* Initialize						*/
-	/*----------------------------------*/
-	if(NULL == pstParameters)
-	{
-		uiListIndex = 0;
-	}
-	else
-	{
-		uiListIndex = *((uint32_t*)pstParameters);
-	}
+	int32_t						iProcessResult;
+	HMI_RTC_TIME*				pstRTCTime;
 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	sprintf(szDemoNoticeText, "选择了列表项目%u.", uiListIndex);
+	pstRTCTime = (HMI_RTC_TIME*)pstParameters;
+	if(NULL != pstRTCTime)
+	{
+        sprintf(szRTCNoticeText, "%04u-%02u-%02u\n%02u:%02u:%02u",
+				pstRTCTime->Year, pstRTCTime->Month+1, pstRTCTime->Day,
+				pstRTCTime->Hour, pstRTCTime->Minute, pstRTCTime->Second);
+		GUI_Notice_RefreshNotice(szRTCNoticeText, 0, GUI_ICON_INFORMATION);
+		iProcessResult = HMI_RESULT_NORMAL;
+	}
+	else
+	{
+		iProcessResult = HMI_RESULT_NOACTION;
+	}
 
-	return 0;
-}
-
-int32_t HMI_DemoNotice_UpdateScreen(void* pstParameters)
-{
-	GUI_Notice_RefreshNotice(szDemoNoticeText, 0, GUI_ICON_INFORMATION);
-	return 0;
+	return iProcessResult;
 }
 
 int32_t HMI_DemoNotice_UserActions(uint16_t uiOptions, uint16_t* puiActions)
@@ -96,13 +100,24 @@ int32_t HMI_DemoNotice_UserActions(uint16_t uiOptions, uint16_t* puiActions)
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	iProcessResult = HMI_RESULT_CANCEL;
+	if(KEY_VALUE_SPACE == *puiActions)
+	{
+		iProcessResult = HMI_RESULT_CANCEL;
+	}
+	else
+	{
+		iProcessResult = HMI_RESULT_NORMAL;
+	}
 	return iProcessResult;
 }
 
 int32_t HMI_DemoNotice_PostProcess(int32_t iActionResult)
 {
-	HMI_Action_FollowUp(0, NULL);
-	return 0;
+	if(HMI_RESULT_CANCEL == iActionResult)
+	{
+		HMI_Action_GoBack();
+	}
+
+	return HMI_RESULT_NORMAL;
 }
 

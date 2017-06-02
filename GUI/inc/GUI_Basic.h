@@ -1,5 +1,8 @@
 #ifndef __INCLUDE_GUI_BASIC__
 #define __INCLUDE_GUI_BASIC__
+//=======================================================================//
+//= Include files.													    =//
+//=======================================================================//
 #include <stddef.h>
 #include <stdint.h>
 #ifdef __SIMULATOR__
@@ -8,11 +11,9 @@
 // Insert screen driver head file here.
 #endif
 
-#define		BASIC_FONT_HEIGHT				(8)
-#define		BASIC_FONT_WIDTH				(6)
-#define		BASIC_FONT_CHAR_DATA_SIZE		(((BASIC_FONT_HEIGHT-1)/8)+1)*BASIC_FONT_WIDTH
-#define		BASIC_FONT_DATA					(BASIC_FONT_H8)
-
+//=======================================================================//
+//= Data type definition.											    =//
+//=======================================================================//
 typedef struct _st_rectangle_
 {
 	int16_t		PosX;
@@ -20,15 +21,6 @@ typedef struct _st_rectangle_
 	uint16_t	Width;
 	uint16_t	Height;
 }RECTANGLE;
-
-#define 	RECTANGLE_X_START(ST)			((ST).PosX)
-#define 	RECTANGLE_X_END(ST)				(((ST).PosX + (ST).Width - 1))
-#define 	RECTANGLE_Y_START(ST)			((ST).PosY)
-#define 	RECTANGLE_Y_END(ST)				(((ST).PosY + (ST).Height - 1))
-#define 	RECTANGLE_WIDTH(ST)				((ST).Width)
-#define 	RECTANGLE_HEIGHT(ST)			((ST).Height)
-#define 	RECTANGLE_VALID_WIDTH(ST)		((RECTANGLE_X_START(ST)>0)?RECTANGLE_WIDTH(ST):(RECTANGLE_WIDTH(ST)+RECTANGLE_X_START(ST)))
-#define		RECTANGLE_VALID_HEIGHT(ST)		((RECTANGLE_Y_START(ST)>0)?RECTANGLE_HEIGHT(ST):(RECTANGLE_HEIGHT(ST)+RECTANGLE_Y_START(ST)))
 
 typedef enum
 {
@@ -43,11 +35,34 @@ typedef enum
 	GUI_DRAW_REVERSE = 1,
 }DRAW_MODE;
 
-#define GET_BIT(PAGE, Bit)		((((PAGE) & (0x01 << (Bit)))>0)?1:0)
+//=======================================================================//
+//= User Macro definition.											    =//
+//=======================================================================//
+#define		BASIC_FONT_HEIGHT				(8)
+#define		BASIC_FONT_WIDTH				(6)
+#define		BASIC_FONT_CHAR_DATA_SIZE		(((BASIC_FONT_HEIGHT-1)/8)+1)*BASIC_FONT_WIDTH
+#define		BASIC_FONT_DATA					(BASIC_FONT_H8)
 
+#define 	RECTANGLE_X_START(ST)			((ST).PosX)
+#define 	RECTANGLE_X_END(ST)				(((ST).PosX + (ST).Width - 1))
+#define 	RECTANGLE_Y_START(ST)			((ST).PosY)
+#define 	RECTANGLE_Y_END(ST)				(((ST).PosY + (ST).Height - 1))
+#define 	RECTANGLE_WIDTH(ST)				((ST).Width)
+#define 	RECTANGLE_HEIGHT(ST)			((ST).Height)
+#define 	RECTANGLE_VALID_WIDTH(ST)		((RECTANGLE_X_START(ST)>0)?RECTANGLE_WIDTH(ST):(RECTANGLE_WIDTH(ST)+RECTANGLE_X_START(ST)))
+#define		RECTANGLE_VALID_HEIGHT(ST)		((RECTANGLE_Y_START(ST)>0)?RECTANGLE_HEIGHT(ST):(RECTANGLE_HEIGHT(ST)+RECTANGLE_Y_START(ST)))
+
+#define		GET_BIT(PAGE, Bit)		((((PAGE) & (0x01 << (Bit)))>0)?1:0)
+
+//=======================================================================//
+//= Public variable declaration.									    =//
+//=======================================================================//
 extern const uint8_t	BASIC_FONT_H8[];
 extern const uint8_t	BASIC_FONT_H6[];
 
+//=======================================================================//
+//= Public function declaration.									    =//
+//=======================================================================//
 void					GUI_ClearScreen(void);
 void					GUI_Basic_DrawPoint(uint8_t uiPosX, uint8_t uiPosY, GUI_COLOR eColor);
 void					GUI_Basic_DrawLine(uint16_t uiStartX, uint16_t uiStartY, uint16_t uiEndX, uint16_t uiEndY, GUI_COLOR eColor);

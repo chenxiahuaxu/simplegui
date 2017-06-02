@@ -36,6 +36,9 @@
 #define wxID_STATUSBAR					3000
 #define wxID_PANEL						4000
 
+#define WXID_TIMER					9001
+#define WXID_RTCTIMER					9002
+
 #define DC_PREPARE(DC)					{DC.SetBrush(m_CBrush); DC.SetPen(m_CPen);}
 #define DC_RELEASE(DC)					{DC.SetBrush(wxNullBrush); DC.SetPen(wxNullPen);}
 #if LCD_PIXSIZE > 1
@@ -104,6 +107,8 @@ class LCD_VirtualDevice : public wxFrame
 		void				wxEvent_OnOpenScreenshotsFolder(wxCommandEvent &event){OpenScreenshotsFolder();}
 		void				wxEvent_OnAbout(wxCommandEvent &event)		{;}
 		void				wxEvent_OnExit(wxCommandEvent &event)		{Destroy();}
+		void				wxEvent_OnTimerEvent(wxTimerEvent& event)	{OnTimer(event);}
+		void				wxEvent_OnRTCUpdate(wxTimerEvent& event)	{OnRTCUpdate(event);}
 	protected:
 		// Controlers
 		wxStatusBar*		m_CtrlStatusBar;
@@ -114,6 +119,8 @@ class LCD_VirtualDevice : public wxFrame
 		wxToolBarToolBase*	m_CtrlToolButton_About;
 		wxToolBarToolBase*	m_CtrlToolButton_Exit;
 		LCD_DisplayPanel*	m_CtrlPaintPanel;
+		wxTimer*			m_pclsTimer;
+		wxTimer*			m_pclsRTCTimer;
 
 		virtual void		OnUpdateUI(wxUpdateUIEvent& event);
 		virtual void		OnClose(wxCloseEvent& event)				{Destroy();}
@@ -122,6 +129,9 @@ class LCD_VirtualDevice : public wxFrame
 		virtual void		Screenshots(void);
 		virtual void		Copy(void);
 		virtual void		OpenScreenshotsFolder(void);
+		virtual void		OnTimer(wxTimerEvent& event);
+		virtual void		OnRTCUpdate(wxTimerEvent& event);
+
 	public:
 
 							LCD_VirtualDevice(	wxWindow* parent,

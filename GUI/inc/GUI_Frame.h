@@ -1,11 +1,16 @@
 #ifndef __INCLUDE_GUI_FRAME_H__
 #define __INCLUDE_GUI_FRAME_H__
-
+//=======================================================================//
+//= Include files.													    =//
+//=======================================================================//
 #include "LCD_VirtualDeviceParameter.h"
 #include "GUI_Common.h"
 #include "GUI_Basic.h"
 #include "GUI_Text.h"
 
+//=======================================================================//
+//= Data type definition.											    =//
+//=======================================================================//
 typedef struct
 {
 	uint16_t					EdgeLayers;

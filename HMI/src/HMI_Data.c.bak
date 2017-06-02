@@ -12,44 +12,21 @@
 //= Include files.													    =//
 //=======================================================================//
 #include "HMI_Data.h"
-#include "HMI_Demo01_Text.h"
-#include "HMI_Demo02_List.h"
-#include "HMI_Demo03_Notice1.h"
-#include "HMI_Demo03_Notice2.h"
-
-
-//=======================================================================//
-//= User Macro definition.											    =//
-//=======================================================================//
-#define		HMI_PRESSED_KEY_MAX								(2)
-
-//=======================================================================//
-//= Data type definition.											    =//
-//=======================================================================//
-typedef struct
-{
-	uint16_t		Options;
-	uint16_t		Keys[HMI_PRESSED_KEY_MAX];
-}HMI_USER_KEY_ACTION;
+#include "HMI_Demo_01.h"
+#include "HMI_Demo_02.h"
 
 //=======================================================================//
 //= Static variable declaration.									    =//
 //=======================================================================//
-// Record count of screen.
 static size_t						uiScreenCount;
-// Record the index of the currently active screen.
 static size_t						uiCurrentScreenIndex;
-// Record the history of the screen follow-up.
 static size_t						uiScreenFollowUpHistory[HMI_GOBACK_HISTORY_SIZE_MAX];
-static size_t						uiScreenFollowUpHistoryCount;
+static size_t						uiScreenFollowUpHistoryIndex;
 
 static HMI_SCREEN*					pstarrScreenDataArray[] = {
 												// Add HMI data here.
-												&g_stHMI_DemoText,
 												&g_stHMI_DemoList,
-												&g_stHMI_DemoRTCNotice,
-												&g_stHMI_DemoTextNotice
-
+												&g_stHMI_DemoNotice
 												};
 
 //=======================================================================//
@@ -85,16 +62,15 @@ void HMI_ScreenData_Initialize(void)
 	{
 		if(NULL != pstarrScreenDataArray[uiScreenIndex])
 		{
-			pstarrScreenDataArray[uiScreenIndex]->ScreenID = uiScreenIndex;
-            if(NULL != pstarrScreenDataArray[uiScreenIndex]->Actions->Initialize)
+            if(NULL != pstarrScreenDataArray[uiScreenIndex]->Initialize)
 			{
 				// Run initialize process if existed.
-				pstarrScreenDataArray[uiScreenIndex]->Actions->Initialize();
+				pstarrScreenDataArray[uiScreenIndex]->Initialize();
 			}
 		}
 	}
 
-	uiScreenFollowUpHistoryCount = 0;
+	uiScreenFollowUpHistoryIndex = 0;
 }
 
 /*****************************************************************************/
@@ -155,10 +131,10 @@ bool HMI_ScreenData_AddToHistory(size_t uiScreenIndex)
 {
 	bool			bProcessResult;
 
-	if(uiScreenFollowUpHistoryCount < HMI_GOBACK_HISTORY_SIZE_MAX)
+	if(uiScreenFollowUpHistoryIndex < HMI_GOBACK_HISTORY_SIZE_MAX)
 	{
-		uiScreenFollowUpHistory[uiScreenFollowUpHistoryCount] = uiScreenIndex;
-		uiScreenFollowUpHistoryCount++;
+		uiScreenFollowUpHistory[uiScreenFollowUpHistoryIndex] = uiScreenIndex;
+		uiScreenFollowUpHistoryIndex++;
 		bProcessResult = true;
 	}
 	else
@@ -170,7 +146,7 @@ bool HMI_ScreenData_AddToHistory(size_t uiScreenIndex)
 }
 
 /*****************************************************************************/
-/** Function Name:	HMI_ScreenData_GetFromHistory.							**/
+/** Function Name:	HMI_ScreenData_AddToHistory.							**/
 /** Purpose:		Get current screen data structure pointer which in		**/
 /**					active.													**/
 /** Resources:		Static global screen data pointer.						**/
@@ -178,23 +154,19 @@ bool HMI_ScreenData_AddToHistory(size_t uiScreenIndex)
 /** Return:			Current in active screen data structure pointer.		**/
 /** Notice:			None.													**/
 /*****************************************************************************/
-size_t HMI_ScreenData_GetLastHistory(void)
+size_t HMI_ScreenData_GetFromHistory(void)
 {
 	size_t				uiScreenID;
-	if(uiScreenFollowUpHistoryCount > 0)
+	if(uiScreenFollowUpHistoryIndex > 0)
 	{
-		uiScreenFollowUpHistoryCount--;
-		uiScreenID = uiScreenFollowUpHistory[uiScreenFollowUpHistoryCount];
+		uiScreenFollowUpHistoryIndex--;
+		uiScreenID = uiScreenFollowUpHistory[uiScreenFollowUpHistoryIndex];
 	}
 	else
 	{
-		uiScreenID = HMI_SCREEN_START;
+		uiScreenID = 0;
 	}
 	return uiScreenID;
 }
 
-void HMI_ScreenData_Memcpy(void* pDest, const void* pSrc, size_t uiSize)
-{
-	memcpy(pDest, pSrc, uiSize);
-}
 

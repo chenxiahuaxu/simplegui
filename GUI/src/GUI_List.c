@@ -25,7 +25,7 @@
 #include <string.h>
 
 //=======================================================================//
-//= Static variable declaration.									    =//
+//= User Macro definition.											    =//
 //=======================================================================//
 #define						LIST_FONT_SIZE						(GUI_FONT_SIZE_H12)
 #define						LIST_EDGE_MULTIPLE					(1)

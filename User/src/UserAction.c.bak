@@ -15,8 +15,6 @@
 #include "UserAction.h"
 #include "LCD_OperationIF.h"
 
-
-#include "HMI_Data.h"
 #include "HMI_Process.h"
 
 //=======================================================================//
@@ -72,21 +70,3 @@ void USR_ACT_OnKeyPress(bool bShift, bool bCtrl, bool bAlt, uint16_t uiKeyCode)
 	HMI_Action_UserActions(uiOptionKeyFlags, &uiKeyCode);
 }
 
-void USR_ACT_OnTimerEventProcess(void)
-{
-	HMI_Action_RefreshScreen(0, NULL);
-}
-
-void USR_ACT_OnRTCUpdateEventProcess(uint16_t uiYear, uint16_t uiMonth, uint16_t uiDay, uint16_t uiHour, uint16_t uiMinute, uint16_t uiSecond)
-{
-	HMI_RTC_TIME		stRTCTime;
-
-	stRTCTime.Year = uiYear;
-	stRTCTime.Month = uiMonth;
-	stRTCTime.Day = uiDay;
-	stRTCTime.Hour = uiHour;
-	stRTCTime.Minute = uiMinute;
-	stRTCTime.Second = uiSecond;
-
-	HMI_Action_RefreshScreen(2, &stRTCTime);
-}

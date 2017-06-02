@@ -27,11 +27,11 @@
 
 uint8_t						auiFontDataBuffer[FONT_DATA_BUFFER_SIZE] = {0x00};
 const GUI_FONT_SIZE_STRUCT	g_stFontSize[GUI_FONT_SIZE_MAX] = {	{6, 4, 6},
-														{8, 6, 8},
-														{12, 6, 12},
-														{16, 8, 16},
-														{24, 12, 24},
-														{32, 16, 32}};
+																{8, 6, 8},
+																{12, 6, 12},
+																{16, 8, 16},
+																{24, 12, 24},
+																{32, 16, 32}};
 
 //=======================================================================//
 //= Static function declaration.									    =//

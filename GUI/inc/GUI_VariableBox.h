@@ -1,21 +1,16 @@
 #ifndef __INCLUDE_GUI_VARIABLEBOX_H__
 #define __INCLUDE_GUI_VARIABLEBOX_H__
-
+//=======================================================================//
+//= Include files.													    =//
+//=======================================================================//
 #include <stddef.h>
 #include <stdint.h>
 #include "GUI_Basic.h"
 #include "GUI_Text.h"
 
-#define VARBOX_FONT_SIZE				(GUI_FONT_SIZE_H12)
-#define VARBOX_WIDTH(L)					(L*(g_stFontSize[VARBOX_FONT_SIZE].Width)-4)
-#define VARBOX_HEIGHT					(g_stFontSize[VARBOX_FONT_SIZE].Height+2)
-#define VARBOX_TEXT_AREA_WIDTH(W)		((W>2)?(W-2):0)
-#define VARBOX_TEXT_AREA_HEIGHT			(g_stFontSize[VARBOX_FONT_SIZE].Height)
-
-#define VARBOX_TEXT_LENGTH_MAX			(32)
-#define VARBOX_TEXT_BUFFER_SIZE			(VARBOX_TEXT_LENGTH_MAX+1)
-#define VARBOX_TEXT_WIDTH(L)			(L*(g_stFontSize[VARBOX_FONT_SIZE].Width))
-
+//=======================================================================//
+//= Data type definition.											    =//
+//=======================================================================//
 typedef struct
 {
 	uint16_t	PosX;
@@ -59,6 +54,19 @@ typedef enum
     GUI_TXT_VARBOX_OPT_NEXT = 1,
 }GUI_TXT_VARBOX_OPT;
 
+//=======================================================================//
+//= User Macro definition.											    =//
+//=======================================================================//
+#define VARBOX_FONT_SIZE				(GUI_FONT_SIZE_H12)
+#define VARBOX_WIDTH(L)					(L*(g_stFontSize[VARBOX_FONT_SIZE].Width)-4)
+#define VARBOX_HEIGHT					(g_stFontSize[VARBOX_FONT_SIZE].Height+2)
+#define VARBOX_TEXT_AREA_WIDTH(W)		((W>2)?(W-2):0)
+#define VARBOX_TEXT_AREA_HEIGHT			(g_stFontSize[VARBOX_FONT_SIZE].Height)
+
+#define VARBOX_TEXT_LENGTH_MAX			(32)
+#define VARBOX_TEXT_BUFFER_SIZE			(VARBOX_TEXT_LENGTH_MAX+1)
+#define VARBOX_TEXT_WIDTH(L)			(L*(g_stFontSize[VARBOX_FONT_SIZE].Width))
+
 #define GUI_TEXT_ASCII					(GUI_TEXT_NUMBER|GUI_TEXT_ALPHA|GUI_TEXT_PUNCTUATION)
 
 #define GUI_TEXT_ISDIGIT(C)				((C>='0' && C<='9')?true:false)
@@ -67,6 +75,9 @@ typedef enum
 #define GUI_TEXT_ISALPHA(C)				(GUI_TEXT_ISUPPER(C) || GUI_TEXT_ISLOWER(C))
 #define GUI_TEXT_ISASCII(C)				((C>=0x20 && C<=0x7E)?true:false)
 
+//=======================================================================//
+//= Public function declaration.									    =//
+//=======================================================================//
 size_t			GUI_GetNumberTextWidth(int32_t iValue);
 void			GUI_IntegerVariableBox_Refresh(GUI_INT_VARBOX_STRUCT* pstValue, GUI_VARBOX_ALIG eAlignment, DRAW_MODE eMode);
 void			GUI_TextVariableBox_Refresh(GUI_TXT_VARBOX_STRUCT* pstTextValue, DRAW_MODE eMode);

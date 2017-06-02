@@ -1,11 +1,16 @@
 #ifndef __INCLUDE_GUI_LIST_H__
 #define __INCLUDE_GUI_LIST_H__
+//=======================================================================//
+//= Include files.													    =//
+//=======================================================================//
 #include "GUI_Basic.h"
 #include "GUI_Text.h"
 #include "GUI_ScrollBar.h"
 #include "LCD_VirtualDeviceParameter.h"
 
-
+//=======================================================================//
+//= Data type definition.											    =//
+//=======================================================================//
 typedef enum
 {
 	LIST_ITEM_NORMAL		= 0,
@@ -66,7 +71,9 @@ typedef struct
 	GUI_LIST_SUBELEMENT			SubElement;
 }GUI_LIST_STRUCT;
 
-
+//=======================================================================//
+//= Public function declaration.									    =//
+//=======================================================================//
 void		GUI_List_InitializeListData(GUI_LIST_STRUCT* pstList);
 void		GUI_List_RefreshList(GUI_LIST_STRUCT* pstList);
 void		GUI_List_SelectUpItem(GUI_LIST_STRUCT* pstList);

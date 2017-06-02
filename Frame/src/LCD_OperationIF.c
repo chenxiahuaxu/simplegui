@@ -36,6 +36,16 @@ void VTIF_KeyBoardEvent(bool bShift, bool bCtrl, bool bAlt, uint16_t uiKeyCode)
 	USR_ACT_OnKeyPress(bShift, bCtrl, bAlt, uiKeyCode);
 }
 
+void VTIF_TimerEvent(void)
+{
+	USR_ACT_OnTimerEventProcess();
+}
+
+void VTIF_RTCUpdateEvent(uint16_t uiYear, uint16_t uiMonth, uint16_t uiDay, uint16_t uiHour, uint16_t uiMinute, uint16_t uiSecond)
+{
+	USR_ACT_OnRTCUpdateEventProcess(uiYear, uiMonth, uiDay, uiHour, uiMinute, uiSecond);
+}
+
 void VTIF_LCDInitializeDisplay(void)
 {
 	USR_ACT_OnInitialize();
@@ -69,11 +79,11 @@ void VTIF_UpdateChangedArea(uint16_t uiPosX, uint16_t uiPosY)
 {
     if(false == g_LCDPixArray.InUpdating)
 	{
-		g_LCDPixArray.InUpdating = true;
 		g_LCDPixArray.ChangedArea.StartPosX = uiPosX;
 		g_LCDPixArray.ChangedArea.EndPosX = uiPosX;
 		g_LCDPixArray.ChangedArea.StartPosY = uiPosY;
 		g_LCDPixArray.ChangedArea.EndPosY = uiPosY;
+		g_LCDPixArray.InUpdating = true;
 	}
 	else
 	{
