@@ -34,6 +34,20 @@
 #define		KEY_OPTION_ALT									(0x0002)
 #define		KEY_OPTION_SHIFT								(0x0004)
 
+#define		KEY_PRESS_EVENT_VALUE_MAX						(4)
+
+//=======================================================================//
+//= Data type definition.											    =//
+//=======================================================================//
+typedef struct
+{
+	uint16_t		Options;
+	uint16_t		KeyValue[KEY_PRESS_EVENT_VALUE_MAX];
+}USER_ACT_KEYPRESS;
+
+//=======================================================================//
+//= Public function declaration.									    =//
+//=======================================================================//
 void USR_ACT_OnInitialize(void);
 void USR_ACT_OnKeyPress(bool bShift, bool bCtrl, bool bAlt, uint16_t uiKeyCode);
 void USR_ACT_OnTimerEventProcess(void);

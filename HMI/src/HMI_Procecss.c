@@ -15,6 +15,11 @@
 #include "HMI_Data.h"
 
 //=======================================================================//
+//= Static variable declaration.									    =//
+//=======================================================================//
+static bool							bInProcess;
+
+//=======================================================================//
 //= Function implementation.										    =//
 //=======================================================================//
 /*****************************************************************************/
@@ -44,52 +49,70 @@ void HMI_Action_Initialize(void)
 	/*----------------------------------*/
 	// Add initialize process for the first screen here.
 	pstCurrentScreen->Actions->PreProcess(NULL);
-	pstCurrentScreen->Actions->RefreshScreen(HMI_SCREEN_START, NULL);
+	pstCurrentScreen->Actions->InternalEventProcess(HMI_SCREEN_START, NULL);
+	bInProcess = false;
 }
 
 /*****************************************************************************/
-/** Function Name:	HMI_Action_UserActions									**/
+/** Function Name:	HMI_Action_OnUserEvent									**/
 /** Purpose:		User action process interface.							**/
 /** Resources:		Screen data structure and action process function.		**/
 /** Params:																	**/
-/**	@uiOptions:			User option value, usually the control key code of	**/
-/**						Flags.												**/
-/**	@uiActions:			User action value, usually the common key code or 	**/
+/** @uiScreenID:		Matched screen ID.									**/
+/**	@pstData:			User action data pointer.							**/
 /**						key code array.										**/
 /** Return:			Process result.											**/
 /** Notice:			None.													**/
 /*****************************************************************************/
-int32_t HMI_Action_UserActions(uint16_t uiOptions, uint16_t* uiActions)
+int32_t HMI_Action_OnExternalEvent(uint32_t uiScreenID, void* pstData)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
 	int32_t						iProcessResult;
 	HMI_SCREEN*					pstCurrentScreen;
+	USER_ACT_KEYPRESS*			pstUserEvent;
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	iProcessResult				= HMI_RESULT_NORMAL;
+	iProcessResult =			HMI_RESULT_NORMAL;
 	// Get the active screen.
-	pstCurrentScreen			= HMI_ScreenData_GetCurrentScreen();
+	pstCurrentScreen =			HMI_ScreenData_GetCurrentScreen();
+	pstUserEvent =				pstData;
 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if(NULL != pstCurrentScreen)
+	if(true == bInProcess)
 	{
-		if(NULL != pstCurrentScreen->Actions->UserActionCallBack)
-		{
-			// Call the user action process function.
-			iProcessResult = pstCurrentScreen->Actions->UserActionCallBack(uiOptions, uiActions);
-			// Call the post-process function when existed.
-			iProcessResult = pstCurrentScreen->Actions->PostProcess(iProcessResult);
-		}
+		// GUI screen is in process, ignore user action.
+		iProcessResult =HMI_RESULT_INPROCESS;
+	}
+	else if(NULL == pstCurrentScreen)
+	{
+		// Screen data is invalid.
+		iProcessResult = HMI_RESULT_INVALID_DATA;
 	}
 	else
 	{
-		iProcessResult = HMI_RESULT_INVALID_DATA;
+		bInProcess = true;
+		// Call user action callback function if existed.
+		if(NULL != pstCurrentScreen->Actions->ExternalEventProcess)
+		{
+			iProcessResult = pstCurrentScreen->Actions->ExternalEventProcess(HMI_SCREEN_ID_ANY, pstUserEvent);
+		}
+		// Call post process function if existed.
+		if(NULL != pstCurrentScreen->Actions->PostProcess)
+		{
+			iProcessResult = pstCurrentScreen->Actions->PostProcess(iProcessResult);
+		}
+		else
+		{
+			// Post process is must be existed.
+			iProcessResult = HMI_RESULT_INVALID_DATA;
+		}
+		bInProcess = false;
 	}
 	return iProcessResult;
 }
@@ -106,48 +129,67 @@ int32_t HMI_Action_UserActions(uint16_t uiOptions, uint16_t* uiActions)
 /**					is actived.												**/
 /**					Screen will only refresh when pstPreProcessData is NULL	**/
 /*****************************************************************************/
-int32_t HMI_Action_RefreshScreen(uint32_t uiScreenID, void* pstData)
+int32_t HMI_Action_OnInternalEvent(uint32_t uiScreenID, void* pstData)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
 	int32_t						iProcessResult;
 	HMI_SCREEN*					pstCurrentScreen;
+	USER_ACT_KEYPRESS*			pstUserEvent;
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	iProcessResult				= HMI_RESULT_NORMAL;
-	pstCurrentScreen			= HMI_ScreenData_GetCurrentScreen();
+	iProcessResult =			HMI_RESULT_NORMAL;
+	pstCurrentScreen =			HMI_ScreenData_GetCurrentScreen();
+	pstUserEvent =				pstData;
 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if(NULL != pstCurrentScreen)
+	if(true == bInProcess)
 	{
-		if((uiScreenID == pstCurrentScreen->ScreenID) && (NULL != pstCurrentScreen->Actions->RefreshScreen))
-		{
-			iProcessResult = pstCurrentScreen->Actions->RefreshScreen(uiScreenID, pstData);
-		}
+		// GUI screen is in process, ignore user action.
+		iProcessResult =HMI_RESULT_INPROCESS;
+	}
+	else if(NULL == pstCurrentScreen)
+	{
+		// Screen data is invalid.
+		iProcessResult = HMI_RESULT_INVALID_DATA;
 	}
 	else
 	{
-		iProcessResult = HMI_RESULT_INVALID_DATA;
+		if((uiScreenID == pstCurrentScreen->ScreenID) && (NULL != pstCurrentScreen->Actions->InternalEventProcess))
+		{
+			iProcessResult = pstCurrentScreen->Actions->InternalEventProcess(uiScreenID, pstUserEvent);
+		}
+		// Call post process function if existed.
+		if(NULL != pstCurrentScreen->Actions->PostProcess)
+		{
+			iProcessResult = pstCurrentScreen->Actions->PostProcess(iProcessResult);
+		}
+		else
+		{
+			// Post process is must be existed.
+			iProcessResult = HMI_RESULT_INVALID_DATA;
+		}
 	}
 
     return iProcessResult;
 }
 
 /*****************************************************************************/
-/** Function Name:	HMI_Action_GotoScreen									**/
+/** Function Name:	HMI_Action_Goto											**/
 /** Purpose:		Turn to a screen with screen index.						**/
 /** Resources:		Screen data structure and action process function.		**/
 /** Params:																	**/
-/**	@pstPreProcessData:	Update screen data.									**/
+/**	@uiDestScreenID:	Screen ID witch will be going to.					**/
+/**	@pstPreProcessData:	New screen initialize data.							**/
 /** Return:			None.													**/
 /** Notice:			Screen will only refresh when pstPreProcessData is NULL	**/
 /*****************************************************************************/
-void HMI_Action_GotoScreen(uint32_t uiCurrentScreenID, uint32_t uiDestScreenID, void* pstPreProcessData)
+void HMI_Action_Goto(uint32_t uiDestScreenID, void* pstPreProcessData)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -157,12 +199,12 @@ void HMI_Action_GotoScreen(uint32_t uiCurrentScreenID, uint32_t uiDestScreenID, 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	HMI_ScreenData_SetCurrentScreen(uiDestScreenID);
-	pstScreen = HMI_ScreenData_GetCurrentScreen();
-
-	if(NULL != pstScreen)
+	// Add current screen ID to history stack.
+	if(true == HMI_ScreenData_PushHistory())
 	{
-		HMI_ScreenData_AddToHistory(uiCurrentScreenID);
+		// Set destination screen.
+		HMI_ScreenData_SetCurrentScreen(uiDestScreenID);
+		pstScreen = HMI_ScreenData_GetCurrentScreen();
 		if(NULL != pstScreen->Actions->Initialize)
 		{
 			pstScreen->Actions->Initialize();
@@ -171,7 +213,11 @@ void HMI_Action_GotoScreen(uint32_t uiCurrentScreenID, uint32_t uiDestScreenID, 
 		{
 			pstScreen->Actions->PreProcess(pstPreProcessData);
 		}
-		pstScreen->Actions->RefreshScreen(uiDestScreenID, pstPreProcessData);
+		pstScreen->Actions->InternalEventProcess(uiDestScreenID, pstPreProcessData);
+	}
+	else
+	{
+        // Stack is full, push history failed.
 	}
 }
 
@@ -195,7 +241,7 @@ void HMI_Action_GoBack(void)
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	uiLastScreenID =		HMI_ScreenData_GetLastHistory();
+	uiLastScreenID =		HMI_ScreenData_PopHistory();
 
 	/*----------------------------------*/
 	/* Process							*/
@@ -205,6 +251,6 @@ void HMI_Action_GoBack(void)
 
 	if(NULL != pstScreen)
 	{
-		pstScreen->Actions->RefreshScreen(uiLastScreenID, NULL);
+		pstScreen->Actions->InternalEventProcess(uiLastScreenID, NULL);
 	}
 }

@@ -42,6 +42,9 @@
 /*************************************************************************/
 void USR_ACT_OnInitialize(void)
 {
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
 	HMI_Action_Initialize();
 }
 
@@ -56,7 +59,16 @@ void USR_ACT_OnInitialize(void)
 /*************************************************************************/
 void USR_ACT_OnKeyPress(bool bShift, bool bCtrl, bool bAlt, uint16_t uiKeyCode)
 {
-	uint16_t		uiOptionKeyFlags = KEY_OPTION_NONE;
+	/*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+	uint16_t				uiOptionKeyFlags;
+	USER_ACT_KEYPRESS		stUserKeyEvent;
+
+	/*----------------------------------*/
+	/* Initialize						*/
+	/*----------------------------------*/
+	uiOptionKeyFlags = KEY_OPTION_NONE;
 	if(true == bShift)
 	{
 		uiOptionKeyFlags |= KEY_OPTION_SHIFT;
@@ -69,18 +81,55 @@ void USR_ACT_OnKeyPress(bool bShift, bool bCtrl, bool bAlt, uint16_t uiKeyCode)
 	{
 		uiOptionKeyFlags |= KEY_OPTION_ALT;
 	}
-	HMI_Action_UserActions(uiOptionKeyFlags, &uiKeyCode);
+	stUserKeyEvent.Options = uiOptionKeyFlags;
+	stUserKeyEvent.KeyValue[0] = uiKeyCode;
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	HMI_Action_OnExternalEvent(HMI_SCREEN_ID_ANY, &stUserKeyEvent);
 }
 
+/*************************************************************************/
+/** Function Name:	USR_ACT_OnTimerEventProcess							**/
+/** Purpose:		Timer event process.								**/
+/** Resources:		None.												**/
+/** Params:			None.												**/
+/** Return:			None.												**/
+/** Notice:			None.												**/
+/*************************************************************************/
 void USR_ACT_OnTimerEventProcess(void)
 {
-	HMI_Action_RefreshScreen(0, NULL);
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	// Post timer event.
+	HMI_Action_OnInternalEvent(0, NULL);
 }
 
+/*************************************************************************/
+/** Function Name:	USR_ACT_OnRTCUpdateEventProcess						**/
+/** Purpose:		RTC timer event process.							**/
+/** Resources:		None.												**/
+/** Params:			None.												**/
+/**@uiYear				:Year.											**/
+/**@uiMonth				:Month.											**/
+/**@uiDay				:Day.											**/
+/**@uiHour				:Hour.											**/
+/**@uiMinute			:Minute.										**/
+/**@uiSecond			:Second.										**/
+/** Return:			None.												**/
+/** Notice:			None.												**/
+/*************************************************************************/
 void USR_ACT_OnRTCUpdateEventProcess(uint16_t uiYear, uint16_t uiMonth, uint16_t uiDay, uint16_t uiHour, uint16_t uiMinute, uint16_t uiSecond)
 {
+	/*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
 	HMI_RTC_TIME		stRTCTime;
 
+	/*----------------------------------*/
+	/* Initialize						*/
+	/*----------------------------------*/
 	stRTCTime.Year = uiYear;
 	stRTCTime.Month = uiMonth;
 	stRTCTime.Day = uiDay;
@@ -88,5 +137,9 @@ void USR_ACT_OnRTCUpdateEventProcess(uint16_t uiYear, uint16_t uiMonth, uint16_t
 	stRTCTime.Minute = uiMinute;
 	stRTCTime.Second = uiSecond;
 
-	HMI_Action_RefreshScreen(2, &stRTCTime);
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	// Post RTC update message to a screen.
+	HMI_Action_OnInternalEvent(2, &stRTCTime);
 }

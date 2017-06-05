@@ -436,3 +436,90 @@ size_t	GUI_Text_GetTextGraphicsWidth(char* szText, GUI_FONT_SIZE eFontSize)
 	}
 	return uiTextGraphicsWidth;
 }
+
+
+/*****************************************************************************/
+/** Function Name:	GUI_Text_GetMultiLineTextLines							**/
+/** Purpose:		Get a string's lines in a fixed width area.				**/
+/** Resources:		None.													**/
+/** Params:																	**/
+/**	@szNoticeText:		Notice text resource.								**/
+/**	@uiHalfWidthCharInLine: Max number of half-width character in each line.**/
+/** Return:			String lines.											**/
+/** Notice:			None.													**/
+/*****************************************************************************/
+uint16_t GUI_Text_GetMultiLineTextLines(char* szNoticeText, uint16_t uiHalfWidthCharInLine)
+{
+	/*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+	uint16_t	uiLineCount, uiLineByteCount;
+	char*		pcCur;
+
+	/*----------------------------------*/
+	/* Initialize						*/
+	/*----------------------------------*/
+	uiLineByteCount				= 0;
+	uiLineCount					= 1;
+	pcCur						= szNoticeText;
+
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	if(NULL != pcCur)
+	{
+		while('\0' != *pcCur)
+		{
+			if(*pcCur == '\n')
+			{
+                if(uiLineByteCount > 0)
+				{
+					// Change lines.
+					uiLineCount ++;
+					uiLineByteCount = 0;
+				}
+				else
+				{
+					// Ignore change lines in line start.
+				}
+				pcCur++;
+				continue;
+			}
+
+			if((uint8_t)(*pcCur) < 0x7F)
+			{
+				if(uiLineByteCount<uiHalfWidthCharInLine)
+				{
+					uiLineByteCount++;
+				}
+				else
+				{
+					uiLineByteCount = 1;
+					uiLineCount++;
+				}
+				pcCur++;
+			}
+			// Process with GB2312.
+			else if(((uint8_t)(*pcCur) >= 0xA1) && ((uint8_t)(*pcCur) <= 0xF7))
+			{
+				//GB2312
+				if((uiHalfWidthCharInLine-uiLineByteCount)>2)
+				{
+					uiLineByteCount+=2;
+				}
+				else
+				{
+					uiLineByteCount = 2;
+					uiLineCount++;
+				}
+				pcCur+=2;
+			}
+			// Invalid character
+			else
+			{
+				pcCur++;
+			}
+		}
+	}
+	return uiLineCount;
+}

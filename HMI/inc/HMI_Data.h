@@ -18,6 +18,7 @@
 #define		HMI_RESULT_CANCEL								(3)
 #define 	HMI_RESULT_FOLLOWUP								(4)
 #define		HMI_RESULT_NOACTION								(5)
+#define		HMI_RESULT_INPROCESS							(6)
 #define		HMI_RESULT_ERROR								(-1)
 #define 	HMI_RESULT_INVALID_DATA							(-2)
 #define		HMI_RESULT_INVALID_PARAMETER					(-3)
@@ -29,8 +30,7 @@
 #define		HMI_GOBACK_HISTORY_SIZE_MAX						(20)
 
 // Parameter post label.
-#define		HMI_SCREEN_PARAMETER_DATA_SIZE					(32)			// Parameter data structure definition.
-#define		HMI_REFRESH_DATA_LABEL_ANY						(0xFFFFFFFF)	// This label means parameter will posted to every screen.
+#define		HMI_SCREEN_ID_ANY								(0xFFFFFFFF)	// This label means parameter will posted to every screen.
 // Add screen parameter label definition here,
 // it's defined between 0 and the maximum value of the label defined type.
 #define		HMI_REFRESH_DATA_LABEL_RTC						(1)
@@ -47,8 +47,8 @@ typedef struct
 {
 	int32_t							(*Initialize)(void);
 	int32_t							(*PreProcess)(void* pstParameters);
-	int32_t							(*UserActionCallBack)(uint16_t uiOptions, uint16_t* uiActions);
-	int32_t							(*RefreshScreen)(uint32_t uiScreenID, void* pstParameters);
+	int32_t							(*InternalEventProcess)(uint32_t uiScreenID, void* pstParameters);
+	int32_t							(*ExternalEventProcess)(uint32_t uiScreenID, void* pstParameters);
 	int32_t							(*PostProcess)(int32_t iProcessResult);
 }HMI_SCREEN_ACTION;
 
@@ -70,10 +70,9 @@ typedef struct
 }HMI_RTC_TIME;
 
 void			HMI_ScreenData_Initialize(void);
-void			HMI_ScreenData_SetCurrentScreen(size_t uiScreenIndex);
+void			HMI_ScreenData_SetCurrentScreen(uint32_t uiScreenIndex);
 HMI_SCREEN*		HMI_ScreenData_GetCurrentScreen(void);
-bool			HMI_ScreenData_AddToHistory(size_t uiScreenIndex);
-size_t			HMI_ScreenData_GetLastHistory(void);
-void			HMI_ScreenData_Memcpy(void* pDest, const void* pSrc, size_t uiSize);
+bool			HMI_ScreenData_PushHistory(void);
+size_t			HMI_ScreenData_PopHistory(void);
 
 #endif // __INCLUDE_HMI_DATA_H__

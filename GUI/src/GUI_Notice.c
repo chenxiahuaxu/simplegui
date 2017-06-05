@@ -77,11 +77,6 @@ const uint8_t* g_arrNoticeIcon[] = {
 };
 
 //=======================================================================//
-//= Static function declaration.									    =//
-//=======================================================================//
-static uint16_t GUI_Notice_GetNoticeLines(char* szNoticeText, uint16_t uiNoticeLineByteMax);
-
-//=======================================================================//
 //= Function implementation.										    =//
 //=======================================================================//
 /*****************************************************************************/
@@ -118,11 +113,11 @@ uint16_t GUI_Notice_RefreshNotice(char* szNoticeText, uint16_t uiTextOffset, NOT
 	// Get max line of notice text.
 	if(GUI_ICON_NONE != eIcon)
 	{
-		uiLineCount = GUI_Notice_GetNoticeLines(pszNoticeTextPtr, NOTICE_TEXT_LINES_MAX);
+		uiLineCount = GUI_Text_GetMultiLineTextLines(pszNoticeTextPtr, NOTICE_TEXT_LINES_MAX);
 	}
 	else
 	{
-		uiLineCount = GUI_Notice_GetNoticeLines(pszNoticeTextPtr, NOTICE_TEXT_LINES_MAX_NOICON);
+		uiLineCount = GUI_Text_GetMultiLineTextLines(pszNoticeTextPtr, NOTICE_TEXT_LINES_MAX_NOICON);
 	}
 	if(uiLineCount < 2)
 	{
@@ -170,91 +165,6 @@ uint16_t GUI_Notice_RefreshNotice(char* szNoticeText, uint16_t uiTextOffset, NOT
     return uiTextLines;
 }
 
-/*****************************************************************************/
-/** Function Name:	GUI_GetNoticeLineIndex									**/
-/** Purpose:		Break string and record line character index in global	**/
-/**					array.													**/
-/** Resources:		Line start index array(g_arrLineTextIndex).				**/
-/** Params:																	**/
-/**	@szNoticeText:		Notice text resource.								**/
-/** Return:			Line number of will be displayed.						**/
-/** Limitation:		None.													**/
-/*****************************************************************************/
-uint16_t GUI_Notice_GetNoticeLines(char* szNoticeText, uint16_t uiNoticeLineByteMax)
-{
-	/*----------------------------------*/
-	/* Variable Declaration				*/
-	/*----------------------------------*/
-	uint16_t	uiLineCount, uiLineByteCount;
-	char*		pcCur;
-
-	/*----------------------------------*/
-	/* Initialize						*/
-	/*----------------------------------*/
-	uiLineByteCount				= 0;
-	uiLineCount					= 1;
-	pcCur						= szNoticeText;
-
-	/*----------------------------------*/
-	/* Process							*/
-	/*----------------------------------*/
-	if(NULL != pcCur)
-	{
-		while('\0' != *pcCur)
-		{
-			if(*pcCur == '\n')
-			{
-                if(uiLineByteCount > 0)
-				{
-					// Change lines.
-					uiLineCount ++;
-					uiLineByteCount = 0;
-				}
-				else
-				{
-					// Ignore change lines in line start.
-				}
-				pcCur++;
-				continue;
-			}
-
-			if((uint8_t)(*pcCur) < 0x7F)
-			{
-				if(uiLineByteCount<uiNoticeLineByteMax)
-				{
-					uiLineByteCount++;
-				}
-				else
-				{
-					uiLineByteCount = 1;
-					uiLineCount++;
-				}
-				pcCur++;
-			}
-			// Process with GB2312.
-			else if(((uint8_t)(*pcCur) >= 0xA1) && ((uint8_t)(*pcCur) <= 0xF7))
-			{
-				//GB2312
-				if((uiNoticeLineByteMax-uiLineByteCount)>2)
-				{
-					uiLineByteCount+=2;
-				}
-				else
-				{
-					uiLineByteCount = 2;
-					uiLineCount++;
-				}
-				pcCur+=2;
-			}
-			// Invalid character
-			else
-			{
-				pcCur++;
-			}
-		}
-	}
-	return uiLineCount;
-}
 
 
 

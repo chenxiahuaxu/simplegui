@@ -6,7 +6,7 @@
 #define LCD_DISPLAY_EDGE				(2)
 #define	LCD_PIXSIZE				        (2)
 
-#define LCD_SIZE_WIDTH					(132)
+#define LCD_SIZE_WIDTH					(192)
 #define LCD_SIZE_HEIGHT					(64)
 #define LCD_COLOR_OBJ_PIX				(wxColor(88,120,20))
 #define LCD_COLOR_OBJ_BKG				(wxColor(202,246,22))

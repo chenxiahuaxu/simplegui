@@ -6,6 +6,7 @@
 #include "HMI_Data.h"
 #include "HMI_Process.h"
 #include "GUI_Notice.h"
+#include "UserAction.h"
 #include <stdio.h>
 
 //=======================================================================//

@@ -1,4 +1,4 @@
-/*************************************************************************/
+﻿/*************************************************************************/
 /** Copyright.															**/
 /** FileName: HMI_Demo03_Notice1.c												**/
 /** Author: Polarix														**/
@@ -21,8 +21,8 @@
 //=======================================================================//
 static int32_t			HMI_DemoNotice_Initialize(void);
 static int32_t			HMI_DemoNotice_PreProcess(void* pstParameters);
-static int32_t			HMI_DemoNotice_UpdateScreen(uint32_t uiScreenID, void* pstParameters);
-static int32_t			HMI_DemoNotice_UserActions(uint16_t uiOptions, uint16_t* puiActions);
+static int32_t			HMI_DemoNotice_OnInternalEvent(uint32_t uiScreenID, void* pstParameters);
+static int32_t			HMI_DemoNotice_OnExternalEvent(uint32_t uiScreenID, void* pstParameters);
 static int32_t			HMI_DemoNotice_PostProcess(int32_t iActionResult);
 
 //=======================================================================//
@@ -35,11 +35,11 @@ static char				szRTCNoticeText[64] = {0x00};
 //=======================================================================//
 HMI_SCREEN_ACTION		stHMI_DemoRTCNoticeActions =	{	HMI_DemoNotice_Initialize,
 															HMI_DemoNotice_PreProcess,
-															HMI_DemoNotice_UserActions,
-															HMI_DemoNotice_UpdateScreen,
+															HMI_DemoNotice_OnInternalEvent,
+															HMI_DemoNotice_OnExternalEvent,
 															HMI_DemoNotice_PostProcess,
 														};
-HMI_SCREEN				g_stHMI_DemoRTCNotice =			{	HMI_REFRESH_DATA_LABEL_ANY,
+HMI_SCREEN				g_stHMI_DemoRTCNotice =			{	HMI_SCREEN_ID_ANY,
 															&stHMI_DemoRTCNoticeActions
 														};
 
@@ -57,7 +57,7 @@ int32_t HMI_DemoNotice_PreProcess(void* pstParameters)
 	return 0;
 }
 
-int32_t HMI_DemoNotice_UpdateScreen(uint32_t uiScreenID, void* pstParameters)
+int32_t HMI_DemoNotice_OnInternalEvent(uint32_t uiScreenID, void* pstParameters)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -71,7 +71,7 @@ int32_t HMI_DemoNotice_UpdateScreen(uint32_t uiScreenID, void* pstParameters)
 	pstRTCTime = (HMI_RTC_TIME*)pstParameters;
 	if(NULL != pstRTCTime)
 	{
-        sprintf(szRTCNoticeText, "%04u-%02u-%02u\n%02u:%02u:%02u",
+        sprintf(szRTCNoticeText, "系统时间\n%04u-%02u-%02u\n%02u:%02u:%02u",
 				pstRTCTime->Year, pstRTCTime->Month+1, pstRTCTime->Day,
 				pstRTCTime->Hour, pstRTCTime->Minute, pstRTCTime->Second);
 		GUI_Notice_RefreshNotice(szRTCNoticeText, 0, GUI_ICON_INFORMATION);
@@ -85,22 +85,24 @@ int32_t HMI_DemoNotice_UpdateScreen(uint32_t uiScreenID, void* pstParameters)
 	return iProcessResult;
 }
 
-int32_t HMI_DemoNotice_UserActions(uint16_t uiOptions, uint16_t* puiActions)
+int32_t HMI_DemoNotice_OnExternalEvent(uint32_t uiScreenID, void* pstParameters)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
 	int32_t						iProcessResult;
+	USER_ACT_KEYPRESS*			pstUserEvent;
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	iProcessResult				= HMI_RESULT_NORMAL;
+	iProcessResult =			HMI_RESULT_NORMAL;
+	pstUserEvent =				(USER_ACT_KEYPRESS*)pstParameters;
 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if(KEY_VALUE_SPACE == *puiActions)
+	if(KEY_VALUE_SPACE == pstUserEvent->KeyValue[0])
 	{
 		iProcessResult = HMI_RESULT_CANCEL;
 	}

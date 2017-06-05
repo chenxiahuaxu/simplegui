@@ -53,8 +53,8 @@ static RECTANGLE			stTextDisplayArea;
 //=======================================================================//
 static int32_t				HMI_DemoText_Initialize(void);
 static int32_t				HMI_DemoText_PreProcess(void* pstParameters);
-static int32_t				HMI_DemoText_UserActions(uint16_t uiOptions, uint16_t* puiActions);
-static int32_t				HMI_DemoText_UpdateScreen(uint32_t uiScreenID, void* pstParameters);
+static int32_t				HMI_DemoText_OnExternalEvent(uint32_t uiScreenID, void* pstParameters);
+static int32_t				HMI_DemoText_OnInternalEvent(uint32_t uiScreenID, void* pstParameters);
 static int32_t				HMI_DemoText_PostProcess(int32_t iActionResult);
 
 //=======================================================================//
@@ -62,20 +62,28 @@ static int32_t				HMI_DemoText_PostProcess(int32_t iActionResult);
 //=======================================================================//
 HMI_SCREEN_ACTION		stHMI_DemoTextActions =			{	HMI_DemoText_Initialize,
 															HMI_DemoText_PreProcess,
-															HMI_DemoText_UserActions,
-															HMI_DemoText_UpdateScreen,
+															HMI_DemoText_OnInternalEvent,
+															HMI_DemoText_OnExternalEvent,
 															HMI_DemoText_PostProcess,
 														};
-HMI_SCREEN				g_stHMI_DemoText =				{	HMI_REFRESH_DATA_LABEL_ANY,
+HMI_SCREEN				g_stHMI_DemoText =				{	HMI_SCREEN_ID_ANY,
 															&stHMI_DemoTextActions
 														};
 //=======================================================================//
 //= Function implementation.										    =//
 //=======================================================================//
+/*****************************************************************************/
+/** Function Name:	HMI_DemoText_Initialize									**/
+/** Purpose:		Initialize screen data.									**/
+/** Resources:		Current screen display or control data.					**/
+/** Parameters:		None.													**/
+/** Return:			Initialize process result.								**/
+/** Limitation:		None.													**/
+/*****************************************************************************/
 int32_t	HMI_DemoText_Initialize(void)
 {
 	iTextOffset = HMI_TEXT_DEMO_FRAME_TEXT_HEIGHT;
-	iTextHeight = 120;//GUI_Notice_GetNoticeLines(szDemoText, (HMI_TEXT_DEMO_FRAME_TEXT_WIDTH/g_stFontSize[GUI_FONT_SIZE_H12].Width));
+	iTextHeight = GUI_Text_GetMultiLineTextLines(szDemoText, (HMI_TEXT_DEMO_FRAME_TEXT_WIDTH/g_stFontSize[GUI_FONT_SIZE_H12].Width))*g_stFontSize[GUI_FONT_SIZE_H12].Height;
 	stTextDisplayArea.PosX = HMI_TEXT_DEMO_FRAME_TEXT_POSX;
 	stTextDisplayArea.PosY = HMI_TEXT_DEMO_FRAME_TEXT_POSY;
 	stTextDisplayArea.Width = HMI_TEXT_DEMO_FRAME_TEXT_WIDTH;
@@ -83,29 +91,50 @@ int32_t	HMI_DemoText_Initialize(void)
 	return HMI_RESULT_NORMAL;
 }
 
+/*****************************************************************************/
+/** Function Name:	HMI_DemoText_PreProcess									**/
+/** Purpose:		Preprocess after initialize.							**/
+/** Resources:		None.													**/
+/** Parameters:		None.													**/
+/** Return:			Preprocess result.										**/
+/** Limitation:		None.													**/
+/*****************************************************************************/
 int32_t HMI_DemoText_PreProcess(void* pstParameters)
 {
 	GUI_Frame_DrawFullScreenFrame(&stTextFrame);
 	return HMI_RESULT_NORMAL;
 }
 
-int32_t HMI_DemoText_UserActions(uint16_t uiOptions, uint16_t* puiActions)
+/*****************************************************************************/
+/** Function Name:	HMI_DemoText_OnExternalEvent							**/
+/** Purpose:		Process with user actions.								**/
+/** Resources:		List data structure and bind data if existed.			**/
+/** Parameters:																**/
+/** @[in]uiScreenID: 	Matched screen ID.									**/
+/** @[in]pstParameters: User event data pointer.							**/
+/** Return:			User event process result.								**/
+/** Limitation:		Parameter pointer is a void type, convert to the 		**/
+/**					appropriate type before use.							**/
+/*****************************************************************************/
+int32_t HMI_DemoText_OnExternalEvent(uint32_t uiScreenID, void* pstParameters)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
 	int32_t						iProcessResult;
 	uint16_t					uiKeyValue;
+	USER_ACT_KEYPRESS*			pstUserEvent;
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
 	iProcessResult =			HMI_RESULT_NORMAL;
+	pstUserEvent =				(USER_ACT_KEYPRESS*)pstParameters;
 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	uiKeyValue = *(puiActions+0);
+	uiKeyValue = pstUserEvent->KeyValue[0];
 	if(KEY_VALUE_SPACE == uiKeyValue)
 	{
 		iProcessResult = HMI_RESULT_CONFIRM;
@@ -117,13 +146,24 @@ int32_t HMI_DemoText_UserActions(uint16_t uiOptions, uint16_t* puiActions)
 	return iProcessResult;
 }
 
-int32_t	HMI_DemoText_UpdateScreen(uint32_t uiScreenID, void* pstParameters)
+/*****************************************************************************/
+/** Function Name:	HMI_DemoText_OnInternalEvent							**/
+/** Purpose:		Update data and refresh screen display.					**/
+/** Resources:		List data structure and bind data if existed.			**/
+/** Parameters:																**/
+/** @[in]uiScreenID: 	Matched screen ID.									**/
+/** @[in]pstParameters: User event data pointer.							**/
+/** Return:			Internal event process result.							**/
+/** Limitation:		Parameter pointer is a void type, convert to the 		**/
+/**					appropriate type before use.							**/
+/*****************************************************************************/
+int32_t	HMI_DemoText_OnInternalEvent(uint32_t uiScreenID, void* pstParameters)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
 	int32_t						iProcessResult;
-	static uint32_t				uiTimer = 5;
+	static uint32_t				uiTimer = 3;
 
 	/*----------------------------------*/
 	/* Process							*/
@@ -145,7 +185,7 @@ int32_t	HMI_DemoText_UpdateScreen(uint32_t uiScreenID, void* pstParameters)
 			{
 				iTextOffset--;
 			}
-			uiTimer = 5;
+			uiTimer = 3;
 		}
 
 
@@ -159,12 +199,21 @@ int32_t	HMI_DemoText_UpdateScreen(uint32_t uiScreenID, void* pstParameters)
 	return iProcessResult;
 }
 
+/*****************************************************************************/
+/** Function Name:	HMI_DemoList_PostProcess								**/
+/** Purpose:		Do something after user action or update screen.		**/
+/** Resources:		List data structure and bind data if existed.			**/
+/** Parameters:																**/
+/** @[in]iActionResult: User action or system action process result.		**/
+/** Return:			Post process result.									**/
+/** Limitation:		None.													**/
+/*****************************************************************************/
 int32_t HMI_DemoText_PostProcess(int32_t iActionResult)
 {
 	if(HMI_RESULT_CONFIRM == iActionResult)
 	{
 		// Go to main list.
-		HMI_Action_GotoScreen(g_stHMI_DemoText.ScreenID, 1, NULL);
+		HMI_Action_Goto(1, NULL);
 	}
 	return HMI_RESULT_NORMAL;
 }
