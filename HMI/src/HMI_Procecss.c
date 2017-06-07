@@ -64,7 +64,7 @@ void HMI_Action_Initialize(void)
 /** Return:			Process result.											**/
 /** Notice:			None.													**/
 /*****************************************************************************/
-int32_t HMI_Action_OnExternalEvent(uint32_t uiScreenID, void* pstData)
+int32_t HMI_Action_ExternalEventProcess(uint32_t uiScreenID, void* pstData)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -129,7 +129,7 @@ int32_t HMI_Action_OnExternalEvent(uint32_t uiScreenID, void* pstData)
 /**					is actived.												**/
 /**					Screen will only refresh when pstPreProcessData is NULL	**/
 /*****************************************************************************/
-int32_t HMI_Action_OnInternalEvent(uint32_t uiScreenID, void* pstData)
+int32_t HMI_Action_InternalEventProcess(uint32_t uiScreenID, void* pstData)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -189,7 +189,7 @@ int32_t HMI_Action_OnInternalEvent(uint32_t uiScreenID, void* pstData)
 /** Return:			None.													**/
 /** Notice:			Screen will only refresh when pstPreProcessData is NULL	**/
 /*****************************************************************************/
-void HMI_Action_Goto(uint32_t uiDestScreenID, void* pstPreProcessData)
+void HMI_Action_Goto(uint32_t uiDestScreenID, const void* pstPreProcessData)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -213,7 +213,47 @@ void HMI_Action_Goto(uint32_t uiDestScreenID, void* pstPreProcessData)
 		{
 			pstScreen->Actions->PreProcess(pstPreProcessData);
 		}
-		pstScreen->Actions->InternalEventProcess(uiDestScreenID, pstPreProcessData);
+		pstScreen->Actions->RefreshScreen();
+	}
+	else
+	{
+        // Stack is full, push history failed.
+	}
+}
+
+/*****************************************************************************/
+/** Function Name:	HMI_Action_PopScreen									**/
+/** Purpose:		Pop a screen and on included in history record.			**/
+/** Resources:		Screen data structure and action process function.		**/
+/** Params:																	**/
+/**	@uiDestScreenID:	Screen ID witch will be going to.					**/
+/**	@pstPreProcessData:	Pop screen initialize data.							**/
+/** Return:			None.													**/
+/** Notice:			Screen will only refresh when pstPreProcessData is NULL	**/
+/*****************************************************************************/
+void HMI_Action_PopScreen(uint32_t uiPopScreenID, void* pstPreProcessData)
+{
+	/*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+	HMI_SCREEN*				pstScreen;
+
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	// Add current screen ID to history stack.
+	if(true == HMI_ScreenData_PushHistory())
+	{
+		pstScreen = HMI_ScreenData_GetScreenData(uiPopScreenID);
+		if(NULL != pstScreen->Actions->Initialize)
+		{
+			pstScreen->Actions->Initialize();
+		}
+		if(NULL != pstScreen->Actions->PreProcess)
+		{
+			pstScreen->Actions->PreProcess(pstPreProcessData);
+		}
+		pstScreen->Actions->InternalEventProcess(uiPopScreenID, pstPreProcessData);
 	}
 	else
 	{
@@ -251,6 +291,6 @@ void HMI_Action_GoBack(void)
 
 	if(NULL != pstScreen)
 	{
-		pstScreen->Actions->InternalEventProcess(uiLastScreenID, NULL);
+		pstScreen->Actions->RefreshScreen();
 	}
 }

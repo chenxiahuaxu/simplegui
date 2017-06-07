@@ -66,7 +66,6 @@ typedef struct
 typedef struct
 {
 	GUI_LIST_DATA				Data;
-	// Initialize parameter.
 	GUI_LIST_CONTROL			ControlVariable;
 	GUI_LIST_SUBELEMENT			SubElement;
 }GUI_LIST_STRUCT;

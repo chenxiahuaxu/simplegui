@@ -8,6 +8,7 @@
 //= User definition.												    =//
 //=======================================================================//
 // Key value definition.
+#define		KEY_VALUE_TAB									(0x0009)
 #define		KEY_VALUE_ENTER									(0x000D)
 #define		KEY_VALUE_ESC									(0x001B)
 #define		KEY_VALUE_SPACE									(0x0020)

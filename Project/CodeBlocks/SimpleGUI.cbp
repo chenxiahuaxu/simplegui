@@ -87,6 +87,9 @@
 		<Unit filename="../../GUI/inc/GUI_Frame.h">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
+		<Unit filename="../../GUI/inc/GUI_Graph.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
 		<Unit filename="../../GUI/inc/GUI_List.h" />
 		<Unit filename="../../GUI/inc/GUI_Notice.h" />
 		<Unit filename="../../GUI/inc/GUI_ProcessBar.h" />
@@ -100,6 +103,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../../GUI/src/GUI_Frame.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../GUI/src/GUI_Graph.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../../GUI/src/GUI_List.c">
@@ -130,6 +136,8 @@
 			<Option link="0" />
 		</Unit>
 		<Unit filename="../../HMI/inc/HMI_Demo03_Notice2.h" />
+		<Unit filename="../../HMI/inc/HMI_Demo04_Graph.h" />
+		<Unit filename="../../HMI/inc/HMI_Demo05_VariableBox.h" />
 		<Unit filename="../../HMI/inc/HMI_Process.h" />
 		<Unit filename="../../HMI/src/HMI_Data.c">
 			<Option compilerVar="CC" />
@@ -144,6 +152,12 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../../HMI/src/HMI_Demo03_Notice2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../HMI/src/HMI_Demo04_Graph.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../HMI/src/HMI_Demo05_VariableBox.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../../HMI/src/HMI_Procecss.c">

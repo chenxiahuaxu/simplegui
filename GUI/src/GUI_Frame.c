@@ -16,7 +16,7 @@
 //=======================================================================//
 //= Function implementation.										    =//
 //=======================================================================//
-void GUI_Frame_DrawFullScreenFrame(GUI_BOX_FRAME_STRUCT* pstFrameStyleData)
+void GUI_Frame_DrawFullScreenFrame(GUI_BOX_FRAME_STRUCT* pstFrameData)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -31,22 +31,22 @@ void GUI_Frame_DrawFullScreenFrame(GUI_BOX_FRAME_STRUCT* pstFrameStyleData)
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	if(NULL != pstFrameStyleData)
+	if(NULL != pstFrameData)
 	{
 		uiEdgeRectanglePosX		= 0;
 		uiEdgeRectanglePosY		= 0;
 		uiEdgeRectangleWidth	= LCD_SIZE_WIDTH;
 		uiEdgeRectangleHeight	= LCD_SIZE_HEIGHT;
-		uiTitleLineWidth		= g_stFontSize[pstFrameStyleData->Parameter.FontSize].Height+2;
+		uiTitleLineWidth		= g_stFontSize[pstFrameData->Parameter.FontSize].Height+2;
 	}
 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if(NULL != pstFrameStyleData)
+	if(NULL != pstFrameData)
 	{
         // Draw frame edge
-		for(uiEdgeLayerIndex = 0; uiEdgeLayerIndex<pstFrameStyleData->Parameter.EdgeLayers; uiEdgeLayerIndex++)
+		for(uiEdgeLayerIndex = 0; uiEdgeLayerIndex<pstFrameData->Parameter.EdgeLayers; uiEdgeLayerIndex++)
 		{
 			GUI_Basic_DrawRectangle(	uiEdgeRectanglePosX, uiEdgeRectanglePosY,
 										uiEdgeRectangleWidth, uiEdgeRectangleHeight,
@@ -58,29 +58,29 @@ void GUI_Frame_DrawFullScreenFrame(GUI_BOX_FRAME_STRUCT* pstFrameStyleData)
 		}
 
 		// Draw Title if exist.
-		if(NULL != pstFrameStyleData->Data.Title)
+		if(NULL != pstFrameData->Data.Title)
 		{
-			if(pstFrameStyleData->Parameter.EdgeLayers > 0)
+			if(pstFrameData->Parameter.EdgeLayers > 0)
 			{
-				GUI_Basic_DrawLine((pstFrameStyleData->Parameter.EdgeLayers*2-1), (pstFrameStyleData->Parameter.EdgeLayers*2-1+uiTitleLineWidth),
-									LCD_SIZE_WIDTH-pstFrameStyleData->Parameter.EdgeLayers*2, (pstFrameStyleData->Parameter.EdgeLayers*2-1+uiTitleLineWidth),
+				GUI_Basic_DrawLine((pstFrameData->Parameter.EdgeLayers*2-1), (pstFrameData->Parameter.EdgeLayers*2-1+uiTitleLineWidth),
+									LCD_SIZE_WIDTH-pstFrameData->Parameter.EdgeLayers*2, (pstFrameData->Parameter.EdgeLayers*2-1+uiTitleLineWidth),
 									GUI_COLOR_FRGCLR);
-				stTitleTextDisplayArea.PosX		= pstFrameStyleData->Parameter.EdgeLayers*2;
-				stTitleTextDisplayArea.PosY		= pstFrameStyleData->Parameter.EdgeLayers*2;
-				stTitleTextDisplayArea.Width	= LCD_SIZE_WIDTH-pstFrameStyleData->Parameter.EdgeLayers*4;
-				stTitleTextDisplayArea.Height	= g_stFontSize[pstFrameStyleData->Parameter.FontSize].Height;
+				stTitleTextDisplayArea.PosX		= pstFrameData->Parameter.EdgeLayers*2;
+				stTitleTextDisplayArea.PosY		= pstFrameData->Parameter.EdgeLayers*2;
+				stTitleTextDisplayArea.Width	= LCD_SIZE_WIDTH-pstFrameData->Parameter.EdgeLayers*4;
+				stTitleTextDisplayArea.Height	= g_stFontSize[pstFrameData->Parameter.FontSize].Height;
 			}
 			else
 			{
-				GUI_Basic_DrawLine(	0, (pstFrameStyleData->Parameter.EdgeLayers*2+uiTitleLineWidth),
-									LCD_SIZE_WIDTH-1, (pstFrameStyleData->Parameter.EdgeLayers*2+uiTitleLineWidth),
+				GUI_Basic_DrawLine(	0, (pstFrameData->Parameter.EdgeLayers*2+uiTitleLineWidth),
+									LCD_SIZE_WIDTH-1, (pstFrameData->Parameter.EdgeLayers*2+uiTitleLineWidth),
 									GUI_COLOR_FRGCLR);
 				stTitleTextDisplayArea.PosX		= 1;
 				stTitleTextDisplayArea.PosY		= 1;
 				stTitleTextDisplayArea.Width	= LCD_SIZE_WIDTH-2;
-				stTitleTextDisplayArea.Height	= g_stFontSize[pstFrameStyleData->Parameter.FontSize].Height;
+				stTitleTextDisplayArea.Height	= g_stFontSize[pstFrameData->Parameter.FontSize].Height;
 			}
-			GUI_Text_DrawSingleLineText(	ENCODE(pstFrameStyleData->Data.Title), pstFrameStyleData->Parameter.FontSize,
+			GUI_Text_DrawSingleLineText(	ENCODE(pstFrameData->Data.Title), pstFrameData->Parameter.FontSize,
 											&stTitleTextDisplayArea, &stTitleTextDataArea, GUI_DRAW_NORMAL);
 		}
 	}

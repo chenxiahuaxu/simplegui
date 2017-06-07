@@ -39,6 +39,6 @@ typedef enum
 
 extern const uint8_t* g_arrNoticeIcon[];
 
-uint16_t GUI_Notice_RefreshNotice(char* szNoticeText, uint16_t uiTextOffset, NOTICE_ICON eIcon);
+uint16_t GUI_Notice_RefreshNotice(const char* szNoticeText, uint16_t uiTextOffset, NOTICE_ICON eIcon);
 
 #endif // __INCLUDE_GUI_NOTICE_H__

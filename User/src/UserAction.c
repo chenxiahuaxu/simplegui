@@ -20,16 +20,6 @@
 #include "HMI_Process.h"
 
 //=======================================================================//
-//= Static variable declaration.									    =//
-//=======================================================================//
-
-//GUI_LIST_STRUCT			stTestList = {{NULL, 16, arrstTestListItems}};
-
-//=======================================================================//
-//= Static function declaration.									    =//
-//=======================================================================//
-
-//=======================================================================//
 //= Function implementation.										    =//
 //=======================================================================//
 /*************************************************************************/
@@ -86,7 +76,7 @@ void USR_ACT_OnKeyPress(bool bShift, bool bCtrl, bool bAlt, uint16_t uiKeyCode)
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	HMI_Action_OnExternalEvent(HMI_SCREEN_ID_ANY, &stUserKeyEvent);
+	HMI_Action_ExternalEventProcess(HMI_SCREEN_ID_ANY, &stUserKeyEvent);
 }
 
 /*************************************************************************/
@@ -103,7 +93,7 @@ void USR_ACT_OnTimerEventProcess(void)
 	/* Process							*/
 	/*----------------------------------*/
 	// Post timer event.
-	HMI_Action_OnInternalEvent(0, NULL);
+	HMI_Action_InternalEventProcess(0, NULL);
 }
 
 /*************************************************************************/
@@ -141,5 +131,5 @@ void USR_ACT_OnRTCUpdateEventProcess(uint16_t uiYear, uint16_t uiMonth, uint16_t
 	/* Process							*/
 	/*----------------------------------*/
 	// Post RTC update message to a screen.
-	HMI_Action_OnInternalEvent(2, &stRTCTime);
+	HMI_Action_InternalEventProcess(2, &stRTCTime);
 }

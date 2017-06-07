@@ -254,77 +254,82 @@ void GUI_Basic_DrawLine(uint16_t uiStartX, uint16_t uiStartY, uint16_t uiEndX, u
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
+	int16_t						iDx, iDy;
+	int16_t						iIncX, iIncY;
+	int16_t						iErrX = 0, iErrY = 0;
+	uint16_t					i, uiDs;
 	uint16_t					uiCurrentPosX, uiCurrentPosY;
-	int16_t						iDeltaX, iDeltaY, iDeltaS;
-	int16_t						iStepX, iStepY;
-	int16_t						iXErr, iYErr;
-	uint16_t					i;
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	// Initialize variable
-    iDeltaX = uiEndX - uiStartX + 1;
-    iDeltaY = uiEndY - uiStartY + 1;
+	iErrX = 0;
+	iErrY = 0;
+    iDx = uiEndX - uiStartX;
+    iDy = uiEndY - uiStartY;
 	uiCurrentPosX = uiStartX;
 	uiCurrentPosY = uiStartY;
-	iXErr = 0;
-	iYErr = 0;
-	// Vertical
-	if(iDeltaX == 0)
+
+	if(iDx > 0)
 	{
-		iStepX = 0;
-	}
-	else if(iDeltaX > 0)
-	{
-		iStepX = 1;
+		iIncX = 1;
 	}
 	else
 	{
-		iStepX = -1;
-		iDeltaX = -iDeltaX;
+		if(iDx == 0)
+		{
+			iIncX = 0;
+		}
+		else
+		{
+			iIncX = -1;
+			iDx = -iDx;
+		}
 	}
-	// Horizontal
-	if(iDeltaY == 0)
+
+	if(iDy > 0)
 	{
-		iStepY = 0;
-	}
-	else if(iDeltaY > 0)
-	{
-		iStepY = 1;
-	}
-	else
-	{
-		iStepY = -1;
-		iDeltaY = -iDeltaY;
-	}
-	// Set the basic incremental
-	if(iDeltaX > iDeltaY)
-	{
-		iDeltaS = iDeltaX;
+		iIncY = 1;
 	}
 	else
 	{
-		iDeltaS = iDeltaY;
+		if(iDy == 0)
+		{
+			iIncY = 0;
+		}
+		else
+		{
+			iIncY = -1;
+			iDy = -iDy;
+		}
+	}
+
+	if(iDx > iDy)
+	{
+		uiDs = iDx;
+	}
+	else
+	{
+		uiDs = iDy;
 	}
 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	for(i=0; i<=iDeltaS; i++)
+	for(i = 0; i <= uiDs+1; i++)
 	{
 		GUI_Basic_DrawPoint(uiCurrentPosX,uiCurrentPosY, eColor);
-		iXErr += iDeltaX;
-		iYErr += iDeltaY;
-		if(iXErr > iDeltaS)
+		iErrX += iDx;
+		if(iErrX > uiDs)
 		{
-			iXErr -= iDeltaS;
-			uiCurrentPosX += iStepX;
+			iErrX -= uiDs;
+			uiCurrentPosX += iIncX;
 		}
-		if(iYErr > iDeltaS)
+		iErrY += iDy;
+		if(iErrY > uiDs)
 		{
-			iYErr -= iDeltaS;
-			uiCurrentPosY += iStepY;
+			iErrY -= uiDs;
+			uiCurrentPosY += iIncY;
 		}
 	}
 }

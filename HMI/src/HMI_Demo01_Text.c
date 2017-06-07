@@ -52,9 +52,10 @@ static RECTANGLE			stTextDisplayArea;
 //= Static function declaration.									    =//
 //=======================================================================//
 static int32_t				HMI_DemoText_Initialize(void);
-static int32_t				HMI_DemoText_PreProcess(void* pstParameters);
-static int32_t				HMI_DemoText_OnExternalEvent(uint32_t uiScreenID, void* pstParameters);
-static int32_t				HMI_DemoText_OnInternalEvent(uint32_t uiScreenID, void* pstParameters);
+static int32_t				HMI_DemoText_PreProcess(const void* pstParameters);
+static int32_t				HMI_DemoText_RefreshScreen(void);
+static int32_t				HMI_DemoText_OnExternalEvent(uint32_t uiScreenID, const void* pstParameters);
+static int32_t				HMI_DemoText_OnInternalEvent(uint32_t uiScreenID, const void* pstParameters);
 static int32_t				HMI_DemoText_PostProcess(int32_t iActionResult);
 
 //=======================================================================//
@@ -62,6 +63,7 @@ static int32_t				HMI_DemoText_PostProcess(int32_t iActionResult);
 //=======================================================================//
 HMI_SCREEN_ACTION		stHMI_DemoTextActions =			{	HMI_DemoText_Initialize,
 															HMI_DemoText_PreProcess,
+															HMI_DemoText_RefreshScreen,
 															HMI_DemoText_OnInternalEvent,
 															HMI_DemoText_OnExternalEvent,
 															HMI_DemoText_PostProcess,
@@ -99,9 +101,24 @@ int32_t	HMI_DemoText_Initialize(void)
 /** Return:			Preprocess result.										**/
 /** Limitation:		None.													**/
 /*****************************************************************************/
-int32_t HMI_DemoText_PreProcess(void* pstParameters)
+int32_t HMI_DemoText_PreProcess(const void* pstParameters)
 {
 	GUI_Frame_DrawFullScreenFrame(&stTextFrame);
+	return HMI_RESULT_NORMAL;
+}
+
+/*****************************************************************************/
+/** Function Name:	HMI_DemoText_RefreshScreen								**/
+/** Purpose:		Refresh current screen.									**/
+/** Resources:		None.													**/
+/** Parameters:		None.													**/
+/** Return:			Refresh process result.									**/
+/** Limitation:		None.													**/
+/*****************************************************************************/
+int32_t HMI_DemoText_RefreshScreen(void)
+{
+	GUI_Frame_DrawFullScreenFrame(&stTextFrame);
+	GUI_Text_DrawMultipleLinesText(ENCODE(szDemoText), GUI_FONT_SIZE_H12, &stTextDisplayArea, iTextOffset, GUI_DRAW_NORMAL);
 	return HMI_RESULT_NORMAL;
 }
 
@@ -116,7 +133,7 @@ int32_t HMI_DemoText_PreProcess(void* pstParameters)
 /** Limitation:		Parameter pointer is a void type, convert to the 		**/
 /**					appropriate type before use.							**/
 /*****************************************************************************/
-int32_t HMI_DemoText_OnExternalEvent(uint32_t uiScreenID, void* pstParameters)
+int32_t HMI_DemoText_OnExternalEvent(uint32_t uiScreenID, const void* pstParameters)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -157,7 +174,7 @@ int32_t HMI_DemoText_OnExternalEvent(uint32_t uiScreenID, void* pstParameters)
 /** Limitation:		Parameter pointer is a void type, convert to the 		**/
 /**					appropriate type before use.							**/
 /*****************************************************************************/
-int32_t	HMI_DemoText_OnInternalEvent(uint32_t uiScreenID, void* pstParameters)
+int32_t	HMI_DemoText_OnInternalEvent(uint32_t uiScreenID, const void* pstParameters)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/

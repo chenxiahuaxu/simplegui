@@ -186,7 +186,7 @@ void GUI_List_RefreshList(GUI_LIST_STRUCT* pstList)
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	GUI_BOX_FRAME_STRUCT	stFrameStyleData;
+	GUI_BOX_FRAME_STRUCT	stFrameData;
 	GUI_LIST_DATA*			pstListData;
 
 	/*----------------------------------*/
@@ -196,10 +196,10 @@ void GUI_List_RefreshList(GUI_LIST_STRUCT* pstList)
 	{
 		pstListData = &(pstList->Data);
 		// Draw frame
-		stFrameStyleData.Parameter.EdgeLayers = LIST_EDGE_MULTIPLE;
-		stFrameStyleData.Parameter.FontSize = LIST_FONT_SIZE;
-		stFrameStyleData.Data.Title = pstListData->Title;
-		GUI_Frame_DrawFullScreenFrame(&stFrameStyleData);
+		stFrameData.Parameter.EdgeLayers = LIST_EDGE_MULTIPLE;
+		stFrameData.Parameter.FontSize = LIST_FONT_SIZE;
+		stFrameData.Data.Title = pstListData->Title;
+		GUI_Frame_DrawFullScreenFrame(&stFrameData);
 		// Draw list items
 		GUI_List_RefreshListItems(pstList);
 	}

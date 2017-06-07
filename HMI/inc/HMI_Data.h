@@ -46,9 +46,10 @@
 typedef struct
 {
 	int32_t							(*Initialize)(void);
-	int32_t							(*PreProcess)(void* pstParameters);
-	int32_t							(*InternalEventProcess)(uint32_t uiScreenID, void* pstParameters);
-	int32_t							(*ExternalEventProcess)(uint32_t uiScreenID, void* pstParameters);
+	int32_t							(*PreProcess)(const void* pstParameters);
+	int32_t							(*RefreshScreen)(void);
+	int32_t							(*InternalEventProcess)(uint32_t uiScreenID, const void* pstParameters);
+	int32_t							(*ExternalEventProcess)(uint32_t uiScreenID, const void* pstParameters);
 	int32_t							(*PostProcess)(int32_t iProcessResult);
 }HMI_SCREEN_ACTION;
 
@@ -72,6 +73,7 @@ typedef struct
 void			HMI_ScreenData_Initialize(void);
 void			HMI_ScreenData_SetCurrentScreen(uint32_t uiScreenIndex);
 HMI_SCREEN*		HMI_ScreenData_GetCurrentScreen(void);
+HMI_SCREEN*		HMI_ScreenData_GetScreenData(uint32_t uiScreenID);
 bool			HMI_ScreenData_PushHistory(void);
 size_t			HMI_ScreenData_PopHistory(void);
 

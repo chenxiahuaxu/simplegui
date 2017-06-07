@@ -16,7 +16,8 @@
 #include "HMI_Demo02_List.h"
 #include "HMI_Demo03_Notice1.h"
 #include "HMI_Demo03_Notice2.h"
-
+#include "HMI_Demo04_Graph.h"
+#include "HMI_Demo05_VariableBox.h"
 
 //=======================================================================//
 //= User Macro definition.											    =//
@@ -49,8 +50,9 @@ static HMI_SCREEN*					pstarrScreenDataArray[] = {		// Screen data structure poi
 												&g_stHMI_DemoText,
 												&g_stHMI_DemoList,
 												&g_stHMI_DemoRTCNotice,
-												&g_stHMI_DemoTextNotice
-
+												&g_stHMI_DemoTextNotice,
+												&g_stHMI_DemoGraph,
+												&g_stHMI_DemoVariableBox
 												};
 
 //=======================================================================//
@@ -134,6 +136,36 @@ HMI_SCREEN* HMI_ScreenData_GetCurrentScreen(void)
 	if(uiCurrentScreenIndex < uiScreenCount)
 	{
 		pstCurrentScreen = pstarrScreenDataArray[uiCurrentScreenIndex];
+	}
+	else
+	{
+		pstCurrentScreen = NULL;
+	}
+
+    return pstCurrentScreen;
+}
+
+/*****************************************************************************/
+/** Function Name:	HMI_ScreenData_GetScreenData.							**/
+/** Purpose:		Get current screen data structure pointer by screen ID.	**/
+/** Resources:		Static global screen data pointer.						**/
+/** Parameters:		None.													**/
+/** Return:			Screen data structure pointer.							**/
+/** Notice:			None.													**/
+/*****************************************************************************/
+HMI_SCREEN* HMI_ScreenData_GetScreenData(uint32_t uiScreenID)
+{
+	/*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+	HMI_SCREEN*				pstCurrentScreen;
+
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	if(uiScreenID < uiScreenCount)
+	{
+		pstCurrentScreen = pstarrScreenDataArray[uiScreenID];
 	}
 	else
 	{

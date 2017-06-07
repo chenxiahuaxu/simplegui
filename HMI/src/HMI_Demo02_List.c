@@ -17,12 +17,18 @@
 #include <stdio.h>
 
 //=======================================================================//
+//= User Macro definition.											    =//
+//=======================================================================//
+#define					NOTICE_TEXT_BUFFER_SIZE				(64)
+
+//=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
 static int32_t			HMI_DemoList_Initialize(void);
-static int32_t			HMI_DemoList_PreProcess(void* pstParameters);
-static int32_t			HMI_DemoList_InternalEventEvent(uint32_t uiScreenID, void* pstParameters);
-static int32_t			HMI_DemoList_ExternalEventEvent(uint32_t uiScreenID, void* pstParameters);
+static int32_t			HMI_DemoList_PreProcess(const void* pstParameters);
+static int32_t			HMI_DemoList_RefreshScreen(void);
+static int32_t			HMI_DemoList_InternalEventEvent(uint32_t uiScreenID, const void* pstParameters);
+static int32_t			HMI_DemoList_ExternalEventEvent(uint32_t uiScreenID, const void* pstParameters);
 static int32_t			HMI_DemoList_PostProcess(int32_t iActionResult);
 
 //=======================================================================//
@@ -35,13 +41,18 @@ static GUI_LIST_ITEM	arrstTestListItems[] =	{	{"简单列表项",			LIST_ITEM_NO
 													{"带小数的数字列表项",	LIST_ITEM_DIGIT,		{1, -50, 50},			{2, 0, 5}, NULL},
 													{"超长文字的简单列表项",	LIST_ITEM_NORMAL,		{0, 0, 0},				{0, 0, 0}, NULL},
 													{"列表项",				LIST_ITEM_NORMAL,		{0, 0, 0},				{0, 0, 0}, NULL},
+													{"曲线图",				LIST_ITEM_NORMAL,		{0, 0, 0},				{0, 0, 0}, NULL},
+													{"编辑框",				LIST_ITEM_NORMAL,		{0, 0, 0},				{0, 0, 0}, NULL},
 };
-static GUI_LIST_STRUCT	stTestList =			{	{"测试列表", 6, arrstTestListItems}};
+static GUI_LIST_STRUCT	stTestList =			{	{"测试列表", 8, arrstTestListItems}};
+static char				szNoticeTextBuffer[NOTICE_TEXT_BUFFER_SIZE] = {0x00};
+
 //=======================================================================//
 //= Global variable declaration.									    =//
 //=======================================================================//
 HMI_SCREEN_ACTION		stHMI_DemoListActions = {	HMI_DemoList_Initialize,
 													HMI_DemoList_PreProcess,
+													HMI_DemoList_RefreshScreen,
 													HMI_DemoList_InternalEventEvent,
 													HMI_DemoList_ExternalEventEvent,
 													HMI_DemoList_PostProcess
@@ -62,7 +73,7 @@ int32_t	HMI_DemoList_Initialize(void)
 	return HMI_RESULT_NORMAL;
 }
 
-int32_t	HMI_DemoList_PreProcess(void* pstParameters)
+int32_t	HMI_DemoList_PreProcess(const void* pstParameters)
 {
 	/*----------------------------------*/
 	/* Process							*/
@@ -70,19 +81,18 @@ int32_t	HMI_DemoList_PreProcess(void* pstParameters)
 	return HMI_RESULT_NORMAL;
 }
 
-int32_t	HMI_DemoList_InternalEventEvent(uint32_t uiScreenID, void* pstParameters)
+int32_t HMI_DemoList_RefreshScreen(void)
 {
-	/*----------------------------------*/
-	/* Process							*/
-	/*----------------------------------*/
-	if(g_stHMI_DemoList.ScreenID == uiScreenID)
-	{
-		GUI_List_RefreshList(&stTestList);
-	}
+	GUI_List_RefreshList(&stTestList);
 	return HMI_RESULT_NORMAL;
 }
 
-int32_t	HMI_DemoList_ExternalEventEvent(uint32_t uiScreenID, void* pstParameters)
+int32_t	HMI_DemoList_InternalEventEvent(uint32_t uiScreenID, const void* pstParameters)
+{
+	return HMI_RESULT_NORMAL;
+}
+
+int32_t	HMI_DemoList_ExternalEventEvent(uint32_t uiScreenID, const void* pstParameters)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -175,7 +185,8 @@ int32_t HMI_DemoList_PostProcess(int32_t iActionResult)
 				iListItemParameterValue = pstSelectedItem->Valid.Value;
 				if(0 == iListItemParameterValue)
 				{
-					HMI_Action_Goto(3, &uiSelectListIndex);
+					sprintf(szNoticeTextBuffer, "选择列表项%u.", uiSelectListIndex);
+					HMI_Action_Goto(3, szNoticeTextBuffer);
 				}
 				else
 				{
@@ -183,9 +194,20 @@ int32_t HMI_DemoList_PostProcess(int32_t iActionResult)
 				}
 				break;
 			}
+			case 6:
+			{
+				HMI_Action_Goto(4, NULL);
+				break;
+			}
+			case 7:
+			{
+				HMI_Action_Goto(5, NULL);
+				break;
+			}
 			default:
 			{
-				HMI_Action_Goto(3, &uiSelectListIndex);
+				sprintf(szNoticeTextBuffer, "选择列表项%u.", uiSelectListIndex);
+				HMI_Action_Goto(3, szNoticeTextBuffer);
 				break;
 			}
 		}
@@ -193,7 +215,6 @@ int32_t HMI_DemoList_PostProcess(int32_t iActionResult)
 	else if(HMI_RESULT_CANCEL == iActionResult)
 	{
 		HMI_Action_GoBack();
-		HMI_Action_Initialize();
 	}
 	return 0;
 }
