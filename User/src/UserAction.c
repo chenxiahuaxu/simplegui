@@ -14,10 +14,9 @@
 //=======================================================================//
 #include "UserAction.h"
 #include "LCD_OperationIF.h"
-
-
 #include "HMI_Data.h"
 #include "HMI_Process.h"
+#include "GUI_Common.h"
 
 //=======================================================================//
 //= Function implementation.										    =//
@@ -76,7 +75,7 @@ void USR_ACT_OnKeyPress(bool bShift, bool bCtrl, bool bAlt, uint16_t uiKeyCode)
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	HMI_Action_ExternalEventProcess(HMI_SCREEN_ID_ANY, &stUserKeyEvent);
+	HMI_Action_UserOperatingEventProcess(HMI_SCREEN_ID_ANY, &stUserKeyEvent);
 }
 
 /*************************************************************************/
@@ -115,7 +114,7 @@ void USR_ACT_OnRTCUpdateEventProcess(uint16_t uiYear, uint16_t uiMonth, uint16_t
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	HMI_RTC_TIME		stRTCTime;
+	GUI_TIME			stRTCTime;
 
 	/*----------------------------------*/
 	/* Initialize						*/

@@ -5,3 +5,5 @@ ID_TOOL_COPY				BITMAP			"Tools\\Copy.bmp"
 ID_TOOL_OPENFOLDER			BITMAP			"Tools\\OpenFolder.bmp"
 ID_TOOL_ABOUT				BITMAP			"Tools\\About.bmp"
 ID_TOOL_EXIT				BITMAP			"Tools\\Exit.bmp"
+
+#include "wx/msw/wx.rc"

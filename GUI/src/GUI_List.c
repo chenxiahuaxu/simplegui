@@ -4,9 +4,6 @@
 /** Author: XuYulin														**/
 /** Version: 1.0.0.0													**/
 /** Description: Draw list interface.									**/
-/** History:															**/
-/**	XuyYulin	2017/4/25	2.0.0.0		New create.						**/
-/** XuYulin 2017/4/25 1.0 build this moudle								**/
 /*************************************************************************/
 
 //=======================================================================//
@@ -85,7 +82,10 @@ void GUI_List_InitializeListData(GUI_LIST_STRUCT* pstList)
 		pstListControl = &(pstList->ControlVariable);
 		pstListData = &(pstList->Data);
 		pstSubElement = &(pstList->SubElement);
-
+#ifdef _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
+		pstListData->Count = 0;
+		pstListData->Items = NULL;
+#endif // _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
 		pstListControl->ListTitleHeight = LIST_TITLE_HEIGHT;
 		pstListControl->PageStartIndex = 0;
 		pstListControl->SelectIndex = 0;
@@ -122,6 +122,7 @@ void GUI_List_InitializeListData(GUI_LIST_STRUCT* pstList)
 /** Resources:		List item data.											**/
 /** Params:																	**/
 /**	@pstList[in]:		Pointer of list data will be refreshed.				**/
+/** Return:			None.													**/
 /** Notice:			This only refresh visible items and scrollbar.			**/
 /*****************************************************************************/
 void GUI_List_RefreshListItems(GUI_LIST_STRUCT* pstList)
@@ -154,6 +155,15 @@ void GUI_List_RefreshListItems(GUI_LIST_STRUCT* pstList)
 	{
 		if(pstList->Data.Count > 0)
 		{
+#ifdef _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
+			// Recalculate scroll bar parameter.
+			pstListControl->VisibleIntegralItemsNum = pstListControl->VisibleItemsAreaHeight/(pstListControl->ListItemHeight);
+			if(pstListControl->VisibleIntegralItemsNum > pstList->Data.Count)
+			{
+				pstListControl->VisibleIntegralItemsNum = pstList->Data.Count;
+			}
+			pstSubElement->ScrollBar.Parameter.MaxIndex = (pstListData->Count>pstListControl->VisibleIntegralItemsNum)?(pstListData->Count-pstListControl->VisibleIntegralItemsNum-1):0;
+#endif // _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
 			// Clear list item display area.
 			GUI_Basic_DrawRectangle(LIST_ITEM_RECT_POSX, pstListControl->FirstVisibleItemPosY, LIST_ITEM_RECT_WIDTH, pstListControl->VisibleItemsAreaHeight, GUI_COLOR_BKGCLR, GUI_COLOR_BKGCLR);
 			// Refresh scroll bar
@@ -343,7 +353,6 @@ void GUI_List_DrawItem(GUI_LIST_STRUCT* pstList, size_t uiIndex)
 	RECTANGLE				stItemTextDisplayArea;
 	RECTANGLE				stItemTextDataArea;
 	GUI_LIST_CONTROL*		pstListControl;
-	GUI_LIST_DATA*			pstListData;
 	GUI_LIST_ITEM*			pstListItemPointer;
 	char					szParameterStringBuffer[LIST_ITEM_PARAMETER_TEXT_LENGTH_MAX];
 	size_t					uiParameterTextWidth;
@@ -354,8 +363,7 @@ void GUI_List_DrawItem(GUI_LIST_STRUCT* pstList, size_t uiIndex)
 	if(NULL != pstList)
 	{
 		pstListControl = &(pstList->ControlVariable);
-		pstListData = &(pstList->Data);
-		pstListItemPointer = pstListData->Items + uiIndex;
+		pstListItemPointer = GUI_List_GetListItemPtr(pstList, uiIndex);
 		szParameterStringBuffer[0] = '\0';
 	}
 
@@ -399,8 +407,8 @@ void GUI_List_DrawItem(GUI_LIST_STRUCT* pstList, size_t uiIndex)
 			}
 
 			// Draw list item text.
-			GUI_Text_DrawSingleLineText(ENCODE(pstListItemPointer->Text), LIST_FONT_SIZE,
-												&stItemTextDisplayArea, &stItemTextDataArea, GUI_DRAW_NORMAL);
+			GUI_Text_DrawSingleLineText(	pstListItemPointer->Text, LIST_FONT_SIZE,
+											&stItemTextDisplayArea, &stItemTextDataArea, GUI_DRAW_NORMAL);
 
 			// Prepare draw parameter text.
 			stItemTextDataArea.PosX = LIST_ITEM_PARAMETER_SPLIT_WIDTH+1;
@@ -429,7 +437,7 @@ void GUI_List_DrawItem(GUI_LIST_STRUCT* pstList, size_t uiIndex)
 				{
 					case LIST_ITEM_ENUM:
 					{
-						strncpy(szParameterStringBuffer, ENCODE(pstListItemPointer->EnumerationValues[pstListItemPointer->Valid.Value]), LIST_ITEM_PARAMETER_TEXT_LENGTH_MAX-1);
+						strncpy(szParameterStringBuffer, pstListItemPointer->EnumerationValues[pstListItemPointer->Valid.Value], LIST_ITEM_PARAMETER_TEXT_LENGTH_MAX-1);
 						szParameterStringBuffer[LIST_ITEM_PARAMETER_TEXT_LENGTH_MAX-1] = '\0';
 						uiParameterTextWidth =  GUI_Text_GetTextGraphicsWidth(szParameterStringBuffer, LIST_FONT_SIZE);
 						if(uiParameterTextWidth < LIST_ITEM_PARAMETER_AREA_WIDTH)
@@ -489,7 +497,7 @@ void GUI_List_SetListItemValue(GUI_LIST_STRUCT* pstList, size_t uiItemIndex, int
 	{
 		if(uiItemIndex < pstList->Data.Count)
 		{
-			pstSelectedListItem = pstList->Data.Items+uiItemIndex;
+			pstSelectedListItem = GUI_List_GetListItemPtr(pstList, uiItemIndex);
 		}
 		pstListControl = &(pstList->ControlVariable);
 	}
@@ -553,8 +561,8 @@ void GUI_List_SetListItemValue(GUI_LIST_STRUCT* pstList, size_t uiItemIndex, int
 /** Params:																	**/
 /**	@pstList[in]:		Pointer of list will be read.						**/
 /**	@uiItemIndex[in]:	Index of list item index will be read.				**/
-/**	@piSetValid[out]:	Valid value will be read.							**/
-/**	@piSetDecimal[out]:	Decimal value will be read.							**/
+/**	@piValid[out]:		Valid value will be read.							**/
+/**	@piDecimal[out]:	Decimal value will be read.							**/
 /** Return:			None.													**/
 /** Notice:			None.													**/
 /*****************************************************************************/
@@ -573,7 +581,7 @@ void GUI_List_GetListItemValue(GUI_LIST_STRUCT* pstList, size_t uiItemIndex, int
 	{
 		if(uiItemIndex < pstList->Data.Count)
 		{
-			pstSelectedListItem = pstList->Data.Items+uiItemIndex;
+			pstSelectedListItem = GUI_List_GetListItemPtr(pstList, uiItemIndex);
 		}
 	}
 
@@ -621,10 +629,7 @@ void GUI_List_BindData(GUI_LIST_STRUCT* pstList, size_t uiItemIndex, int32_t* pi
 	pstSelectedListItem		= NULL;
 	if(NULL != pstList)
 	{
-		if(uiItemIndex < pstList->Data.Count)
-		{
-			pstSelectedListItem = pstList->Data.Items+uiItemIndex;
-		}
+		pstSelectedListItem = GUI_List_GetListItemPtr(pstList, uiItemIndex);
 	}
 
 	/*----------------------------------*/
@@ -636,3 +641,192 @@ void GUI_List_BindData(GUI_LIST_STRUCT* pstList, size_t uiItemIndex, int32_t* pi
 		pstSelectedListItem->Decimal.Bind = piDecimal;
 	}
 }
+
+/*****************************************************************************/
+/** Function Name:	GUI_List_GetListItemPtr									**/
+/** Purpose:		Get list item data pointer by index.					**/
+/** Resources:		List item data.											**/
+/** Params:																	**/
+/**	@pstList[in]:		Pointer of list will be read.						**/
+/**	@uiItemIndex[in]:	Index of list item index will be read.				**/
+/** Return:			None.													**/
+/** Notice:			Variable pointer and decimal variable can be NULL.		**/
+/*****************************************************************************/
+GUI_LIST_ITEM* GUI_List_GetListItemPtr(GUI_LIST_STRUCT* pstList, uint32_t uiItemIndex)
+{
+	/*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+	GUI_LIST_ITEM			*pstSelectedListItem;
+#ifdef _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
+	uint32_t				uiItemCounter;
+#endif //_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
+	/*----------------------------------*/
+	/* Initialize						*/
+	/*----------------------------------*/
+	pstSelectedListItem = NULL;
+#ifdef _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
+	uiItemCounter = 0;
+#endif //_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
+
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	if(NULL != pstList)
+	{
+		if(uiItemIndex < pstList->Data.Count)
+		{
+#if _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
+			pstSelectedListItem = pstList->Data.Items;
+			if(NULL != pstSelectedListItem)
+			{
+				while((pstList->Data.Count > 0) && (NULL != pstSelectedListItem->NextItem) && (uiItemCounter < uiItemIndex))
+				{
+					pstSelectedListItem = pstSelectedListItem->NextItem;
+					uiItemCounter++;
+				}
+			}
+#else
+			pstSelectedListItem = pstList->Data.Items+uiItemIndex;
+#endif // _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
+		}
+	}
+	return pstSelectedListItem;
+}
+
+#if _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
+/*****************************************************************************/
+/** Function Name:	GUI_List_InsertItem										**/
+/** Purpose:		Insert a new item to list.								**/
+/** Resources:		List item data.											**/
+/** Params:																	**/
+/**	@pstList[in]:		Pointer of list will be read.						**/
+/**	@pstNewItem[in]:	New item data pointer.								**/
+/**	@uiItemIndex[in]:	Index of new list item.								**/
+/** Return:																	**/
+/** @TRUE				Insert success.										**/
+/**	@FALSE				Insert failed.										**/
+/** Notice:			This function only supported when the dynamic list item **/
+/**					enabled, and new item index cannot greater then list	**/
+/**					item count.												**/
+/*****************************************************************************/
+BOOL GUI_List_InsertItem(GUI_LIST_STRUCT* pstList, GUI_LIST_ITEM* pstNewItem, uint32_t uiNewItemIndex)
+{
+	/*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+	GUI_LIST_ITEM			*pstListItemDataSource;
+	GUI_LIST_ITEM			*pstNewListItem, *pstPosItem;
+	GUI_LIST_DATA			*pstListData;
+	BOOL					bResult;
+
+	/*----------------------------------*/
+	/* Initialize						*/
+	/*----------------------------------*/
+	pstListItemDataSource =	pstNewItem;
+	pstNewListItem =		NULL;
+	pstPosItem =			NULL;
+	bResult =				TRUE;
+	pstListData =			&(pstList->Data);
+
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	if(uiNewItemIndex > pstList->Data.Count)
+	{
+		bResult = FALSE;
+	}
+	else
+	{
+		pstNewListItem = (GUI_LIST_ITEM*)GUI_Common_Allocate(sizeof(GUI_LIST_ITEM));
+		if(NULL != pstNewListItem)
+		{
+			GUI_Common_MemoryCopy(pstNewListItem, pstListItemDataSource, sizeof(GUI_LIST_ITEM));
+
+			if(0 == pstList->Data.Count)
+			{
+				pstNewListItem->NextItem = NULL;
+				pstNewListItem->PrevItem = NULL;
+				pstListData->Items = pstNewListItem;
+			}
+			else if(uiNewItemIndex == pstList->Data.Count)
+			{
+				pstPosItem = GUI_List_GetListItemPtr(pstList, uiNewItemIndex-1);
+				pstPosItem->NextItem = pstNewListItem;
+				pstNewListItem->PrevItem = pstPosItem;
+				pstNewListItem->NextItem = NULL;
+			}
+			else //if((uiNewItemIndex>0)&&(uiNewItemIndex<pstListData->Count))
+			{
+				pstPosItem = GUI_List_GetListItemPtr(pstList, uiNewItemIndex);
+				pstNewListItem->PrevItem = pstPosItem->PrevItem;
+				pstNewListItem->NextItem = pstPosItem;
+				if(NULL != pstPosItem->PrevItem)
+				{
+					pstPosItem->PrevItem->NextItem = pstNewListItem;
+				}
+				else
+				{
+					// Insert to list head, repointer the list head pointer.
+					pstListData->Items = pstNewListItem;
+				}
+				pstPosItem->PrevItem = pstNewListItem;
+			}
+			pstList->Data.Count++;
+		}
+	}
+	return bResult;
+}
+
+/*****************************************************************************/
+/** Function Name:	GUI_List_RemoveItem										**/
+/** Purpose:		Remove a item from list.								**/
+/** Resources:		List item data.											**/
+/** Params:																	**/
+/**	@pstList[in]:		Pointer of list will be read.						**/
+/**	@uiItemIndex[in]:	Index of list item will be removed.					**/
+/** Return:																	**/
+/** @TRUE				Remove success.										**/
+/**	@FALSE				Remove failed.										**/
+/** Notice:			This function only supported when the dynamic list item **/
+/**					enabled, and index of removed item cannot greater then	**/
+/**					list item count.										**/
+/*****************************************************************************/
+BOOL GUI_List_RemoveItem(GUI_LIST_STRUCT* pstList, uint32_t uiNewItemIndex)
+{
+	/*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+	GUI_LIST_ITEM			*pstRemoveListItem;
+	BOOL					bResult;
+
+	/*----------------------------------*/
+	/* Initialize						*/
+	/*----------------------------------*/
+	pstRemoveListItem =		GUI_List_GetListItemPtr(pstList, uiNewItemIndex);
+	bResult =				TRUE;
+
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	if(NULL != pstRemoveListItem)
+	{
+		if(NULL != pstRemoveListItem->PrevItem)
+		{
+			pstRemoveListItem->PrevItem->NextItem = pstRemoveListItem->NextItem;
+		}
+		if(NULL != pstRemoveListItem->NextItem)
+		{
+			pstRemoveListItem->NextItem->PrevItem = pstRemoveListItem->PrevItem;
+		}
+		if(0 == uiNewItemIndex)
+		{
+			pstList->Data.Items = pstRemoveListItem->NextItem;
+		}
+		GUI_Common_Free(pstRemoveListItem);
+		pstList->Data.Count--;
+	}
+	return bResult;
+}
+
+#endif // _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_

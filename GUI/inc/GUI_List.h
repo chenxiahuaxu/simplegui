@@ -3,10 +3,16 @@
 //=======================================================================//
 //= Include files.													    =//
 //=======================================================================//
+#include "GUI_Common.h"
 #include "GUI_Basic.h"
 #include "GUI_Text.h"
 #include "GUI_ScrollBar.h"
+#ifdef _SIMPLE_GUI_ENABLE_SIMULATOR_
 #include "LCD_VirtualDeviceParameter.h"
+#else
+// Insert platform display device parameter info file here.
+#endif //_SIMPLE_GUI_ENABLE_SIMULATOR_
+
 
 //=======================================================================//
 //= Data type definition.											    =//
@@ -28,14 +34,19 @@ typedef struct
 	int32_t*					Bind;
 }GUI_LIST_PARAMETER_VALUE;
 
-typedef struct
+typedef struct _st_gui_list_item_
 {
+	uint32_t					Sign;
 	const char*					Text;
 	GUI_LIST_ITEM_TYPE			Type;
 	GUI_LIST_PARAMETER_VALUE	Valid;
 	GUI_LIST_PARAMETER_VALUE	Decimal;
     const char**				EnumerationValues;
-    size_t						EnumerationCount;
+    uint32_t					EnumerationCount;
+#if _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
+	struct _st_gui_list_item_*	PrevItem;
+    struct _st_gui_list_item_*	NextItem;
+#endif
 }GUI_LIST_ITEM;
 
 typedef struct
@@ -73,11 +84,16 @@ typedef struct
 //=======================================================================//
 //= Public function declaration.									    =//
 //=======================================================================//
-void		GUI_List_InitializeListData(GUI_LIST_STRUCT* pstList);
-void		GUI_List_RefreshList(GUI_LIST_STRUCT* pstList);
-void		GUI_List_SelectUpItem(GUI_LIST_STRUCT* pstList);
-void		GUI_List_SelectDownItem(GUI_LIST_STRUCT* pstList);
-void		GUI_List_SetListItemValue(GUI_LIST_STRUCT* pstList, size_t uiItemIndex, int32_t iSetValid, int32_t iSetDecimal);
-void		GUI_List_GetListItemValue(GUI_LIST_STRUCT* pstList, size_t uiItemIndex, int32_t* piValid, int32_t* piDecimal);
+void			GUI_List_InitializeListData(GUI_LIST_STRUCT* pstList);
+void			GUI_List_RefreshList(GUI_LIST_STRUCT* pstList);
+void			GUI_List_SelectUpItem(GUI_LIST_STRUCT* pstList);
+void			GUI_List_SelectDownItem(GUI_LIST_STRUCT* pstList);
+void			GUI_List_SetListItemValue(GUI_LIST_STRUCT* pstList, size_t uiItemIndex, int32_t iSetValid, int32_t iSetDecimal);
+void			GUI_List_GetListItemValue(GUI_LIST_STRUCT* pstList, size_t uiItemIndex, int32_t* piValid, int32_t* piDecimal);
+GUI_LIST_ITEM*	GUI_List_GetListItemPtr(GUI_LIST_STRUCT* pstList, uint32_t uiItemIndex);
+#if _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
+BOOL			GUI_List_InsertItem(GUI_LIST_STRUCT* pstList, GUI_LIST_ITEM* pstNewItem, uint32_t uiNewItemIndex);
+BOOL			GUI_List_RemoveItem(GUI_LIST_STRUCT* pstList, uint32_t uiNewItemIndex);
+#endif // _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
 
 #endif // __INCLUDE_GUI_LIST_H__

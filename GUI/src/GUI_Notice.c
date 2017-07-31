@@ -3,10 +3,7 @@
 /** FileName: GUI_Notice.c												**/
 /** Author: XuYulin														**/
 /** Version: 1.0.0.0													**/
-/** Description: XML operations.										**/
-/** History:															**/
-/**	XuyYulin	2017/2/27	2.0.0.0		New create.						**/
-/** XuYulin 2017/2/27 1.0 build this moudle								**/
+/** Description: Notice box display interface.							**/
 /*************************************************************************/
 
 //=======================================================================//
@@ -94,22 +91,18 @@ uint16_t GUI_Notice_RefreshNotice(const char* szNoticeText, uint16_t uiTextOffse
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	uint16_t	uiLineCount;
-	uint16_t	uiNoticeBoxHeight;
-	uint16_t	uiTextLines;
-	RECTANGLE	stTextDisplayArea;
-	RECTANGLE	stIconDisplayArea, stIconDataArea;
-	char*       pszNoticeTextPtr;
+	uint16_t				uiLineCount;
+	uint16_t				uiNoticeBoxHeight;
+	uint16_t				uiTextLines;
+	RECTANGLE				stTextDisplayArea;
+	RECTANGLE				stIconDisplayArea, stIconDataArea;
+	const char*				pszNoticeTextPtr;
 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
 	// Encode string if defined.
-	#ifdef GB2312_ENCV
-	pszNoticeTextPtr = ENCODE(szNoticeText);
-	#else
 	pszNoticeTextPtr = szNoticeText;
-	#endif
 	// Get max line of notice text.
 	if(GUI_ICON_NONE != eIcon)
 	{

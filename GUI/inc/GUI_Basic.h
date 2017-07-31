@@ -5,11 +5,11 @@
 //=======================================================================//
 #include <stddef.h>
 #include <stdint.h>
-#ifdef __SIMULATOR__
+#ifdef _SIMPLE_GUI_ENABLE_SIMULATOR_
 #include "LCD_OperationIF.h"
 #else
-// Insert screen driver head file here.
-#endif
+// Insert platform driver head file here.
+#endif //_SIMPLE_GUI_ENABLE_SIMULATOR_
 
 //=======================================================================//
 //= Data type definition.											    =//

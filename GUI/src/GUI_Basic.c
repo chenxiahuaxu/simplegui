@@ -3,10 +3,7 @@
 /** FileName: GUI_Font.c												**/
 /** Author: XuYulin														**/
 /** Version: 1.0.0.0													**/
-/** Description: XML operations.										**/
-/** History:															**/
-/**	XuyYulin	2017/2/24	2.0.0.0		New create.						**/
-/** XuYulin 2017/2/24 1.0 build this moudle								**/
+/** Description: GUI basic drawing operating.							**/
 /*************************************************************************/
 
 //=======================================================================//
@@ -158,19 +155,19 @@ void GUI_Basic_DrawPoint(uint8_t uiPosX, uint8_t uiPosY, GUI_COLOR eColor)
 	{
 		if(GUI_COLOR_FRGCLR == eColor)
 		{
-#ifdef __SIMULATOR__
+#ifdef _SIMPLE_GUI_ENABLE_SIMULATOR_
 			VTIF_SetPoint(uiPosX, uiPosY, 1);
 #else
 			// Call draw pix interface here.
-#endif
+#endif //_SIMPLE_GUI_ENABLE_SIMULATOR_
 		}
 		else if(GUI_COLOR_BKGCLR == eColor)
 		{
-#ifdef __SIMULATOR__
+#ifdef _SIMPLE_GUI_ENABLE_SIMULATOR_
 			VTIF_SetPoint(uiPosX, uiPosY, 0);
 #else
 			// Call draw pix interface here.
-#endif
+#endif //_SIMPLE_GUI_ENABLE_SIMULATOR_
 		}
 	}
 }
@@ -203,11 +200,11 @@ GUI_COLOR GUI_Basic_GetPoint(uint8_t uiPosX, uint8_t uiPosY)
 	/*----------------------------------*/
 	if((uiPosX < LCD_SIZE_WIDTH) && (uiPosY < LCD_SIZE_HEIGHT))
 	{
-#ifdef __SIMULATOR__
+#ifdef _SIMPLE_GUI_ENABLE_SIMULATOR_
 		uiPixValue = VTIF_GetPoint(uiPosX, uiPosY);
 #else
 		// Call read pix interface here.
-#endif
+#endif //_SIMPLE_GUI_ENABLE_SIMULATOR_
 		if(0 == uiPixValue)
 		{
 			eColor = GUI_COLOR_BKGCLR;
@@ -230,11 +227,11 @@ GUI_COLOR GUI_Basic_GetPoint(uint8_t uiPosX, uint8_t uiPosY)
 /*****************************************************************************/
 void GUI_ClearScreen(void)
 {
-#ifdef __SIMULATOR__
+#ifdef _SIMPLE_GUI_ENABLE_SIMULATOR_
 	VTIF_ClearScreen();
 #else
 	// Call clear screen function here;
-#endif //__SIMULATOR__
+#endif //_SIMPLE_GUI_ENABLE_SIMULATOR_
 }
 
 /*****************************************************************************/

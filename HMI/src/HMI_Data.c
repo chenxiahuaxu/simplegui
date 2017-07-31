@@ -4,9 +4,6 @@
 /** Author: Polarix														**/
 /** Version: 1.0.0.0													**/
 /** Description: User operation interface.								**/
-/** History:															**/
-/**	XuyYulin	2017/2/27	2.0.0.0		New create.						**/
-/** XuYulin 2017/2/27 1.0 build this moudle								**/
 /*************************************************************************/
 //=======================================================================//
 //= Include files.													    =//

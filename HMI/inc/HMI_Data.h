@@ -59,17 +59,6 @@ typedef struct _t_hmi_element_
 	HMI_SCREEN_ACTION*				Actions;
 }HMI_SCREEN;
 
-
-typedef struct
-{
-	uint16_t						Year;
-	uint16_t						Month;
-	uint16_t						Day;
-	uint16_t						Hour;
-	uint16_t						Minute;
-	uint16_t						Second;
-}HMI_RTC_TIME;
-
 void			HMI_ScreenData_Initialize(void);
 void			HMI_ScreenData_SetCurrentScreen(uint32_t uiScreenIndex);
 HMI_SCREEN*		HMI_ScreenData_GetCurrentScreen(void);

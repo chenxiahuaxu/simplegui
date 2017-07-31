@@ -4,8 +4,6 @@
 /** Author: Polarix														**/
 /** Version: 1.0.0.0													**/
 /** Description: HMI demo for notice box interface and refresh screen.	**/
-/** History:															**/
-/**	Polarix	2017/6/1	1.0.0.0		New create.							**/
 /*************************************************************************/
 //=======================================================================//
 //= Include files.													    =//
@@ -14,6 +12,7 @@
 #include "HMI_Data.h"
 #include "HMI_Process.h"
 #include "GUI_Notice.h"
+#include "GUI_Common.h"
 #include <stdio.h>
 
 //=======================================================================//
@@ -61,6 +60,18 @@ int32_t HMI_DemoNotice_PreProcess(const void* pstParameters)
 
 int32_t HMI_DemoNotice_RefreshScreen(void)
 {
+	/*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+	GUI_TIME					stRTCTime;
+
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	GUI_Common_GetNowTime(&stRTCTime);
+	sprintf(szRTCNoticeText, "系统时间\n%04u-%02u-%02u\n%02u:%02u:%02u",
+				stRTCTime.Year, stRTCTime.Month, stRTCTime.Day,
+				stRTCTime.Hour, stRTCTime.Minute, stRTCTime.Second);
 	GUI_Notice_RefreshNotice(szRTCNoticeText, 0, GUI_ICON_INFORMATION);
 	return HMI_RESULT_NORMAL;
 }
@@ -71,12 +82,12 @@ int32_t HMI_DemoNotice_OnInternalEvent(uint32_t uiScreenID, const void* pstParam
 	/* Variable Declaration				*/
 	/*----------------------------------*/
 	int32_t						iProcessResult;
-	HMI_RTC_TIME*				pstRTCTime;
+	GUI_TIME*					pstRTCTime;
 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	pstRTCTime = (HMI_RTC_TIME*)pstParameters;
+	pstRTCTime = (GUI_TIME*)pstParameters;
 	if(NULL != pstRTCTime)
 	{
         sprintf(szRTCNoticeText, "系统时间\n%04u-%02u-%02u\n%02u:%02u:%02u",

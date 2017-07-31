@@ -54,9 +54,9 @@ extern const GUI_FONT_SIZE_STRUCT g_stFontSize[];
 //=======================================================================//
 //= Public function declaration.									    =//
 //=======================================================================//
-void		GUI_Text_DrawSingleLineText(char* szTextBuffer, GUI_FONT_SIZE eFontSize, RECTANGLE* pstDisplayArea, RECTANGLE* pstStringDataArea, DRAW_MODE eFontMode);
-uint16_t	GUI_Text_DrawMultipleLinesText(char* szTextBuffer, GUI_FONT_SIZE eFontSize, RECTANGLE* pstDisplayArea, int16_t iTopOffset, DRAW_MODE eFontMode);
-size_t		GUI_Text_GetTextGraphicsWidth(char* szText, GUI_FONT_SIZE eFontSize);
-uint16_t	GUI_Text_GetMultiLineTextLines(char* szNoticeText, uint16_t uiHalfWidthCharInLine);
+void		GUI_Text_DrawSingleLineText(const char* szTextBuffer, GUI_FONT_SIZE eFontSize, RECTANGLE* pstDisplayArea, RECTANGLE* pstStringDataArea, DRAW_MODE eFontMode);
+uint16_t	GUI_Text_DrawMultipleLinesText(const char* szTextBuffer, GUI_FONT_SIZE eFontSize, RECTANGLE* pstDisplayArea, int16_t iTopOffset, DRAW_MODE eFontMode);
+size_t		GUI_Text_GetTextGraphicsWidth(const char* szText, GUI_FONT_SIZE eFontSize);
+uint16_t	GUI_Text_GetMultiLineTextLines(const char* szNoticeText, uint16_t uiHalfWidthCharInLine);
 
 #endif

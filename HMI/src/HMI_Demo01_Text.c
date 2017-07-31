@@ -4,8 +4,6 @@
 /** Author: Polarix														**/
 /** Version: 1.0.0.0													**/
 /** Description: HMI demo for list control interface.					**/
-/** History:															**/
-/**	Polarix	2017/6/1	1.0.0.0		New create.							**/
 /*************************************************************************/
 
 //=======================================================================//
@@ -118,7 +116,7 @@ int32_t HMI_DemoText_PreProcess(const void* pstParameters)
 int32_t HMI_DemoText_RefreshScreen(void)
 {
 	GUI_Frame_DrawFullScreenFrame(&stTextFrame);
-	GUI_Text_DrawMultipleLinesText(ENCODE(szDemoText), GUI_FONT_SIZE_H12, &stTextDisplayArea, iTextOffset, GUI_DRAW_NORMAL);
+	GUI_Text_DrawMultipleLinesText(szDemoText, GUI_FONT_SIZE_H12, &stTextDisplayArea, iTextOffset, GUI_DRAW_NORMAL);
 	return HMI_RESULT_NORMAL;
 }
 
@@ -193,7 +191,7 @@ int32_t	HMI_DemoText_OnInternalEvent(uint32_t uiScreenID, const void* pstParamet
 		}
 		else
 		{
-			GUI_Text_DrawMultipleLinesText(ENCODE(szDemoText), GUI_FONT_SIZE_H12, &stTextDisplayArea, iTextOffset, GUI_DRAW_NORMAL);
+			GUI_Text_DrawMultipleLinesText(szDemoText, GUI_FONT_SIZE_H12, &stTextDisplayArea, iTextOffset, GUI_DRAW_NORMAL);
 			if(iTextOffset + iTextHeight == 0)
 			{
 				iTextOffset = HMI_TEXT_DEMO_FRAME_TEXT_HEIGHT;

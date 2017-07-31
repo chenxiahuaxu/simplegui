@@ -3,10 +3,7 @@
 /** FileName: GUI_ProcessBar.c											**/
 /** Author: XuYulin														**/
 /** Version: 1.0.0.0													**/
-/** Description: XML operations.										**/
-/** History:															**/
-/**	XuyYulin	2017/2/27	2.0.0.0		New create.						**/
-/** XuYulin 2017/2/27 1.0 build this moudle								**/
+/** Description: Process bar display interface.							**/
 /*************************************************************************/
 
 //=======================================================================//

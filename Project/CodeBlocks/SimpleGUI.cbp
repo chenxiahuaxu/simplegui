@@ -53,8 +53,9 @@
 			<Add option="-D__WXMSW__" />
 			<Add option="-DWXUSINGDLL" />
 			<Add option="-DwxUSE_UNICODE" />
-			<Add option="-DGB2312_ENCV" />
-			<Add option="-D__SIMULATOR__" />
+			<Add option="-D_SIMPLE_GUI_ENABLE_ICONV_GB2312_" />
+			<Add option="-D_SIMPLE_GUI_ENABLE_SIMULATOR_" />
+			<Add option="-D_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_" />
 			<Add directory="$(#wx31)/include" />
 			<Add directory="../../Frame/inc" />
 			<Add directory="../../User/inc" />
@@ -78,10 +79,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../../Frame/src/LCD_VirtualDevice.cpp" />
-		<Unit filename="../../GUI/inc/Font_H12.h" />
-		<Unit filename="../../GUI/inc/Font_H16.h" />
-		<Unit filename="../../GUI/inc/Font_H32.h" />
-		<Unit filename="../../GUI/inc/Font_H8.h" />
 		<Unit filename="../../GUI/inc/GUI_Basic.h" />
 		<Unit filename="../../GUI/inc/GUI_Common.h" />
 		<Unit filename="../../GUI/inc/GUI_Frame.h">
@@ -100,6 +97,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../../GUI/src/GUI_Common.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../GUI/src/GUI_FlashData.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../../GUI/src/GUI_Frame.c">
@@ -130,11 +130,6 @@
 		<Unit filename="../../HMI/inc/HMI_Demo01_Text.h" />
 		<Unit filename="../../HMI/inc/HMI_Demo02_List.h" />
 		<Unit filename="../../HMI/inc/HMI_Demo03_Notice1.h" />
-		<Unit filename="../../HMI/inc/HMI_Demo03_Notice2.c">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
 		<Unit filename="../../HMI/inc/HMI_Demo03_Notice2.h" />
 		<Unit filename="../../HMI/inc/HMI_Demo04_Graph.h" />
 		<Unit filename="../../HMI/inc/HMI_Demo05_VariableBox.h" />

@@ -1,11 +1,9 @@
 /*************************************************************************/
 /** Copyright.															**/
-/** FileName: GUI_Font.c												**/
+/** FileName: GUI_Common.c												**/
 /** Author: Polarix														**/
 /** Version: 1.0.0.0													**/
 /** Description: Draw text.												**/
-/** History:															**/
-/**	Polarix	2017/2/24	1.0.0.0		New create.							**/
 /*************************************************************************/
 
 //=======================================================================//
@@ -16,14 +14,18 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
-#ifdef GB2312_ENCV
+#ifdef _SIMPLE_GUI_ENABLE_SIMULATOR_
+#ifdef _SIMPLE_GUI_ENABLE_ICONV_GB2312_
 #include <iconv.h>
-#endif // GB2312_ENCV
+#include <time.h>
+#endif // _SIMPLE_GUI_ENABLE_ICONV_GB2312_
+#include <malloc.h>
+#endif //_SIMPLE_GUI_ENABLE_SIMULATOR_
 
 //=======================================================================//
 //= Static variable declaration.									    =//
 //=======================================================================//
-#ifdef GB2312_ENCV
+#if defined(_SIMPLE_GUI_ENABLE_SIMULATOR_)&&defined(_SIMPLE_GUI_ENABLE_ICONV_GB2312_)
 static char g_arrcEncodeBuffer[ENCODE_BUFFER_SIZE];
 #endif
 
@@ -480,48 +482,15 @@ int32_t GUI_Common_ConvertStringToInteger(char* szString, char** pcEndPointer, u
 	return iResult;
 }
 
-/*****************************************************************************/
-/** Function Name:	GUI_StringLength_GB2312									**/
-/** Purpose:		Get a GB2312 encode string byte length.					**/
-/** Resources:		None.													**/
-/** Params:																	**/
-/**	@szString: 			String pointer.										**/
-/** Return:			String length.											**/
-/** Notice:			Only used for GB2312 encode, full character used tow	**/
-/**					bytes.										 			**/
-/*****************************************************************************/
-size_t GUI_Common_StringLength(char* szString)
-{
-	/*----------------------------------*/
-	/* Variable Declaration				*/
-	/*----------------------------------*/
-	size_t						uiLength;
-
-	/*----------------------------------*/
-	/* Initialize						*/
-	/*----------------------------------*/
-	uiLength =					0;
-
-	/*----------------------------------*/
-	/* Process							*/
-	/*----------------------------------*/
-	if(NULL != szString)
-	{
-		uiLength = strlen(szString);
-	}
-
-	return uiLength;
-}
-
-#ifdef GB2312_ENCV
+#ifdef _SIMPLE_GUI_ENABLE_ICONV_GB2312_
 /*************************************************************************/
 /** Function Name:	GUI_EncodeConvert									**/
 /** Purpose:		Convert string encode.								**/
 /** Resources:		None.												**/
 /** Params:																**/
-/**	[in]encFrom:		Source encoder.									**/
-/**	[in]encTo:			Destination encoder.							**/
-/**	[in]szFilePath:		File path.										**/
+/**	@[in]encFrom:		Source encoder.									**/
+/**	@[in]encTo:			Destination encoder.							**/
+/**	@[in]szFilePath:	File path.										**/
 /** Return:			String after convert.								**/
 /*************************************************************************/
 char* GUI_EncodeConvert(char *szSourceEncode, char *szDestinationEncode, char *szSource)
@@ -561,8 +530,185 @@ char* GUI_EncodeConvert(char *szSourceEncode, char *szDestinationEncode, char *s
 }
 #endif
 
+#ifdef _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
+/*************************************************************************/
+/** Function Name:	GUI_Common_Allocate									**/
+/** Purpose:		Allocate a memory block.							**/
+/** Resources:		None.												**/
+/** Params:																**/
+/**	@[in]uiSize:		Allocated memory size.							**/
+/** Return:			Allocated memory block started address, same as STD	**/
+/**					malloc interface.									**/
+/*************************************************************************/
+void* GUI_Common_Allocate(uint32_t uiSize)
+{
+	/*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+	void					*pAllocatedMemory;
+
+	/*----------------------------------*/
+	/* Initialize						*/
+	/*----------------------------------*/
+	pAllocatedMemory =		NULL;
+
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+#ifdef _SIMPLE_GUI_ENABLE_SIMULATOR_
+	pAllocatedMemory = malloc(uiSize);
+#else
+	// Add allocate memory function here;
+#endif // _SIMPLE_GUI_ENABLE_SIMULATOR_
+	return pAllocatedMemory;
+}
+
+/*************************************************************************/
+/** Function Name:	GUI_Common_Free										**/
+/** Purpose:		Free a memory block.								**/
+/** Resources:		None.												**/
+/** Params:																**/
+/**	@[in]pFreePointer:	Free memory pointer 							**/
+/** Return:			None.												**/
+/*************************************************************************/
+void GUI_Common_Free(void* pFreePointer)
+{
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	free(pFreePointer);
+}
+
+#endif // _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
+
+/*************************************************************************/
+/** Function Name:	GUI_Common_MemoryCopy								**/
+/** Purpose:		Copy memory block to a new address.					**/
+/** Resources:		None.												**/
+/** Params:																**/
+/**	@[in]pDest:			Memory address will copied to.					**/
+/**	@[in]pSrc:			Memory data source.								**/
+/**	@[in]size:			Copied data size(in byte).						**/
+/** Return:			Same as STD memcpy function.						**/
+/*************************************************************************/
+void* GUI_Common_MemoryCopy(void* pDest, const void* pSrc, uint32_t size)
+{
+	/*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+	void					*pCopiedMemory;
+
+	/*----------------------------------*/
+	/* Initialize						*/
+	/*----------------------------------*/
+	pCopiedMemory =		NULL;
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	if((NULL != pDest) && (NULL != pSrc))
+	{
+#ifdef _SIMPLE_GUI_ENABLE_SIMULATOR_
+	pCopiedMemory = memcpy(pDest, pSrc, size);
+#else
+	// Add RTC time process here;
+#endif // _SIMPLE_GUI_ENABLE_SIMULATOR_
+	}
+
+	return pCopiedMemory;
+}
+
+uint32_t GUI_Common_StringLength(const char* szString)
+{
+	/*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+	uint32_t				uiStringLength;
+
+	/*----------------------------------*/
+	/* Initialize						*/
+	/*----------------------------------*/
+	uiStringLength =		0;
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	if(NULL != szString)
+	{
+#ifdef _SIMPLE_GUI_ENABLE_SIMULATOR_
+	uiStringLength = strlen(szString);
+#else
+	// Add RTC time process here;
+#endif // _SIMPLE_GUI_ENABLE_SIMULATOR_
+	}
+
+	return uiStringLength;
+}
+
+/*****************************************************************************/
+/** Function Name:	GUI_Common_GetNowTime									**/
+/** Purpose:		Get system now time.									**/
+/** Resources:		System RTC interface.									**/
+/** Params:																	**/
+/**	@pstTime:			RTC time data structure pointer.					**/
+/** Return:			None.													**/
+/** Notice:			user need to override this function according to the	**/
+/**					platform used.											**/
+/*****************************************************************************/
+void GUI_Common_GetNowTime(GUI_TIME* pstTime)
+{
+	/*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+	time_t				rawtime;
+	struct tm*			timeinfo;
+
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	if(NULL != pstTime)
+	{
+		time(&rawtime);
+		timeinfo = localtime(&rawtime);
+		if(NULL != timeinfo)
+		{
+			pstTime->Year = timeinfo->tm_year+1900;
+			pstTime->Month = timeinfo->tm_mon+1;
+			pstTime->Day = timeinfo->tm_mday;
+			pstTime->Hour = timeinfo->tm_hour;
+			pstTime->Minute = timeinfo->tm_min;
+			pstTime->Second = timeinfo->tm_sec;
+		}
+	}
+}
+
+/*****************************************************************************/
+/** Function Name:	GUI_Common_RefreshScreen								**/
+/** Purpose:		Refresh screen when needed.								**/
+/** Resources:		None.													**/
+/** Params:			None.													**/
+/** Return:			None.													**/
+/** Notice:			Need to be implemented, and call when needed in GUI API	**/
+/**					optimization.											**/
+/*****************************************************************************/
 void GUI_Common_RefreshScreen(void)
 {
 	/* Add screen refresh function or process here. */
+}
+
+/*****************************************************************************/
+/** Function Name:	GUI_Common_ReadFlashROM									**/
+/** Purpose:		Read byte or byte array form internal flash or external	**/
+/**					flash.													**/
+/** Resources:		None.													**/
+/** Params:																	**/
+/**	@uiAddressHead:		Start address will be read.							**/
+/**	@uiDataLength:		Number of byte will be read.						**/
+/**	@pBuffer:			Read byte buffer.									**/
+/** Return:			None.													**/
+/** Notice:			This function need to override when use external flash	**/
+/**					ROM data.												**/
+/*****************************************************************************/
+void GUI_Common_ReadFlashROM(uint32_t uiAddressHead, uint32_t uiDataLength, uint8_t* pBuffer)
+{
+	/* Add flash ROM IO process here. */
 }
 

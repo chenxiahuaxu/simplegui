@@ -4,8 +4,6 @@
 /** Author: Polarix														**/
 /** Version: 1.0.0.0													**/
 /** Description: Draw frames on screen.									**/
-/** History:															**/
-/**	Polarix	2017/5/24	1.0.0.0		New create.							**/
 /*************************************************************************/
 
 //=======================================================================//
@@ -80,7 +78,7 @@ void GUI_Frame_DrawFullScreenFrame(GUI_BOX_FRAME_STRUCT* pstFrameData)
 				stTitleTextDisplayArea.Width	= LCD_SIZE_WIDTH-2;
 				stTitleTextDisplayArea.Height	= g_stFontSize[pstFrameData->Parameter.FontSize].Height;
 			}
-			GUI_Text_DrawSingleLineText(	ENCODE(pstFrameData->Data.Title), pstFrameData->Parameter.FontSize,
+			GUI_Text_DrawSingleLineText(	pstFrameData->Data.Title, pstFrameData->Parameter.FontSize,
 											&stTitleTextDisplayArea, &stTitleTextDataArea, GUI_DRAW_NORMAL);
 		}
 	}

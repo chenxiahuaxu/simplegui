@@ -4,8 +4,6 @@
 /** Author: Polarix														**/
 /** Version: 1.0.0.0													**/
 /** Description: This file provides ActionMap interface function.		**/
-/** History:															**/
-/**	Polarix		2017/6/1	2.0.0.0		New create.						**/
 /*************************************************************************/
 
 //=======================================================================//
@@ -64,7 +62,7 @@ void HMI_Action_Initialize(void)
 /** Return:			Process result.											**/
 /** Notice:			None.													**/
 /*****************************************************************************/
-int32_t HMI_Action_ExternalEventProcess(uint32_t uiScreenID, void* pstData)
+int32_t HMI_Action_UserOperatingEventProcess(uint32_t uiScreenID, void* pstData)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
