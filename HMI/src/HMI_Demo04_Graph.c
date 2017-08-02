@@ -23,17 +23,17 @@ static int32_t			HMI_DemoGraph_PostProcess(int32_t iActionResult);
 //=======================================================================//
 //= Static variable declaration.									    =//
 //=======================================================================//
-GUI_GRAPH_POINT			arrPoint[] =			{	{-50, 90},
+SGUI_GRAPH_POINT		arrPoint[] =			{	{-50, 90},
 													{-40, 10},
 													{-20, 0},
 													{0, 60},
 													{20, 40},
 													{50  , 80}
 												};
-GUI_GRAPH_DATA			stGraphData =			{0x00};
-GUI_GRAPH_CONTROL		stGraphControl =		{{-50, 50}, {0, 100}, 1};
-GUI_GRAPH_INIT_DATA		stGraphInitializeData =	{6 , 0, arrPoint};
-GUI_GRAPH				stGraph =				{&stGraphData, &stGraphControl};
+SGUI_GRAPH_DATA			stGraphData =			{0x00};
+SGUI_GRAPH_CONTROL		stGraphControl =		{{-50, 50}, {0, 100}, 1};
+SGUI_GRAPH_INIT_DATA	stGraphInitializeData =	{6 , 0, arrPoint};
+SGUI_GRAPH				stGraph =				{&stGraphData, &stGraphControl};
 
 //=======================================================================//
 //= Global variable declaration.									    =//
@@ -54,19 +54,19 @@ HMI_SCREEN				g_stHMI_DemoGraph =			{	HMI_SCREEN_ID_ANY,
 //=======================================================================//
 int32_t HMI_DemoGraph_Initialize(void)
 {
-	GUI_Graph_InitializeGraphData(&stGraph, &stGraphInitializeData);
+	SGUI_Graph_InitializeGraphData(&stGraph, &stGraphInitializeData);
 	return HMI_RESULT_NORMAL;
 }
 
 int32_t HMI_DemoGraph_PreProcess(const void* pstParameters)
 {
-	GUI_Graph_Refresh(&stGraph);
+	SGUI_Graph_Refresh(&stGraph);
 	return HMI_RESULT_NORMAL;
 }
 
 int32_t HMI_DemoGraph_RefreshScreen(void)
 {
-	GUI_Graph_Refresh(&stGraph);
+	SGUI_Graph_Refresh(&stGraph);
 	return HMI_RESULT_NORMAL;
 }
 

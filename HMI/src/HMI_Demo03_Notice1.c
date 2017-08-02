@@ -11,8 +11,8 @@
 #include "HMI_Demo03_Notice1.h"
 #include "HMI_Data.h"
 #include "HMI_Process.h"
-#include "GUI_Notice.h"
-#include "GUI_Common.h"
+#include "SGUI_Notice.h"
+#include "SGUI_Common.h"
 #include <stdio.h>
 
 //=======================================================================//
@@ -63,16 +63,16 @@ int32_t HMI_DemoNotice_RefreshScreen(void)
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	GUI_TIME					stRTCTime;
+	SGUI_TIME				stRTCTime;
 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	GUI_Common_GetNowTime(&stRTCTime);
+	SGUI_Common_GetNowTime(&stRTCTime);
 	sprintf(szRTCNoticeText, "系统时间\n%04u-%02u-%02u\n%02u:%02u:%02u",
 				stRTCTime.Year, stRTCTime.Month, stRTCTime.Day,
 				stRTCTime.Hour, stRTCTime.Minute, stRTCTime.Second);
-	GUI_Notice_RefreshNotice(szRTCNoticeText, 0, GUI_ICON_INFORMATION);
+	SGUI_Notice_RefreshNotice(szRTCNoticeText, 0, SGUI_ICON_INFORMATION);
 	return HMI_RESULT_NORMAL;
 }
 
@@ -82,18 +82,18 @@ int32_t HMI_DemoNotice_OnInternalEvent(uint32_t uiScreenID, const void* pstParam
 	/* Variable Declaration				*/
 	/*----------------------------------*/
 	int32_t						iProcessResult;
-	GUI_TIME*					pstRTCTime;
+	SGUI_TIME*				pstRTCTime;
 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	pstRTCTime = (GUI_TIME*)pstParameters;
+	pstRTCTime = (SGUI_TIME*)pstParameters;
 	if(NULL != pstRTCTime)
 	{
         sprintf(szRTCNoticeText, "系统时间\n%04u-%02u-%02u\n%02u:%02u:%02u",
 				pstRTCTime->Year, pstRTCTime->Month+1, pstRTCTime->Day,
 				pstRTCTime->Hour, pstRTCTime->Minute, pstRTCTime->Second);
-		GUI_Notice_RefreshNotice(szRTCNoticeText, 0, GUI_ICON_INFORMATION);
+		SGUI_Notice_RefreshNotice(szRTCNoticeText, 0, SGUI_ICON_INFORMATION);
 		iProcessResult = HMI_RESULT_NORMAL;
 	}
 	else

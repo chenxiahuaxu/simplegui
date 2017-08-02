@@ -9,12 +9,12 @@
 //=======================================================================//
 //= Include files.													    =//
 //=======================================================================//
-#include "GUI_Basic.h"
+#include "SGUI_Basic.h"
 
 //=======================================================================//
 //= Static variable declaration.									    =//
 //=======================================================================//
-const uint8_t BASIC_FONT_H6[] = {
+SGUI_CBYTE SGUI_BASIC_FONT_H6[] = {
 0x1F, 0x11, 0x1F, 0x00,	//0
 0x00, 0x1F, 0x00, 0x00,	//1
 0x1D, 0x15, 0x17, 0x00,	//2
@@ -36,7 +36,7 @@ const uint8_t BASIC_FONT_H6[] = {
 };
 
 /* Basic character font data */
-const uint8_t BASIC_FONT_H8[] = {
+SGUI_CBYTE SGUI_BASIC_FONT_H8[] = {
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,	// space index 0
 0x00, 0x00, 0x5F, 0x00, 0x00, 0x00,	// !
 0x00, 0x07, 0x00, 0x07, 0x00, 0x00,	// "
@@ -137,20 +137,22 @@ const uint8_t BASIC_FONT_H8[] = {
 //=======================================================================//
 //= Function implementation.										    =//
 //=======================================================================//
-
-/*****************************************************************************/
-/** Function Name:	GUI_DrawPoint											**/
-/** Purpose:		Set a pixel color or draw a point.						**/
-/** Resources:		None.													**/
-/** Params:																	**/
-/**	@uiPosX:			X location of point by pixels.						**/
-/**	@uiPosY:			Y location of point by pixels.						**/
-/**	@uiColor:			Point color, GUI_COLOR_BKGCLR means clear pix, 		**/
-/**						GUI_COLOR_FRGCLR means set pix.						**/
-/** Return:			None.													**/
-/*****************************************************************************/
-void GUI_Basic_DrawPoint(uint8_t uiPosX, uint8_t uiPosY, GUI_COLOR eColor)
+/*************************************************************************/
+/** Function Name:	GUI_DrawPoint										**/
+/** Purpose:		Set a pixel color or draw a point.					**/
+/** Resources:		None.												**/
+/** Params:																**/
+/**	@uiPosX:			X location of point by pixels.					**/
+/**	@uiPosY:			Y location of point by pixels.					**/
+/**	@uiColor:			Point color, GUI_COLOR_BKGCLR means clear pix, 	**/
+/**						GUI_COLOR_FRGCLR means set pix.					**/
+/** Return:			None.												**/
+/*************************************************************************/
+void SGUI_Basic_DrawPoint(SGUI_UINT uiPosX, SGUI_UINT uiPosY, SGUI_COLOR eColor)
 {
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
 	if((uiPosX < LCD_SIZE_WIDTH) && (uiPosY < LCD_SIZE_HEIGHT))
 	{
 		if(GUI_COLOR_FRGCLR == eColor)
@@ -172,28 +174,28 @@ void GUI_Basic_DrawPoint(uint8_t uiPosX, uint8_t uiPosY, GUI_COLOR eColor)
 	}
 }
 
-/*****************************************************************************/
-/** Function Name:	GUI_Basic_GetPoint										**/
-/** Purpose:		Get a pixel color .										**/
-/** Resources:		None.													**/
-/** Params:																	**/
-/**	@uiPosX:			X location of point by pixels.						**/
-/**	@uiPosY:			Y location of point by pixels.						**/
-/** Return:			None.													**/
-/*****************************************************************************/
-GUI_COLOR GUI_Basic_GetPoint(uint8_t uiPosX, uint8_t uiPosY)
+/*************************************************************************/
+/** Function Name:	GUI_Basic_GetPoint									**/
+/** Purpose:		Get a pixel color .									**/
+/** Resources:		None.												**/
+/** Params:																**/
+/**	@uiPosX:			X location of point by pixels.					**/
+/**	@uiPosY:			Y location of point by pixels.					**/
+/** Return:			None.												**/
+/*************************************************************************/
+SGUI_COLOR GUI_Basic_GetPoint(SGUI_UINT uiPosX, SGUI_UINT uiPosY)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	GUI_COLOR					eColor;
-	uint8_t						uiPixValue;
+	SGUI_COLOR					eColor;
+	SGUI_UINT					uiPixValue;
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	eColor						= GUI_COLOR_BKGCLR;
-	uiPixValue					= 0;
+	eColor =					GUI_COLOR_BKGCLR;
+	uiPixValue =				0;
 
 	/*----------------------------------*/
 	/* Process							*/
@@ -218,15 +220,18 @@ GUI_COLOR GUI_Basic_GetPoint(uint8_t uiPosX, uint8_t uiPosY)
 	return eColor;
 }
 
-/*****************************************************************************/
-/** Function Name:	GUI_ClearScreen											**/
-/** Purpose:		Clean LCD screen display.								**/
-/** Resources:		None.													**/
-/** Params:			None.													**/
-/** Return:			None.													**/
-/*****************************************************************************/
-void GUI_ClearScreen(void)
+/*************************************************************************/
+/** Function Name:	SGUI_Basic_ClearScreen								**/
+/** Purpose:		Clean LCD screen display.							**/
+/** Resources:		None.												**/
+/** Params:			None.												**/
+/** Return:			None.												**/
+/*************************************************************************/
+void SGUI_Basic_ClearScreen(void)
 {
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
 #ifdef _SIMPLE_GUI_ENABLE_SIMULATOR_
 	VTIF_ClearScreen();
 #else
@@ -234,28 +239,28 @@ void GUI_ClearScreen(void)
 #endif //_SIMPLE_GUI_ENABLE_SIMULATOR_
 }
 
-/*****************************************************************************/
-/** Function Name:	GUI_DrawLine											**/
-/** Purpose:		Draw a line by the Bresenham algorithm.					**/
-/** Resources:		None.													**/
-/** Params:																	**/
-/**	@uiStartX:			X coordinate of start point of line.				**/
-/**	@uiStartY:			Y coordinate of start point of line.				**/
-/**	@uiEndX:			X coordinate of end point of line.					**/
-/**	@uiEndY:			Y coordinate of end point of line.					**/
-/**	@ui_Color:			Line color.											**/
-/** Return:			None.													**/
-/*****************************************************************************/
-void GUI_Basic_DrawLine(uint16_t uiStartX, uint16_t uiStartY, uint16_t uiEndX, uint16_t uiEndY, GUI_COLOR eColor)
+/*************************************************************************/
+/** Function Name:	GUI_DrawLine										**/
+/** Purpose:		Draw a line by the Bresenham algorithm.				**/
+/** Resources:		None.												**/
+/** Params:																**/
+/**	@uiStartX:			X coordinate of start point of line.			**/
+/**	@uiStartY:			Y coordinate of start point of line.			**/
+/**	@uiEndX:			X coordinate of end point of line.				**/
+/**	@uiEndY:			Y coordinate of end point of line.				**/
+/**	@ui_Color:			Line color.										**/
+/** Return:			None.												**/
+/*************************************************************************/
+void SGUI_Basic_DrawLine(SGUI_UINT uiStartX, SGUI_UINT uiStartY, SGUI_UINT uiEndX, SGUI_UINT uiEndY, SGUI_COLOR eColor)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	int16_t						iDx, iDy;
-	int16_t						iIncX, iIncY;
-	int16_t						iErrX = 0, iErrY = 0;
-	uint16_t					i, uiDs;
-	uint16_t					uiCurrentPosX, uiCurrentPosY;
+	SGUI_INT					iDx, iDy;
+	SGUI_INT					iIncX, iIncY;
+	SGUI_INT					iErrX = 0, iErrY = 0;
+	SGUI_UINT					i, uiDs;
+	SGUI_UINT					uiCurrentPosX, uiCurrentPosY;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -315,7 +320,7 @@ void GUI_Basic_DrawLine(uint16_t uiStartX, uint16_t uiStartY, uint16_t uiEndX, u
 	/*----------------------------------*/
 	for(i = 0; i <= uiDs+1; i++)
 	{
-		GUI_Basic_DrawPoint(uiCurrentPosX,uiCurrentPosY, eColor);
+		SGUI_Basic_DrawPoint(uiCurrentPosX,uiCurrentPosY, eColor);
 		iErrX += iDx;
 		if(iErrX > uiDs)
 		{
@@ -331,26 +336,26 @@ void GUI_Basic_DrawLine(uint16_t uiStartX, uint16_t uiStartY, uint16_t uiEndX, u
 	}
 }
 
-/*****************************************************************************/
-/** Function Name:	GUI_DrawRectangle										**/
-/** Purpose:		Draw a rectangle by upper left coordinate, width		**/
-/**					and height.												**/
-/** Resources:		None.													**/
-/** Params:																	**/
-/**	@pBitMapData:		Bitmap data array pointer.							**/
-/**	@uiPosColumn:		Column position of display upper left point.		**/
-/**	@uiPosPage:			Page Position of display upper left point.			**/
-/**	@uidColumn:			Size of Bitmap by column.							**/
-/**	@uidPage:			Size of Bitmap by Page.								**/
-/** Return:			None.													**/
-/** Notice:			None.													**/
-/*****************************************************************************/
-void GUI_Basic_DrawRectangle(uint16_t uiStartX, uint16_t uiStartY, uint16_t uiWidth, uint16_t uiHeight, GUI_COLOR eEdgeColor, GUI_COLOR eFillColor)
+/*************************************************************************/
+/** Function Name:	GUI_DrawRectangle									**/
+/** Purpose:		Draw a SGUI_RECT_AREA by upper left coordinate, 	**/
+/**					width and height.									**/
+/** Resources:		None.												**/
+/** Params:																**/
+/**	@pBitMapData:		Bitmap data array pointer.						**/
+/**	@uiPosColumn:		Column position of display upper left point.	**/
+/**	@uiPosPage:			Page Position of display upper left point.		**/
+/**	@uidColumn:			Size of Bitmap by column.						**/
+/**	@uidPage:			Size of Bitmap by Page.							**/
+/** Return:			None.												**/
+/** Notice:			None.												**/
+/*************************************************************************/
+void SGUI_Basic_DrawRectangle(SGUI_UINT uiStartX, SGUI_UINT uiStartY, SGUI_UINT uiWidth, SGUI_UINT uiHeight, SGUI_COLOR eEdgeColor, SGUI_COLOR eFillColor)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	uint8_t uiColumnIndex;
+	SGUI_UINT					uiColumnIndex;
 
 	/*----------------------------------*/
 	/* Process							*/
@@ -359,56 +364,56 @@ void GUI_Basic_DrawRectangle(uint16_t uiStartX, uint16_t uiStartY, uint16_t uiWi
 	{
 		if((uiWidth == 1) && (uiHeight == 1))
 		{
-			GUI_Basic_DrawPoint(uiStartX, uiStartY, eEdgeColor);
+			SGUI_Basic_DrawPoint(uiStartX, uiStartY, eEdgeColor);
 		}
 		else if(uiWidth == 1)
 		{
-			GUI_Basic_DrawLine(uiStartX, uiStartY, uiStartX, uiStartY+uiHeight-1, eEdgeColor);
+			SGUI_Basic_DrawLine(uiStartX, uiStartY, uiStartX, uiStartY+uiHeight-1, eEdgeColor);
 		}
 		else if(uiHeight == 1)
 		{
-			GUI_Basic_DrawLine(uiStartX, uiStartY, uiStartX+uiWidth-1, uiStartY, eEdgeColor);
+			SGUI_Basic_DrawLine(uiStartX, uiStartY, uiStartX+uiWidth-1, uiStartY, eEdgeColor);
 		}
 		else
 		{
 			// Draw edge.
 			// Check and set changed page and column index is in edge display action.
-			GUI_Basic_DrawLine(uiStartX, uiStartY, uiStartX, uiStartY+uiHeight-1, eEdgeColor);
-			GUI_Basic_DrawLine(uiStartX+uiWidth-1, uiStartY, uiStartX+uiWidth-1, uiStartY+uiHeight-1, eEdgeColor);
-			GUI_Basic_DrawLine(uiStartX, uiStartY, uiStartX+uiWidth-1, uiStartY, eEdgeColor);
-			GUI_Basic_DrawLine(uiStartX, uiStartY+uiHeight-1, uiStartX+uiWidth-1, uiStartY+uiHeight-1, eEdgeColor);
+			SGUI_Basic_DrawLine(uiStartX, uiStartY, uiStartX, uiStartY+uiHeight-1, eEdgeColor);
+			SGUI_Basic_DrawLine(uiStartX+uiWidth-1, uiStartY, uiStartX+uiWidth-1, uiStartY+uiHeight-1, eEdgeColor);
+			SGUI_Basic_DrawLine(uiStartX, uiStartY, uiStartX+uiWidth-1, uiStartY, eEdgeColor);
+			SGUI_Basic_DrawLine(uiStartX, uiStartY+uiHeight-1, uiStartX+uiWidth-1, uiStartY+uiHeight-1, eEdgeColor);
 			// Fill area.
 			if((eFillColor != GUI_COLOR_TRANS) && (uiWidth > 2) && (uiHeight > 2))
 			{
 				for(uiColumnIndex=(uiStartX+1); uiColumnIndex<(uiStartX+uiWidth-1); uiColumnIndex++)
 				{
-					GUI_Basic_DrawLine(uiColumnIndex, uiStartY+1, uiColumnIndex, uiStartY+uiHeight-2, eFillColor);
+					SGUI_Basic_DrawLine(uiColumnIndex, uiStartY+1, uiColumnIndex, uiStartY+uiHeight-2, eFillColor);
 				}
 			}
 		}
 	}
 }
 
-/*****************************************************************************/
-/** Function Name:	GUI_DrawCircle											**/
-/** Purpose:		Draw a circle by circle center positon and radius.		**/
-/** Resources:		None.													**/
-/** Params:																	**/
-/**	@uiCx:				Circle center X coordinate.							**/
-/**	@uiCy:				Circle center Y coordinate.							**/
-/**	@uiRadius:			Circle radius.										**/
-/**	@eEdgeColor:		Circle edge color.									**/
-/**	@eFillColor:		Circle fill color.									**/
-/** Return:			None.													**/
-/*****************************************************************************/
-void GUI_Basic_DrawCircle(uint16_t uiCx, uint16_t uiCy, uint16_t uiRadius, GUI_COLOR eEdgeColor, GUI_COLOR eFillColor)
+/*************************************************************************/
+/** Function Name:	GUI_DrawCircle										**/
+/** Purpose:		Draw a circle by circle center positon and radius.	**/
+/** Resources:		None.												**/
+/** Params:																**/
+/**	@uiCx:				Circle center X coordinate.						**/
+/**	@uiCy:				Circle center Y coordinate.						**/
+/**	@uiRadius:			Circle radius.									**/
+/**	@eEdgeColor:		Circle edge color.								**/
+/**	@eFillColor:		Circle fill color.								**/
+/** Return:			None.												**/
+/*************************************************************************/
+void SGUI_Basic_DrawCircle(SGUI_UINT uiCx, SGUI_UINT uiCy, SGUI_UINT uiRadius, SGUI_COLOR eEdgeColor, SGUI_COLOR eFillColor)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	uint16_t					uiPosXOffset, uiPosYOffset;
-	uint16_t					uiPosXOffset_Old, uiPosYOffset_Old;
-	int16_t						iXChange, iYChange, iRadiusError;
+	SGUI_UINT					uiPosXOffset, uiPosYOffset;
+	SGUI_UINT					uiPosXOffset_Old, uiPosYOffset_Old;
+	SGUI_INT					iXChange, iYChange, iRadiusError;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -426,7 +431,7 @@ void GUI_Basic_DrawCircle(uint16_t uiCx, uint16_t uiCy, uint16_t uiRadius, GUI_C
 	/*----------------------------------*/
 	if(uiRadius < 1)
 	{
-		GUI_Basic_DrawPoint(uiCx, uiCy, eEdgeColor);
+		SGUI_Basic_DrawPoint(uiCx, uiCy, eEdgeColor);
 	}
 	else
 	{
@@ -438,23 +443,23 @@ void GUI_Basic_DrawCircle(uint16_t uiCx, uint16_t uiCy, uint16_t uiRadius, GUI_C
 				if((uiRadius > 1) && (eFillColor != GUI_COLOR_TRANS) && (uiPosXOffset_Old != uiPosXOffset))
 				{
 
-					GUI_Basic_DrawLine(uiCx-uiPosXOffset, uiCy-uiPosYOffset+1, uiCx-uiPosXOffset, uiCy+uiPosYOffset-1, eFillColor);
-					GUI_Basic_DrawLine(uiCx+uiPosXOffset, uiCy-uiPosYOffset+1, uiCx+uiPosXOffset, uiCy+uiPosYOffset-1, eFillColor);
+					SGUI_Basic_DrawLine(uiCx-uiPosXOffset, uiCy-uiPosYOffset+1, uiCx-uiPosXOffset, uiCy+uiPosYOffset-1, eFillColor);
+					SGUI_Basic_DrawLine(uiCx+uiPosXOffset, uiCy-uiPosYOffset+1, uiCx+uiPosXOffset, uiCy+uiPosYOffset-1, eFillColor);
 					uiPosXOffset_Old = uiPosXOffset;
 				}
-				GUI_Basic_DrawLine(uiCx-uiPosYOffset, uiCy-uiPosXOffset+1, uiCx-uiPosYOffset, uiCy+uiPosXOffset-1, eFillColor);
-				GUI_Basic_DrawLine(uiCx+uiPosYOffset, uiCy-uiPosXOffset+1, uiCx+uiPosYOffset, uiCy+uiPosXOffset-1, eFillColor);
+				SGUI_Basic_DrawLine(uiCx-uiPosYOffset, uiCy-uiPosXOffset+1, uiCx-uiPosYOffset, uiCy+uiPosXOffset-1, eFillColor);
+				SGUI_Basic_DrawLine(uiCx+uiPosYOffset, uiCy-uiPosXOffset+1, uiCx+uiPosYOffset, uiCy+uiPosXOffset-1, eFillColor);
 				uiPosYOffset_Old = uiPosYOffset;
 
 				// Draw edge.
-				GUI_Basic_DrawPoint(uiCx+uiPosXOffset, uiCy+uiPosYOffset, eEdgeColor);
-				GUI_Basic_DrawPoint(uiCx-uiPosXOffset, uiCy+uiPosYOffset, eEdgeColor);
-				GUI_Basic_DrawPoint(uiCx-uiPosXOffset, uiCy-uiPosYOffset, eEdgeColor);
-				GUI_Basic_DrawPoint(uiCx+uiPosXOffset, uiCy-uiPosYOffset, eEdgeColor);
-				GUI_Basic_DrawPoint(uiCx+uiPosYOffset, uiCy+uiPosXOffset, eEdgeColor);
-				GUI_Basic_DrawPoint(uiCx-uiPosYOffset, uiCy+uiPosXOffset, eEdgeColor);
-				GUI_Basic_DrawPoint(uiCx-uiPosYOffset, uiCy-uiPosXOffset, eEdgeColor);
-				GUI_Basic_DrawPoint(uiCx+uiPosYOffset, uiCy-uiPosXOffset, eEdgeColor);
+				SGUI_Basic_DrawPoint(uiCx+uiPosXOffset, uiCy+uiPosYOffset, eEdgeColor);
+				SGUI_Basic_DrawPoint(uiCx-uiPosXOffset, uiCy+uiPosYOffset, eEdgeColor);
+				SGUI_Basic_DrawPoint(uiCx-uiPosXOffset, uiCy-uiPosYOffset, eEdgeColor);
+				SGUI_Basic_DrawPoint(uiCx+uiPosXOffset, uiCy-uiPosYOffset, eEdgeColor);
+				SGUI_Basic_DrawPoint(uiCx+uiPosYOffset, uiCy+uiPosXOffset, eEdgeColor);
+				SGUI_Basic_DrawPoint(uiCx-uiPosYOffset, uiCy+uiPosXOffset, eEdgeColor);
+				SGUI_Basic_DrawPoint(uiCx-uiPosYOffset, uiCy-uiPosXOffset, eEdgeColor);
+				SGUI_Basic_DrawPoint(uiCx+uiPosYOffset, uiCy-uiPosXOffset, eEdgeColor);
 			}
 			uiPosYOffset++;
 			iRadiusError += iYChange;
@@ -469,24 +474,24 @@ void GUI_Basic_DrawCircle(uint16_t uiCx, uint16_t uiCy, uint16_t uiRadius, GUI_C
 	}
 }
 
-/*****************************************************************************/
-/** Function Name:	GUI_ReverseBlockColor									**/
-/** Purpose:		Reverse color in a rectangle area.						**/
-/** Resources:		None.													**/
-/** Params:																	**/
-/**	@uiPosX:			Upper left X coordinate of rectangle area.			**/
-/**	@uiPosY:			Upper left Y coordinate of rectangle area.			**/
-/**	@uiWidth:			Rectangle area width.								**/
-/**	@uiHeight:			Rectangle area Height.								**/
-/** Return:			None.													**/
-/** Notice:			None.													**/
-/*****************************************************************************/
-void GUI_Basic_ReverseBlockColor(uint16_t uiStartX, uint16_t uiStartY, uint16_t uiWidth, uint16_t uiHeight)
+/*************************************************************************/
+/** Function Name:	GUI_ReverseBlockColor								**/
+/** Purpose:		Reverse color in a SGUI_RECT_AREA area.				**/
+/** Resources:		None.												**/
+/** Params:																**/
+/**	@uiPosX:			Upper left X coordinate of SGUI_RECT_AREA area.	**/
+/**	@uiPosY:			Upper left Y coordinate of SGUI_RECT_AREA area.	**/
+/**	@uiWidth:			SGUI_RECT_AREA area width.						**/
+/**	@uiHeight:			SGUI_RECT_AREA area Height.						**/
+/** Return:			None.												**/
+/** Notice:			None.												**/
+/*************************************************************************/
+void SGUI_Basic_ReverseBlockColor(SGUI_UINT uiStartX, SGUI_UINT uiStartY, SGUI_UINT uiWidth, SGUI_UINT uiHeight)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	uint16_t i_W, i_H;
+	SGUI_UINT					i_W, i_H;
 
 	/*----------------------------------*/
 	/* Process							*/
@@ -497,38 +502,38 @@ void GUI_Basic_ReverseBlockColor(uint16_t uiStartX, uint16_t uiStartY, uint16_t 
 		{
 			if(GUI_Basic_GetPoint(uiStartX+i_W, uiStartY+i_H) == GUI_COLOR_FRGCLR)
 			{
-                GUI_Basic_DrawPoint(uiStartX+i_W, uiStartY+i_H, GUI_COLOR_BKGCLR);
+                SGUI_Basic_DrawPoint(uiStartX+i_W, uiStartY+i_H, GUI_COLOR_BKGCLR);
 			}
 			else
 			{
-				GUI_Basic_DrawPoint(uiStartX+i_W, uiStartY+i_H, GUI_COLOR_FRGCLR);
+				SGUI_Basic_DrawPoint(uiStartX+i_W, uiStartY+i_H, GUI_COLOR_FRGCLR);
 			}
 		}
 	}
 }
 
-/*****************************************************************************/
-/** Function Name:	GUI_Basic_DrawBitMap									**/
-/** Purpose:		Draw a rectangular area bit map on LCD screen.			**/
-/** Resources:		Bit map data.											**/
-/** Params:																	**/
-/**	@pstDisplayArea:	Display area position and size.						**/
-/**	@pstDataArea:		Data area size and display offset.					**/
-/**	@pDataBuffer:		Bit map data buffer.								**/
-/**	@eDrawMode			Bit map display mode(normal or reverse color).		**/
-/** Return:			None.													**/
-/** Notice:			None.													**/
-/*****************************************************************************/
-void GUI_Basic_DrawBitMap(RECTANGLE* pstDisplayArea, RECTANGLE* pstDataArea, uint8_t* pDataBuffer, DRAW_MODE eDrawMode)
+/*************************************************************************/
+/** Function Name:	SGUI_Basic_DrawBitMap								**/
+/** Purpose:		Draw a rectangular area bit map on LCD screen.		**/
+/** Resources:		Bit map data.										**/
+/** Params:																**/
+/**	@pstDisplayArea:	Display area position and size.					**/
+/**	@pstDataArea:		Data area size and display offset.				**/
+/**	@pDataBuffer:		Bit map data buffer.							**/
+/**	@eDrawMode			Bit map display mode(normal or reverse color).	**/
+/** Return:			None.												**/
+/** Notice:			None.												**/
+/*************************************************************************/
+void SGUI_Basic_DrawBitMap(SGUI_RECT_AREA* pstDisplayArea, SGUI_RECT_AREA* pstDataArea, SGUI_BYTE* pDataBuffer, SGUI_DRAW_MODE eDrawMode)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	int16_t		iDrawPixX, iDrawPixY;
-	int16_t		iBmpPixX, iBmpPixY;
-	uint16_t	uiDrawnWidthIndex, uiDrawnHeightIndex;
-	uint16_t	uiPixIndex;
-	uint8_t*	pData;
+	SGUI_INT					iDrawPixX, iDrawPixY;
+	SGUI_INT					iBmpPixX, iBmpPixY;
+	SGUI_UINT					uiDrawnWidthIndex, uiDrawnHeightIndex;
+	SGUI_UINT					uiPixIndex;
+	SGUI_BYTE*					pData;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -600,11 +605,11 @@ void GUI_Basic_DrawBitMap(RECTANGLE* pstDisplayArea, RECTANGLE* pstDataArea, uin
 					}
 					if(GET_BIT(*pData, uiPixIndex) != eDrawMode)
 					{
-						GUI_Basic_DrawPoint(iDrawPixX, iDrawPixY, GUI_COLOR_FRGCLR);
+						SGUI_Basic_DrawPoint(iDrawPixX, iDrawPixY, GUI_COLOR_FRGCLR);
 					}
 					else
 					{
-						GUI_Basic_DrawPoint(iDrawPixX, iDrawPixY, GUI_COLOR_BKGCLR);
+						SGUI_Basic_DrawPoint(iDrawPixX, iDrawPixY, GUI_COLOR_BKGCLR);
 					}
 					uiDrawnHeightIndex ++;
 					uiPixIndex ++;

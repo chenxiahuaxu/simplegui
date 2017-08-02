@@ -9,8 +9,8 @@
 //=======================================================================//
 //= Include files.													    =//
 //=======================================================================//
-#include "GUI_Basic.h"
-#include "GUI_ProcessBar.h"
+#include "SGUI_Basic.h"
+#include "SGUI_ProcessBar.h"
 
 //=======================================================================//
 //= Function implementation.										    =//
@@ -24,11 +24,18 @@
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void GUI_RefreshProcessBar(GUI_PROCBAR_STRUCT *pProcessBarData)
+void SGUI_RefreshProcessBar(SGUI_PROCBAR_STRUCT *pProcessBarData)
 {
-	uint8_t uiProcessBlockStartX, uiProcessBlockStartY;
-	uint8_t uiProcessBlockWidth, uiProcessBlockHeight;
-	GUI_COLOR eBackColor, eFillColor;
+	/*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+	SGUI_UINT16					uiProcessBlockStartX, uiProcessBlockStartY;
+	SGUI_UINT16					uiProcessBlockWidth, uiProcessBlockHeight;
+	SGUI_COLOR					eBackColor, eFillColor;
+
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
 	if(NULL != pProcessBarData)
 	{
 		if((pProcessBarData->Parameter.Width > 3) && (pProcessBarData->Parameter.Height > 3))
@@ -41,7 +48,7 @@ void GUI_RefreshProcessBar(GUI_PROCBAR_STRUCT *pProcessBarData)
 			// Update process bar data.
 			switch(pProcessBarData->Parameter.Direction)
 			{
-				case GUI_PROCBAR_DOWN:	// Process from up to down.
+				case SGUI_PROCBAR_DOWN:	// Process from up to down.
 				{
 					uiProcessBlockStartX	= pProcessBarData->Parameter.PosX + 1;
 					uiProcessBlockStartY	= pProcessBarData->Parameter.PosY + 1;
@@ -51,7 +58,7 @@ void GUI_RefreshProcessBar(GUI_PROCBAR_STRUCT *pProcessBarData)
 					eFillColor = GUI_COLOR_FRGCLR;
 					break;
 				}
-				case GUI_PROCBAR_LEFT:	// Process from right to left.
+				case SGUI_PROCBAR_LEFT:	// Process from right to left.
 				{
 					uiProcessBlockStartX	= pProcessBarData->Parameter.PosX + 1;
 					uiProcessBlockStartY	= pProcessBarData->Parameter.PosY + 1;
@@ -61,7 +68,7 @@ void GUI_RefreshProcessBar(GUI_PROCBAR_STRUCT *pProcessBarData)
 					eFillColor = GUI_COLOR_BKGCLR;
 					break;
 				}
-				case GUI_PROCBAR_RIGHT:	// Process from left to right.
+				case SGUI_PROCBAR_RIGHT:	// Process from left to right.
 				{
 					uiProcessBlockStartX	= pProcessBarData->Parameter.PosX + 1;
 					uiProcessBlockStartY	= pProcessBarData->Parameter.PosY + 1;
@@ -71,7 +78,7 @@ void GUI_RefreshProcessBar(GUI_PROCBAR_STRUCT *pProcessBarData)
 					eFillColor = GUI_COLOR_FRGCLR;
 					break;
 				}
-				case GUI_PROCBAR_UP:	// Process from down to up.
+				case SGUI_PROCBAR_UP:	// Process from down to up.
 				default:
 				{
 					uiProcessBlockStartX	= pProcessBarData->Parameter.PosX + 1;
@@ -83,9 +90,9 @@ void GUI_RefreshProcessBar(GUI_PROCBAR_STRUCT *pProcessBarData)
 				}
 			}
 			// Redraw edge and clean up area.
-			GUI_Basic_DrawRectangle(pProcessBarData->Parameter.PosX, pProcessBarData->Parameter.PosY, pProcessBarData->Parameter.Width, pProcessBarData->Parameter.Height, GUI_COLOR_FRGCLR, eBackColor);
+			SGUI_Basic_DrawRectangle(pProcessBarData->Parameter.PosX, pProcessBarData->Parameter.PosY, pProcessBarData->Parameter.Width, pProcessBarData->Parameter.Height, GUI_COLOR_FRGCLR, eBackColor);
 			// Draw process block.
-			GUI_Basic_DrawRectangle(uiProcessBlockStartX, uiProcessBlockStartY, uiProcessBlockWidth, uiProcessBlockHeight, eFillColor, eFillColor);
+			SGUI_Basic_DrawRectangle(uiProcessBlockStartX, uiProcessBlockStartY, uiProcessBlockWidth, uiProcessBlockHeight, eFillColor, eFillColor);
 		}
 	}
 }

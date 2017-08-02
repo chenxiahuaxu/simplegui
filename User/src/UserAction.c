@@ -16,7 +16,7 @@
 #include "LCD_OperationIF.h"
 #include "HMI_Data.h"
 #include "HMI_Process.h"
-#include "GUI_Common.h"
+#include "SGUI_Common.h"
 
 //=======================================================================//
 //= Function implementation.										    =//
@@ -114,7 +114,7 @@ void USR_ACT_OnRTCUpdateEventProcess(uint16_t uiYear, uint16_t uiMonth, uint16_t
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	GUI_TIME			stRTCTime;
+	SGUI_TIME			stRTCTime;
 
 	/*----------------------------------*/
 	/* Initialize						*/

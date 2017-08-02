@@ -3,61 +3,60 @@
 //=======================================================================//
 //= Include files.													    =//
 //=======================================================================//
-#include <stddef.h>
-#include <stdint.h>
-#include "GUI_Basic.h"
-#include "GUI_Text.h"
+#include "SGUI_Common.h"
+#include "SGUI_Basic.h"
+#include "SGUI_Text.h"
 
 //=======================================================================//
 //= Data type definition.											    =//
 //=======================================================================//
 typedef struct
 {
-	uint16_t	PosX;
-	uint16_t	PosY;
-	uint16_t	Width;
-	int32_t		Min;
-	int32_t		Max;
-	int32_t		Value;
-}GUI_INT_VARBOX_STRUCT;
+	SGUI_SIZE	PosX;
+	SGUI_SIZE	PosY;
+	SGUI_SIZE	Width;
+	SGUI_INT	Min;
+	SGUI_INT	Max;
+	SGUI_INT	Value;
+}SGUI_INT_VARBOX_STRUCT;
 
 typedef struct
 {
-	uint16_t	PosX;
-	uint16_t	PosY;
-	uint16_t	Width;
-	uint16_t	FocusIndex;
-	uint16_t	MaxTextLength;
-	char*		Value;
-}GUI_TXT_VARBOX_STRUCT;
+	SGUI_SIZE	PosX;
+	SGUI_SIZE	PosY;
+	SGUI_SIZE	Width;
+	SGUI_SIZE	FocusIndex;
+	SGUI_SIZE	MaxTextLength;
+	SGUI_PSZSTR		Value;
+}SGUI_TEXT_VARBOX_STRUCT;
 
 typedef enum
 {
-	GUI_RIGHT = 0,
-	GUI_CENTER,
-	GUI_LEFT,
-}GUI_VARBOX_ALIG;
+	SGUI_RIGHT = 0,
+	SGUI_CENTER,
+	SGUI_LEFT,
+}SGUI_VARBOX_ALIG;
 
 enum
 {
-	GUI_TEXT_NUMBER			= 0x0100,
-	GUI_TEXT_ALPHA			= 0x0200,
-	GUI_TEXT_PUNCTUATION	= 0x0400,
-	GUI_TEXT_DATE			= 0x0800,
-	GUI_TEXT_TIME			= 0x1000,
+	SGUI_TEXT_NUMBER		= 0x0100,
+	SGUI_TEXT_ALPHA			= 0x0200,
+	SGUI_TEXT_PUNCTUATION	= 0x0400,
+	SGUI_TEXT_DATE			= 0x0800,
+	SGUI_TEXT_TIME			= 0x1000,
 };
 
 typedef enum
 {
-    GUI_TXT_VARBOX_OPT_PREV = -1,
-    GUI_TXT_VARBOX_OPT_NONE = 0,
-    GUI_TXT_VARBOX_OPT_NEXT = 1,
-}GUI_TXT_VARBOX_OPT;
+    SGUI_TXT_VARBOX_OPT_PREV = -1,
+    SGUI_TXT_VARBOX_OPT_NONE = 0,
+    SGUI_TXT_VARBOX_OPT_NEXT = 1,
+}SGUI_TEXT_VARBOX_OPT;
 
 //=======================================================================//
 //= User Macro definition.											    =//
 //=======================================================================//
-#define VARBOX_FONT_SIZE				(GUI_FONT_SIZE_H12)
+#define VARBOX_FONT_SIZE				(SGUI_FONT_SIZE_H12)
 #define VARBOX_WIDTH(L)					(L*(g_stFontSize[VARBOX_FONT_SIZE].Width)-4)
 #define VARBOX_HEIGHT					(g_stFontSize[VARBOX_FONT_SIZE].Height+2)
 #define VARBOX_TEXT_AREA_WIDTH(W)		((W>2)?(W-2):0)
@@ -67,7 +66,7 @@ typedef enum
 #define VARBOX_TEXT_BUFFER_SIZE			(VARBOX_TEXT_LENGTH_MAX+1)
 #define VARBOX_TEXT_WIDTH(L)			(L*(g_stFontSize[VARBOX_FONT_SIZE].Width))
 
-#define GUI_TEXT_ASCII					(GUI_TEXT_NUMBER|GUI_TEXT_ALPHA|GUI_TEXT_PUNCTUATION)
+#define GUI_TEXT_ASCII					(SGUI_TEXT_NUMBER|SGUI_TEXT_ALPHA|SGUI_TEXT_PUNCTUATION)
 
 #define GUI_TEXT_ISDIGIT(C)				((C>='0' && C<='9')?true:false)
 #define GUI_TEXT_ISUPPER(C)				((C>='A' && C<='Z')?true:false)
@@ -78,10 +77,9 @@ typedef enum
 //=======================================================================//
 //= Public function declaration.									    =//
 //=======================================================================//
-size_t			GUI_GetNumberTextWidth(int32_t iValue);
-void			GUI_IntegerVariableBox_Refresh(GUI_INT_VARBOX_STRUCT* pstValue, GUI_VARBOX_ALIG eAlignment, DRAW_MODE eMode);
-void			GUI_TextVariableBox_Refresh(GUI_TXT_VARBOX_STRUCT* pstTextValue, DRAW_MODE eMode);
-void			GUI_TextVariableBox_ChangeCharacter(GUI_TXT_VARBOX_STRUCT* pstTextValue, DRAW_MODE eMode, uint16_t uiCharacterSet, GUI_TXT_VARBOX_OPT eOpt);
+void			SGUI_IntegerVariableBox_Refresh(SGUI_INT_VARBOX_STRUCT* pstValue, SGUI_VARBOX_ALIG eAlignment, SGUI_DRAW_MODE eMode);
+void			SGUI_TextVariableBox_Refresh(SGUI_TEXT_VARBOX_STRUCT* pstTextValue, SGUI_DRAW_MODE eMode);
+void			SGUI_TextVariableBox_ChangeCharacter(SGUI_TEXT_VARBOX_STRUCT* pstTextValue, SGUI_DRAW_MODE eMode, SGUI_UINT uiCharacterSet, SGUI_TEXT_VARBOX_OPT eOpt);
 
 
 

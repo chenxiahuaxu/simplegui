@@ -3,7 +3,7 @@
 //=======================================================================//
 //= Include files.													    =//
 //=======================================================================//
-#include "GUI_Notice.h"
+#include "SGUI_Notice.h"
 #include "HMI_Process.h"
 #include "UserAction.h"
 #include <stdio.h>

@@ -51,7 +51,7 @@ HMI_SCREEN				g_stHMI_DemoTextNotice =		{	HMI_SCREEN_ID_ANY,
 
 int32_t HMI_DemoNotice_Initialize(void)
 {
-	GUI_Notice_RefreshNotice(szDemoNoticeText, 0, GUI_ICON_INFORMATION);
+	SGUI_Notice_RefreshNotice(szDemoNoticeText, 0, SGUI_ICON_INFORMATION);
 	return HMI_RESULT_NORMAL;
 }
 
@@ -62,14 +62,14 @@ int32_t HMI_DemoNotice_PreProcess(const void* pstParameters)
 	/*----------------------------------*/
 	if(NULL == pstParameters)
 	{
-		strcpy(szDemoNoticeText, "无参数。");
+		SGUI_Common_StringCopy(szDemoNoticeText, "无参数。");
 	}
 	else
 	{
-		strncpy(szDemoNoticeText, (char*)pstParameters, NOTICE_TEXT_BUFFER_SIZE);
+		strncpy(szDemoNoticeText, (SGUI_PSZSTR)pstParameters, NOTICE_TEXT_BUFFER_SIZE);
 		szDemoNoticeText[NOTICE_TEXT_BUFFER_SIZE] = '\0';
 	}
-	GUI_Notice_RefreshNotice(szDemoNoticeText, 0, GUI_ICON_INFORMATION);
+	SGUI_Notice_RefreshNotice(szDemoNoticeText, 0, SGUI_ICON_INFORMATION);
 	return HMI_RESULT_NORMAL;
 }
 

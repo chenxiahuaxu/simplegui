@@ -10,8 +10,8 @@
 //= Include files.													    =//
 //=======================================================================//
 #include "HMI_Demo01_Text.h"
-#include "GUI_Text.h"
-#include "GUI_Frame.h"
+#include "SGUI_Text.h"
+#include "SGUI_Frame.h"
 #include "HMI_Process.h"
 #include <stdio.h>
 
@@ -41,11 +41,11 @@ static char					szDemoText[] =
   按“空格”键开始演示。"
 };
 
-GUI_BOX_FRAME_STRUCT		stTextFrame = 		{	{HMI_TEXT_DEMO_FRAME_EDGE_LAYERS, GUI_FONT_SIZE_H12},
+SGUI_BOX_FRAME_STRUCT		stTextFrame = 		{	{HMI_TEXT_DEMO_FRAME_EDGE_LAYERS, SGUI_FONT_SIZE_H12},
 													{NULL}};
 static int32_t				iTextOffset;
 static int32_t				iTextHeight;
-static RECTANGLE			stTextDisplayArea;
+static SGUI_RECT_AREA		stTextDisplayArea;
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
@@ -83,7 +83,7 @@ HMI_SCREEN				g_stHMI_DemoText =				{	HMI_SCREEN_ID_ANY,
 int32_t	HMI_DemoText_Initialize(void)
 {
 	iTextOffset = HMI_TEXT_DEMO_FRAME_TEXT_HEIGHT;
-	iTextHeight = GUI_Text_GetMultiLineTextLines(szDemoText, (HMI_TEXT_DEMO_FRAME_TEXT_WIDTH/g_stFontSize[GUI_FONT_SIZE_H12].Width))*g_stFontSize[GUI_FONT_SIZE_H12].Height;
+	iTextHeight = SGUI_Text_GetMultiLineTextLines(szDemoText, (HMI_TEXT_DEMO_FRAME_TEXT_WIDTH/g_stFontSize[SGUI_FONT_SIZE_H12].Width))*g_stFontSize[SGUI_FONT_SIZE_H12].Height;
 	stTextDisplayArea.PosX = HMI_TEXT_DEMO_FRAME_TEXT_POSX;
 	stTextDisplayArea.PosY = HMI_TEXT_DEMO_FRAME_TEXT_POSY;
 	stTextDisplayArea.Width = HMI_TEXT_DEMO_FRAME_TEXT_WIDTH;
@@ -101,7 +101,7 @@ int32_t	HMI_DemoText_Initialize(void)
 /*****************************************************************************/
 int32_t HMI_DemoText_PreProcess(const void* pstParameters)
 {
-	GUI_Frame_DrawFullScreenFrame(&stTextFrame);
+	SGUI_Frame_DrawFullScreenFrame(&stTextFrame);
 	return HMI_RESULT_NORMAL;
 }
 
@@ -115,8 +115,8 @@ int32_t HMI_DemoText_PreProcess(const void* pstParameters)
 /*****************************************************************************/
 int32_t HMI_DemoText_RefreshScreen(void)
 {
-	GUI_Frame_DrawFullScreenFrame(&stTextFrame);
-	GUI_Text_DrawMultipleLinesText(szDemoText, GUI_FONT_SIZE_H12, &stTextDisplayArea, iTextOffset, GUI_DRAW_NORMAL);
+	SGUI_Frame_DrawFullScreenFrame(&stTextFrame);
+	SGUI_Text_DrawMultipleLinesText(szDemoText, SGUI_FONT_SIZE_H12, &stTextDisplayArea, iTextOffset, GUI_DRAW_NORMAL);
 	return HMI_RESULT_NORMAL;
 }
 
@@ -191,7 +191,7 @@ int32_t	HMI_DemoText_OnInternalEvent(uint32_t uiScreenID, const void* pstParamet
 		}
 		else
 		{
-			GUI_Text_DrawMultipleLinesText(szDemoText, GUI_FONT_SIZE_H12, &stTextDisplayArea, iTextOffset, GUI_DRAW_NORMAL);
+			SGUI_Text_DrawMultipleLinesText(szDemoText, SGUI_FONT_SIZE_H12, &stTextDisplayArea, iTextOffset, GUI_DRAW_NORMAL);
 			if(iTextOffset + iTextHeight == 0)
 			{
 				iTextOffset = HMI_TEXT_DEMO_FRAME_TEXT_HEIGHT;

@@ -9,8 +9,8 @@
 //=======================================================================//
 //= Include files.													    =//
 //=======================================================================//
-#include "GUI_Basic.h"
-#include "GUI_ScrollBar.h"
+#include "SGUI_Basic.h"
+#include "SGUI_ScrollBar.h"
 
 //=======================================================================//
 //= Function implementation.										    =//
@@ -24,18 +24,18 @@
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void GUI_ScrollBar_RefreshScrollBar(GUI_SCROLLBAR_STRUCT* pstScrollBar)
+void SGUI_ScrollBar_RefreshScrollBar(SGUI_SCROLLBAR_STRUCT* pstScrollBar)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	uint16_t	uiScrollBlockPos;
-	uint16_t	uiScrollBlockSize;
+	SGUI_INT					uiScrollBlockPos;
+	SGUI_SIZE					uiScrollBlockSize;
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	if(GUI_SCROLLBAR_VERTICAL == pstScrollBar->Parameter.eDirection)
+	if(SGUI_SCROLLBAR_VERTICAL == pstScrollBar->Parameter.eDirection)
 	{
 		uiScrollBlockSize	= pstScrollBar->Parameter.Width-2;
 	}
@@ -55,10 +55,10 @@ void GUI_ScrollBar_RefreshScrollBar(GUI_SCROLLBAR_STRUCT* pstScrollBar)
 			pstScrollBar->Data.Index = pstScrollBar->Parameter.MaxIndex;
 		}
 
-		if(GUI_SCROLLBAR_VERTICAL == pstScrollBar->Parameter.eDirection)
+		if(SGUI_SCROLLBAR_VERTICAL == pstScrollBar->Parameter.eDirection)
 		{
 			// Draw scroll bar edge.
-			GUI_Basic_DrawRectangle(pstScrollBar->Parameter.PosX, pstScrollBar->Parameter.PosY,
+			SGUI_Basic_DrawRectangle(pstScrollBar->Parameter.PosX, pstScrollBar->Parameter.PosY,
 									pstScrollBar->Parameter.Width, pstScrollBar->Parameter.Height,
 									GUI_COLOR_FRGCLR, GUI_COLOR_BKGCLR);
 			// Value lower limit is 0, scroll blocks must be greater then 0.
@@ -66,19 +66,19 @@ void GUI_ScrollBar_RefreshScrollBar(GUI_SCROLLBAR_STRUCT* pstScrollBar)
 			{
 				uiScrollBlockPos = pstScrollBar->Parameter.PosY+1+((pstScrollBar->Parameter.Height-uiScrollBlockSize-2)*pstScrollBar->Data.Index/pstScrollBar->Parameter.MaxIndex);
 				// Redraw process block
-				GUI_Basic_DrawRectangle(pstScrollBar->Parameter.PosX+1, uiScrollBlockPos,
+				SGUI_Basic_DrawRectangle(pstScrollBar->Parameter.PosX+1, uiScrollBlockPos,
 										uiScrollBlockSize, uiScrollBlockSize, GUI_COLOR_FRGCLR, GUI_COLOR_FRGCLR);
 			}
 			else
 			{
-				GUI_Basic_DrawRectangle(pstScrollBar->Parameter.PosX+1, pstScrollBar->Parameter.PosY+1,
+				SGUI_Basic_DrawRectangle(pstScrollBar->Parameter.PosX+1, pstScrollBar->Parameter.PosY+1,
 										uiScrollBlockSize, uiScrollBlockSize, GUI_COLOR_FRGCLR, GUI_COLOR_FRGCLR);
 			}
 		}
 		else // Horizontal
 		{
 			// Draw scroll bar edge.
-			GUI_Basic_DrawRectangle(pstScrollBar->Parameter.PosX, pstScrollBar->Parameter.PosY,
+			SGUI_Basic_DrawRectangle(pstScrollBar->Parameter.PosX, pstScrollBar->Parameter.PosY,
 									pstScrollBar->Parameter.Width, pstScrollBar->Parameter.Height,
 									GUI_COLOR_FRGCLR, GUI_COLOR_BKGCLR);
 			// Value lower limit is 0, scroll blocks must be greater then 0.
@@ -86,12 +86,12 @@ void GUI_ScrollBar_RefreshScrollBar(GUI_SCROLLBAR_STRUCT* pstScrollBar)
 			{
 				uiScrollBlockPos = pstScrollBar->Parameter.PosX+1+((pstScrollBar->Parameter.Width-uiScrollBlockSize-2)*pstScrollBar->Data.Index/pstScrollBar->Parameter.MaxIndex);
 				// Redraw process block
-				GUI_Basic_DrawRectangle(uiScrollBlockPos, pstScrollBar->Parameter.PosY+1,
+				SGUI_Basic_DrawRectangle(uiScrollBlockPos, pstScrollBar->Parameter.PosY+1,
 										uiScrollBlockSize, uiScrollBlockSize, GUI_COLOR_FRGCLR, GUI_COLOR_FRGCLR);
 			}
 			else
 			{
-				GUI_Basic_DrawRectangle(pstScrollBar->Parameter.PosX+1, pstScrollBar->Parameter.PosY+1,
+				SGUI_Basic_DrawRectangle(pstScrollBar->Parameter.PosX+1, pstScrollBar->Parameter.PosY+1,
 										uiScrollBlockSize, uiScrollBlockSize, GUI_COLOR_FRGCLR, GUI_COLOR_FRGCLR);
 			}
 		}

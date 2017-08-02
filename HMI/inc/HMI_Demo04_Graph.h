@@ -5,7 +5,7 @@
 //=======================================================================//
 #include <stdint.h>
 #include <stddef.h>
-#include "GUI_Graph.h"
+#include "SGUI_Graph.h"
 #include "HMI_Data.h"
 #include "HMI_Process.h"
 #include "UserAction.h"

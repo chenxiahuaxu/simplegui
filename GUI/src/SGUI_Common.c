@@ -9,55 +9,53 @@
 //=======================================================================//
 //= Include files.													    =//
 //=======================================================================//
-#include "GUI_Common.h"
-#include <stddef.h>
-#include <stdint.h>
-#include <stdbool.h>
-#include <string.h>
+#include "SGUI_Common.h"
 #ifdef _SIMPLE_GUI_ENABLE_SIMULATOR_
 #ifdef _SIMPLE_GUI_ENABLE_ICONV_GB2312_
 #include <iconv.h>
 #include <time.h>
 #endif // _SIMPLE_GUI_ENABLE_ICONV_GB2312_
 #include <malloc.h>
+#include <string.h>
 #endif //_SIMPLE_GUI_ENABLE_SIMULATOR_
 
 //=======================================================================//
 //= Static variable declaration.									    =//
 //=======================================================================//
 #if defined(_SIMPLE_GUI_ENABLE_SIMULATOR_)&&defined(_SIMPLE_GUI_ENABLE_ICONV_GB2312_)
-static char g_arrcEncodeBuffer[ENCODE_BUFFER_SIZE];
+static SGUI_CHAR g_arrcEncodeBuffer[ENCODE_BUFFER_SIZE];
 #endif
 
 //=======================================================================//
 //= Function implementation.										    =//
 //=======================================================================//
-/*****************************************************************************/
-/** Function Name:	GUI_Common_IntegerToStringWithDecimalPoint				**/
-/** Purpose:		Convert number to a string and insert decimal point.	**/
-/** Resources:		None.													**/
-/** Params:																	**/
-/**	@iInteger:			Source number.										**/
-/**	@uiDecimalPlaces:	Decimal point places.								**/
-/**	@pszStringBuffer:	Bit map data buffer.								**/
-/**	@iAlignment:		Alignment of number string, positive numbers means	**/
-/**						right aligned and negative means left alignment.	**/
-/** Return:			Converted string length.								**/
-/** Notice:			Only applies to decimal numbers.						**/
-/*****************************************************************************/
-uint16_t GUI_Common_IntegerToStringWithDecimalPoint(int32_t iInteger, uint16_t uiDecimalPlaces, char* pszStringBuffer, int16_t iAlignment, char cFillCharacter)
+/*************************************************************************/
+/** Function Name:	SGUI_Common_IntegerToStringWithDecimalPoint			**/
+/** Purpose:		Convert number to a string and insert decimal point.**/
+/** Resources:		None.												**/
+/** Params:																**/
+/**	@iInteger:			Source number.									**/
+/**	@uiDecimalPlaces:	Decimal point places.							**/
+/**	@pszStringBuffer:	Bit map data buffer.							**/
+/**	@iAlignment:		Alignment of number string, positive numbers 	**/
+/**						means right aligned and negative means left 	**/
+/**						alignment.										**/
+/** Return:			Converted string length.							**/
+/** Notice:			Only applies to decimal numbers.					**/
+/*************************************************************************/
+SGUI_SIZE SGUI_Common_IntegerToStringWithDecimalPoint(SGUI_INT iInteger, SGUI_UINT uiDecimalPlaces, SGUI_PSZSTR pszStringBuffer, SGUI_INT iAlignment, SGUI_CHAR cFillCharacter)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	char		szNumberString[GUI_NUMBER_STR_LENGTH_MAX] = {0x00};
-	uint32_t	uiSourceNumber;
-	uint16_t	uiSignBit;
-	uint16_t	uiNumberStringLength;
-	uint16_t	uiDecimalLength;
-	uint16_t	uiOutputLength;
-	char*		pcSrcPtr;
-	char*		pcDestPtr;
+	SGUI_CHAR					szNumberString[GUI_NUMBER_STR_LENGTH_MAX] = {0x00};
+	SGUI_UINT					uiSourceNumber;
+	SGUI_UINT					uiSignBit;
+	SGUI_SIZE					uiNumberStringLength;
+	SGUI_SIZE					uiDecimalLength;
+	SGUI_SIZE					uiOutputLength;
+	SGUI_PSZSTR					pcSrcPtr;
+	SGUI_PSZSTR					pcDestPtr;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -82,7 +80,7 @@ uint16_t GUI_Common_IntegerToStringWithDecimalPoint(int32_t iInteger, uint16_t u
 	{
 		uiDecimalLength = uiDecimalPlaces;
 		// Convert number to string, ignore sign.
-		uiNumberStringLength = GUI_Common_IntegerToString(uiSourceNumber, szNumberString, 10, 0, cFillCharacter);
+		uiNumberStringLength = SGUI_Common_IntegerToString(uiSourceNumber, szNumberString, 10, 0, cFillCharacter);
         // Set pointer.
 		pcSrcPtr = szNumberString + uiNumberStringLength - 1;
 		if(uiDecimalLength < uiNumberStringLength)
@@ -131,7 +129,6 @@ uint16_t GUI_Common_IntegerToStringWithDecimalPoint(int32_t iInteger, uint16_t u
 		{
 			*pcDestPtr = '-';
 		}
-
 		// Alignment
 		uiOutputLength = uiOutputLength + uiSignBit;
 		if(iAlignment > 0)
@@ -189,39 +186,40 @@ uint16_t GUI_Common_IntegerToStringWithDecimalPoint(int32_t iInteger, uint16_t u
 	else
 	{
 		// Convert number to string.
-		uiOutputLength = GUI_Common_IntegerToString(iInteger, pszStringBuffer, 10, iAlignment, cFillCharacter);
+		uiOutputLength = SGUI_Common_IntegerToString(iInteger, pszStringBuffer, 10, iAlignment, cFillCharacter);
 	}
 
 	return uiOutputLength;
 }
 
-/*****************************************************************************/
-/** Function Name:	GUI_Common_ConvertIntegerToString						**/
-/** Purpose:		Convert number to a string and insert decimal point.	**/
-/** Resources:		None.													**/
-/** Params:																	**/
-/**	@iInteger:			Source number.										**/
-/**	@pszStringBuffer:	Bit map data buffer.								**/
-/**	@uiBase:			Conversion base.									**/
-/**	@iAlignment:		Alignment of number string, positive numbers means	**/
-/**						right aligned and negative means left alignment.	**/
-/**	@cFillCharacter:	Used when convert string length is less then		**/
-/**						alignment length.									**/
-/** Return:			Converted string length.								**/
-/** Notice:			None.													**/
-/*****************************************************************************/
-uint16_t GUI_Common_IntegerToString(int32_t iInteger, char* pszStringBuffer, uint16_t uiBase, int16_t iAlignment, char cFillCharacter)
+/*************************************************************************/
+/** Function Name:	GUI_Common_ConvertIntegerToString					**/
+/** Purpose:		Convert number to a string and insert decimal point.**/
+/** Resources:		None.												**/
+/** Params:																**/
+/**	@iInteger:			Source number.									**/
+/**	@pszStringBuffer:	Bit map data buffer.							**/
+/**	@uiBase:			Conversion base.								**/
+/**	@iAlignment:		Alignment of number string, positive numbers 	**/
+/**						means right aligned and negative means left 	**/
+/**						alignment.										**/
+/**	@cFillCharacter:	Used when convert string length is less then	**/
+/**						alignment length.								**/
+/** Return:			Converted string length.							**/
+/** Notice:			None.												**/
+/*************************************************************************/
+SGUI_SIZE SGUI_Common_IntegerToString(SGUI_INT iInteger, SGUI_PSZSTR pszStringBuffer, SGUI_UINT uiBase, SGUI_INT iAlignment, SGUI_CHAR cFillCharacter)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	char		szNumberString[GUI_NUMBER_STR_LENGTH_MAX] = {0x00};
-	uint32_t	uiSourceNumber;
-	uint16_t	uiNumberStringLength = 0;
-    char*		pcSrcPtr;
-    char*		pcDestPtr;
-    uint16_t	uiDigitBit;
-    uint16_t	uiSignBit;
+	SGUI_CHAR					szNumberString[GUI_NUMBER_STR_LENGTH_MAX] = {0x00};
+	SGUI_UINT					uiSourceNumber;
+	SGUI_UINT					uiSignBit;
+	SGUI_SIZE					uiNumberStringLength;
+    SGUI_PSZSTR					pcSrcPtr;
+    SGUI_PSZSTR					pcDestPtr;
+    SGUI_SIZE					uiDigitBit;
 
     /*----------------------------------*/
 	/* Initialize						*/
@@ -230,13 +228,14 @@ uint16_t GUI_Common_IntegerToString(int32_t iInteger, char* pszStringBuffer, uin
 	pcDestPtr = szNumberString;
 	*pcSrcPtr = '\0';
 	pcSrcPtr--;
+	uiNumberStringLength = 0;
 	// Judged sign
     if(iInteger < 0)
 	{
 		if(uiBase == 16)
 		{
 			uiSignBit = 0;
-			uiSourceNumber = (uint32_t)iInteger;
+			uiSourceNumber = (SGUI_UINT)iInteger;
 		}
 		else
 		{
@@ -247,7 +246,7 @@ uint16_t GUI_Common_IntegerToString(int32_t iInteger, char* pszStringBuffer, uin
 	else
 	{
 		uiSignBit = 0;
-		uiSourceNumber = (uint32_t)iInteger;
+		uiSourceNumber = (SGUI_UINT)iInteger;
 	}
 
 	/*----------------------------------*/
@@ -355,25 +354,25 @@ uint16_t GUI_Common_IntegerToString(int32_t iInteger, char* pszStringBuffer, uin
 	return uiNumberStringLength;
 }
 
-/*****************************************************************************/
-/** Function Name:	GUI_ConvertStringToUnsignedInteger						**/
-/** Purpose:		Convert a string to number.								**/
-/** Resources:		None.													**/
-/** Params:																	**/
-/**	@szString:			Source number.										**/
-/**	@pcEndPointer:		Convert end pointer output in string.				**/
-/**	@uiBase:			Conversion base.									**/
-/** Return:			Converted number.										**/
-/** Notice:			None.													**/
-/*****************************************************************************/
-uint32_t GUI_Common_ConvertStringToUnsignedInteger(char* szString, char** pcEndPointer, uint16_t uiBase)
+/*************************************************************************/
+/** Function Name:	GUI_ConvertStringToUnsignedInteger					**/
+/** Purpose:		Convert a string to number.							**/
+/** Resources:		None.												**/
+/** Params:																**/
+/**	@szString:			Source number.									**/
+/**	@pcEndPointer:		Convert end pointer output in string.			**/
+/**	@uiBase:			Conversion base.								**/
+/** Return:			Converted number.									**/
+/** Notice:			None.												**/
+/*************************************************************************/
+SGUI_UINT32 SGUI_Common_ConvertStringToUnsignedInteger(SGUI_PSZSTR szString, SGUI_PSZSTR* pcEndPointer, SGUI_UINT uiBase)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-    uint32_t				uiResult;
-	uint32_t				uiBitValue;
-	char*					pcCurPtr;
+    SGUI_UINT32					uiResult;
+	SGUI_UINT					uiBitValue;
+	SGUI_PSZSTR					pcCurPtr;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -422,25 +421,25 @@ uint32_t GUI_Common_ConvertStringToUnsignedInteger(char* szString, char** pcEndP
     return uiResult;
 }
 
-/*****************************************************************************/
-/** Function Name:	GUI_ConvertStringToInteger								**/
-/** Purpose:		Convert a string to number with sign.					**/
-/** Resources:		None.													**/
-/** Params:																	**/
-/**	@szString:			Source number.										**/
-/**	@pcEndPointer:		Convert end pointer output in string.				**/
-/**	@uiBase:			Conversion base.									**/
-/** Return:			Converted number.										**/
-/** Notice:			None.													**/
-/*****************************************************************************/
-int32_t GUI_Common_ConvertStringToInteger(char* szString, char** pcEndPointer, uint16_t uiBase)
+/*************************************************************************/
+/** Function Name:	GUI_ConvertStringToInteger							**/
+/** Purpose:		Convert a string to number with sign.				**/
+/** Resources:		None.												**/
+/** Params:																**/
+/**	@szString:			Source number.									**/
+/**	@pcEndPointer:		Convert end pointer output in string.			**/
+/**	@uiBase:			Conversion base.								**/
+/** Return:			Converted number.									**/
+/** Notice:			None.												**/
+/*************************************************************************/
+SGUI_INT32 SGUI_Common_ConvertStringToInteger(SGUI_PSZSTR szString, SGUI_PSZSTR* pcEndPointer, SGUI_UINT uiBase)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-    int32_t					iResult;
-    int32_t					iSign;
-	char*					pcCurPtr;
+    SGUI_INT32					iResult;
+    SGUI_INT32					iSign;
+	SGUI_PSZSTR					pcCurPtr;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -473,7 +472,7 @@ int32_t GUI_Common_ConvertStringToInteger(char* szString, char** pcEndPointer, u
 			}
 		}
 		// Convert string without sign.
-		iResult = GUI_Common_ConvertStringToUnsignedInteger(pcCurPtr, pcEndPointer, uiBase);
+		iResult = SGUI_Common_ConvertStringToUnsignedInteger(pcCurPtr, pcEndPointer, uiBase);
 		if((iResult > 0) && (-1 == iSign))
 		{
 			iResult = -iResult;
@@ -484,24 +483,25 @@ int32_t GUI_Common_ConvertStringToInteger(char* szString, char** pcEndPointer, u
 
 #ifdef _SIMPLE_GUI_ENABLE_ICONV_GB2312_
 /*************************************************************************/
-/** Function Name:	GUI_EncodeConvert									**/
+/** Function Name:	SGUI_Common_EncodeConvert							**/
 /** Purpose:		Convert string encode.								**/
 /** Resources:		None.												**/
 /** Params:																**/
-/**	@[in]encFrom:		Source encoder.									**/
-/**	@[in]encTo:			Destination encoder.							**/
-/**	@[in]szFilePath:	File path.										**/
+/**	@[in]encFrom:		Source encoder name.							**/
+/**	@[in]encTo:			Destination encoder name.						**/
+/**	@[in]szSource:		String will converted.							**/
 /** Return:			String after convert.								**/
 /*************************************************************************/
-char* GUI_EncodeConvert(char *szSourceEncode, char *szDestinationEncode, char *szSource)
+SGUI_PSZSTR SGUI_Common_EncodeConvert(SGUI_PCSZSTR szSourceEncode, SGUI_PSZSTR szDestinationEncode, SGUI_PSZSTR szSource)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	char					*pszResultPtr;
-	size_t					uiSourceLength, uiOutputBufferSize;
-	size_t					uiEncoderResult;
-	iconv_t					pIconv;
+	SGUI_PSZSTR					pszResultPtr;
+	SGUI_SIZE					uiSourceLength, uiOutputBufferSize;
+	SGUI_SIZE					uiEncoderResult;
+	iconv_t						pIconv;
+
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
@@ -512,7 +512,7 @@ char* GUI_EncodeConvert(char *szSourceEncode, char *szDestinationEncode, char *s
 	pIconv = iconv_open(szDestinationEncode, szSourceEncode);
 	if((iconv_t)-1 != pIconv)
 	{
-		uiSourceLength = strlen(szSource) + 1;
+		uiSourceLength = SGUI_Common_StringLength(szSource) + 1;
 		uiOutputBufferSize = ENCODE_BUFFER_SIZE;
 		pszResultPtr = g_arrcEncodeBuffer;
 		uiEncoderResult = iconv(pIconv, &szSource, &uiSourceLength, &pszResultPtr, &uiOutputBufferSize);
@@ -532,7 +532,7 @@ char* GUI_EncodeConvert(char *szSourceEncode, char *szDestinationEncode, char *s
 
 #ifdef _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
 /*************************************************************************/
-/** Function Name:	GUI_Common_Allocate									**/
+/** Function Name:	SGUI_Common_Allocate								**/
 /** Purpose:		Allocate a memory block.							**/
 /** Resources:		None.												**/
 /** Params:																**/
@@ -540,12 +540,12 @@ char* GUI_EncodeConvert(char *szSourceEncode, char *szDestinationEncode, char *s
 /** Return:			Allocated memory block started address, same as STD	**/
 /**					malloc interface.									**/
 /*************************************************************************/
-void* GUI_Common_Allocate(uint32_t uiSize)
+void* SGUI_Common_Allocate(SGUI_SIZE uiSize)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	void					*pAllocatedMemory;
+	void						*pAllocatedMemory;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -564,39 +564,42 @@ void* GUI_Common_Allocate(uint32_t uiSize)
 }
 
 /*************************************************************************/
-/** Function Name:	GUI_Common_Free										**/
+/** Function Name:	SGUI_Common_Free									**/
 /** Purpose:		Free a memory block.								**/
 /** Resources:		None.												**/
 /** Params:																**/
 /**	@[in]pFreePointer:	Free memory pointer 							**/
 /** Return:			None.												**/
 /*************************************************************************/
-void GUI_Common_Free(void* pFreePointer)
+void SGUI_Common_Free(void* pFreePointer)
 {
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	free(pFreePointer);
+	if(NULL != pFreePointer)
+	{
+		free(pFreePointer);
+	}
 }
 
 #endif // _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
 
 /*************************************************************************/
-/** Function Name:	GUI_Common_MemoryCopy								**/
+/** Function Name:	SGUI_Common_MemoryCopy								**/
 /** Purpose:		Copy memory block to a new address.					**/
 /** Resources:		None.												**/
 /** Params:																**/
 /**	@[in]pDest:			Memory address will copied to.					**/
 /**	@[in]pSrc:			Memory data source.								**/
 /**	@[in]size:			Copied data size(in byte).						**/
-/** Return:			Same as STD memcpy function.						**/
+/** Return:			Destination memory block pointer.					**/
 /*************************************************************************/
-void* GUI_Common_MemoryCopy(void* pDest, const void* pSrc, uint32_t size)
+void* SGUI_Common_MemoryCopy(void* pDest, const void* pSrc, SGUI_SIZE size)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	void					*pCopiedMemory;
+	void						*pCopiedMemory;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -617,17 +620,25 @@ void* GUI_Common_MemoryCopy(void* pDest, const void* pSrc, uint32_t size)
 	return pCopiedMemory;
 }
 
-uint32_t GUI_Common_StringLength(const char* szString)
+/*************************************************************************/
+/** Function Name:	SGUI_Common_StringLength							**/
+/** Purpose:		Get string length in bytes.							**/
+/** Resources:		None.												**/
+/** Params:																**/
+/**	@[in]szString:		String head pointer.							**/
+/** Return:			String length in bytes.								**/
+/*************************************************************************/
+SGUI_SIZE SGUI_Common_StringLength(SGUI_PCSZSTR szString)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	uint32_t				uiStringLength;
+	SGUI_SIZE					uiStringLength;
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	uiStringLength =		0;
+	uiStringLength =			0;
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
@@ -643,23 +654,96 @@ uint32_t GUI_Common_StringLength(const char* szString)
 	return uiStringLength;
 }
 
-/*****************************************************************************/
-/** Function Name:	GUI_Common_GetNowTime									**/
-/** Purpose:		Get system now time.									**/
-/** Resources:		System RTC interface.									**/
-/** Params:																	**/
-/**	@pstTime:			RTC time data structure pointer.					**/
-/** Return:			None.													**/
-/** Notice:			user need to override this function according to the	**/
-/**					platform used.											**/
-/*****************************************************************************/
-void GUI_Common_GetNowTime(GUI_TIME* pstTime)
+/*************************************************************************/
+/** Function Name:	SGUI_Common_StringCopy								**/
+/** Purpose:		Copy string.										**/
+/** Resources:		None.												**/
+/** Params:																**/
+/**	@[in]szDest:		Source string.									**/
+/**	@[in]szSrc:			Destination string	.							**/
+/** Return:			Destination string pointer.							**/
+/*************************************************************************/
+SGUI_PSZSTR SGUI_Common_StringCopy(SGUI_PSZSTR szDest, SGUI_PCSZSTR szSrc)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	time_t				rawtime;
-	struct tm*			timeinfo;
+	SGUI_PSZSTR					szDestPtr;
+
+	/*----------------------------------*/
+	/* Initialize						*/
+	/*----------------------------------*/
+	szDestPtr =					NULL;
+
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	if((NULL != szDest) && (NULL != szSrc))
+	{
+#ifdef _SIMPLE_GUI_ENABLE_SIMULATOR_
+	szDestPtr = strcpy(szDest, szSrc);
+#else
+	// Add RTC time process here;
+#endif // _SIMPLE_GUI_ENABLE_SIMULATOR_
+	}
+
+	return szDestPtr;
+}
+
+/*************************************************************************/
+/** Function Name:	SGUI_Common_StringLengthCopy						**/
+/** Purpose:		Copy string.										**/
+/** Resources:		None.												**/
+/** Params:																**/
+/**	@[in]szDest:		Source string.									**/
+/**	@[in]szSrc:			Destination string.								**/
+/**	@[in]uiSize:		String length will be copied.					**/
+/** Return:			Destination string pointer.							**/
+/*************************************************************************/
+SGUI_PSZSTR SGUI_Common_StringLengthCopy(SGUI_PSZSTR szDest, SGUI_PCSZSTR szSrc, SGUI_SIZE uiSize)
+{
+	/*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+	SGUI_PSZSTR					szDestPtr;
+
+	/*----------------------------------*/
+	/* Initialize						*/
+	/*----------------------------------*/
+	szDestPtr =					NULL;
+
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	if((NULL != szDest) && (NULL != szSrc))
+	{
+#ifdef _SIMPLE_GUI_ENABLE_SIMULATOR_
+	szDestPtr = strncpy(szDest, szSrc, uiSize);
+#else
+	// Add RTC time process here;
+#endif // _SIMPLE_GUI_ENABLE_SIMULATOR_
+	}
+
+	return szDestPtr;
+}
+
+/*************************************************************************/
+/** Function Name:	SGUI_Common_GetNowTime								**/
+/** Purpose:		Get system now time.								**/
+/** Resources:		System RTC interface.								**/
+/** Params:																**/
+/**	@pstTime:			RTC time data structure pointer.				**/
+/** Return:			None.												**/
+/** Notice:			user need to override this function according to 	**/
+/**					the platform used.									**/
+/*************************************************************************/
+void SGUI_Common_GetNowTime(SGUI_TIME* pstTime)
+{
+	/*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+	time_t						rawtime;
+	struct tm*					timeinfo;
 
 	/*----------------------------------*/
 	/* Process							*/
@@ -680,34 +764,34 @@ void GUI_Common_GetNowTime(GUI_TIME* pstTime)
 	}
 }
 
-/*****************************************************************************/
-/** Function Name:	GUI_Common_RefreshScreen								**/
-/** Purpose:		Refresh screen when needed.								**/
-/** Resources:		None.													**/
-/** Params:			None.													**/
-/** Return:			None.													**/
-/** Notice:			Need to be implemented, and call when needed in GUI API	**/
-/**					optimization.											**/
-/*****************************************************************************/
-void GUI_Common_RefreshScreen(void)
+/*************************************************************************/
+/** Function Name:	SGUI_Common_RefreshScreen							**/
+/** Purpose:		Refresh screen when needed.							**/
+/** Resources:		None.												**/
+/** Params:			None.												**/
+/** Return:			None.												**/
+/** Notice:			Need to be implemented, and call when needed in GUI	**/
+/**					API optimization.									**/
+/*************************************************************************/
+void SGUI_Common_RefreshScreen(void)
 {
 	/* Add screen refresh function or process here. */
 }
 
-/*****************************************************************************/
-/** Function Name:	GUI_Common_ReadFlashROM									**/
-/** Purpose:		Read byte or byte array form internal flash or external	**/
-/**					flash.													**/
-/** Resources:		None.													**/
-/** Params:																	**/
-/**	@uiAddressHead:		Start address will be read.							**/
-/**	@uiDataLength:		Number of byte will be read.						**/
-/**	@pBuffer:			Read byte buffer.									**/
-/** Return:			None.													**/
-/** Notice:			This function need to override when use external flash	**/
-/**					ROM data.												**/
-/*****************************************************************************/
-void GUI_Common_ReadFlashROM(uint32_t uiAddressHead, uint32_t uiDataLength, uint8_t* pBuffer)
+/*************************************************************************/
+/** Function Name:	SGUI_Common_ReadFlashROM							**/
+/** Purpose:		Read byte or byte array form internal flash or		**/
+/**					external flash.										**/
+/** Resources:		None.												**/
+/** Params:																**/
+/**	@uiAddressHead[in]:	Start address will be read.						**/
+/**	@uiDataLength[in]:	Number of byte will be read.					**/
+/**	@pBuffer[out]:		Read byte buffer.								**/
+/** Return:			None.												**/
+/** Notice:			This function need to override when use external 	**/
+/**					flash ROM data.										**/
+/*************************************************************************/
+void SGUI_Common_ReadFlashROM(SGUI_ROM_ADDRESS uiAddressHead, SGUI_SIZE uiDataLength, SGUI_BYTE* pBuffer)
 {
 	/* Add flash ROM IO process here. */
 }

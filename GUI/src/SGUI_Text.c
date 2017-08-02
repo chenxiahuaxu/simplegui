@@ -9,9 +9,9 @@
 //=======================================================================//
 //= Include files.													    =//
 //=======================================================================//
-#include "GUI_Common.h"
-#include "GUI_Text.h"
-#include "GUI_Basic.h"
+#include "SGUI_Common.h"
+#include "SGUI_Text.h"
+#include "SGUI_Basic.h"
 #include <stddef.h>
 #include <stdint.h>
 #include <string.h>
@@ -20,58 +20,58 @@
 //= Static variable declaration.									    =//
 //=======================================================================//
 
-uint8_t						auiFontDataBuffer[FONT_DATA_BUFFER_SIZE] = {0x00};
-const GUI_FONT_SIZE_STRUCT	g_stFontSize[GUI_FONT_SIZE_MAX] = {	{6, 4, 6},
-																{8, 6, 8},
-																{12, 6, 12},
-																{16, 8, 16},
-																{24, 12, 24},
-																{32, 16, 32}};
+SGUI_BYTE					auiFontDataBuffer[FONT_DATA_BUFFER_SIZE] = {0x00};
+const SGUI_FONT_SIZE_STRUCT	g_stFontSize[SGUI_FONT_SIZE_MAX] = {	{6, 4, 6},
+																	{8, 6, 8},
+																	{12, 6, 12},
+																	{16, 8, 16},
+																	{24, 12, 24},
+																	{32, 16, 32}};
 
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
-static void					GUI_Text_ReadFontData(GUI_FONT_SIZE eFontSize, uint32_t uiCharacterCode, uint8_t* pOutPutBuffer, uint32_t uiFontBufferSize);
-static size_t				GUI_Text_GetCharacterTableIndex(uint16_t uiCharacterCode);
+static void					SGUI_Text_ReadFontData(SGUI_FONT_SIZE eFontSize, SGUI_UINT16 uiCharacterCode, SGUI_BYTE* pOutPutBuffer, SGUI_SIZE uiFontBufferSize);
+static SGUI_SIZE			SGUI_Text_GetCharacterTableIndex(SGUI_UINT16 uiCharacterCode);
 
 //=======================================================================//
 //= Function implementation.										    =//
 //=======================================================================//
 
-/*****************************************************************************/
-/** Function Name:	GUI_Text_DrawSingleLineText								**/
-/** Purpose:		Write a single line text in a fixed area.				**/
-/** Resources:		Basic character font module data.						**/
-/** Params:																	**/
-/**	@szTextBuffer:		Text array pointer.									**/
-/**	@uiFontSize:		Font size.											**/
-/**	@pstDisplayArea:	Display area size.									**/
-/**	@pstStringDataArea:	Text area size.										**/
-/**	@eFontMode			Character display mode(normal or reverse color).	**/
-/** Return:			Next character X coordinate in current line.			**/
-/** Limitation:		None.													**/
-/*****************************************************************************/
-void GUI_Text_DrawSingleLineText(const char* szTextBuffer, GUI_FONT_SIZE eFontSize, RECTANGLE* pstDisplayArea, RECTANGLE* pstTextDataArea, DRAW_MODE eFontMode)
+/*************************************************************************/
+/** Function Name:	SGUI_Text_DrawSingleLineText						**/
+/** Purpose:		Write a single line text in a fixed area.			**/
+/** Resources:		Basic character font module data.					**/
+/** Params:																**/
+/**	@szTextBuffer:		Text array pointer.								**/
+/**	@uiFontSize:		Font size.										**/
+/**	@pstDisplayArea:	Display area size.								**/
+/**	@pstStringDataArea:	Text area size.									**/
+/**	@eFontMode			Character display mode(normal or reverse color).**/
+/** Return:			Next character X coordinate in current line.		**/
+/** Limitation:		None.												**/
+/*************************************************************************/
+void SGUI_Text_DrawSingleLineText(SGUI_PCSZSTR szTextBuffer, SGUI_FONT_SIZE eFontSize, SGUI_RECT_AREA* pstDisplayArea, SGUI_RECT_AREA* pstTextDataArea, SGUI_DRAW_MODE eFontMode)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	char*		pcTextPointer;										// Text character pointer.
-	uint16_t	uiCodeHighByte, uiCodeLowByte, uiCharacterCode;		// Character byte, might be tow bytes.
-	uint16_t	uiFontWidth, uiFontHeight, uiCharacterWidth;		// Font size and character graphics width.
-	RECTANGLE	stCharacterDataArea = {0};
-	GUI_COLOR	eBackColor;
+	SGUI_PSZSTR					pcTextPointer;										// Text character pointer.
+	SGUI_UINT16					uiCodeHighByte, uiCodeLowByte, uiCharacterCode;		// Character byte, might be tow bytes.
+	SGUI_UINT16					uiFontWidth, uiFontHeight, uiCharacterWidth;		// Font size and character graphics width.
+	SGUI_RECT_AREA				stCharacterDataArea = {0};
+	SGUI_COLOR					eBackColor;
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
 	// Initialize variable.
-	pcTextPointer				= ENCODE(szTextBuffer);
-	uiCharacterCode				= 0x0000;
-	eBackColor					= (eFontMode == GUI_DRAW_NORMAL)?GUI_COLOR_BKGCLR:GUI_COLOR_FRGCLR;
+	pcTextPointer =				ENCODE(szTextBuffer);
+	uiCharacterCode =			0x0000;
+	eBackColor =				(eFontMode == GUI_DRAW_NORMAL)?GUI_COLOR_BKGCLR:GUI_COLOR_FRGCLR;
 	// Get font graphics size.
-	uiFontWidth					= g_stFontSize[eFontSize].Width;
-	uiFontHeight				= g_stFontSize[eFontSize].Height;
+	uiFontWidth =				g_stFontSize[eFontSize].Width;
+	uiFontHeight =				g_stFontSize[eFontSize].Height;
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
@@ -91,7 +91,7 @@ void GUI_Text_DrawSingleLineText(const char* szTextBuffer, GUI_FONT_SIZE eFontSi
 			RECTANGLE_Y_START(*pstDisplayArea) = 0;
 		}
 		// Clear text area.
-        GUI_Basic_DrawRectangle(RECTANGLE_X_START(*pstDisplayArea), RECTANGLE_Y_START(*pstDisplayArea),
+        SGUI_Basic_DrawRectangle(RECTANGLE_X_START(*pstDisplayArea), RECTANGLE_Y_START(*pstDisplayArea),
 						RECTANGLE_WIDTH(*pstDisplayArea), RECTANGLE_HEIGHT(*pstDisplayArea),
 						eBackColor, eBackColor);
 		// Initialize drawing area data.
@@ -105,16 +105,17 @@ void GUI_Text_DrawSingleLineText(const char* szTextBuffer, GUI_FONT_SIZE eFontSi
 			uiCodeHighByte = 0x00;
 			uiCodeLowByte = 0x00;
 			// Process with ASCII code.
-			if((uint8_t)(*pcTextPointer) < 0x7F)
+			if((SGUI_BYTE)(*pcTextPointer) < 0x7F)
 			{
-				uiCodeLowByte = (uint8_t)*pcTextPointer++;
+				uiCodeLowByte = (SGUI_BYTE)(*pcTextPointer);
 				uiCharacterWidth = uiFontWidth;
+				pcTextPointer++;
 			}
 			// Process with GB2312.
-			else if(((uint8_t)(*pcTextPointer) >= 0xA1) && ((uint8_t)(*pcTextPointer) <= 0xF7))
+			else if(((SGUI_BYTE)(*pcTextPointer) >= 0xA1) && ((SGUI_BYTE)(*pcTextPointer) <= 0xF7))
 			{
-				uiCodeHighByte = (uint8_t)*pcTextPointer++;
-				uiCodeLowByte = (uint8_t)*pcTextPointer++;
+				uiCodeHighByte = (SGUI_BYTE)*pcTextPointer++;
+				uiCodeLowByte = (SGUI_BYTE)*pcTextPointer++;
 				uiCharacterWidth = uiFontWidth << 1;	//uiCharacterWidth = uiFontWidth * 2; for full-width character;
 			}
 			// Invalid character
@@ -132,9 +133,9 @@ void GUI_Text_DrawSingleLineText(const char* szTextBuffer, GUI_FONT_SIZE eFontSi
 			if(RECTANGLE_X_END(stCharacterDataArea) >= 0)
 			{
 				// Read Font data.
-				GUI_Text_ReadFontData(eFontSize, uiCharacterCode, (uint8_t*)auiFontDataBuffer, 512);
+				SGUI_Text_ReadFontData(eFontSize, uiCharacterCode, auiFontDataBuffer, 512);
 				// Display character.
-				GUI_Basic_DrawBitMap(pstDisplayArea, &stCharacterDataArea, (uint8_t*)auiFontDataBuffer, (DRAW_MODE)eFontMode);
+				SGUI_Basic_DrawBitMap(pstDisplayArea, &stCharacterDataArea, auiFontDataBuffer, (SGUI_DRAW_MODE)eFontMode);
 			}
 			RECTANGLE_X_START(stCharacterDataArea) += uiCharacterWidth;
 		}
@@ -154,28 +155,28 @@ void GUI_Text_DrawSingleLineText(const char* szTextBuffer, GUI_FONT_SIZE eFontSi
 /** Return:			Next character X coordinate in current line.			**/
 /** Notice:			None.													**/
 /*****************************************************************************/
-uint16_t GUI_Text_DrawMultipleLinesText(const char* szTextBuffer, GUI_FONT_SIZE eFontSize, RECTANGLE* pstDisplayArea, int16_t iTopOffset, DRAW_MODE eFontMode)
+SGUI_SIZE SGUI_Text_DrawMultipleLinesText(SGUI_PCSZSTR szTextBuffer, SGUI_FONT_SIZE eFontSize, SGUI_RECT_AREA* pstDisplayArea, SGUI_INT iTopOffset, SGUI_DRAW_MODE eFontMode)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	char*						pcTextPointer;
-	uint16_t					uiCodeHighByte, uiCodeLowByte, uiCharacterCode;
-	uint16_t					uiFontWidth, uiFontHeight;
-	uint16_t					uiLines;
-	RECTANGLE					stCharacterDataArea = {0};
-	GUI_COLOR					eBackColor;
+	SGUI_PSZSTR					pcTextPointer;
+	SGUI_UINT16					uiCodeHighByte, uiCodeLowByte, uiCharacterCode;
+	SGUI_UINT16					uiFontWidth, uiFontHeight;
+	SGUI_SIZE					uiLines;
+	SGUI_RECT_AREA				stCharacterDataArea = {0};
+	SGUI_COLOR					eBackColor;
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	pcTextPointer				= ENCODE(szTextBuffer);
-	uiCharacterCode				= 0x0000;
-	uiLines						= 0;
-	eBackColor					= (eFontMode == GUI_DRAW_NORMAL)?GUI_COLOR_BKGCLR:GUI_COLOR_FRGCLR;
+	pcTextPointer =				ENCODE(szTextBuffer);
+	uiCharacterCode =			0x0000;
+	uiLines =					0;
+	eBackColor =				(eFontMode == GUI_DRAW_NORMAL)?GUI_COLOR_BKGCLR:GUI_COLOR_FRGCLR;
 	// Get font graphics size.
-	uiFontWidth					= g_stFontSize[eFontSize].Width;
-	uiFontHeight				= g_stFontSize[eFontSize].Height;
+	uiFontWidth =				g_stFontSize[eFontSize].Width;
+	uiFontHeight =				g_stFontSize[eFontSize].Height;
 
 	/*----------------------------------*/
 	/* Process							*/
@@ -196,7 +197,7 @@ uint16_t GUI_Text_DrawMultipleLinesText(const char* szTextBuffer, GUI_FONT_SIZE 
 			RECTANGLE_Y_START(*pstDisplayArea) = 0;
 		}
 		// Clear text area.
-        GUI_Basic_DrawRectangle(RECTANGLE_X_START(*pstDisplayArea), RECTANGLE_Y_START(*pstDisplayArea),
+        SGUI_Basic_DrawRectangle(RECTANGLE_X_START(*pstDisplayArea), RECTANGLE_Y_START(*pstDisplayArea),
 						RECTANGLE_WIDTH(*pstDisplayArea), RECTANGLE_HEIGHT(*pstDisplayArea),
 						eBackColor, eBackColor);
 		// Initialize drawing area data.
@@ -228,16 +229,16 @@ uint16_t GUI_Text_DrawMultipleLinesText(const char* szTextBuffer, GUI_FONT_SIZE 
 				continue;
 			}
 			// Process with ASCII code.
-			if(((uint8_t)(*pcTextPointer) < 0x7F) && ((uint8_t)(*pcTextPointer) >= 0x20))
+			if(((SGUI_BYTE)(*pcTextPointer) < 0x7F) && ((SGUI_BYTE)(*pcTextPointer) >= 0x20))
 			{
-				uiCodeLowByte = (uint8_t)*pcTextPointer++;
+				uiCodeLowByte = (SGUI_BYTE)*pcTextPointer++;
 				RECTANGLE_WIDTH(stCharacterDataArea) = uiFontWidth;
 			}
 			// Process with GB2312.
-			else if(((uint8_t)(*pcTextPointer) >= 0xA1) && ((uint8_t)(*pcTextPointer) <= 0xF7))
+			else if(((SGUI_BYTE)(*pcTextPointer) >= 0xA1) && ((SGUI_BYTE)(*pcTextPointer) <= 0xF7))
 			{
-				uiCodeHighByte = (uint8_t)*pcTextPointer++;
-				uiCodeLowByte = (uint8_t)*pcTextPointer++;
+				uiCodeHighByte = (SGUI_BYTE)*pcTextPointer++;
+				uiCodeLowByte = (SGUI_BYTE)*pcTextPointer++;
 				RECTANGLE_WIDTH(stCharacterDataArea) = uiFontWidth << 1;
 			}
 			// Invalid character
@@ -263,8 +264,8 @@ uint16_t GUI_Text_DrawMultipleLinesText(const char* szTextBuffer, GUI_FONT_SIZE 
 			if((RECTANGLE_Y_END(stCharacterDataArea) >= 0) && (RECTANGLE_Y_START(stCharacterDataArea) < RECTANGLE_HEIGHT(*pstDisplayArea)))
 			{
 				// Read Font data.
-				GUI_Text_ReadFontData(eFontSize, uiCharacterCode, (uint8_t*)auiFontDataBuffer, 512);
-				GUI_Basic_DrawBitMap(pstDisplayArea, &stCharacterDataArea, (uint8_t*)auiFontDataBuffer, eFontMode);
+				SGUI_Text_ReadFontData(eFontSize, uiCharacterCode, (SGUI_BYTE*)auiFontDataBuffer, 512);
+				SGUI_Basic_DrawBitMap(pstDisplayArea, &stCharacterDataArea, (SGUI_BYTE*)auiFontDataBuffer, eFontMode);
 			}
 			else
 			{
@@ -277,65 +278,74 @@ uint16_t GUI_Text_DrawMultipleLinesText(const char* szTextBuffer, GUI_FONT_SIZE 
 }
 
 /*****************************************************************************/
-/** Function Name:	GUI_Text_ReadFontData									**/
+/** Function Name:	SGUI_Text_ReadFontData									**/
 /** Purpose:		Read font from internal or external flash memory.		**/
 /** Resources:		External flash read interface.							**/
 /** Params:																	**/
-/**	@uiFontSize: 		Start address of font data.							**/
-/**	@uiCharacterCode:	Data buffer pointer of read font data.				**/
-/**	@pDataBuffer:		Read data size.										**/
-/**	@uiFontBufferSize:	Free space for font buffer, 0 means ignore the		**/
+/**	@uiFontSize[in]: 	Start address of font data.							**/
+/**	@uiCharacterCode[in]: Data buffer pointer of read font data.			**/
+/**	@pDataBuffer[out]:	Read data size.										**/
+/**	@uiFontBufferSize[in]: Free space for font buffer, 0 means ignore the	**/
 /**						data size judgment.									**/
 /** Return:			None.													**/
 /** Limitation:		This function need to override when use external flash	**/
 /**					ROM data.												**/
 /*****************************************************************************/
-void GUI_Text_ReadFontData(GUI_FONT_SIZE eFontSize, uint32_t uiCharacterCode, uint8_t* pOutPutBuffer, uint32_t uiFontBufferSize)
+void SGUI_Text_ReadFontData(SGUI_FONT_SIZE eFontSize, SGUI_UINT16 uiCharacterCode, SGUI_BYTE* pOutPutBuffer, SGUI_SIZE uiFontBufferSize)
 {
+	/*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
 	// Need rewrite this function for use each different external font data.
-	uint32_t	uiCharacterIndex;
-	uint16_t	uiFontWidth, uiFontHeight;
-	uint32_t	uiCharacterDataSize;
-	uint8_t*	puiFontDataArrayPointer;
-	uint16_t	i;
+	SGUI_UINT16					uiCharacterIndex;
+	SGUI_UINT					uiFontWidth, uiFontHeight;
+	SGUI_SIZE					uiCharacterDataSize;
+	SGUI_BYTE*					puiFontDataArrayPointer;
+	SGUI_UINT					i;
 
+	/*----------------------------------*/
+	/* Initialize						*/
+	/*----------------------------------*/
 	// Get character font data index in font table.
-	uiCharacterIndex = GUI_Text_GetCharacterTableIndex(uiCharacterCode);
+	uiCharacterIndex =			SGUI_Text_GetCharacterTableIndex(uiCharacterCode);
 	// Calculates the byte used by each half-width character.
 	// Get font graphics size.
-	uiFontWidth					= g_stFontSize[eFontSize].Width;
-	uiFontHeight				= g_stFontSize[eFontSize].Height;
+	uiFontWidth =				g_stFontSize[eFontSize].Width;
+	uiFontHeight =				g_stFontSize[eFontSize].Height;
+	uiCharacterDataSize =		(((uiFontHeight-1)/8)+1)*uiFontWidth;
 
-	uiCharacterDataSize = (((uiFontHeight-1)/8)+1)*uiFontWidth;
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
 	switch(eFontSize)
 	{
 
-		case(GUI_FONT_SIZE_H12):
+		case(SGUI_FONT_SIZE_H12):
 		{
-			puiFontDataArrayPointer = (uint8_t*)FONT_H12;
+			puiFontDataArrayPointer = (SGUI_BYTE*)SGUI_FONT_H12;
 			break;
 		}
-		case(GUI_FONT_SIZE_H16):
+		case(SGUI_FONT_SIZE_H16):
 		{
-			puiFontDataArrayPointer = (uint8_t*)FONT_H16;
+			puiFontDataArrayPointer = (SGUI_BYTE*)SGUI_FONT_H16;
 			break;
 		}
 		/*
 		case(FONT_SIZE_H24):
 		{
-			puiFontDataArrayPointer = (uint8_t*)FONT_H24;
+			puiFontDataArrayPointer = (SGUI_BYTE*)FONT_H24;
 			break;
 		}
 		case(FONT_SIZE_H32):
 		{
-			puiFontDataArrayPointer = (uint8_t*)FONT_H32;
+			puiFontDataArrayPointer = (SGUI_BYTE*)SGUI_FONT_H32;
 			break;
 		}
 		*/
 		default:
 		{
 			// In other cases, the basic font is used.
-			puiFontDataArrayPointer = (uint8_t*)BASIC_FONT_DATA;
+			puiFontDataArrayPointer = (SGUI_BYTE*)BASIC_FONT_DATA;
 			uiFontWidth = 6;
 			uiFontHeight = 8;
 		}
@@ -356,14 +366,25 @@ void GUI_Text_ReadFontData(GUI_FONT_SIZE eFontSize, uint32_t uiCharacterCode, ui
 	}
 }
 
-size_t GUI_Text_GetCharacterTableIndex(uint16_t uiCharacterCode)
+/*****************************************************************************/
+/** Function Name:	SGUI_Text_GetCharacterTableIndex						**/
+/** Purpose:		Get character index in font mode table.					**/
+/** Resources:		External flash read interface.							**/
+/** Params:																	**/
+/**	@uiCharacterCode[in]: Data buffer pointer of read font data.			**/
+/** Return:			Font mode data index in table.							**/
+/** Limitation:		This function need to override when use external flash	**/
+/**					ROM data, user must redefine the data offset by the		**/
+/**					actual data.											**/
+/*****************************************************************************/
+SGUI_SIZE SGUI_Text_GetCharacterTableIndex(SGUI_UINT16 uiCharacterCode)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	uint8_t						uiCharacterCodeHighByte;
-	uint8_t						uiCharacterCodeLowByte;
-	size_t						uiFontTableIndex;
+	SGUI_UINT16					uiCharacterCodeHighByte;
+	SGUI_UINT16					uiCharacterCodeLowByte;
+	SGUI_SIZE					uiFontTableIndex;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -399,7 +420,7 @@ size_t GUI_Text_GetCharacterTableIndex(uint16_t uiCharacterCode)
 }
 
 /*****************************************************************************/
-/** Function Name:	GUI_Text_GetTextGraphicsWidth							**/
+/** Function Name:	SGUI_Text_GetTextGraphicsWidth							**/
 /** Purpose:		Get text displayed full width.							**/
 /** Resources:		None.													**/
 /** Params:																	**/
@@ -408,14 +429,14 @@ size_t GUI_Text_GetCharacterTableIndex(uint16_t uiCharacterCode)
 /** Return:			None.													**/
 /** Notice:			Only used with Equal-width characters. 					**/
 /*****************************************************************************/
-size_t	GUI_Text_GetTextGraphicsWidth(const char* szText, GUI_FONT_SIZE eFontSize)
+SGUI_SIZE SGUI_Text_GetTextGraphicsWidth(SGUI_PCSZSTR szText, SGUI_FONT_SIZE eFontSize)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-    size_t						uiTextHalfCharLength;
-    uint16_t					uiHalfFontWidth;
-    size_t						uiTextGraphicsWidth;
+    SGUI_SIZE					uiTextHalfCharLength;
+    SGUI_UINT16					uiHalfFontWidth;
+    SGUI_SIZE					uiTextGraphicsWidth;
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
@@ -426,7 +447,7 @@ size_t	GUI_Text_GetTextGraphicsWidth(const char* szText, GUI_FONT_SIZE eFontSize
 	/*----------------------------------*/
 	if(NULL != szText)
 	{
-		uiTextHalfCharLength = GUI_Common_StringLength(ENCODE(szText));
+		uiTextHalfCharLength = SGUI_Common_StringLength(ENCODE(szText));
 		uiHalfFontWidth = g_stFontSize[eFontSize].Width;
 		uiTextGraphicsWidth = uiHalfFontWidth * uiTextHalfCharLength;
 	}
@@ -435,7 +456,7 @@ size_t	GUI_Text_GetTextGraphicsWidth(const char* szText, GUI_FONT_SIZE eFontSize
 
 
 /*****************************************************************************/
-/** Function Name:	GUI_Text_GetMultiLineTextLines							**/
+/** Function Name:	SGUI_Text_GetMultiLineTextLines							**/
 /** Purpose:		Get a string's lines in a fixed width area.				**/
 /** Resources:		None.													**/
 /** Params:																	**/
@@ -444,13 +465,13 @@ size_t	GUI_Text_GetTextGraphicsWidth(const char* szText, GUI_FONT_SIZE eFontSize
 /** Return:			String lines.											**/
 /** Notice:			None.													**/
 /*****************************************************************************/
-uint16_t GUI_Text_GetMultiLineTextLines(const char* szNoticeText, uint16_t uiHalfWidthCharInLine)
+SGUI_SIZE SGUI_Text_GetMultiLineTextLines(SGUI_PCSZSTR szNoticeText, SGUI_SIZE uiHalfWidthCharInLine)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	uint16_t					uiLineCount, uiLineByteCount;
-	const char*					pcCur;
+	SGUI_SIZE					uiLineCount, uiLineByteCount;
+	SGUI_PCSZSTR				pcCur;
 
 	/*----------------------------------*/
 	/* Initialize						*/

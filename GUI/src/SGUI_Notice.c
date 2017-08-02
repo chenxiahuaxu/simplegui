@@ -9,12 +9,37 @@
 //=======================================================================//
 //= Include files.													    =//
 //=======================================================================//
-#include "GUI_Common.h"
-#include "GUI_Basic.h"
-#include "GUI_Text.h"
-#include "GUI_Notice.h"
+#include "SGUI_Common.h"
+#include "SGUI_Basic.h"
+#include "SGUI_Text.h"
+#include "SGUI_Notice.h"
 
-#include <string.h>
+//=======================================================================//
+//= User Macro definition.											    =//
+//=======================================================================//
+// User settings
+#define NOTICE_FONT_SIZE				(SGUI_FONT_SIZE_H12)
+#define NOTICE_ICON_SIZE				(16)
+#define NOTICE_BOX_EDGE_DIST			(6)
+#define NOTICE_BOX_MARGIN				(2)
+
+// Automatic calculation
+#define NOTICE_BOX_WIDTH				(LCD_SIZE_WIDTH-NOTICE_BOX_EDGE_DIST*2)
+#define NOTICE_BOX_HEIGHT_MIN			(g_stFontSize[NOTICE_FONT_SIZE].Height*2+NOTICE_BOX_MARGIN*2)
+#define NOTICE_BOX_HEIGHT_MAX			(LCD_SIZE_HEIGHT-NOTICE_BOX_EDGE_DIST*2)
+#define NOTICE_BOX_HEIGHT(LINES)		(LINES*g_stFontSize[NOTICE_FONT_SIZE].Height+NOTICE_BOX_MARGIN*2)
+#define NOTICE_BOX_POSX					(NOTICE_BOX_EDGE_DIST)
+#define NOTICE_BOX_POSY(HEIGHT)			((LCD_SIZE_HEIGHT-HEIGHT)/2)
+#define NOTICE_TEXT_AREA_WIDTH_NOICON	(NOTICE_BOX_WIDTH-NOTICE_BOX_MARGIN*4)
+#define	NOTICE_TEXT_AREA_WIDTH			(NOTICE_TEXT_AREA_WIDTH_NOICON-NOTICE_ICON_SIZE-NOTICE_BOX_MARGIN*2)
+#define NOTICE_TEXT_AREA_HEIGHT(LINES)	(NOTICE_BOX_HEIGHT(LINES)-NOTICE_BOX_MARGIN*2)
+#define NOTICE_TEXT_AREA_HEIGHT_MIN		(g_stFontSize[NOTICE_FONT_SIZE].Height*2)
+#define NOTICE_TEXT_AREA_HEIGHT_MAX		(NOTICE_BOX_HEIGHT_MAX-NOTICE_BOX_MARGIN*2)
+#define NOTICE_TEXT_POSX_NOICON			(NOTICE_BOX_POSX+NOTICE_BOX_MARGIN*2)
+#define NOTICE_TEXT_POSX				(NOTICE_TEXT_POSX_NOICON+NOTICE_ICON_SIZE+NOTICE_BOX_MARGIN*2)
+#define NOTICE_TEXT_POSY(HEIGHT)		(NOTICE_BOX_POSY(HEIGHT)+NOTICE_BOX_MARGIN)
+#define	NOTICE_TEXT_LINES_MAX			(NOTICE_TEXT_AREA_WIDTH/g_stFontSize[NOTICE_FONT_SIZE].Width)
+#define	NOTICE_TEXT_LINES_MAX_NOICON	(NOTICE_TEXT_AREA_WIDTH_NOICON/g_stFontSize[NOTICE_FONT_SIZE].Width)
 
 //=======================================================================//
 //= Static variable declaration.									    =//
@@ -76,27 +101,27 @@ const uint8_t* g_arrNoticeIcon[] = {
 //=======================================================================//
 //= Function implementation.										    =//
 //=======================================================================//
-/*****************************************************************************/
-/** Function Name:	GUI_ShowNotice											**/
-/** Purpose:		Show a notice box.										**/
-/** Resources:		Icon data.												**/
-/** Params:																	**/
-/**	@szNoticeText:		Notice text.										**/
-/**	@eIcon:				Notice icon.										**/
-/** Return:			Remaining text height display.							**/
-/** Notice:			None.													**/
-/*****************************************************************************/
-uint16_t GUI_Notice_RefreshNotice(const char* szNoticeText, uint16_t uiTextOffset, NOTICE_ICON eIcon)
+/*************************************************************************/
+/** Function Name:	GUI_ShowNotice										**/
+/** Purpose:		Show a notice box.									**/
+/** Resources:		Icon data.											**/
+/** Params:																**/
+/**	@szNoticeText:		Notice text.									**/
+/**	@eIcon:				Notice icon.									**/
+/** Return:			Remaining text height display.						**/
+/** Notice:			None.												**/
+/*************************************************************************/
+SGUI_SIZE SGUI_Notice_RefreshNotice(SGUI_PCSZSTR szNoticeText, SGUI_INT uiTextOffset, SGUI_NOTICE_ICON eIcon)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	uint16_t				uiLineCount;
-	uint16_t				uiNoticeBoxHeight;
-	uint16_t				uiTextLines;
-	RECTANGLE				stTextDisplayArea;
-	RECTANGLE				stIconDisplayArea, stIconDataArea;
-	const char*				pszNoticeTextPtr;
+	SGUI_SIZE					uiLineCount;
+	SGUI_SIZE					uiNoticeBoxHeight;
+	SGUI_SIZE					uiTextLines;
+	SGUI_RECT_AREA				stTextDisplayArea;
+	SGUI_RECT_AREA				stIconDisplayArea, stIconDataArea;
+	SGUI_PCSZSTR				pszNoticeTextPtr;
 
 	/*----------------------------------*/
 	/* Process							*/
@@ -104,13 +129,13 @@ uint16_t GUI_Notice_RefreshNotice(const char* szNoticeText, uint16_t uiTextOffse
 	// Encode string if defined.
 	pszNoticeTextPtr = szNoticeText;
 	// Get max line of notice text.
-	if(GUI_ICON_NONE != eIcon)
+	if(SGUI_ICON_NONE != eIcon)
 	{
-		uiLineCount = GUI_Text_GetMultiLineTextLines(pszNoticeTextPtr, NOTICE_TEXT_LINES_MAX);
+		uiLineCount = SGUI_Text_GetMultiLineTextLines(pszNoticeTextPtr, NOTICE_TEXT_LINES_MAX);
 	}
 	else
 	{
-		uiLineCount = GUI_Text_GetMultiLineTextLines(pszNoticeTextPtr, NOTICE_TEXT_LINES_MAX_NOICON);
+		uiLineCount = SGUI_Text_GetMultiLineTextLines(pszNoticeTextPtr, NOTICE_TEXT_LINES_MAX_NOICON);
 	}
 	if(uiLineCount < 2)
 	{
@@ -122,9 +147,9 @@ uint16_t GUI_Notice_RefreshNotice(const char* szNoticeText, uint16_t uiTextOffse
 		uiNoticeBoxHeight = NOTICE_BOX_HEIGHT_MAX;
 	}
 	// Draw edge
-    GUI_Basic_DrawRectangle(NOTICE_BOX_POSX, NOTICE_BOX_POSY(uiNoticeBoxHeight), NOTICE_BOX_WIDTH, uiNoticeBoxHeight, GUI_COLOR_FRGCLR, GUI_COLOR_BKGCLR);
+    SGUI_Basic_DrawRectangle(NOTICE_BOX_POSX, NOTICE_BOX_POSY(uiNoticeBoxHeight), NOTICE_BOX_WIDTH, uiNoticeBoxHeight, GUI_COLOR_FRGCLR, GUI_COLOR_BKGCLR);
     // Draw icon if exists.
-    if(GUI_ICON_NONE != eIcon)
+    if(SGUI_ICON_NONE != eIcon)
 	{
 		stIconDisplayArea.PosX = NOTICE_BOX_POSX+NOTICE_BOX_MARGIN;
 		stIconDisplayArea.PosY = NOTICE_BOX_POSY(uiNoticeBoxHeight)+NOTICE_BOX_MARGIN;
@@ -134,10 +159,10 @@ uint16_t GUI_Notice_RefreshNotice(const char* szNoticeText, uint16_t uiTextOffse
 		stIconDataArea.PosY = 0;
 		stIconDataArea.Width = NOTICE_ICON_SIZE;
 		stIconDataArea.Height = NOTICE_ICON_SIZE;
-		GUI_Basic_DrawBitMap(&stIconDisplayArea, &stIconDataArea, (uint8_t*)g_arrNoticeIcon[eIcon], GUI_DRAW_NORMAL);
+		SGUI_Basic_DrawBitMap(&stIconDisplayArea, &stIconDataArea, (SGUI_BYTE*)g_arrNoticeIcon[eIcon], GUI_DRAW_NORMAL);
 	}
     // Draw text;
-    if(GUI_ICON_NONE != eIcon)
+    if(SGUI_ICON_NONE != eIcon)
 	{
 		stTextDisplayArea.PosX = NOTICE_TEXT_POSX;
 		stTextDisplayArea.Width = NOTICE_TEXT_AREA_WIDTH;
@@ -153,7 +178,7 @@ uint16_t GUI_Notice_RefreshNotice(const char* szNoticeText, uint16_t uiTextOffse
 	{
 		stTextDisplayArea.Height = NOTICE_TEXT_AREA_HEIGHT_MAX;
 	}
-    uiTextLines = GUI_Text_DrawMultipleLinesText(pszNoticeTextPtr, NOTICE_FONT_SIZE, &stTextDisplayArea, uiTextOffset, GUI_DRAW_NORMAL);
+    uiTextLines = SGUI_Text_DrawMultipleLinesText(pszNoticeTextPtr, NOTICE_FONT_SIZE, &stTextDisplayArea, uiTextOffset, GUI_DRAW_NORMAL);
 
     return uiTextLines;
 }

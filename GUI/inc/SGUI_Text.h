@@ -3,9 +3,8 @@
 //=======================================================================//
 //= Public function declaration.									    =//
 //=======================================================================//
-#include <stddef.h>
-#include <stdint.h>
-#include "GUI_Basic.h"
+#include "SGUI_Common.h"
+#include "SGUI_Basic.h"
 
 //=======================================================================//
 //= User Macro definition.											    =//
@@ -24,39 +23,39 @@
 //=======================================================================//
 typedef enum
 {
-	FONT_MODULE_BASIC = 0,
-	FONT_MODULE_NORMAL,
-}FONT_MODULE;
+	SGUI_FONT_MODULE_SOURCE_BASIC = 0,
+	SGUI_FONT_MODULE_SOURCE_NORMAL,
+}SGUI_FONT_MODULE_SOURCE;
 
 typedef struct
 {
-	const uint16_t	Size;
-	const uint16_t	Width;
-	const uint16_t	Height;
-}GUI_FONT_SIZE_STRUCT;
+	const SGUI_UINT16	Size;
+	const SGUI_UINT16	Width;
+	const SGUI_UINT16	Height;
+}SGUI_FONT_SIZE_STRUCT;
 
 typedef enum
 {
-	GUI_FONT_SIZE_H6 = 0,
-	GUI_FONT_SIZE_H8,
-	GUI_FONT_SIZE_H12,
-	GUI_FONT_SIZE_H16,
-	GUI_FONT_SIZE_H24,
-	GUI_FONT_SIZE_H32,
-	GUI_FONT_SIZE_MAX,
-}GUI_FONT_SIZE;
+	SGUI_FONT_SIZE_H6 = 0,
+	SGUI_FONT_SIZE_H8,
+	SGUI_FONT_SIZE_H12,
+	SGUI_FONT_SIZE_H16,
+	SGUI_FONT_SIZE_H24,
+	SGUI_FONT_SIZE_H32,
+	SGUI_FONT_SIZE_MAX,
+}SGUI_FONT_SIZE;
 
 //=======================================================================//
 //= Public variable declaration.									    =//
 //=======================================================================//
-extern const GUI_FONT_SIZE_STRUCT g_stFontSize[];
+extern const SGUI_FONT_SIZE_STRUCT g_stFontSize[];
 
 //=======================================================================//
 //= Public function declaration.									    =//
 //=======================================================================//
-void		GUI_Text_DrawSingleLineText(const char* szTextBuffer, GUI_FONT_SIZE eFontSize, RECTANGLE* pstDisplayArea, RECTANGLE* pstStringDataArea, DRAW_MODE eFontMode);
-uint16_t	GUI_Text_DrawMultipleLinesText(const char* szTextBuffer, GUI_FONT_SIZE eFontSize, RECTANGLE* pstDisplayArea, int16_t iTopOffset, DRAW_MODE eFontMode);
-size_t		GUI_Text_GetTextGraphicsWidth(const char* szText, GUI_FONT_SIZE eFontSize);
-uint16_t	GUI_Text_GetMultiLineTextLines(const char* szNoticeText, uint16_t uiHalfWidthCharInLine);
+void			SGUI_Text_DrawSingleLineText(SGUI_PCSZSTR szTextBuffer, SGUI_FONT_SIZE eFontSize, SGUI_RECT_AREA* pstDisplayArea, SGUI_RECT_AREA* pstStringDataArea, SGUI_DRAW_MODE eFontMode);
+SGUI_SIZE		SGUI_Text_DrawMultipleLinesText(SGUI_PCSZSTR szTextBuffer, SGUI_FONT_SIZE eFontSize, SGUI_RECT_AREA* pstDisplayArea, SGUI_INT iTopOffset, SGUI_DRAW_MODE eFontMode);
+SGUI_SIZE		SGUI_Text_GetTextGraphicsWidth(SGUI_PCSZSTR szText, SGUI_FONT_SIZE eFontSize);
+SGUI_SIZE		SGUI_Text_GetMultiLineTextLines(SGUI_PCSZSTR szNoticeText, SGUI_SIZE uiHalfWidthCharInLine);
 
 #endif

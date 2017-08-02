@@ -1,6 +1,6 @@
 /*************************************************************************/
 /** Copyright.															**/
-/** FileName: GUI_Graph.c												**/
+/** FileName: SGUI_GRAPH.c												**/
 /** Author: Polarix														**/
 /** Version: 1.0.0.0													**/
 /** Description: Graph adjustment interface.							**/
@@ -9,8 +9,8 @@
 //=======================================================================//
 //= Include files.													    =//
 //=======================================================================//
-#include "GUI_Graph.h"
-#include "GUI_Frame.h"
+#include "SGUI_Graph.h"
+#include "SGUI_Frame.h"
 
 //=======================================================================//
 //= User Macro definition.											    =//
@@ -22,22 +22,23 @@
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
-static void GUI_Graph_DrawLine(GUI_GRAPH* pstGraph, uint32_t uiStartPointIndex, uint32_t uiEndPointIndex);
-static void GUI_Praph_GetPointDrawingCoordinate(GUI_GRAPH_POINT* pstDataPoint, GUI_GRAPH_CONTROL* pstControlData, GUI_GRAPH_POINT* pstDrawingPoint);
+static void SGUI_Graph_DrawLine(SGUI_GRAPH* pstGraph, SGUI_UINT32 uiStartPointIndex, SGUI_UINT32 uiEndPointIndex);
+static void SGUI_Praph_GetPointDrawingCoordinate(SGUI_GRAPH_POINT* pstDataPoint, SGUI_GRAPH_CONTROL* pstControlData, SGUI_GRAPH_POINT* pstDrawingPoint);
 
 //=======================================================================//
 //= Function implementation.										    =//
 //=======================================================================//
-/*****************************************************************************/
-/** Function Name:	GUI_Graph_InitializeGraphData							**/
-/** Purpose:		Initialize a graph control data.						**/
-/** Resources:		List item data.											**/
-/** Params:																	**/
-/**	@pstList[in]:		Pointer of list data will be initialized.			**/
-/** Return:			None.													**/
-/** Notice:			None.													**/
-/*****************************************************************************/
-void GUI_Graph_InitializeGraphData(GUI_GRAPH* pstGraph, GUI_GRAPH_INIT_DATA* pstInitializeData)
+/*************************************************************************/
+/** Function Name:	SGUI_Graph_InitializeGraphData						**/
+/** Purpose:		Initialize a graph control data.					**/
+/** Resources:		Graph data.											**/
+/** Params:																**/
+/**	@pstGraph[in]:		Graph map data.									**/
+/**	@pstInitializeData[in]: Pointer list data will be initialized.		**/
+/** Return:			None.												**/
+/** Notice:			None.												**/
+/*************************************************************************/
+void SGUI_Graph_InitializeGraphData(SGUI_GRAPH* pstGraph, SGUI_GRAPH_INIT_DATA* pstInitializeData)
 {
 	/*----------------------------------*/
 	/* Process							*/
@@ -68,14 +69,14 @@ void GUI_Graph_InitializeGraphData(GUI_GRAPH* pstGraph, GUI_GRAPH_INIT_DATA* pst
 			pstGraph->Control->FocusIndex = pstInitializeData->FocusIndex;
 		}
 		// Axis scrollbar
-		pstGraph->SubElement.xScrollBar.Parameter.eDirection = GUI_SCROLLBAR_HORIZONTAL;
+		pstGraph->SubElement.xScrollBar.Parameter.eDirection = SGUI_SCROLLBAR_HORIZONTAL;
  		pstGraph->SubElement.xScrollBar.Parameter.MaxIndex = pstGraph->Control->PointRangeX;
 		pstGraph->SubElement.xScrollBar.Parameter.PosX = GUI_GRAPH_SCROLLBAR_WIDTH;
 		pstGraph->SubElement.xScrollBar.Parameter.PosY = 0;
 		pstGraph->SubElement.xScrollBar.Parameter.Width = LCD_SIZE_WIDTH - GUI_GRAPH_SCROLLBAR_WIDTH;
 		pstGraph->SubElement.xScrollBar.Parameter.Height = GUI_GRAPH_SCROLLBAR_WIDTH;
 
-		pstGraph->SubElement.yScrollBar.Parameter.eDirection = GUI_SCROLLBAR_VERTICAL;
+		pstGraph->SubElement.yScrollBar.Parameter.eDirection = SGUI_SCROLLBAR_VERTICAL;
 		pstGraph->SubElement.yScrollBar.Parameter.MaxIndex = pstGraph->Control->PointRangeY;
 		pstGraph->SubElement.yScrollBar.Parameter.PosX = 0;
 		pstGraph->SubElement.yScrollBar.Parameter.PosY = GUI_GRAPH_SCROLLBAR_WIDTH;
@@ -86,46 +87,67 @@ void GUI_Graph_InitializeGraphData(GUI_GRAPH* pstGraph, GUI_GRAPH_INIT_DATA* pst
 	}
 }
 
-void GUI_Graph_Refresh(GUI_GRAPH* pstGraph)
+/*************************************************************************/
+/** Function Name:	SGUI_Graph_Refresh									**/
+/** Purpose:		Refresh graph map display.							**/
+/** Resources:		Graph data.											**/
+/** Params:																**/
+/**	@pstGraph[in]:		Graph map data used refreshed.					**/
+/** Return:			None.												**/
+/** Notice:			None.												**/
+/*************************************************************************/
+void SGUI_Graph_Refresh(SGUI_GRAPH* pstGraph)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	GUI_BOX_FRAME_STRUCT				stFrameData;
-	uint32_t							uiPointIndex;
+	SGUI_BOX_FRAME_STRUCT		stFrameData;
+	SGUI_UINT32					uiPointIndex;
+
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	stFrameData.Data.Title	=			NULL;
-	stFrameData.Parameter.EdgeLayers =	1;
-	stFrameData.Parameter.FontSize = 	GUI_FONT_SIZE_H6;
+	stFrameData.Data.Title	=	NULL;
+	stFrameData.Parameter.EdgeLayers = 1;
+	stFrameData.Parameter.FontSize = SGUI_FONT_SIZE_H6;
 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	GUI_Frame_DrawFullScreenFrame(&stFrameData);
-	//GUI_Basic_DrawRectangle(0, 0, LCD_SIZE_WIDTH, LCD_SIZE_HEIGHT, GUI_COLOR_BKGCLR, GUI_COLOR_BKGCLR);
-	GUI_ScrollBar_RefreshScrollBar(&(pstGraph->SubElement.xScrollBar));
-	GUI_ScrollBar_RefreshScrollBar(&(pstGraph->SubElement.yScrollBar));
+	SGUI_Frame_DrawFullScreenFrame(&stFrameData);
+	//SGUI_Basic_DrawRectangle(0, 0, LCD_SIZE_WIDTH, LCD_SIZE_HEIGHT, GUI_COLOR_BKGCLR, GUI_COLOR_BKGCLR);
+	SGUI_ScrollBar_RefreshScrollBar(&(pstGraph->SubElement.xScrollBar));
+	SGUI_ScrollBar_RefreshScrollBar(&(pstGraph->SubElement.yScrollBar));
 
 	if(pstGraph->Data->Count > 1)
 	{
 		for(uiPointIndex=0; uiPointIndex<(pstGraph->Data->Count-1); uiPointIndex++)
 		{
-			GUI_Graph_DrawLine(pstGraph, uiPointIndex, uiPointIndex+1);
+			SGUI_Graph_DrawLine(pstGraph, uiPointIndex, uiPointIndex+1);
 		}
 	}
 }
 
-void GUI_Graph_DrawLine(GUI_GRAPH* pstGraph, uint32_t uiStartPointIndex, uint32_t uiEndPointIndex)
+/*************************************************************************/
+/** Function Name:	SGUI_Graph_DrawLine									**/
+/** Purpose:		Draw a line with two points in graph map.			**/
+/** Resources:		Graph data.											**/
+/** Params:																**/
+/**	@pstGraph[in]:		Graph map data used refreshed.					**/
+/**	@uiStartPointIndex[in]: Line starting point index.					**/
+/**	@uiEndPointIndex[in]: Line ending point index.						**/
+/** Return:			None.												**/
+/** Notice:			None.												**/
+/*************************************************************************/
+void SGUI_Graph_DrawLine(SGUI_GRAPH* pstGraph, SGUI_UINT32 uiStartPointIndex, SGUI_UINT32 uiEndPointIndex)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	GUI_GRAPH_POINT*					pstStartPoint;
-	GUI_GRAPH_POINT*					pstEndPoint;
-	GUI_GRAPH_POINT						stGStartPoint;
-	GUI_GRAPH_POINT						stGEndPoint;
+	SGUI_GRAPH_POINT*			pstStartPoint;
+	SGUI_GRAPH_POINT*			pstEndPoint;
+	SGUI_GRAPH_POINT			stGStartPoint;
+	SGUI_GRAPH_POINT			stGEndPoint;
 
 	/*----------------------------------*/
 	/* Process							*/
@@ -134,30 +156,30 @@ void GUI_Graph_DrawLine(GUI_GRAPH* pstGraph, uint32_t uiStartPointIndex, uint32_
 	{
 		// Start point.
 		pstStartPoint = pstGraph->Data->Points+uiStartPointIndex;
-		GUI_Praph_GetPointDrawingCoordinate(pstStartPoint, pstGraph->Control, &stGStartPoint);
+		SGUI_Praph_GetPointDrawingCoordinate(pstStartPoint, pstGraph->Control, &stGStartPoint);
 
 		// End point.
 		pstEndPoint = pstGraph->Data->Points+uiEndPointIndex;
-		GUI_Praph_GetPointDrawingCoordinate(pstEndPoint, pstGraph->Control, &stGEndPoint);
+		SGUI_Praph_GetPointDrawingCoordinate(pstEndPoint, pstGraph->Control, &stGEndPoint);
 
 		// End point.
 
-		GUI_Basic_DrawLine(stGStartPoint.x, stGStartPoint.y, stGEndPoint.x, stGEndPoint.y, GUI_COLOR_FRGCLR);
+		SGUI_Basic_DrawLine(stGStartPoint.x, stGStartPoint.y, stGEndPoint.x, stGEndPoint.y, GUI_COLOR_FRGCLR);
 	}
 }
 
-/*****************************************************************************/
-/** Function Name:	GUI_Praph_GetPointDrawingCoordinate						**/
-/** Purpose:		Convert data point to a drawing point in visible graph	**/
-/**					area.													**/
-/** Resources:		None.													**/
-/** Params:																	**/
-/**	@pstDataPoint[in]:	Data point structure pointer.						**/
-/**	@pstDrawingPoint[out]: Drawing point structure pointer.					**/
-/** Return:			None.													**/
-/** Notice:			None.													**/
-/*****************************************************************************/
-void GUI_Praph_GetPointDrawingCoordinate(GUI_GRAPH_POINT* pstDataPoint, GUI_GRAPH_CONTROL* pstControlData, GUI_GRAPH_POINT* pstDrawingPoint)
+/*************************************************************************/
+/** Function Name:	SGUI_Praph_GetPointDrawingCoordinate					**/
+/** Purpose:		Convert data point to a drawing point in visible 	**/
+/**					graph area.											**/
+/** Resources:		None.												**/
+/** Params:																**/
+/**	@pstDataPoint[in]:	Data point structure pointer.					**/
+/**	@pstDrawingPoint[out]: Drawing point structure pointer.				**/
+/** Return:			None.												**/
+/** Notice:			None.												**/
+/*************************************************************************/
+void SGUI_Praph_GetPointDrawingCoordinate(SGUI_GRAPH_POINT* pstDataPoint, SGUI_GRAPH_CONTROL* pstControlData, SGUI_GRAPH_POINT* pstDrawingPoint)
 {
 	/*----------------------------------*/
 	/* Process							*/

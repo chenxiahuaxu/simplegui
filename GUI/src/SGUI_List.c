@@ -5,74 +5,67 @@
 /** Version: 1.0.0.0													**/
 /** Description: Draw list interface.									**/
 /*************************************************************************/
-
 //=======================================================================//
 //= Include files.													    =//
 //=======================================================================//
-#include "LCD_OperationIF.h"
-#include "GUI_Common.h"
-#include "GUI_Basic.h"
-#include "GUI_Text.h"
-#include "GUI_ScrollBar.h"
-#include "GUI_List.h"
-#include "GUI_Frame.h"
-
-#include <stddef.h>
-#include <stdint.h>
-#include <string.h>
+#include "SGUI_Common.h"
+#include "SGUI_Basic.h"
+#include "SGUI_Text.h"
+#include "SGUI_ScrollBar.h"
+#include "SGUI_List.h"
+#include "SGUI_Frame.h"
 
 //=======================================================================//
 //= User Macro definition.											    =//
 //=======================================================================//
-#define						LIST_FONT_SIZE						(GUI_FONT_SIZE_H12)
+// User settings
+#define						LIST_FONT_SIZE						(SGUI_FONT_SIZE_H12)
 #define						LIST_EDGE_MULTIPLE					(1)
-						#if(LIST_EDGE_MULTIPLE == 0)
-#define 					LIST_EDGE_SIZE						(0)
-						#else
-#define						LIST_EDGE_SIZE						(LIST_EDGE_MULTIPLE*2-1)
-						#endif
-#define						LIST_TITLE_HEIGHT					(g_stFontSize[LIST_FONT_SIZE].Height+2)
-#define						LIST_SCROLLBAR_WIDTH				(5)
-#define						LIST_SCROLLBAR_POSX					(LCD_SIZE_WIDTH-LIST_EDGE_SIZE-LIST_SCROLLBAR_WIDTH)
-
-#define						LIST_ITEM_RECT_POSX					(LIST_EDGE_SIZE+2)
-#define						LIST_ITEM_RECT_WIDTH				(LCD_SIZE_WIDTH-(LIST_ITEM_RECT_POSX*2)-LIST_SCROLLBAR_WIDTH)
 #define						LIST_ITEM_TEXT_BLANK_EDGEX			(2)
 #define						LIST_ITEM_TEXT_BLANK_EDGEY			(1)
-#define						LIST_ITEM_TEXT_AREA_WIDTH			(LIST_ITEM_RECT_WIDTH-(LIST_ITEM_TEXT_BLANK_EDGEX*2))
 #define						LIST_ITEM_PARAMETER_SPLIT_WIDTH		(4)
+#define						LIST_ITEM_PARAMETER_TEXT_LENGTH_MAX	(16)
+#define						LIST_SCROLLBAR_WIDTH				(5)
+// Automatic calculation
+#if(LIST_EDGE_MULTIPLE == 0)
+	#define 				LIST_EDGE_SIZE						(0)
+#else
+	#define					LIST_EDGE_SIZE						(LIST_EDGE_MULTIPLE*2-1)
+#endif
+#define						LIST_TITLE_HEIGHT					(g_stFontSize[LIST_FONT_SIZE].Height+2)
+#define						LIST_SCROLLBAR_POSX					(LCD_SIZE_WIDTH-LIST_EDGE_SIZE-LIST_SCROLLBAR_WIDTH)
+#define						LIST_ITEM_RECT_POSX					(LIST_EDGE_SIZE+2)
+#define						LIST_ITEM_RECT_WIDTH				(LCD_SIZE_WIDTH-(LIST_ITEM_RECT_POSX*2)-LIST_SCROLLBAR_WIDTH)
+#define						LIST_ITEM_TEXT_AREA_WIDTH			(LIST_ITEM_RECT_WIDTH-(LIST_ITEM_TEXT_BLANK_EDGEX*2))
 #define						LIST_ITEM_PARAMETER_AREA_WIDTH		((LIST_ITEM_TEXT_AREA_WIDTH/2)-LIST_ITEM_PARAMETER_SPLIT_WIDTH)
 #define						LIST_ITEM_PARAMETER_STARTX			(LIST_ITEM_RECT_POSX+LIST_ITEM_TEXT_BLANK_EDGEX+(LIST_ITEM_TEXT_AREA_WIDTH-LIST_ITEM_PARAMETER_AREA_WIDTH))
-
-#define						LIST_ITEM_PARAMETER_TEXT_LENGTH_MAX	(16)
-
 
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
-static inline void			GUI_List_RefreshListItems(GUI_LIST_STRUCT* pstList);
-static inline void			GUI_List_DrawItem(GUI_LIST_STRUCT* pstList, size_t uiIndex);
+static inline void			SGUI_LIST_RefreshListItems(SGUI_LIST_STRUCT* pstList);
+static inline void			SGUI_LIST_DrawItem(SGUI_LIST_STRUCT* pstList, SGUI_SIZE uiIndex);
 
 //=======================================================================//
 //= Function implementation.										    =//
 //=======================================================================//
-/*****************************************************************************/
-/** Function Name:	GUI_List_InitializeListData								**/
-/** Purpose:		Initialize a list control data.							**/
-/** Resources:		List item data.											**/
-/** Params:																	**/
-/**	@pstList[in]:		Pointer of list data will be initialized.			**/
-/** Return:			None.													**/
-/** Notice:			None.													**/
-/*****************************************************************************/
-void GUI_List_InitializeListData(GUI_LIST_STRUCT* pstList)
+/*************************************************************************/
+/** Function Name:	SGUI_LIST_InitializeListData						**/
+/** Purpose:		Initialize a list control data.						**/
+/** Resources:		List item data.										**/
+/** Params:																**/
+/**	@pstList[in]:		Pointer of list data will be initialized.		**/
+/** Return:			None.												**/
+/** Notice:			None.												**/
+/*************************************************************************/
+void SGUI_LIST_InitializeListData(SGUI_LIST_STRUCT* pstList)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	GUI_LIST_CONTROL*		pstListControl;
-	GUI_LIST_DATA*			pstListData;
-	GUI_LIST_SUBELEMENT*	pstSubElement;
+	SGUI_LIST_CONTROL*			pstListControl;
+	SGUI_LIST_DATA*				pstListData;
+	SGUI_LIST_SUBELEMENT*		pstSubElement;
 
 	/*----------------------------------*/
 	/* Process							*/
@@ -105,7 +98,7 @@ void GUI_List_InitializeListData(GUI_LIST_STRUCT* pstList)
 		}
 		pstListControl->VisibleItemsNum = (pstListControl->VisibleItemsAreaHeight-1)/pstListControl->ListItemHeight+1;
 
-		pstSubElement->ScrollBar.Parameter.eDirection = GUI_SCROLLBAR_VERTICAL;
+		pstSubElement->ScrollBar.Parameter.eDirection = SGUI_SCROLLBAR_VERTICAL;
 		pstSubElement->ScrollBar.Parameter.PosX = LIST_SCROLLBAR_POSX;
 		pstSubElement->ScrollBar.Parameter.PosY = pstListControl->FirstVisibleItemPosY;
 		pstSubElement->ScrollBar.Parameter.Width = LIST_SCROLLBAR_WIDTH;
@@ -113,28 +106,26 @@ void GUI_List_InitializeListData(GUI_LIST_STRUCT* pstList)
 		pstSubElement->ScrollBar.Data.Index = 0;
 		pstSubElement->ScrollBar.Parameter.MaxIndex = (pstListData->Count>pstListControl->VisibleIntegralItemsNum)?(pstListData->Count-pstListControl->VisibleIntegralItemsNum-1):0;
 	}
-
 }
 
-/*****************************************************************************/
-/** Function Name:	GUI_List_RefreshListItems								**/
-/** Purpose:		Refresh all visible list item display.					**/
-/** Resources:		List item data.											**/
-/** Params:																	**/
-/**	@pstList[in]:		Pointer of list data will be refreshed.				**/
-/** Return:			None.													**/
-/** Notice:			This only refresh visible items and scrollbar.			**/
-/*****************************************************************************/
-void GUI_List_RefreshListItems(GUI_LIST_STRUCT* pstList)
+/*************************************************************************/
+/** Function Name:	SGUI_LIST_RefreshListItems							**/
+/** Purpose:		Refresh all visible list item display.				**/
+/** Resources:		List item data.										**/
+/** Params:																**/
+/**	@pstList[in]:		Pointer of list data will be refreshed.			**/
+/** Return:			None.												**/
+/** Notice:			This only refresh visible items and scrollbar.		**/
+/*************************************************************************/
+void SGUI_LIST_RefreshListItems(SGUI_LIST_STRUCT* pstList)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	GUI_LIST_CONTROL*		pstListControl;
-	GUI_LIST_SUBELEMENT*	pstSubElement;
-	GUI_LIST_DATA*			pstListData;
-
-	uint16_t				uiCurrentItemIndex;
+	SGUI_LIST_CONTROL*			pstListControl;
+	SGUI_LIST_SUBELEMENT*		pstSubElement;
+	SGUI_LIST_DATA*				pstListData;
+	SGUI_SIZE					uiCurrentItemIndex;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -165,39 +156,39 @@ void GUI_List_RefreshListItems(GUI_LIST_STRUCT* pstList)
 			pstSubElement->ScrollBar.Parameter.MaxIndex = (pstListData->Count>pstListControl->VisibleIntegralItemsNum)?(pstListData->Count-pstListControl->VisibleIntegralItemsNum-1):0;
 #endif // _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
 			// Clear list item display area.
-			GUI_Basic_DrawRectangle(LIST_ITEM_RECT_POSX, pstListControl->FirstVisibleItemPosY, LIST_ITEM_RECT_WIDTH, pstListControl->VisibleItemsAreaHeight, GUI_COLOR_BKGCLR, GUI_COLOR_BKGCLR);
+			SGUI_Basic_DrawRectangle(LIST_ITEM_RECT_POSX, pstListControl->FirstVisibleItemPosY, LIST_ITEM_RECT_WIDTH, pstListControl->VisibleItemsAreaHeight, GUI_COLOR_BKGCLR, GUI_COLOR_BKGCLR);
 			// Refresh scroll bar
 			pstSubElement->ScrollBar.Data.Index = pstListControl->PageStartIndex;
-			GUI_ScrollBar_RefreshScrollBar(&(pstSubElement->ScrollBar));
+			SGUI_ScrollBar_RefreshScrollBar(&(pstSubElement->ScrollBar));
 			// Draw all visible items.
 			while((uiCurrentItemIndex < pstListControl->PageStartIndex+pstListControl->VisibleItemsNum) && (uiCurrentItemIndex < pstListData->Count))
 			{
-				GUI_List_DrawItem(pstList, uiCurrentItemIndex++);
+				SGUI_LIST_DrawItem(pstList, uiCurrentItemIndex++);
 			}
 			// High light focused items.
-			GUI_Basic_ReverseBlockColor(LIST_ITEM_RECT_POSX, pstListControl->FirstVisibleItemPosY+(pstListControl->SelectIndex-pstListControl->PageStartIndex)*pstListControl->ListItemHeight-pstListControl->ItemPosYOffSet,
+			SGUI_Basic_ReverseBlockColor(LIST_ITEM_RECT_POSX, pstListControl->FirstVisibleItemPosY+(pstListControl->SelectIndex-pstListControl->PageStartIndex)*pstListControl->ListItemHeight-pstListControl->ItemPosYOffSet,
 										LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight);
 		}
 	}
 }
 
-/*****************************************************************************/
-/** Function Name:	GUI_List_RefreshList									**/
-/** Purpose:		Refresh list display.									**/
-/** Resources:		List item data.											**/
-/** Params:																	**/
-/**	@pstList[in]:		Pointer of list data will be refreshed.				**/
-/** Return:			None.													**/
-/** Notice:			This function will refresh all list display on screen, 	**/
-/**					include edge, items, title and scrollbar.				**/
-/*****************************************************************************/
-void GUI_List_RefreshList(GUI_LIST_STRUCT* pstList)
+/*************************************************************************/
+/** Function Name:	SGUI_LIST_RefreshList								**/
+/** Purpose:		Refresh list display.								**/
+/** Resources:		List item data.										**/
+/** Params:																**/
+/**	@pstList[in]:		Pointer of list data will be refreshed.			**/
+/** Return:			None.												**/
+/** Notice:			This function will refresh all list display on		**/
+/**					screen, include edge, items, title and scrollbar.	**/
+/*************************************************************************/
+void SGUI_LIST_RefreshList(SGUI_LIST_STRUCT* pstList)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	GUI_BOX_FRAME_STRUCT	stFrameData;
-	GUI_LIST_DATA*			pstListData;
+	SGUI_BOX_FRAME_STRUCT		stFrameData;
+	SGUI_LIST_DATA				*pstListData;
 
 	/*----------------------------------*/
 	/* Process							*/
@@ -209,29 +200,29 @@ void GUI_List_RefreshList(GUI_LIST_STRUCT* pstList)
 		stFrameData.Parameter.EdgeLayers = LIST_EDGE_MULTIPLE;
 		stFrameData.Parameter.FontSize = LIST_FONT_SIZE;
 		stFrameData.Data.Title = pstListData->Title;
-		GUI_Frame_DrawFullScreenFrame(&stFrameData);
+		SGUI_Frame_DrawFullScreenFrame(&stFrameData);
 		// Draw list items
-		GUI_List_RefreshListItems(pstList);
+		SGUI_LIST_RefreshListItems(pstList);
 	}
 }
 
-/*****************************************************************************/
-/** Function Name:	GUI_List_SelectUpItem									**/
-/** Purpose:		Select previous list item if existed.					**/
-/** Resources:		List item data.											**/
-/** Params:																	**/
-/**	@pstList[in]:		Pointer of list will be selected.					**/
-/** Return:			None.													**/
-/** Notice:			None.													**/
-/*****************************************************************************/
-void GUI_List_SelectUpItem(GUI_LIST_STRUCT* pstList)
+/*************************************************************************/
+/** Function Name:	SGUI_LIST_SelectUpItem								**/
+/** Purpose:		Select previous list item if existed.				**/
+/** Resources:		List item data.										**/
+/** Params:																**/
+/**	@pstList[in]:		Pointer of list will be selected.				**/
+/** Return:			None.												**/
+/** Notice:			None.												**/
+/*************************************************************************/
+void SGUI_LIST_SelectUpItem(SGUI_LIST_STRUCT* pstList)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	GUI_LIST_CONTROL*		pstListControl;
-	GUI_LIST_DATA*			pstListData;
-	uint16_t				uiReverseBlockPosY;
+	SGUI_LIST_CONTROL			*pstListControl;
+	SGUI_LIST_DATA				*pstListData;
+	SGUI_UINT16					uiReverseBlockPosY;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -252,11 +243,11 @@ void GUI_List_SelectUpItem(GUI_LIST_STRUCT* pstList)
 		{
 			// Unfocused current item.
 			uiReverseBlockPosY = pstListControl->FirstVisibleItemPosY+(pstListControl->SelectIndex-pstListControl->PageStartIndex)*pstListControl->ListItemHeight-pstListControl->ItemPosYOffSet;
-			GUI_Basic_ReverseBlockColor(LIST_ITEM_RECT_POSX, uiReverseBlockPosY, LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight);
+			SGUI_Basic_ReverseBlockColor(LIST_ITEM_RECT_POSX, uiReverseBlockPosY, LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight);
 			pstListControl->SelectIndex--;
 			// Focused previous item.
 			uiReverseBlockPosY = pstListControl->FirstVisibleItemPosY+(pstListControl->SelectIndex-pstListControl->PageStartIndex)*pstListControl->ListItemHeight-pstListControl->ItemPosYOffSet;
-			GUI_Basic_ReverseBlockColor(LIST_ITEM_RECT_POSX, uiReverseBlockPosY, LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight);
+			SGUI_Basic_ReverseBlockColor(LIST_ITEM_RECT_POSX, uiReverseBlockPosY, LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight);
 		}
 		else
 		{
@@ -269,28 +260,28 @@ void GUI_List_SelectUpItem(GUI_LIST_STRUCT* pstList)
 			{
 				pstListControl->PageStartIndex--;
 			}
-			GUI_List_RefreshListItems(pstList);
+			SGUI_LIST_RefreshListItems(pstList);
 		}
 	}
 }
 
-/*****************************************************************************/
-/** Function Name:	GUI_List_SelectDownItem									**/
-/** Purpose:		Select next list item if existed.						**/
-/** Resources:		List item data.											**/
-/** Params:																	**/
-/**	@pstList[in]:		Pointer of list will be selected.					**/
-/** Return:			None.													**/
-/** Notice:			None.													**/
-/*****************************************************************************/
-void GUI_List_SelectDownItem(GUI_LIST_STRUCT* pstList)
+/*************************************************************************/
+/** Function Name:	SGUI_LIST_SelectDownItem							**/
+/** Purpose:		Select next list item if existed.					**/
+/** Resources:		List item data.										**/
+/** Params:																**/
+/**	@pstList[in]:		Pointer of list will be selected.				**/
+/** Return:			None.												**/
+/** Notice:			None.												**/
+/*************************************************************************/
+void SGUI_LIST_SelectDownItem(SGUI_LIST_STRUCT* pstList)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	GUI_LIST_CONTROL*		pstListControl;
-	GUI_LIST_DATA*			pstListData;
-	uint16_t				uiReverseBlockPosY;
+	SGUI_LIST_CONTROL			*pstListControl;
+	SGUI_LIST_DATA				*pstListData;
+	SGUI_UINT16					uiReverseBlockPosY;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -311,11 +302,11 @@ void GUI_List_SelectDownItem(GUI_LIST_STRUCT* pstList)
 		{
 			// Unfocused current item.
 			uiReverseBlockPosY = pstListControl->FirstVisibleItemPosY+(pstListControl->SelectIndex-pstListControl->PageStartIndex)*pstListControl->ListItemHeight-pstListControl->ItemPosYOffSet;
-			GUI_Basic_ReverseBlockColor(LIST_ITEM_RECT_POSX, uiReverseBlockPosY, LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight);
+			SGUI_Basic_ReverseBlockColor(LIST_ITEM_RECT_POSX, uiReverseBlockPosY, LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight);
 			pstListControl->SelectIndex++;
 			// Focused previous item.
 			uiReverseBlockPosY = pstListControl->FirstVisibleItemPosY+(pstListControl->SelectIndex-pstListControl->PageStartIndex)*pstListControl->ListItemHeight-pstListControl->ItemPosYOffSet;
-			GUI_Basic_ReverseBlockColor(LIST_ITEM_RECT_POSX, uiReverseBlockPosY, LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight);
+			SGUI_Basic_ReverseBlockColor(LIST_ITEM_RECT_POSX, uiReverseBlockPosY, LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight);
 		}
 		else
 		{
@@ -328,34 +319,34 @@ void GUI_List_SelectDownItem(GUI_LIST_STRUCT* pstList)
 			{
 				pstListControl->PageStartIndex++;
 			}
-			GUI_List_RefreshListItems(pstList);
+			SGUI_LIST_RefreshListItems(pstList);
 		}
 	}
 }
 
-/*****************************************************************************/
-/** Function Name:	GUI_List_DrawItem										**/
-/** Purpose:		Draw a visible list item.								**/
-/** Resources:		List item data.											**/
-/** Params:																	**/
-/**	@pstList[in]:		Pointer of list will be selected.					**/
-/**	@uiIndex[in]:		List item index will be draw.						**/
-/** Return:			None.													**/
-/** Notice:			This function only draw visible items, it's depending	**/
-/**					on the first visible item index and count of visible 	**/
-/**					items.													**/
-/*****************************************************************************/
-void GUI_List_DrawItem(GUI_LIST_STRUCT* pstList, size_t uiIndex)
+/*************************************************************************/
+/** Function Name:	SGUI_LIST_DrawItem									**/
+/** Purpose:		Draw a visible list item.							**/
+/** Resources:		List item data.										**/
+/** Params:																**/
+/**	@pstList[in]:		Pointer of list will be selected.				**/
+/**	@uiIndex[in]:		List item index will be draw.					**/
+/** Return:			None.												**/
+/** Notice:			This function only draw visible items, it's			**/
+/**					depending on the first visible item index and count	**/
+/**					of visible items.									**/
+/*************************************************************************/
+void SGUI_LIST_DrawItem(SGUI_LIST_STRUCT* pstList, SGUI_SIZE uiIndex)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	RECTANGLE				stItemTextDisplayArea;
-	RECTANGLE				stItemTextDataArea;
-	GUI_LIST_CONTROL*		pstListControl;
-	GUI_LIST_ITEM*			pstListItemPointer;
-	char					szParameterStringBuffer[LIST_ITEM_PARAMETER_TEXT_LENGTH_MAX];
-	size_t					uiParameterTextWidth;
+	SGUI_RECT_AREA				stItemTextDisplayArea;
+	SGUI_RECT_AREA				stItemTextDataArea;
+	SGUI_LIST_CONTROL*			pstListControl;
+	SGUI_LIST_ITEM*				pstListItemPointer;
+	SGUI_CHAR					szParameterStringBuffer[LIST_ITEM_PARAMETER_TEXT_LENGTH_MAX];
+	SGUI_SIZE					uiParameterTextWidth;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -363,7 +354,7 @@ void GUI_List_DrawItem(GUI_LIST_STRUCT* pstList, size_t uiIndex)
 	if(NULL != pstList)
 	{
 		pstListControl = &(pstList->ControlVariable);
-		pstListItemPointer = GUI_List_GetListItemPtr(pstList, uiIndex);
+		pstListItemPointer = SGUI_LIST_GetListItemPtr(pstList, uiIndex);
 		szParameterStringBuffer[0] = '\0';
 	}
 
@@ -407,7 +398,7 @@ void GUI_List_DrawItem(GUI_LIST_STRUCT* pstList, size_t uiIndex)
 			}
 
 			// Draw list item text.
-			GUI_Text_DrawSingleLineText(	pstListItemPointer->Text, LIST_FONT_SIZE,
+			SGUI_Text_DrawSingleLineText(	pstListItemPointer->Text, LIST_FONT_SIZE,
 											&stItemTextDisplayArea, &stItemTextDataArea, GUI_DRAW_NORMAL);
 
 			// Prepare draw parameter text.
@@ -437,9 +428,9 @@ void GUI_List_DrawItem(GUI_LIST_STRUCT* pstList, size_t uiIndex)
 				{
 					case LIST_ITEM_ENUM:
 					{
-						strncpy(szParameterStringBuffer, pstListItemPointer->EnumerationValues[pstListItemPointer->Valid.Value], LIST_ITEM_PARAMETER_TEXT_LENGTH_MAX-1);
+						SGUI_Common_StringLengthCopy(szParameterStringBuffer, pstListItemPointer->EnumerationValues[pstListItemPointer->Valid.Value], LIST_ITEM_PARAMETER_TEXT_LENGTH_MAX-1);
 						szParameterStringBuffer[LIST_ITEM_PARAMETER_TEXT_LENGTH_MAX-1] = '\0';
-						uiParameterTextWidth =  GUI_Text_GetTextGraphicsWidth(szParameterStringBuffer, LIST_FONT_SIZE);
+						uiParameterTextWidth = SGUI_Text_GetTextGraphicsWidth(szParameterStringBuffer, LIST_FONT_SIZE);
 						if(uiParameterTextWidth < LIST_ITEM_PARAMETER_AREA_WIDTH)
 						{
 							stItemTextDataArea.PosX += (LIST_ITEM_PARAMETER_AREA_WIDTH-LIST_ITEM_PARAMETER_SPLIT_WIDTH)-uiParameterTextWidth;
@@ -448,8 +439,8 @@ void GUI_List_DrawItem(GUI_LIST_STRUCT* pstList, size_t uiIndex)
 					}
 					case LIST_ITEM_DIGIT:
 					{
-						GUI_Common_IntegerToStringWithDecimalPoint(pstListItemPointer->Valid.Value, pstListItemPointer->Decimal.Value, szParameterStringBuffer, 0, ' ');
-						uiParameterTextWidth = GUI_Text_GetTextGraphicsWidth(szParameterStringBuffer,LIST_FONT_SIZE);
+						SGUI_Common_IntegerToStringWithDecimalPoint(pstListItemPointer->Valid.Value, pstListItemPointer->Decimal.Value, szParameterStringBuffer, 0, ' ');
+						uiParameterTextWidth = SGUI_Text_GetTextGraphicsWidth(szParameterStringBuffer,LIST_FONT_SIZE);
 						if(uiParameterTextWidth < LIST_ITEM_PARAMETER_AREA_WIDTH)
 						{
 							stItemTextDataArea.PosX += (LIST_ITEM_PARAMETER_AREA_WIDTH-LIST_ITEM_PARAMETER_SPLIT_WIDTH)-uiParameterTextWidth;
@@ -463,31 +454,31 @@ void GUI_List_DrawItem(GUI_LIST_STRUCT* pstList, size_t uiIndex)
 					}
 				}
 				// Draw parameter text.
-				GUI_Text_DrawSingleLineText(szParameterStringBuffer, LIST_FONT_SIZE, &stItemTextDisplayArea, &stItemTextDataArea, GUI_DRAW_NORMAL);
+				SGUI_Text_DrawSingleLineText(szParameterStringBuffer, LIST_FONT_SIZE, &stItemTextDisplayArea, &stItemTextDataArea, GUI_DRAW_NORMAL);
 			}
 		}
 	}
 }
 
-/*****************************************************************************/
-/** Function Name:	GUI_List_SetListItemValue								**/
-/** Purpose:		Set list parameter value if supported.					**/
-/** Resources:		List item data.											**/
-/** Params:																	**/
-/**	@pstList[in]:		Pointer of list will be selected.					**/
-/**	@uiItemIndex[in]:	Index of list item index will be changed.			**/
-/**	@iSetValid[in]:		Valid value will be set.							**/
-/**	@iSetDecimal[in]:	Decimal value will be set.							**/
-/** Return:			None.													**/
-/** Notice:			The bind value will update if existed.					**/
-/*****************************************************************************/
-void GUI_List_SetListItemValue(GUI_LIST_STRUCT* pstList, size_t uiItemIndex, int32_t iSetValid, int32_t iSetDecimal)
+/*************************************************************************/
+/** Function Name:	SGUI_LIST_SetListItemValue							**/
+/** Purpose:		Set list parameter value if supported.				**/
+/** Resources:		List item data.										**/
+/** Params:																**/
+/**	@pstList[in]:		Pointer of list will be selected.				**/
+/**	@iItemIndex[in]:	Index of list item index will be changed.		**/
+/**	@iSetValid[in]:		Valid value will be set.						**/
+/**	@iSetDecimal[in]:	Decimal value will be set.						**/
+/** Return:			None.												**/
+/** Notice:			The bind value will update if existed.				**/
+/*************************************************************************/
+void SGUI_LIST_SetListItemValue(SGUI_LIST_STRUCT* pstList, SGUI_INDEX iItemIndex, int32_t iSetValid, int32_t iSetDecimal)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	GUI_LIST_ITEM			*pstSelectedListItem;
-	GUI_LIST_CONTROL		*pstListControl;
+	SGUI_LIST_ITEM				*pstSelectedListItem;
+	SGUI_LIST_CONTROL			*pstListControl;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -495,9 +486,9 @@ void GUI_List_SetListItemValue(GUI_LIST_STRUCT* pstList, size_t uiItemIndex, int
 	pstSelectedListItem		= NULL;
 	if(NULL != pstList)
 	{
-		if(uiItemIndex < pstList->Data.Count)
+		if(iItemIndex < pstList->Data.Count)
 		{
-			pstSelectedListItem = GUI_List_GetListItemPtr(pstList, uiItemIndex);
+			pstSelectedListItem = SGUI_LIST_GetListItemPtr(pstList, iItemIndex);
 		}
 		pstListControl = &(pstList->ControlVariable);
 	}
@@ -544,34 +535,34 @@ void GUI_List_SetListItemValue(GUI_LIST_STRUCT* pstList, size_t uiItemIndex, int
 			*(pstSelectedListItem->Decimal.Bind) = pstSelectedListItem->Decimal.Value;
 		}
 		// Clear list item area.
-		GUI_Basic_DrawRectangle(LIST_ITEM_RECT_POSX, pstListControl->FirstVisibleItemPosY+(pstListControl->SelectIndex-pstListControl->PageStartIndex)*pstListControl->ListItemHeight-pstListControl->ItemPosYOffSet,
+		SGUI_Basic_DrawRectangle(LIST_ITEM_RECT_POSX, pstListControl->FirstVisibleItemPosY+(pstListControl->SelectIndex-pstListControl->PageStartIndex)*pstListControl->ListItemHeight-pstListControl->ItemPosYOffSet,
 								LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight, GUI_COLOR_BKGCLR, GUI_COLOR_BKGCLR);
 		// refresh list item
-		GUI_List_DrawItem(pstList, uiItemIndex);
+		SGUI_LIST_DrawItem(pstList, iItemIndex);
 		// High light selected item.
-		GUI_Basic_ReverseBlockColor(LIST_ITEM_RECT_POSX, pstListControl->FirstVisibleItemPosY+(pstListControl->SelectIndex-pstListControl->PageStartIndex)*pstListControl->ListItemHeight-pstListControl->ItemPosYOffSet,
+		SGUI_Basic_ReverseBlockColor(LIST_ITEM_RECT_POSX, pstListControl->FirstVisibleItemPosY+(pstListControl->SelectIndex-pstListControl->PageStartIndex)*pstListControl->ListItemHeight-pstListControl->ItemPosYOffSet,
 		 							LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight);
 	}
 }
 
-/*****************************************************************************/
-/** Function Name:	GUI_List_GetListItemValue								**/
-/** Purpose:		Get list parameter value if supported.					**/
-/** Resources:		List item data.											**/
-/** Params:																	**/
-/**	@pstList[in]:		Pointer of list will be read.						**/
-/**	@uiItemIndex[in]:	Index of list item index will be read.				**/
-/**	@piValid[out]:		Valid value will be read.							**/
-/**	@piDecimal[out]:	Decimal value will be read.							**/
-/** Return:			None.													**/
-/** Notice:			None.													**/
-/*****************************************************************************/
-void GUI_List_GetListItemValue(GUI_LIST_STRUCT* pstList, size_t uiItemIndex, int32_t* piValid, int32_t* piDecimal)
+/*************************************************************************/
+/** Function Name:	SGUI_LIST_GetListItemValue							**/
+/** Purpose:		Get list parameter value if supported.				**/
+/** Resources:		List item data.										**/
+/** Params:																**/
+/**	@pstList[in]:		Pointer of list will be read.					**/
+/**	@iItemIndex[in]:	Index of list item index will be read.			**/
+/**	@piValid[out]:		Valid value will be read.						**/
+/**	@piDecimal[out]:	Decimal value will be read.						**/
+/** Return:			None.												**/
+/** Notice:			None.												**/
+/*************************************************************************/
+void SGUI_LIST_GetListItemValue(SGUI_LIST_STRUCT* pstList, SGUI_INDEX iItemIndex, int32_t* piValid, int32_t* piDecimal)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	GUI_LIST_ITEM			*pstSelectedListItem;
+	SGUI_LIST_ITEM				*pstSelectedListItem;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -579,9 +570,9 @@ void GUI_List_GetListItemValue(GUI_LIST_STRUCT* pstList, size_t uiItemIndex, int
 	pstSelectedListItem		= NULL;
 	if(NULL != pstList)
 	{
-		if(uiItemIndex < pstList->Data.Count)
+		if(iItemIndex < pstList->Data.Count)
 		{
-			pstSelectedListItem = GUI_List_GetListItemPtr(pstList, uiItemIndex);
+			pstSelectedListItem = SGUI_LIST_GetListItemPtr(pstList, iItemIndex);
 		}
 	}
 
@@ -604,32 +595,32 @@ void GUI_List_GetListItemValue(GUI_LIST_STRUCT* pstList, size_t uiItemIndex, int
 	}
 }
 
-/*****************************************************************************/
-/** Function Name:	GUI_List_BindData										**/
-/** Purpose:		Bind a 32-bit integer variable by pointer.				**/
-/** Resources:		List item data.											**/
-/** Params:																	**/
-/**	@pstList[in]:		Pointer of list will be read.						**/
-/**	@uiItemIndex[in]:	Index of list item index will be read.				**/
-/**	@piValid[out]:		Valid variable pointer.								**/
-/**	@piDecimal[out]:	Decimal variable pointer.							**/
-/** Return:			None.													**/
-/** Notice:			Variable pointer and decimal variable can be NULL.		**/
-/*****************************************************************************/
-void GUI_List_BindData(GUI_LIST_STRUCT* pstList, size_t uiItemIndex, int32_t* piValid, int32_t* piDecimal)
+/*************************************************************************/
+/** Function Name:	SGUI_LIST_BindData									**/
+/** Purpose:		Bind a 32-bit integer variable by pointer.			**/
+/** Resources:		List item data.										**/
+/** Params:																**/
+/**	@pstList[in]:		Pointer of list will be read.					**/
+/**	@iItemIndex[in]:	Index of list item index will be read.			**/
+/**	@piValid[out]:		Valid variable pointer.							**/
+/**	@piDecimal[out]:	Decimal variable pointer.						**/
+/** Return:			None.												**/
+/** Notice:			Variable pointer and decimal variable can be NULL.	**/
+/*************************************************************************/
+void SGUI_LIST_BindData(SGUI_LIST_STRUCT* pstList, SGUI_INDEX iItemIndex, SGUI_INT32* piValid, SGUI_INT32* piDecimal)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	GUI_LIST_ITEM			*pstSelectedListItem;
+	SGUI_LIST_ITEM				*pstSelectedListItem;
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	pstSelectedListItem		= NULL;
+	pstSelectedListItem =		NULL;
 	if(NULL != pstList)
 	{
-		pstSelectedListItem = GUI_List_GetListItemPtr(pstList, uiItemIndex);
+		pstSelectedListItem =	SGUI_LIST_GetListItemPtr(pstList, iItemIndex);
 	}
 
 	/*----------------------------------*/
@@ -642,31 +633,32 @@ void GUI_List_BindData(GUI_LIST_STRUCT* pstList, size_t uiItemIndex, int32_t* pi
 	}
 }
 
-/*****************************************************************************/
-/** Function Name:	GUI_List_GetListItemPtr									**/
-/** Purpose:		Get list item data pointer by index.					**/
-/** Resources:		List item data.											**/
-/** Params:																	**/
-/**	@pstList[in]:		Pointer of list will be read.						**/
-/**	@uiItemIndex[in]:	Index of list item index will be read.				**/
-/** Return:			None.													**/
-/** Notice:			Variable pointer and decimal variable can be NULL.		**/
-/*****************************************************************************/
-GUI_LIST_ITEM* GUI_List_GetListItemPtr(GUI_LIST_STRUCT* pstList, uint32_t uiItemIndex)
+/*************************************************************************/
+/** Function Name:	SGUI_LIST_GetListItemPtr							**/
+/** Purpose:		Get list item data pointer by index.				**/
+/** Resources:		List item data.										**/
+/** Params:																**/
+/**	@pstList[in]:		Pointer of list will be read.					**/
+/**	@iItemIndex[in]:	Index of list item index will be read.			**/
+/** Return:			None.												**/
+/** Notice:			Variable pointer and decimal variable can be NULL.	**/
+/*************************************************************************/
+SGUI_LIST_ITEM* SGUI_LIST_GetListItemPtr(SGUI_LIST_STRUCT* pstList, SGUI_INDEX iItemIndex)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	GUI_LIST_ITEM			*pstSelectedListItem;
+	SGUI_LIST_ITEM				*pstSelectedListItem;
 #ifdef _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
-	uint32_t				uiItemCounter;
+	SGUI_SIZE					uiItemCounter;
 #endif //_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
+
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	pstSelectedListItem = NULL;
+	pstSelectedListItem =		NULL;
 #ifdef _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
-	uiItemCounter = 0;
+	uiItemCounter =				0;
 #endif //_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
 
 	/*----------------------------------*/
@@ -674,13 +666,13 @@ GUI_LIST_ITEM* GUI_List_GetListItemPtr(GUI_LIST_STRUCT* pstList, uint32_t uiItem
 	/*----------------------------------*/
 	if(NULL != pstList)
 	{
-		if(uiItemIndex < pstList->Data.Count)
+		if(iItemIndex < pstList->Data.Count)
 		{
 #if _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
 			pstSelectedListItem = pstList->Data.Items;
 			if(NULL != pstSelectedListItem)
 			{
-				while((pstList->Data.Count > 0) && (NULL != pstSelectedListItem->NextItem) && (uiItemCounter < uiItemIndex))
+				while((pstList->Data.Count > 0) && (NULL != pstSelectedListItem->NextItem) && (uiItemCounter < iItemIndex))
 				{
 					pstSelectedListItem = pstSelectedListItem->NextItem;
 					uiItemCounter++;
@@ -695,53 +687,53 @@ GUI_LIST_ITEM* GUI_List_GetListItemPtr(GUI_LIST_STRUCT* pstList, uint32_t uiItem
 }
 
 #if _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
-/*****************************************************************************/
-/** Function Name:	GUI_List_InsertItem										**/
-/** Purpose:		Insert a new item to list.								**/
-/** Resources:		List item data.											**/
-/** Params:																	**/
-/**	@pstList[in]:		Pointer of list will be read.						**/
-/**	@pstNewItem[in]:	New item data pointer.								**/
-/**	@uiItemIndex[in]:	Index of new list item.								**/
-/** Return:																	**/
-/** @TRUE				Insert success.										**/
-/**	@FALSE				Insert failed.										**/
-/** Notice:			This function only supported when the dynamic list item **/
-/**					enabled, and new item index cannot greater then list	**/
-/**					item count.												**/
-/*****************************************************************************/
-BOOL GUI_List_InsertItem(GUI_LIST_STRUCT* pstList, GUI_LIST_ITEM* pstNewItem, uint32_t uiNewItemIndex)
+/*************************************************************************/
+/** Function Name:	SGUI_LIST_InsertItem								**/
+/** Purpose:		Insert a new item to list.							**/
+/** Resources:		List item data.										**/
+/** Params:																**/
+/**	@pstList[in]:		Pointer of list will be read.					**/
+/**	@pstNewItem[in]:	New item data pointer.							**/
+/**	@iItemIndex[in]:	Index of new list item.							**/
+/** Return:																**/
+/** @TRUE				Insert success.									**/
+/**	@FALSE				Insert failed.									**/
+/** Notice:			This function only supported when the dynamic list	**/
+/**					item enabled, and new item index cannot greater		**/
+/**					then list item count.								**/
+/*************************************************************************/
+SGUI_BOOL SGUI_LIST_InsertItem(SGUI_LIST_STRUCT* pstList, SGUI_LIST_ITEM* pstNewItem, SGUI_INDEX iNewItemIndex)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	GUI_LIST_ITEM			*pstListItemDataSource;
-	GUI_LIST_ITEM			*pstNewListItem, *pstPosItem;
-	GUI_LIST_DATA			*pstListData;
-	BOOL					bResult;
+	SGUI_LIST_ITEM				*pstListItemDataSource;
+	SGUI_LIST_ITEM				*pstNewListItem, *pstPosItem;
+	SGUI_LIST_DATA				*pstListData;
+	SGUI_BOOL					bResult;
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	pstListItemDataSource =	pstNewItem;
-	pstNewListItem =		NULL;
-	pstPosItem =			NULL;
-	bResult =				TRUE;
-	pstListData =			&(pstList->Data);
+	pstListItemDataSource =		pstNewItem;
+	pstNewListItem =			NULL;
+	pstPosItem =				NULL;
+	bResult =					SGUI_TRUE;
+	pstListData =				&(pstList->Data);
 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if(uiNewItemIndex > pstList->Data.Count)
+	if(iNewItemIndex > pstList->Data.Count)
 	{
-		bResult = FALSE;
+		bResult = SGUI_FALSE;
 	}
 	else
 	{
-		pstNewListItem = (GUI_LIST_ITEM*)GUI_Common_Allocate(sizeof(GUI_LIST_ITEM));
+		pstNewListItem = (SGUI_LIST_ITEM*)SGUI_Common_Allocate(sizeof(SGUI_LIST_ITEM));
 		if(NULL != pstNewListItem)
 		{
-			GUI_Common_MemoryCopy(pstNewListItem, pstListItemDataSource, sizeof(GUI_LIST_ITEM));
+			SGUI_Common_MemoryCopy(pstNewListItem, pstListItemDataSource, sizeof(SGUI_LIST_ITEM));
 
 			if(0 == pstList->Data.Count)
 			{
@@ -749,16 +741,16 @@ BOOL GUI_List_InsertItem(GUI_LIST_STRUCT* pstList, GUI_LIST_ITEM* pstNewItem, ui
 				pstNewListItem->PrevItem = NULL;
 				pstListData->Items = pstNewListItem;
 			}
-			else if(uiNewItemIndex == pstList->Data.Count)
+			else if(iNewItemIndex == pstList->Data.Count)
 			{
-				pstPosItem = GUI_List_GetListItemPtr(pstList, uiNewItemIndex-1);
+				pstPosItem = SGUI_LIST_GetListItemPtr(pstList, iNewItemIndex-1);
 				pstPosItem->NextItem = pstNewListItem;
 				pstNewListItem->PrevItem = pstPosItem;
 				pstNewListItem->NextItem = NULL;
 			}
 			else //if((uiNewItemIndex>0)&&(uiNewItemIndex<pstListData->Count))
 			{
-				pstPosItem = GUI_List_GetListItemPtr(pstList, uiNewItemIndex);
+				pstPosItem = SGUI_LIST_GetListItemPtr(pstList, iNewItemIndex);
 				pstNewListItem->PrevItem = pstPosItem->PrevItem;
 				pstNewListItem->NextItem = pstPosItem;
 				if(NULL != pstPosItem->PrevItem)
@@ -778,33 +770,33 @@ BOOL GUI_List_InsertItem(GUI_LIST_STRUCT* pstList, GUI_LIST_ITEM* pstNewItem, ui
 	return bResult;
 }
 
-/*****************************************************************************/
-/** Function Name:	GUI_List_RemoveItem										**/
-/** Purpose:		Remove a item from list.								**/
-/** Resources:		List item data.											**/
-/** Params:																	**/
-/**	@pstList[in]:		Pointer of list will be read.						**/
-/**	@uiItemIndex[in]:	Index of list item will be removed.					**/
-/** Return:																	**/
-/** @TRUE				Remove success.										**/
-/**	@FALSE				Remove failed.										**/
-/** Notice:			This function only supported when the dynamic list item **/
-/**					enabled, and index of removed item cannot greater then	**/
-/**					list item count.										**/
-/*****************************************************************************/
-BOOL GUI_List_RemoveItem(GUI_LIST_STRUCT* pstList, uint32_t uiNewItemIndex)
+/*************************************************************************/
+/** Function Name:	SGUI_LIST_RemoveItem								**/
+/** Purpose:		Remove a item from list.							**/
+/** Resources:		List item data.										**/
+/** Params:																**/
+/**	@pstList[in]:		Pointer of list will be read.					**/
+/**	@uiItemIndex[in]:	Index of list item will be removed.				**/
+/** Return:																**/
+/** @TRUE				Remove success.									**/
+/**	@FALSE				Remove failed.									**/
+/** Notice:			This function only supported when the dynamic list  **/
+/**					item enabled, and index of removed item cannot		**/
+/**					greater then list item count.						**/
+/*************************************************************************/
+SGUI_BOOL SGUI_LIST_RemoveItem(SGUI_LIST_STRUCT* pstList, SGUI_INDEX iItemIndex)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	GUI_LIST_ITEM			*pstRemoveListItem;
-	BOOL					bResult;
+	SGUI_LIST_ITEM				*pstRemoveListItem;
+	SGUI_BOOL					bResult;
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	pstRemoveListItem =		GUI_List_GetListItemPtr(pstList, uiNewItemIndex);
-	bResult =				TRUE;
+	pstRemoveListItem =			SGUI_LIST_GetListItemPtr(pstList, iItemIndex);
+	bResult =					SGUI_TRUE;
 
 	/*----------------------------------*/
 	/* Process							*/
@@ -819,14 +811,13 @@ BOOL GUI_List_RemoveItem(GUI_LIST_STRUCT* pstList, uint32_t uiNewItemIndex)
 		{
 			pstRemoveListItem->NextItem->PrevItem = pstRemoveListItem->PrevItem;
 		}
-		if(0 == uiNewItemIndex)
+		if(0 == iItemIndex)
 		{
 			pstList->Data.Items = pstRemoveListItem->NextItem;
 		}
-		GUI_Common_Free(pstRemoveListItem);
+		SGUI_Common_Free(pstRemoveListItem);
 		pstList->Data.Count--;
 	}
 	return bResult;
 }
-
 #endif // _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
