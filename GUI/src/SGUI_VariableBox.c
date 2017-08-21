@@ -151,18 +151,14 @@ void SGUI_TextVariableBox_UpdateCharacter(SGUI_TEXT_VARBOX_STRUCT* pstTextValue,
 		if(pstTextValue->MaxTextLength > VARBOX_TEXT_LENGTH_MAX)
 		{
 			pstTextValue->MaxTextLength = VARBOX_TEXT_LENGTH_MAX;
-			uiFocusIndexMax = VARBOX_TEXT_LENGTH_MAX-1;
 		}
-		else
-		{
-			uiFocusIndexMax = pstTextValue->MaxTextLength-1;
-		}
+		uiFocusIndexMax = pstTextValue->MaxTextLength-1;
 		// Ignore too long text string.
 		uiTextLength = SGUI_Common_StringLength(pstTextValue->Value);
 		if(uiTextLength > pstTextValue->MaxTextLength)
 		{
 			uiTextLength = pstTextValue->MaxTextLength;
-			*(pstTextValue->Value+uiFocusIndexMax) = '\0';
+			*(pstTextValue->Value+uiTextLength) = '\0';
             // Point at to last character position if index is more then string length.
 			if(pstTextValue->FocusIndex > uiFocusIndexMax)
 			{

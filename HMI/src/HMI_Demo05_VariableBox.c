@@ -40,7 +40,7 @@ static void				HMI_DemoVariableBox_DrawFrame(SGUI_PSZSTR szTitle);
 //=======================================================================//
 static SGUI_INT_VARBOX_STRUCT	stNumberVariableBox =	{VARIABLE_BOX_POSX+2, VARIABLE_BOX_NUMBER_POSY+2, VARIABLE_BOX_WIDTH, -50, 100, 0};
 static char						arrTextVariable[TEXT_VARIABLE_LENGTH+1] = {"ABCDEFG"};
-static SGUI_TEXT_VARBOX_STRUCT	stTextVariableBox =		{VARIABLE_BOX_POSX+2, VARIABLE_BOX_TEXT_POSY+2, VARIABLE_BOX_WIDTH, 0, TEXT_VARIABLE_LENGTH-1, arrTextVariable};
+static SGUI_TEXT_VARBOX_STRUCT	stTextVariableBox =		{VARIABLE_BOX_POSX+2, VARIABLE_BOX_TEXT_POSY+2, VARIABLE_BOX_WIDTH, 0, TEXT_VARIABLE_LENGTH, arrTextVariable};
 static const char				stFrameTitleDefault[] =	{"数值/文本编辑演示"};
 static const char*				szFrameTitle =			stFrameTitleDefault;
 static uint16_t					uiFocusedFlag;
@@ -205,7 +205,7 @@ int32_t HMI_DemoVariableBox_OnExternalEvent(uint32_t uiScreenID,const void* pstP
 			{
 				if(1 == uiFocusedFlag)
 				{
-					if(stTextVariableBox.FocusIndex < (TEXT_VARIABLE_LENGTH))
+					if(stTextVariableBox.FocusIndex < (stTextVariableBox.MaxTextLength-1))
 					{
 						stTextVariableBox.FocusIndex++;
 						SGUI_TextVariableBox_ChangeCharacter(&stTextVariableBox, GUI_DRAW_REVERSE, GUI_TEXT_ASCII, SGUI_TXT_VARBOX_OPT_NONE);

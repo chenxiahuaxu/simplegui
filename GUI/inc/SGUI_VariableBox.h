@@ -27,7 +27,7 @@ typedef struct
 	SGUI_SIZE	Width;
 	SGUI_SIZE	FocusIndex;
 	SGUI_SIZE	MaxTextLength;
-	SGUI_PSZSTR		Value;
+	SGUI_PSZSTR	Value;
 }SGUI_TEXT_VARBOX_STRUCT;
 
 typedef enum
