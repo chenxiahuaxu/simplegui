@@ -3,6 +3,7 @@
 //=======================================================================//
 //= Include files.													    =//
 //=======================================================================//
+#include "SGUI_Config.h"
 #include "SGUI_Common.h"
 #include "SGUI_Basic.h"
 #include "SGUI_ScrollBar.h"

@@ -3,6 +3,7 @@
 //=======================================================================//
 //= Include files.													    =//
 //=======================================================================//
+#include "SGUI_Config.h"
 #include "SGUI_Common.h"
 #include "SGUI_Basic.h"
 #include "SGUI_Text.h"
@@ -37,7 +38,7 @@ typedef struct _st_sgui_list_item_
 	SGUI_LIST_PARAMETER_VALUE	Decimal;
     SGUI_PCSZSTR*				EnumerationValues;
     SGUI_SIZE					EnumerationCount;
-#if _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
+#if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0)
 	struct _st_sgui_list_item_	*PrevItem;
     struct _st_sgui_list_item_	*NextItem;
 #endif
@@ -85,9 +86,9 @@ void			SGUI_LIST_SelectDownItem(SGUI_LIST_STRUCT* pstList);
 void			SGUI_LIST_SetListItemValue(SGUI_LIST_STRUCT* pstList, SGUI_INDEX iItemIndex, SGUI_INT32 iSetValid, SGUI_INT32 iSetDecimal);
 void			SGUI_LIST_GetListItemValue(SGUI_LIST_STRUCT* pstList, SGUI_INDEX iItemIndex, SGUI_INT32 *piValid, SGUI_INT32 *piDecimal);
 SGUI_LIST_ITEM*	SGUI_LIST_GetListItemPtr(SGUI_LIST_STRUCT* pstList, SGUI_INDEX iItemIndex);
-#if _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
+#if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0)
 SGUI_BOOL		SGUI_LIST_InsertItem(SGUI_LIST_STRUCT* pstList, SGUI_LIST_ITEM* pstNewItem, SGUI_INDEX iNewItemIndex);
 SGUI_BOOL		SGUI_LIST_RemoveItem(SGUI_LIST_STRUCT* pstList, SGUI_INDEX iItemIndex);
-#endif // _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
+#endif
 
 #endif // __INCLUDE_SGUI_LIST_H__

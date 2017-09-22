@@ -43,19 +43,19 @@ static SGUI_LIST_ITEM	arrstTestListItems[] =	{	{0, "简单列表项",			LIST_ITE
 													{7, "编辑框",				LIST_ITEM_NORMAL,		{0, 0, 0},				{0, 0, 0}, NULL},
 };
 
-#ifdef _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
+#if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0)
 static SGUI_LIST_ITEM	arrstAppendListItems[] = {	{8, "添加项1",				LIST_ITEM_NORMAL,		{0}, 					{0, 0, 0}, NULL},
 													{9, "添加项2",				LIST_ITEM_ENUM,			{0, 0, 1},				{0, 0, 0}, arrszNoticeType},
 													{10, "添加项3",				LIST_ITEM_DIGIT,		{0, -50, 50},			{0, 0, 3}, NULL},
 };
-#endif // _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
+#endif
 
 
-#if _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
+#if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0)
 static SGUI_LIST_STRUCT	stTestList =			{	{"测试列表", 8, NULL}};
 #else
 static SGUI_LIST_STRUCT	stTestList =			{	{"测试列表", 8, arrstTestListItems}};
-#endif // _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
+#endif
 
 static char				szNoticeTextBuffer[NOTICE_TEXT_BUFFER_SIZE] = {0x00};
 
@@ -87,7 +87,7 @@ int32_t	HMI_DemoList_Initialize(void)
 
 int32_t	HMI_DemoList_PreProcess(const void* pstParameters)
 {
-	#ifdef _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
+#if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0)
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
@@ -101,7 +101,7 @@ int32_t	HMI_DemoList_PreProcess(const void* pstParameters)
         SGUI_LIST_InsertItem(&stTestList, &arrstTestListItems[i], stTestList.Data.Count);
 	}
 	SGUI_LIST_RefreshList(&stTestList);
-	#endif // _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
+#endif
 	return HMI_RESULT_NORMAL;
 }
 
@@ -183,7 +183,7 @@ int32_t	HMI_DemoList_ExternalEvent(uint32_t uiScreenID, const void* pstParameter
 			}
 			break;
 		}
-#ifdef _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
+#if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0)
 		case KEY_VALUE_F8:
 		{
 			SGUI_LIST_RemoveItem(&stTestList, stTestList.ControlVariable.SelectIndex);
@@ -196,19 +196,19 @@ int32_t	HMI_DemoList_ExternalEvent(uint32_t uiScreenID, const void* pstParameter
 			SGUI_LIST_RefreshList(&stTestList);
 			break;
 		}
-		case KEY_VALUE_F10:	// Insert to end.
+		case KEY_VALUE_F10:	// Insert to intermediate.
 		{
 			SGUI_LIST_InsertItem(&stTestList, &arrstAppendListItems[1], 5);
 			SGUI_LIST_RefreshList(&stTestList);
 			break;
 		}
-		case KEY_VALUE_F11:	// Insert to intermediate.
+		case KEY_VALUE_F11:	// Insert to end.
 		{
 			SGUI_LIST_InsertItem(&stTestList, &arrstAppendListItems[2], stTestList.Data.Count);
 			SGUI_LIST_RefreshList(&stTestList);
 			break;
 		}
-#endif //_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
+#endif
 		default:
 		{
 			break;

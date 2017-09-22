@@ -10,20 +10,34 @@
 //= Include files.													    =//
 //=======================================================================//
 #include "SGUI_Common.h"
-#ifdef _SIMPLE_GUI_ENABLE_SIMULATOR_
-#ifdef _SIMPLE_GUI_ENABLE_ICONV_GB2312_
+#if (_SIMPLE_GUI_ENABLE_ICONV_GB2312_ > 0)
+#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
 #include <iconv.h>
+#else
+	// Include encoder convert interface declare here.
+#endif
+#endif
+
+// System RTC interface switch.
+#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
 #include <time.h>
-#endif // _SIMPLE_GUI_ENABLE_ICONV_GB2312_
+#else
+	// Include platform RTC interface declare here.
+#endif
+
+// Dynamic memory operation switch.
+#if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0) && (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
 #include <malloc.h>
 #include <string.h>
-#endif //_SIMPLE_GUI_ENABLE_SIMULATOR_
+#else
+	// Include MMU interface header file here.
+#endif
 
 //=======================================================================//
 //= Static variable declaration.									    =//
 //=======================================================================//
-#if defined(_SIMPLE_GUI_ENABLE_SIMULATOR_)&&defined(_SIMPLE_GUI_ENABLE_ICONV_GB2312_)
-static SGUI_CHAR g_arrcEncodeBuffer[ENCODE_BUFFER_SIZE];
+#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0) && (_SIMPLE_GUI_ENABLE_ICONV_GB2312_ > 0)
+static SGUI_CHAR g_arrcEncodeBuffer[_SIMPLE_GUI_ENCODE_BUFFER_SIZE];
 #endif
 
 //=======================================================================//
@@ -481,7 +495,7 @@ SGUI_INT32 SGUI_Common_ConvertStringToInteger(SGUI_PSZSTR szString, SGUI_PSZSTR*
 	return iResult;
 }
 
-#ifdef _SIMPLE_GUI_ENABLE_ICONV_GB2312_
+#if (_SIMPLE_GUI_ENABLE_ICONV_GB2312_ > 0)
 /*************************************************************************/
 /** Function Name:	SGUI_Common_EncodeConvert							**/
 /** Purpose:		Convert string encode.								**/
@@ -513,7 +527,7 @@ SGUI_PSZSTR SGUI_Common_EncodeConvert(SGUI_PCSZSTR szSourceEncode, SGUI_PSZSTR s
 	if((iconv_t)-1 != pIconv)
 	{
 		uiSourceLength = SGUI_Common_StringLength(szSource) + 1;
-		uiOutputBufferSize = ENCODE_BUFFER_SIZE;
+		uiOutputBufferSize = _SIMPLE_GUI_ENCODE_BUFFER_SIZE;
 		pszResultPtr = g_arrcEncodeBuffer;
 		uiEncoderResult = iconv(pIconv, &szSource, &uiSourceLength, &pszResultPtr, &uiOutputBufferSize);
 		if (uiEncoderResult == -1)
@@ -530,7 +544,7 @@ SGUI_PSZSTR SGUI_Common_EncodeConvert(SGUI_PCSZSTR szSourceEncode, SGUI_PSZSTR s
 }
 #endif
 
-#ifdef _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
+#if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0)
 /*************************************************************************/
 /** Function Name:	SGUI_Common_Allocate								**/
 /** Purpose:		Allocate a memory block.							**/
@@ -555,11 +569,11 @@ void* SGUI_Common_Allocate(SGUI_SIZE uiSize)
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-#ifdef _SIMPLE_GUI_ENABLE_SIMULATOR_
+#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
 	pAllocatedMemory = malloc(uiSize);
 #else
 	// Add allocate memory function here;
-#endif // _SIMPLE_GUI_ENABLE_SIMULATOR_
+#endif
 	return pAllocatedMemory;
 }
 
@@ -579,10 +593,14 @@ void SGUI_Common_Free(void* pFreePointer)
 	if(NULL != pFreePointer)
 	{
 		free(pFreePointer);
+#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
+		free(pFreePointer);
+#else
+		// Add allocate memory function here;
+#endif
 	}
 }
-
-#endif // _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
+#endif
 
 /*************************************************************************/
 /** Function Name:	SGUI_Common_MemoryCopy								**/
@@ -610,11 +628,11 @@ void* SGUI_Common_MemoryCopy(void* pDest, const void* pSrc, SGUI_SIZE size)
 	/*----------------------------------*/
 	if((NULL != pDest) && (NULL != pSrc))
 	{
-#ifdef _SIMPLE_GUI_ENABLE_SIMULATOR_
+#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
 	pCopiedMemory = memcpy(pDest, pSrc, size);
 #else
 	// Add RTC time process here;
-#endif // _SIMPLE_GUI_ENABLE_SIMULATOR_
+#endif
 	}
 
 	return pCopiedMemory;
@@ -644,11 +662,11 @@ SGUI_SIZE SGUI_Common_StringLength(SGUI_PCSZSTR szString)
 	/*----------------------------------*/
 	if(NULL != szString)
 	{
-#ifdef _SIMPLE_GUI_ENABLE_SIMULATOR_
+#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
 	uiStringLength = strlen(szString);
 #else
 	// Add RTC time process here;
-#endif // _SIMPLE_GUI_ENABLE_SIMULATOR_
+#endif
 	}
 
 	return uiStringLength;
@@ -680,11 +698,11 @@ SGUI_PSZSTR SGUI_Common_StringCopy(SGUI_PSZSTR szDest, SGUI_PCSZSTR szSrc)
 	/*----------------------------------*/
 	if((NULL != szDest) && (NULL != szSrc))
 	{
-#ifdef _SIMPLE_GUI_ENABLE_SIMULATOR_
+#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
 	szDestPtr = strcpy(szDest, szSrc);
 #else
 	// Add RTC time process here;
-#endif // _SIMPLE_GUI_ENABLE_SIMULATOR_
+#endif
 	}
 
 	return szDestPtr;
@@ -717,11 +735,11 @@ SGUI_PSZSTR SGUI_Common_StringLengthCopy(SGUI_PSZSTR szDest, SGUI_PCSZSTR szSrc,
 	/*----------------------------------*/
 	if((NULL != szDest) && (NULL != szSrc))
 	{
-#ifdef _SIMPLE_GUI_ENABLE_SIMULATOR_
+#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
 	szDestPtr = strncpy(szDest, szSrc, uiSize);
 #else
 	// Add RTC time process here;
-#endif // _SIMPLE_GUI_ENABLE_SIMULATOR_
+#endif
 	}
 
 	return szDestPtr;
@@ -742,14 +760,18 @@ void SGUI_Common_GetNowTime(SGUI_TIME* pstTime)
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
+#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
 	time_t						rawtime;
 	struct tm*					timeinfo;
-
+#else
+	// Add date structure variable declare here.
+#endif
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
 	if(NULL != pstTime)
 	{
+#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
 		time(&rawtime);
 		timeinfo = localtime(&rawtime);
 		if(NULL != timeinfo)
@@ -761,6 +783,9 @@ void SGUI_Common_GetNowTime(SGUI_TIME* pstTime)
 			pstTime->Minute = timeinfo->tm_min;
 			pstTime->Second = timeinfo->tm_sec;
 		}
+#else
+	// Add RTC Interface call of the platform.
+#endif
 	}
 }
 

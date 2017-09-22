@@ -53,9 +53,6 @@
 			<Add option="-D__WXMSW__" />
 			<Add option="-DWXUSINGDLL" />
 			<Add option="-DwxUSE_UNICODE" />
-			<Add option="-D_SIMPLE_GUI_ENABLE_ICONV_GB2312_" />
-			<Add option="-D_SIMPLE_GUI_ENABLE_SIMULATOR_" />
-			<Add option="-D_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_" />
 			<Add directory="$(#wx31)/include" />
 			<Add directory="../../Frame/inc" />
 			<Add directory="../../User/inc" />
@@ -81,6 +78,7 @@
 		<Unit filename="../../Frame/src/LCD_VirtualDevice.cpp" />
 		<Unit filename="../../GUI/inc/SGUI_Basic.h" />
 		<Unit filename="../../GUI/inc/SGUI_Common.h" />
+		<Unit filename="../../GUI/inc/SGUI_Config.h" />
 		<Unit filename="../../GUI/inc/SGUI_Frame.h">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>

@@ -3,8 +3,9 @@
 //=======================================================================//
 //= Include files.													    =//
 //=======================================================================//
+#include "SGUI_Config.h"
 #include "SGUI_Typedef.h"
-#ifdef _SIMPLE_GUI_ENABLE_SIMULATOR_
+#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
 #include "LCD_OperationIF.h"
 #else
 // Insert platform driver head file here.
@@ -23,7 +24,7 @@
 //=======================================================================//
 //= Public variable declaration.									    =//
 //=======================================================================//
-#ifdef _SIMPLE_GUI_ENABLE_SIMULATOR_
+#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
 extern SGUI_CBYTE		SGUI_FONT_H8[];
 extern SGUI_CBYTE		SGUI_FONT_H12[];
 extern SGUI_CBYTE		SGUI_FONT_H16[];
@@ -33,14 +34,14 @@ extern SGUI_CBYTE		SGUI_FONT_H32[];
 //=======================================================================//
 //= Public function declaration.									    =//
 //=======================================================================//
-#if defined(_SIMPLE_GUI_ENABLE_SIMULATOR_) && defined(_SIMPLE_GUI_ENABLE_ICONV_GB2312_)
-// Only used when running in simulated environment
+#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0) && (_SIMPLE_GUI_ENABLE_ICONV_GB2312_ > 0)
+// Only used when running in simulated environment and text encode need convert to GB2312.
 SGUI_PSZSTR				SGUI_Common_EncodeConvert(SGUI_PCSZSTR szSourceEncode, SGUI_PSZSTR szDestinationEncode, SGUI_PSZSTR szSource);
-#define		ENCODE_BUFFER_SIZE				(512)
+#define		_SIMPLE_GUI_ENCODE_BUFFER_SIZE	(512)
 #define		ENCODE(S)						(SGUI_Common_EncodeConvert("UTF-8", "GB2312", (char *)S))
 #else
 #define		ENCODE(S)						(S)
-#endif //defined(_SIMPLE_GUI_ENABLE_SIMULATOR_)&&defined(_SIMPLE_GUI_ENABLE_ICONV_GB2312_)
+#endif
 
 //=======================================================================//
 //= Public function declaration.									    =//
@@ -51,10 +52,10 @@ SGUI_UINT32				SGUI_Common_ConvertStringToUnsignedInteger(SGUI_PSZSTR szString, 
 SGUI_INT32				SGUI_Common_ConvertStringToInteger(SGUI_PSZSTR szString, SGUI_PSZSTR* pcEndPointer, SGUI_UINT uiBase);
 inline SGUI_SIZE		SGUI_Common_StringLength(SGUI_PCSZSTR szString);
 void					SGUI_Common_RefreshScreen(void);
-#ifdef _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
+#if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0)
 inline void*			SGUI_Common_Allocate(SGUI_SIZE uiSize);
 inline void				SGUI_Common_Free(void* pFreePointer);
-#endif //_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
+#endif
 inline SGUI_PSZSTR		SGUI_Common_StringCopy(SGUI_PSZSTR szDest, SGUI_PCSZSTR szSrc);
 inline SGUI_PSZSTR		SGUI_Common_StringLengthCopy(SGUI_PSZSTR szDest, SGUI_PCSZSTR szSrc, SGUI_SIZE uiSize);
 inline void*			SGUI_Common_MemoryCopy(void* pDest, const void* pSrc, SGUI_SIZE uiSize);

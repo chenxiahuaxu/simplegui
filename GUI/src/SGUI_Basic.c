@@ -14,6 +14,8 @@
 //=======================================================================//
 //= Static variable declaration.									    =//
 //=======================================================================//
+//   Here is the 4*6 pixel font data definition, only number characters
+// and plug(+), subtract(-), multiply(*), divide(/), brackets and space.
 SGUI_CBYTE SGUI_BASIC_FONT_H6[] = {
 0x1F, 0x11, 0x1F, 0x00,	//0
 0x00, 0x1F, 0x00, 0x00,	//1
@@ -35,7 +37,10 @@ SGUI_CBYTE SGUI_BASIC_FONT_H6[] = {
 0x00, 0x00, 0x00, 0x00, //space
 };
 
-/* Basic character font data */
+//   Here is the 6*8 pixel font data definition, only visible ASCII
+// characters it's also used as basic font, when the extended font data
+// lost, these data can used for display some error message or runtime
+// information.
 SGUI_CBYTE SGUI_BASIC_FONT_H8[] = {
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,	// space index 0
 0x00, 0x00, 0x5F, 0x00, 0x00, 0x00,	// !
@@ -157,7 +162,7 @@ void SGUI_Basic_DrawPoint(SGUI_UINT uiPosX, SGUI_UINT uiPosY, SGUI_COLOR eColor)
 	{
 		if(GUI_COLOR_FRGCLR == eColor)
 		{
-#ifdef _SIMPLE_GUI_ENABLE_SIMULATOR_
+#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
 			VTIF_SetPoint(uiPosX, uiPosY, 1);
 #else
 			// Call draw pix interface here.
@@ -165,7 +170,7 @@ void SGUI_Basic_DrawPoint(SGUI_UINT uiPosX, SGUI_UINT uiPosY, SGUI_COLOR eColor)
 		}
 		else if(GUI_COLOR_BKGCLR == eColor)
 		{
-#ifdef _SIMPLE_GUI_ENABLE_SIMULATOR_
+#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
 			VTIF_SetPoint(uiPosX, uiPosY, 0);
 #else
 			// Call draw pix interface here.
@@ -202,7 +207,7 @@ SGUI_COLOR GUI_Basic_GetPoint(SGUI_UINT uiPosX, SGUI_UINT uiPosY)
 	/*----------------------------------*/
 	if((uiPosX < LCD_SIZE_WIDTH) && (uiPosY < LCD_SIZE_HEIGHT))
 	{
-#ifdef _SIMPLE_GUI_ENABLE_SIMULATOR_
+#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
 		uiPixValue = VTIF_GetPoint(uiPosX, uiPosY);
 #else
 		// Call read pix interface here.
@@ -232,7 +237,7 @@ void SGUI_Basic_ClearScreen(void)
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-#ifdef _SIMPLE_GUI_ENABLE_SIMULATOR_
+#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
 	VTIF_ClearScreen();
 #else
 	// Call clear screen function here;
