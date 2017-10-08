@@ -13,22 +13,24 @@
 //=======================================================================//
 typedef struct
 {
-	SGUI_SIZE	PosX;
-	SGUI_SIZE	PosY;
-	SGUI_SIZE	Width;
-	SGUI_INT	Min;
-	SGUI_INT	Max;
-	SGUI_INT	Value;
+	SGUI_SIZE		PosX;
+	SGUI_SIZE		PosY;
+	SGUI_SIZE		Width;
+	SGUI_FONT_SIZE	FontSize;
+	SGUI_INT		Min;
+	SGUI_INT		Max;
+	SGUI_INT		Value;
 }SGUI_INT_VARBOX_STRUCT;
 
 typedef struct
 {
-	SGUI_SIZE	PosX;
-	SGUI_SIZE	PosY;
-	SGUI_SIZE	Width;
-	SGUI_SIZE	FocusIndex;
-	SGUI_SIZE	MaxTextLength;
-	SGUI_PSZSTR	Value;
+	SGUI_SIZE		PosX;
+	SGUI_SIZE		PosY;
+	SGUI_SIZE		Width;
+	SGUI_FONT_SIZE	FontSize;
+	SGUI_SIZE		FocusIndex;
+	SGUI_SIZE		MaxTextLength;
+	SGUI_PSZSTR		Value;
 }SGUI_TEXT_VARBOX_STRUCT;
 
 typedef enum
@@ -57,15 +59,14 @@ typedef enum
 //=======================================================================//
 //= User Macro definition.											    =//
 //=======================================================================//
-#define VARBOX_FONT_SIZE				(SGUI_FONT_SIZE_H12)
-#define VARBOX_WIDTH(L)					(L*(g_stFontSize[VARBOX_FONT_SIZE].Width)-4)
-#define VARBOX_HEIGHT					(g_stFontSize[VARBOX_FONT_SIZE].Height+2)
+#define VARBOX_WIDTH(FONT_SIZE, L)		(L*(g_stFontSize[FONT_SIZE].Width)-4)
+#define VARBOX_HEIGHT(FONT_SIZE)		(g_stFontSize[FONT_SIZE].Height+2)
 #define VARBOX_TEXT_AREA_WIDTH(W)		((W>2)?(W-2):0)
-#define VARBOX_TEXT_AREA_HEIGHT			(g_stFontSize[VARBOX_FONT_SIZE].Height)
+#define VARBOX_TEXT_AREA_HEIGHT(FONT_SIZE) (g_stFontSize[FONT_SIZE].Height)
 
 #define VARBOX_TEXT_LENGTH_MAX			(32)
 #define VARBOX_TEXT_BUFFER_SIZE			(VARBOX_TEXT_LENGTH_MAX+1)
-#define VARBOX_TEXT_WIDTH(L)			(L*(g_stFontSize[VARBOX_FONT_SIZE].Width))
+#define VARBOX_TEXT_WIDTH(FONT_SIZE, L)	(L*(g_stFontSize[FONT_SIZE].Width))
 
 #define GUI_TEXT_ASCII					(SGUI_TEXT_NUMBER|SGUI_TEXT_ALPHA|SGUI_TEXT_PUNCTUATION)
 

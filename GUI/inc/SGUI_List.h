@@ -59,7 +59,7 @@ typedef struct
 
 typedef struct
 {
-	SGUI_PSZSTR					Title;
+	SGUI_PCSZSTR				Title;
 	SGUI_SIZE					Count;
 	SGUI_LIST_ITEM*				Items;
 }SGUI_LIST_DATA;
@@ -73,7 +73,8 @@ typedef struct
 {
 	SGUI_LIST_DATA				Data;
 	SGUI_LIST_CONTROL			ControlVariable;
-	SGUI_LIST_SUBELEMENT			SubElement;
+	SGUI_LIST_SUBELEMENT		SubElement;
+	SGUI_FONT_SIZE	            FontSize;
 }SGUI_LIST_STRUCT;
 
 //=======================================================================//

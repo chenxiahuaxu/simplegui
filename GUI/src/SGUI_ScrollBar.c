@@ -1,6 +1,6 @@
 /*************************************************************************/
 /** Copyright.															**/
-/** FileName: GUI_ScrollBar.c											**/
+/** FileName: SGUI_ScrollBar.c											**/
 /** Author: XuYulin														**/
 /** Version: 1.0.0.0													**/
 /** Description: Create and display a scrollbar on screen.				**/
@@ -16,7 +16,7 @@
 //= Function implementation.										    =//
 //=======================================================================//
 /*************************************************************************/
-/** Function Name:	GUI_ScrollBar_UpdateScrollBar						**/
+/** Function Name:	SGUI_ScrollBar_RefreshScrollBar						**/
 /** Purpose:		Display or update a scroll bar.						**/
 /** Resources:		Scroll bar data structure.							**/
 /** Params:																**/

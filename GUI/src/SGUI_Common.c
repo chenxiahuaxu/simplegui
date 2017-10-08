@@ -1,9 +1,9 @@
 /*************************************************************************/
 /** Copyright.															**/
-/** FileName: GUI_Common.c												**/
+/** FileName: SGUI_Common.c												**/
 /** Author: Polarix														**/
 /** Version: 1.0.0.0													**/
-/** Description: Draw text.												**/
+/** Description: Simple GUI common process.								**/
 /*************************************************************************/
 
 //=======================================================================//
@@ -20,6 +20,7 @@
 
 // System RTC interface switch.
 #if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
+#include <windows.h>
 #include <time.h>
 #else
 	// Include platform RTC interface declare here.
@@ -46,15 +47,16 @@ static SGUI_CHAR g_arrcEncodeBuffer[_SIMPLE_GUI_ENCODE_BUFFER_SIZE];
 /*************************************************************************/
 /** Function Name:	SGUI_Common_IntegerToStringWithDecimalPoint			**/
 /** Purpose:		Convert number to a string and insert decimal point.**/
-/** Resources:		None.												**/
 /** Params:																**/
-/**	@iInteger:			Source number.									**/
-/**	@uiDecimalPlaces:	Decimal point places.							**/
-/**	@pszStringBuffer:	Bit map data buffer.							**/
-/**	@iAlignment:		Alignment of number string, positive numbers 	**/
+/**	@iInteger[in]:		Source number.									**/
+/**	@uiDecimalPlaces[in]: Decimal point places.							**/
+/**	@pszStringBuffer[out]: Bit map data buffer.							**/
+/**	@iAlignment[in]:	Alignment of number string, positive numbers 	**/
 /**						means right aligned and negative means left 	**/
 /**						alignment.										**/
-/** Return:			Converted string length.							**/
+/**	@cFillCharacter[in]:When string length less then align width, use 	**/
+/**						this character fill the space.					**/
+/** Return:			Converted string length(include space).				**/
 /** Notice:			Only applies to decimal numbers.					**/
 /*************************************************************************/
 SGUI_SIZE SGUI_Common_IntegerToStringWithDecimalPoint(SGUI_INT iInteger, SGUI_UINT uiDecimalPlaces, SGUI_PSZSTR pszStringBuffer, SGUI_INT iAlignment, SGUI_CHAR cFillCharacter)
@@ -62,7 +64,7 @@ SGUI_SIZE SGUI_Common_IntegerToStringWithDecimalPoint(SGUI_INT iInteger, SGUI_UI
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	SGUI_CHAR					szNumberString[GUI_NUMBER_STR_LENGTH_MAX] = {0x00};
+	SGUI_CHAR					szNumberString[SGUI_NUMBER_STR_LENGTH_MAX] = {0x00};
 	SGUI_UINT					uiSourceNumber;
 	SGUI_UINT					uiSignBit;
 	SGUI_SIZE					uiNumberStringLength;
@@ -207,18 +209,17 @@ SGUI_SIZE SGUI_Common_IntegerToStringWithDecimalPoint(SGUI_INT iInteger, SGUI_UI
 }
 
 /*************************************************************************/
-/** Function Name:	GUI_Common_ConvertIntegerToString					**/
-/** Purpose:		Convert number to a string and insert decimal point.**/
-/** Resources:		None.												**/
+/** Function Name:	SGUI_Common_IntegerToString							**/
+/** Purpose:		Convert number to a string.							**/
 /** Params:																**/
-/**	@iInteger:			Source number.									**/
-/**	@pszStringBuffer:	Bit map data buffer.							**/
-/**	@uiBase:			Conversion base.								**/
-/**	@iAlignment:		Alignment of number string, positive numbers 	**/
+/**	@iInteger[in]:		Source number.									**/
+/**	@pszStringBuffer[out]: Bit map data buffer.							**/
+/**	@uiBase[in]:		Conversion base.								**/
+/**	@iAlignment[in]:	Alignment of number string, positive numbers 	**/
 /**						means right aligned and negative means left 	**/
 /**						alignment.										**/
-/**	@cFillCharacter:	Used when convert string length is less then	**/
-/**						alignment length.								**/
+/**	@cFillCharacter[in]:When string length less then align width, use 	**/
+/**						this character fill the space.					**/
 /** Return:			Converted string length.							**/
 /** Notice:			None.												**/
 /*************************************************************************/
@@ -227,7 +228,7 @@ SGUI_SIZE SGUI_Common_IntegerToString(SGUI_INT iInteger, SGUI_PSZSTR pszStringBu
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	SGUI_CHAR					szNumberString[GUI_NUMBER_STR_LENGTH_MAX] = {0x00};
+	SGUI_CHAR					szNumberString[SGUI_NUMBER_STR_LENGTH_MAX] = {0x00};
 	SGUI_UINT					uiSourceNumber;
 	SGUI_UINT					uiSignBit;
 	SGUI_SIZE					uiNumberStringLength;
@@ -238,7 +239,7 @@ SGUI_SIZE SGUI_Common_IntegerToString(SGUI_INT iInteger, SGUI_PSZSTR pszStringBu
     /*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	pcSrcPtr = szNumberString + GUI_NUMBER_STR_LENGTH_MAX - 1;
+	pcSrcPtr = szNumberString + SGUI_NUMBER_STR_LENGTH_MAX - 1;
 	pcDestPtr = szNumberString;
 	*pcSrcPtr = '\0';
 	pcSrcPtr--;
@@ -369,17 +370,16 @@ SGUI_SIZE SGUI_Common_IntegerToString(SGUI_INT iInteger, SGUI_PSZSTR pszStringBu
 }
 
 /*************************************************************************/
-/** Function Name:	GUI_ConvertStringToUnsignedInteger					**/
-/** Purpose:		Convert a string to number.							**/
-/** Resources:		None.												**/
+/** Function Name:	SGUI_Common_ConvertStringToUnsignedInteger			**/
+/** Purpose:		Convert a string to a unsigned integer.				**/
 /** Params:																**/
-/**	@szString:			Source number.									**/
-/**	@pcEndPointer:		Convert end pointer output in string.			**/
-/**	@uiBase:			Conversion base.								**/
+/**	@szString[in]:		Source number.									**/
+/**	@ppcEndPointer[out]: Convert end pointer output in string.			**/
+/**	@uiBase[in]:		Conversion base.								**/
 /** Return:			Converted number.									**/
 /** Notice:			None.												**/
 /*************************************************************************/
-SGUI_UINT32 SGUI_Common_ConvertStringToUnsignedInteger(SGUI_PSZSTR szString, SGUI_PSZSTR* pcEndPointer, SGUI_UINT uiBase)
+SGUI_UINT32 SGUI_Common_ConvertStringToUnsignedInteger(SGUI_PSZSTR szString, SGUI_CHAR** ppcEndPointer, SGUI_UINT uiBase)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -411,16 +411,16 @@ SGUI_UINT32 SGUI_Common_ConvertStringToUnsignedInteger(SGUI_PSZSTR szString, SGU
 			{
 				pcCurPtr += 2;
 			}
-			while(('\0' != (*pcCurPtr)) && (true == GUI_ISHEXDIGIT(*pcCurPtr)))
+			while(('\0' != (*pcCurPtr)) && (true == SGUI_ISHEXDIGIT(*pcCurPtr)))
 			{
-				uiBitValue = GUI_ISDIGIT(*pcCurPtr)?((*pcCurPtr)-'0'):(10+GUI_TOUPPER(*pcCurPtr)-'A');
+				uiBitValue = SGUI_ISDIGIT(*pcCurPtr)?((*pcCurPtr)-'0'):(10+SGUI_TOUPPER(*pcCurPtr)-'A');
 				uiResult = uiResult*uiBase + uiBitValue;
 				pcCurPtr++;
 			}
 		}
 		else if((uiBase == 8) || (uiBase == 10))
 		{
-			while(('\0' != (*pcCurPtr)) && (true == GUI_ISDIGIT(*pcCurPtr)))
+			while(('\0' != (*pcCurPtr)) && (true == SGUI_ISDIGIT(*pcCurPtr)))
 			{
 				uiBitValue =(*pcCurPtr)-'0';
 				uiResult = uiResult*uiBase + uiBitValue;
@@ -428,25 +428,24 @@ SGUI_UINT32 SGUI_Common_ConvertStringToUnsignedInteger(SGUI_PSZSTR szString, SGU
 			}
 		}
 	}
-	if(NULL != pcEndPointer)
+	if(NULL != ppcEndPointer)
 	{
-		*pcEndPointer = pcCurPtr;
+		*ppcEndPointer = pcCurPtr;
 	}
     return uiResult;
 }
 
 /*************************************************************************/
-/** Function Name:	GUI_ConvertStringToInteger							**/
-/** Purpose:		Convert a string to number with sign.				**/
-/** Resources:		None.												**/
+/** Function Name:	SGUI_Common_ConvertStringToInteger					**/
+/** Purpose:		Convert a string to a signed integer.				**/
 /** Params:																**/
-/**	@szString:			Source number.									**/
-/**	@pcEndPointer:		Convert end pointer output in string.			**/
-/**	@uiBase:			Conversion base.								**/
+/**	@szString[in]:		Source number.									**/
+/**	@ppcEndPointer[in]:	Convert end pointer output in string.			**/
+/**	@uiBase[in]:		Conversion base.								**/
 /** Return:			Converted number.									**/
 /** Notice:			None.												**/
 /*************************************************************************/
-SGUI_INT32 SGUI_Common_ConvertStringToInteger(SGUI_PSZSTR szString, SGUI_PSZSTR* pcEndPointer, SGUI_UINT uiBase)
+SGUI_INT32 SGUI_Common_ConvertStringToInteger(SGUI_PSZSTR szString, SGUI_CHAR** ppcEndPointer, SGUI_UINT uiBase)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -486,7 +485,7 @@ SGUI_INT32 SGUI_Common_ConvertStringToInteger(SGUI_PSZSTR szString, SGUI_PSZSTR*
 			}
 		}
 		// Convert string without sign.
-		iResult = SGUI_Common_ConvertStringToUnsignedInteger(pcCurPtr, pcEndPointer, uiBase);
+		iResult = SGUI_Common_ConvertStringToUnsignedInteger(pcCurPtr, ppcEndPointer, uiBase);
 		if((iResult > 0) && (-1 == iSign))
 		{
 			iResult = -iResult;
@@ -501,9 +500,9 @@ SGUI_INT32 SGUI_Common_ConvertStringToInteger(SGUI_PSZSTR szString, SGUI_PSZSTR*
 /** Purpose:		Convert string encode.								**/
 /** Resources:		None.												**/
 /** Params:																**/
-/**	@[in]encFrom:		Source encoder name.							**/
-/**	@[in]encTo:			Destination encoder name.						**/
-/**	@[in]szSource:		String will converted.							**/
+/**	@szSourceEncode[in]: Source encoder name.							**/
+/**	@szDestinationEncode[in]: Destination encoder name.						**/
+/**	@szSource[in]:		String will converted.							**/
 /** Return:			String after convert.								**/
 /*************************************************************************/
 SGUI_PSZSTR SGUI_Common_EncodeConvert(SGUI_PCSZSTR szSourceEncode, SGUI_PSZSTR szDestinationEncode, SGUI_PSZSTR szSource)
@@ -550,7 +549,7 @@ SGUI_PSZSTR SGUI_Common_EncodeConvert(SGUI_PCSZSTR szSourceEncode, SGUI_PSZSTR s
 /** Purpose:		Allocate a memory block.							**/
 /** Resources:		None.												**/
 /** Params:																**/
-/**	@[in]uiSize:		Allocated memory size.							**/
+/**	@uiSize[in]:		Allocated memory size.							**/
 /** Return:			Allocated memory block started address, same as STD	**/
 /**					malloc interface.									**/
 /*************************************************************************/
@@ -582,7 +581,7 @@ void* SGUI_Common_Allocate(SGUI_SIZE uiSize)
 /** Purpose:		Free a memory block.								**/
 /** Resources:		None.												**/
 /** Params:																**/
-/**	@[in]pFreePointer:	Free memory pointer 							**/
+/**	@pFreePointer[in]:	Free memory pointer 							**/
 /** Return:			None.												**/
 /*************************************************************************/
 void SGUI_Common_Free(void* pFreePointer)
@@ -607,12 +606,12 @@ void SGUI_Common_Free(void* pFreePointer)
 /** Purpose:		Copy memory block to a new address.					**/
 /** Resources:		None.												**/
 /** Params:																**/
-/**	@[in]pDest:			Memory address will copied to.					**/
-/**	@[in]pSrc:			Memory data source.								**/
-/**	@[in]size:			Copied data size(in byte).						**/
+/**	@pDest[in]:			Memory address will copied to.					**/
+/**	@pSrc[in]:			Memory data source.								**/
+/**	@uiSize[in]:			Copied data size(in byte).						**/
 /** Return:			Destination memory block pointer.					**/
 /*************************************************************************/
-void* SGUI_Common_MemoryCopy(void* pDest, const void* pSrc, SGUI_SIZE size)
+void* SGUI_Common_MemoryCopy(void* pDest, const void* pSrc, SGUI_UINT uiSize)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -629,7 +628,7 @@ void* SGUI_Common_MemoryCopy(void* pDest, const void* pSrc, SGUI_SIZE size)
 	if((NULL != pDest) && (NULL != pSrc))
 	{
 #if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
-	pCopiedMemory = memcpy(pDest, pSrc, size);
+	pCopiedMemory = memcpy(pDest, pSrc, uiSize);
 #else
 	// Add RTC time process here;
 #endif
@@ -639,11 +638,45 @@ void* SGUI_Common_MemoryCopy(void* pDest, const void* pSrc, SGUI_SIZE size)
 }
 
 /*************************************************************************/
+/** Function Name:	SGUI_Common_MemorySet								**/
+/** Purpose:		Set memory area data.           					**/
+/** Params:																**/
+/**	@pMemoryPtr[in]:    Memory address will filled. 					**/
+/**	@iSetValue[in]:     Memory data byte value.							**/
+/**	@uiSize[in]:        Memory area size.  				        		**/
+/** Return:			None.                           					**/
+/*************************************************************************/
+void SGUI_Common_MemorySet(void* pMemoryPtr, SGUI_BYTE iSetValue, SGUI_UINT uiSize)
+{
+	/*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ == 0)
+	SGUI_UINT                   uiIdx;
+#endif
+
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	if((NULL != pMemoryPtr) && (0 != uiSize))
+	{
+#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
+        memset(pMemoryPtr, iSetValue, uiSize);
+#else
+        for(uiIdx=0; uiIdx<uiSize; uiIdx++)
+        {
+            *(pMemoryPtr+uiIdx) = iSetValue;
+        }
+#endif
+	}
+}
+
+/*************************************************************************/
 /** Function Name:	SGUI_Common_StringLength							**/
 /** Purpose:		Get string length in bytes.							**/
 /** Resources:		None.												**/
 /** Params:																**/
-/**	@[in]szString:		String head pointer.							**/
+/**	@szString[in]:		String head pointer.							**/
 /** Return:			String length in bytes.								**/
 /*************************************************************************/
 SGUI_SIZE SGUI_Common_StringLength(SGUI_PCSZSTR szString)
@@ -677,8 +710,8 @@ SGUI_SIZE SGUI_Common_StringLength(SGUI_PCSZSTR szString)
 /** Purpose:		Copy string.										**/
 /** Resources:		None.												**/
 /** Params:																**/
-/**	@[in]szDest:		Source string.									**/
-/**	@[in]szSrc:			Destination string	.							**/
+/**	@szDest[in]:		Source string.									**/
+/**	@szSrc[in]:			Destination string	.							**/
 /** Return:			Destination string pointer.							**/
 /*************************************************************************/
 SGUI_PSZSTR SGUI_Common_StringCopy(SGUI_PSZSTR szDest, SGUI_PCSZSTR szSrc)
@@ -713,9 +746,9 @@ SGUI_PSZSTR SGUI_Common_StringCopy(SGUI_PSZSTR szDest, SGUI_PCSZSTR szSrc)
 /** Purpose:		Copy string.										**/
 /** Resources:		None.												**/
 /** Params:																**/
-/**	@[in]szDest:		Source string.									**/
-/**	@[in]szSrc:			Destination string.								**/
-/**	@[in]uiSize:		String length will be copied.					**/
+/**	@szDest[in]:		Source string.									**/
+/**	@szSrc[in]:			Destination string.								**/
+/**	@uiSize[in]:		String length will be copied.					**/
 /** Return:			Destination string pointer.							**/
 /*************************************************************************/
 SGUI_PSZSTR SGUI_Common_StringLengthCopy(SGUI_PSZSTR szDest, SGUI_PCSZSTR szSrc, SGUI_SIZE uiSize)
@@ -750,7 +783,7 @@ SGUI_PSZSTR SGUI_Common_StringLengthCopy(SGUI_PSZSTR szDest, SGUI_PCSZSTR szSrc,
 /** Purpose:		Get system now time.								**/
 /** Resources:		System RTC interface.								**/
 /** Params:																**/
-/**	@pstTime:			RTC time data structure pointer.				**/
+/**	@pstTime[out]:		RTC time data structure pointer.				**/
 /** Return:			None.												**/
 /** Notice:			user need to override this function according to 	**/
 /**					the platform used.									**/
@@ -821,3 +854,20 @@ void SGUI_Common_ReadFlashROM(SGUI_ROM_ADDRESS uiAddressHead, SGUI_SIZE uiDataLe
 	/* Add flash ROM IO process here. */
 }
 
+/*************************************************************************/
+/** Function Name:	SGUI_Common_Delay									**/
+/** Purpose:		Delay some milliseconds.							**/
+/** Resources:		System delay function.								**/
+/** Params:																**/
+/**	@uiTimeMs[in]:		Delay times in milliseconds.					**/
+/** Return:			None.												**/
+/** Notice:			None.												**/
+/*************************************************************************/
+void SGUI_Common_Delay(SGUI_UINT32 uiTimeMs)
+{
+#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
+	Sleep(uiTimeMs);
+#else
+	// Add system platform delay function call here .
+#endif
+}

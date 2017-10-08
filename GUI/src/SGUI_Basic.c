@@ -1,9 +1,9 @@
 /*************************************************************************/
 /** Copyright.															**/
-/** FileName: GUI_Font.c												**/
+/** FileName: SGUI_Basic.c												**/
 /** Author: XuYulin														**/
 /** Version: 1.0.0.0													**/
-/** Description: GUI basic drawing operating.							**/
+/** Description: Simple GUI basic drawing operating interface.					**/
 /*************************************************************************/
 
 //=======================================================================//
@@ -143,27 +143,27 @@ SGUI_CBYTE SGUI_BASIC_FONT_H8[] = {
 //= Function implementation.										    =//
 //=======================================================================//
 /*************************************************************************/
-/** Function Name:	GUI_DrawPoint										**/
+/** Function Name:	SGUI_Basic_DrawPoint								**/
 /** Purpose:		Set a pixel color or draw a point.					**/
-/** Resources:		None.												**/
 /** Params:																**/
-/**	@uiPosX:			X location of point by pixels.					**/
-/**	@uiPosY:			Y location of point by pixels.					**/
-/**	@uiColor:			Point color, GUI_COLOR_BKGCLR means clear pix, 	**/
+/**	@uiCoordinateX[in]:	X coordinate of point by pixels.				**/
+/**	@uiCoordinateY[in]:	Y coordinate of point by pixels.				**/
+/**	@eColor[in]:		Point color, GUI_COLOR_BKGCLR means clear pix, 	**/
 /**						GUI_COLOR_FRGCLR means set pix.					**/
 /** Return:			None.												**/
+/** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_Basic_DrawPoint(SGUI_UINT uiPosX, SGUI_UINT uiPosY, SGUI_COLOR eColor)
+void SGUI_Basic_DrawPoint(SGUI_UINT uiCoordinateX, SGUI_UINT uiCoordinateY, SGUI_COLOR eColor)
 {
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if((uiPosX < LCD_SIZE_WIDTH) && (uiPosY < LCD_SIZE_HEIGHT))
+	if((uiCoordinateX < LCD_SIZE_WIDTH) && (uiCoordinateY < LCD_SIZE_HEIGHT))
 	{
 		if(GUI_COLOR_FRGCLR == eColor)
 		{
 #if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
-			VTIF_SetPoint(uiPosX, uiPosY, 1);
+			VTIF_SetPoint(uiCoordinateX, uiCoordinateY, 1);
 #else
 			// Call draw pix interface here.
 #endif //_SIMPLE_GUI_ENABLE_SIMULATOR_
@@ -171,7 +171,7 @@ void SGUI_Basic_DrawPoint(SGUI_UINT uiPosX, SGUI_UINT uiPosY, SGUI_COLOR eColor)
 		else if(GUI_COLOR_BKGCLR == eColor)
 		{
 #if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
-			VTIF_SetPoint(uiPosX, uiPosY, 0);
+			VTIF_SetPoint(uiCoordinateX, uiCoordinateY, 0);
 #else
 			// Call draw pix interface here.
 #endif //_SIMPLE_GUI_ENABLE_SIMULATOR_
@@ -180,15 +180,15 @@ void SGUI_Basic_DrawPoint(SGUI_UINT uiPosX, SGUI_UINT uiPosY, SGUI_COLOR eColor)
 }
 
 /*************************************************************************/
-/** Function Name:	GUI_Basic_GetPoint									**/
+/** Function Name:	SGUI_Basic_GetPoint									**/
 /** Purpose:		Get a pixel color .									**/
-/** Resources:		None.												**/
 /** Params:																**/
-/**	@uiPosX:			X location of point by pixels.					**/
-/**	@uiPosY:			Y location of point by pixels.					**/
-/** Return:			None.												**/
+/**	@uiCoordinateX[in]:	X coordinate of point by pixels.				**/
+/**	@uiCoordinateY[in]:	Y coordinate of point by pixels.				**/
+/** Return:			SGUI_COLOR type enumerated for point color.			**/
+/** Notice:			None.												**/
 /*************************************************************************/
-SGUI_COLOR GUI_Basic_GetPoint(SGUI_UINT uiPosX, SGUI_UINT uiPosY)
+SGUI_COLOR SGUI_Basic_GetPoint(SGUI_UINT uiCoordinateX, SGUI_UINT uiCoordinateY)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -205,10 +205,10 @@ SGUI_COLOR GUI_Basic_GetPoint(SGUI_UINT uiPosX, SGUI_UINT uiPosY)
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if((uiPosX < LCD_SIZE_WIDTH) && (uiPosY < LCD_SIZE_HEIGHT))
+	if((uiCoordinateX < LCD_SIZE_WIDTH) && (uiCoordinateY < LCD_SIZE_HEIGHT))
 	{
 #if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
-		uiPixValue = VTIF_GetPoint(uiPosX, uiPosY);
+		uiPixValue = VTIF_GetPoint(uiCoordinateX, uiCoordinateY);
 #else
 		// Call read pix interface here.
 #endif //_SIMPLE_GUI_ENABLE_SIMULATOR_
@@ -228,9 +228,9 @@ SGUI_COLOR GUI_Basic_GetPoint(SGUI_UINT uiPosX, SGUI_UINT uiPosY)
 /*************************************************************************/
 /** Function Name:	SGUI_Basic_ClearScreen								**/
 /** Purpose:		Clean LCD screen display.							**/
-/** Resources:		None.												**/
 /** Params:			None.												**/
 /** Return:			None.												**/
+/** Notice:			None.												**/
 /*************************************************************************/
 void SGUI_Basic_ClearScreen(void)
 {
@@ -245,18 +245,18 @@ void SGUI_Basic_ClearScreen(void)
 }
 
 /*************************************************************************/
-/** Function Name:	GUI_DrawLine										**/
+/** Function Name:	SGUI_Basic_DrawLine									**/
 /** Purpose:		Draw a line by the Bresenham algorithm.				**/
-/** Resources:		None.												**/
 /** Params:																**/
-/**	@uiStartX:			X coordinate of start point of line.			**/
-/**	@uiStartY:			Y coordinate of start point of line.			**/
-/**	@uiEndX:			X coordinate of end point of line.				**/
-/**	@uiEndY:			Y coordinate of end point of line.				**/
-/**	@ui_Color:			Line color.										**/
+/**	@uiStartX[in]:		X coordinate of start point of line.			**/
+/**	@uiStartY[in]:		Y coordinate of start point of line.			**/
+/**	@uiEndX[in]:		X coordinate of end point of line.				**/
+/**	@uiEndY[in]:		Y coordinate of end point of line.				**/
+/**	@eColor[in]:		Line color.										**/
 /** Return:			None.												**/
+/** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_Basic_DrawLine(SGUI_UINT uiStartX, SGUI_UINT uiStartY, SGUI_UINT uiEndX, SGUI_UINT uiEndY, SGUI_COLOR eColor)
+void SGUI_Basic_DrawLine(SGUI_INT uiStartX, SGUI_INT uiStartY, SGUI_INT uiEndX, SGUI_INT uiEndY, SGUI_COLOR eColor)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -264,8 +264,8 @@ void SGUI_Basic_DrawLine(SGUI_UINT uiStartX, SGUI_UINT uiStartY, SGUI_UINT uiEnd
 	SGUI_INT					iDx, iDy;
 	SGUI_INT					iIncX, iIncY;
 	SGUI_INT					iErrX = 0, iErrY = 0;
-	SGUI_UINT					i, uiDs;
-	SGUI_UINT					uiCurrentPosX, uiCurrentPosY;
+	SGUI_INT					i, uiDs;
+	SGUI_INT					uiCurrentPosX, uiCurrentPosY;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -342,16 +342,15 @@ void SGUI_Basic_DrawLine(SGUI_UINT uiStartX, SGUI_UINT uiStartY, SGUI_UINT uiEnd
 }
 
 /*************************************************************************/
-/** Function Name:	GUI_DrawRectangle									**/
-/** Purpose:		Draw a SGUI_RECT_AREA by upper left coordinate, 	**/
-/**					width and height.									**/
-/** Resources:		None.												**/
+/** Function Name:	SGUI_Basic_DrawRectangle							**/
+/** Purpose:		Draw a rectangle on screen. 						**/
 /** Params:																**/
-/**	@pBitMapData:		Bitmap data array pointer.						**/
-/**	@uiPosColumn:		Column position of display upper left point.	**/
-/**	@uiPosPage:			Page Position of display upper left point.		**/
-/**	@uidColumn:			Size of Bitmap by column.						**/
-/**	@uidPage:			Size of Bitmap by Page.							**/
+/**	@uiStartX[in]:		X coordinate of the upper-left corner.			**/
+/**	@uiStartY[in]:		Y coordinate of the upper-left corner.			**/
+/**	@uiWidth[in]: .		Width of rectangle.								**/
+/**	@uiHeight[in]:		Height of rectangle.							**/
+/**	@eEdgeColor[in]:	Edge color.										**/
+/**	@eFillColor[in]:	Fill color.										**/
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
@@ -400,16 +399,16 @@ void SGUI_Basic_DrawRectangle(SGUI_UINT uiStartX, SGUI_UINT uiStartY, SGUI_UINT 
 }
 
 /*************************************************************************/
-/** Function Name:	GUI_DrawCircle										**/
-/** Purpose:		Draw a circle by circle center positon and radius.	**/
-/** Resources:		None.												**/
+/** Function Name:	SGUI_Basic_DrawCircle								**/
+/** Purpose:		Draw a circle by center coordinate and radius.		**/
 /** Params:																**/
-/**	@uiCx:				Circle center X coordinate.						**/
-/**	@uiCy:				Circle center Y coordinate.						**/
-/**	@uiRadius:			Circle radius.									**/
-/**	@eEdgeColor:		Circle edge color.								**/
-/**	@eFillColor:		Circle fill color.								**/
+/**	@uiCx[in]:			Circle center X coordinate.						**/
+/**	@uiCy[in]:			Circle center Y coordinate.						**/
+/**	@uiRadius[in]:		Circle radius.									**/
+/**	@eEdgeColor[in]:	Edge color.										**/
+/**	@eFillColor[in]:	Fill color.										**/
 /** Return:			None.												**/
+/** Notice:			None.												**/
 /*************************************************************************/
 void SGUI_Basic_DrawCircle(SGUI_UINT uiCx, SGUI_UINT uiCy, SGUI_UINT uiRadius, SGUI_COLOR eEdgeColor, SGUI_COLOR eFillColor)
 {
@@ -480,14 +479,13 @@ void SGUI_Basic_DrawCircle(SGUI_UINT uiCx, SGUI_UINT uiCy, SGUI_UINT uiRadius, S
 }
 
 /*************************************************************************/
-/** Function Name:	GUI_ReverseBlockColor								**/
-/** Purpose:		Reverse color in a SGUI_RECT_AREA area.				**/
-/** Resources:		None.												**/
+/** Function Name:	SGUI_Basic_ReverseBlockColor						**/
+/** Purpose:		Reverse all pixel color in a rectangle area.		**/
 /** Params:																**/
-/**	@uiPosX:			Upper left X coordinate of SGUI_RECT_AREA area.	**/
-/**	@uiPosY:			Upper left Y coordinate of SGUI_RECT_AREA area.	**/
-/**	@uiWidth:			SGUI_RECT_AREA area width.						**/
-/**	@uiHeight:			SGUI_RECT_AREA area Height.						**/
+/**	@uiStartX[in]:		X coordinate of the upper-left corner.			**/
+/**	@uiStartY[in]:		Y coordinate of the upper-left corner.			**/
+/**	@uiWidth[in]: .		Width of rectangle.								**/
+/**	@uiHeight[in]:		Height of rectangle.							**/
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
@@ -505,7 +503,7 @@ void SGUI_Basic_ReverseBlockColor(SGUI_UINT uiStartX, SGUI_UINT uiStartY, SGUI_U
 	{
         for(i_H=0; i_H<uiHeight; i_H++)
 		{
-			if(GUI_Basic_GetPoint(uiStartX+i_W, uiStartY+i_H) == GUI_COLOR_FRGCLR)
+			if(SGUI_Basic_GetPoint(uiStartX+i_W, uiStartY+i_H) == GUI_COLOR_FRGCLR)
 			{
                 SGUI_Basic_DrawPoint(uiStartX+i_W, uiStartY+i_H, GUI_COLOR_BKGCLR);
 			}
@@ -520,12 +518,11 @@ void SGUI_Basic_ReverseBlockColor(SGUI_UINT uiStartX, SGUI_UINT uiStartY, SGUI_U
 /*************************************************************************/
 /** Function Name:	SGUI_Basic_DrawBitMap								**/
 /** Purpose:		Draw a rectangular area bit map on LCD screen.		**/
-/** Resources:		Bit map data.										**/
 /** Params:																**/
-/**	@pstDisplayArea:	Display area position and size.					**/
-/**	@pstDataArea:		Data area size and display offset.				**/
-/**	@pDataBuffer:		Bit map data buffer.							**/
-/**	@eDrawMode			Bit map display mode(normal or reverse color).	**/
+/**	@pstDisplayArea[in]:Display area position and size.					**/
+/**	@pstDataArea[in]:	Data area size and display offset.				**/
+/**	@pDataBuffer[in]:	Bit map data buffer.							**/
+/**	@eDrawMode[in]		Bit map display mode(normal or reverse color).	**/
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/

@@ -1,9 +1,9 @@
 /*************************************************************************/
 /** Copyright.															**/
-/** FileName: SGUI_GRAPH.c												**/
+/** FileName: SGUI_Graph.c												**/
 /** Author: Polarix														**/
 /** Version: 1.0.0.0													**/
-/** Description: Graph adjustment interface.							**/
+/** Description: Graph adjustment UI interface.							**/
 /*************************************************************************/
 
 //=======================================================================//

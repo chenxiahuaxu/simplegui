@@ -9,9 +9,9 @@
 //=======================================================================//
 //= Include files.													    =//
 //=======================================================================//
-#include "HMI_Demo02_List.h"
+#include "DemoProc.h"
 #include "SGUI_List.h"
-#include "HMI_Process.h"
+#include "HMI_Engine.h"
 #include <stdio.h>
 
 //=======================================================================//
@@ -22,16 +22,17 @@
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
-static int32_t			HMI_DemoList_Initialize(void);
-static int32_t			HMI_DemoList_PreProcess(const void* pstParameters);
-static int32_t			HMI_DemoList_RefreshScreen(void);
-static int32_t			HMI_DemoList_InternalEvent(uint32_t uiScreenID, const void* pstParameters);
-static int32_t			HMI_DemoList_ExternalEvent(uint32_t uiScreenID, const void* pstParameters);
-static int32_t			HMI_DemoList_PostProcess(int32_t iActionResult);
+static SGUI_INT			HMI_DemoList_Initialize(void);
+static SGUI_INT			HMI_DemoList_PreProcess(const void* pstParameters);
+static SGUI_INT			HMI_DemoList_RefreshScreen(void);
+static SGUI_INT			HMI_DemoList_InternalEvent(SGUI_INT uiScreenID, const void* pstParameters);
+static SGUI_INT			HMI_DemoList_ExternalEvent(SGUI_INT uiScreenID, const void* pstParameters);
+static SGUI_INT			HMI_DemoList_PostProcess(SGUI_INT iActionResult);
 
 //=======================================================================//
 //= Static variable declaration.									    =//
 //=======================================================================//
+static SGUI_PCSZSTR     szListTitle =           "测试列表";
 static SGUI_PCSZSTR		arrszNoticeType[] =		{	"文字消息", "系统时间"};
 static SGUI_LIST_ITEM	arrstTestListItems[] =	{	{0, "简单列表项",			LIST_ITEM_NORMAL,		{0}, 					{0, 0, 0}, NULL},
 													{1, "枚举类型列表项",		LIST_ITEM_ENUM,			{0, 0, 1},				{0, 0, 0}, arrszNoticeType},
@@ -52,9 +53,9 @@ static SGUI_LIST_ITEM	arrstAppendListItems[] = {	{8, "添加项1",				LIST_ITEM_
 
 
 #if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0)
-static SGUI_LIST_STRUCT	stTestList =			{	{"测试列表", 8, NULL}};
+static SGUI_LIST_STRUCT	stTestList =			{0x00};
 #else
-static SGUI_LIST_STRUCT	stTestList =			{	{"测试列表", 8, arrstTestListItems}};
+static SGUI_LIST_STRUCT	stTestList =			{0x00};
 #endif
 
 static char				szNoticeTextBuffer[NOTICE_TEXT_BUFFER_SIZE] = {0x00};
@@ -69,23 +70,35 @@ HMI_SCREEN_ACTION		stHMI_DemoListActions = {	HMI_DemoList_Initialize,
 													HMI_DemoList_ExternalEvent,
 													HMI_DemoList_PostProcess
 												};
-HMI_SCREEN				g_stHMI_DemoList =		{	HMI_SCREEN_ID_ANY,
+HMI_SCREEN_OBJECT       g_stHMI_DemoList =		{	HMI_SCREEN_ID_ANY,
 													&stHMI_DemoListActions
 												};
 
 //=======================================================================//
 //= Function implementation.										    =//
 //=======================================================================//
-int32_t	HMI_DemoList_Initialize(void)
+SGUI_INT	HMI_DemoList_Initialize(void)
 {
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
+    // Initialize list data.
+    stTestList.Data.Title = szListTitle;
+#if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0)
+    stTestList.Data.Items = NULL;
+    stTestList.Data.Count = 0;
+#else
+    stTestList.Data.Items = arrstTestListItems;
+    stTestList.Data.Count = sizeof(arrstTestListItems)/sizeof(SGUI_LIST_ITEM);
+#endif
+    stTestList.FontSize = SGUI_FONT_SIZE_H16;
+
+    // Initialize logical.
 	SGUI_LIST_InitializeListData(&stTestList);
-	return HMI_RESULT_NORMAL;
+	return HMI_RET_NORMAL;
 }
 
-int32_t	HMI_DemoList_PreProcess(const void* pstParameters)
+SGUI_INT	HMI_DemoList_PreProcess(const void* pstParameters)
 {
 #if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0)
 	/*----------------------------------*/
@@ -102,32 +115,32 @@ int32_t	HMI_DemoList_PreProcess(const void* pstParameters)
 	}
 	SGUI_LIST_RefreshList(&stTestList);
 #endif
-	return HMI_RESULT_NORMAL;
+	return HMI_RET_NORMAL;
 }
 
-int32_t HMI_DemoList_RefreshScreen(void)
+SGUI_INT HMI_DemoList_RefreshScreen(void)
 {
 	SGUI_LIST_RefreshList(&stTestList);
-	return HMI_RESULT_NORMAL;
+	return HMI_RET_NORMAL;
 }
 
-int32_t	HMI_DemoList_InternalEvent(uint32_t uiScreenID, const void* pstParameters)
+SGUI_INT HMI_DemoList_InternalEvent(SGUI_INT uiScreenID, const void* pstParameters)
 {
-	return HMI_RESULT_NORMAL;
+	return HMI_RET_NORMAL;
 }
 
-int32_t	HMI_DemoList_ExternalEvent(uint32_t uiScreenID, const void* pstParameters)
+SGUI_INT HMI_DemoList_ExternalEvent(SGUI_INT uiScreenID, const void* pstParameters)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	int32_t						iProcessResult;
+	SGUI_INT						iProcessResult;
 	USER_ACT_KEYPRESS*			pstUserEvent;
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	iProcessResult =			HMI_RESULT_NORMAL;
+	iProcessResult =			HMI_RET_NORMAL;
 	pstUserEvent = 				(USER_ACT_KEYPRESS*)pstParameters;
 
 	/*----------------------------------*/
@@ -141,12 +154,12 @@ int32_t	HMI_DemoList_ExternalEvent(uint32_t uiScreenID, const void* pstParameter
 		}
 		case KEY_VALUE_ENTER:
 		{
-			iProcessResult = HMI_RESULT_CONFIRM;
+			iProcessResult = HMI_RET_CONFIRM;
 			break;
 		}
 		case KEY_VALUE_ESC:
 		{
-			iProcessResult = HMI_RESULT_CANCEL;
+			iProcessResult = HMI_RET_CANCEL;
 			break;
 		}
 		case KEY_VALUE_UP:
@@ -217,13 +230,13 @@ int32_t	HMI_DemoList_ExternalEvent(uint32_t uiScreenID, const void* pstParameter
 	return iProcessResult;
 }
 
-int32_t HMI_DemoList_PostProcess(int32_t iActionResult)
+SGUI_INT HMI_DemoList_PostProcess(int32_t iActionResult)
 {
 	uint32_t			uiSelectListIndex;
 	SGUI_LIST_ITEM*		pstSelectedItem;
 	int32_t				iListItemParameterValue;
 
-	if(HMI_RESULT_CONFIRM == iActionResult)
+	if(HMI_RET_CONFIRM == iActionResult)
 	{
 		uiSelectListIndex = stTestList.ControlVariable.SelectIndex;
 		switch(SGUI_LIST_GetListItemPtr(&stTestList, uiSelectListIndex)->Sign)
@@ -262,11 +275,11 @@ int32_t HMI_DemoList_PostProcess(int32_t iActionResult)
 			}
 		}
 	}
-	else if(HMI_RESULT_CANCEL == iActionResult)
+	else if(HMI_RET_CANCEL == iActionResult)
 	{
 		HMI_Action_GoBack();
 	}
-	return 0;
+	return HMI_RET_NORMAL;
 }
 
 

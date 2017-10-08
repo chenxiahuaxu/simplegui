@@ -43,7 +43,7 @@ extern SGUI_CBYTE		SGUI_BASIC_FONT_H6[];
 //=======================================================================//
 void					SGUI_Basic_ClearScreen(void);
 void					SGUI_Basic_DrawPoint(SGUI_UINT uiPosX, SGUI_UINT uiPosY, SGUI_COLOR eColor);
-void					SGUI_Basic_DrawLine(SGUI_UINT uiStartX, SGUI_UINT uiStartY, SGUI_UINT uiEndX, SGUI_UINT uiEndY, SGUI_COLOR eColor);
+void					SGUI_Basic_DrawLine(SGUI_INT uiStartX, SGUI_INT uiStartY, SGUI_INT uiEndX, SGUI_INT uiEndY, SGUI_COLOR eColor);
 void					SGUI_Basic_DrawRectangle(SGUI_UINT uiStartX, SGUI_UINT uiStartY, SGUI_UINT uiWidth, SGUI_UINT uiHeight, SGUI_COLOR eEdgeColor, SGUI_COLOR eFillColor);
 void					SGUI_Basic_DrawCircle(SGUI_UINT uiCx, SGUI_UINT uiCy, SGUI_UINT uiRadius, SGUI_COLOR eEdgeColor, SGUI_COLOR eFillColor);
 void					SGUI_Basic_ReverseBlockColor(SGUI_UINT uiStartX, SGUI_UINT uiStartY, SGUI_UINT uiWidth, SGUI_UINT uiHeight);

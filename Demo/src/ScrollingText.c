@@ -9,10 +9,10 @@
 //=======================================================================//
 //= Include files.													    =//
 //=======================================================================//
-#include "HMI_Demo01_Text.h"
+#include "DemoProc.h"
 #include "SGUI_Text.h"
 #include "SGUI_Frame.h"
-#include "HMI_Process.h"
+#include "HMI_Engine.h"
 #include <stdio.h>
 
 //=======================================================================//
@@ -44,43 +44,42 @@ static char					szDemoText[] =
 SGUI_BOX_FRAME_STRUCT		stTextFrame = 		{	{HMI_TEXT_DEMO_FRAME_EDGE_LAYERS, SGUI_FONT_SIZE_H12},
 													{NULL}};
 static int32_t				iTextOffset;
-static int32_t				iTextHeight;
+static SGUI_INT				iTextHeight;
 static SGUI_RECT_AREA		stTextDisplayArea;
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
-static int32_t				HMI_DemoText_Initialize(void);
-static int32_t				HMI_DemoText_PreProcess(const void* pstParameters);
-static int32_t				HMI_DemoText_RefreshScreen(void);
-static int32_t				HMI_DemoText_OnExternalEvent(uint32_t uiScreenID, const void* pstParameters);
-static int32_t				HMI_DemoText_OnInternalEvent(uint32_t uiScreenID, const void* pstParameters);
-static int32_t				HMI_DemoText_PostProcess(int32_t iActionResult);
+static HMI_ENGINE_RESULT    HMI_DemoScrollingText_Initialize(void);
+static HMI_ENGINE_RESULT    HMI_DemoScrollingText_Prepare(const void* pstParameters);
+static HMI_ENGINE_RESULT    HMI_DemoScrollingText_RefreshScreen(const void* pstParameters);
+static HMI_ENGINE_RESULT    HMI_DemoScrollingText_ProcessEvent(HMI_EVENT_TYPE eEvent, const void* pstParameters);
+static HMI_ENGINE_RESULT    HMI_DemoScrollingText_PostProcess(SGUI_INT iActionResult);
 
 //=======================================================================//
 //= Global variable declaration.									    =//
 //=======================================================================//
-HMI_SCREEN_ACTION		stHMI_DemoTextActions =			{	HMI_DemoText_Initialize,
-															HMI_DemoText_PreProcess,
-															HMI_DemoText_RefreshScreen,
-															HMI_DemoText_OnInternalEvent,
-															HMI_DemoText_OnExternalEvent,
-															HMI_DemoText_PostProcess,
+HMI_SCREEN_ACTION		stHMI_DemoTextActions =			{	HMI_DemoScrollingText_Initialize,
+															HMI_DemoScrollingText_Prepare,
+															HMI_DemoScrollingText_RefreshScreen,
+															HMI_DemoScrollingText_ProcessEvent,
+															HMI_DemoScrollingText_PostProcess,
 														};
-HMI_SCREEN				g_stHMI_DemoText =				{	HMI_SCREEN_ID_ANY,
+
+HMI_SCREEN_OBJECT       g_stHMI_DemoText =				{	HMI_SCREEN_ID_ANY,
 															&stHMI_DemoTextActions
 														};
 //=======================================================================//
 //= Function implementation.										    =//
 //=======================================================================//
 /*****************************************************************************/
-/** Function Name:	HMI_DemoText_Initialize									**/
+/** Function Name:	HMI_DemoScrollingText_Initialize                        **/
 /** Purpose:		Initialize screen data.									**/
 /** Resources:		Current screen display or control data.					**/
 /** Parameters:		None.													**/
 /** Return:			Initialize process result.								**/
 /** Limitation:		None.													**/
 /*****************************************************************************/
-int32_t	HMI_DemoText_Initialize(void)
+HMI_ENGINE_RESULT HMI_DemoScrollingText_Initialize(void)
 {
 	iTextOffset = HMI_TEXT_DEMO_FRAME_TEXT_HEIGHT;
 	iTextHeight = SGUI_Text_GetMultiLineTextLines(szDemoText, (HMI_TEXT_DEMO_FRAME_TEXT_WIDTH/g_stFontSize[SGUI_FONT_SIZE_H12].Width))*g_stFontSize[SGUI_FONT_SIZE_H12].Height;
@@ -88,21 +87,21 @@ int32_t	HMI_DemoText_Initialize(void)
 	stTextDisplayArea.PosY = HMI_TEXT_DEMO_FRAME_TEXT_POSY;
 	stTextDisplayArea.Width = HMI_TEXT_DEMO_FRAME_TEXT_WIDTH;
 	stTextDisplayArea.Height = HMI_TEXT_DEMO_FRAME_TEXT_HEIGHT;
-	return HMI_RESULT_NORMAL;
+	return HMI_RET_NORMAL;
 }
 
 /*****************************************************************************/
-/** Function Name:	HMI_DemoText_PreProcess									**/
+/** Function Name:	HMI_DemoScrollingText_Prepare                           **/
 /** Purpose:		Preprocess after initialize.							**/
 /** Resources:		None.													**/
 /** Parameters:		None.													**/
 /** Return:			Preprocess result.										**/
 /** Limitation:		None.													**/
 /*****************************************************************************/
-int32_t HMI_DemoText_PreProcess(const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoScrollingText_Prepare(const void* pstParameters)
 {
 	SGUI_Frame_DrawFullScreenFrame(&stTextFrame);
-	return HMI_RESULT_NORMAL;
+	return HMI_RET_NORMAL;
 }
 
 /*****************************************************************************/
@@ -113,11 +112,11 @@ int32_t HMI_DemoText_PreProcess(const void* pstParameters)
 /** Return:			Refresh process result.									**/
 /** Limitation:		None.													**/
 /*****************************************************************************/
-int32_t HMI_DemoText_RefreshScreen(void)
+HMI_ENGINE_RESULT HMI_DemoScrollingText_RefreshScreen(const void* pstParameters)
 {
 	SGUI_Frame_DrawFullScreenFrame(&stTextFrame);
 	SGUI_Text_DrawMultipleLinesText(szDemoText, SGUI_FONT_SIZE_H12, &stTextDisplayArea, iTextOffset, GUI_DRAW_NORMAL);
-	return HMI_RESULT_NORMAL;
+	return HMI_RET_NORMAL;
 }
 
 /*****************************************************************************/
@@ -131,87 +130,82 @@ int32_t HMI_DemoText_RefreshScreen(void)
 /** Limitation:		Parameter pointer is a void type, convert to the 		**/
 /**					appropriate type before use.							**/
 /*****************************************************************************/
-int32_t HMI_DemoText_OnExternalEvent(uint32_t uiScreenID, const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoScrollingText_ProcessEvent(HMI_EVENT_TYPE eEvent, const void* pstParameters)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	int32_t						iProcessResult;
-	uint16_t					uiKeyValue;
-	USER_ACT_KEYPRESS*			pstUserEvent;
+	HMI_ENGINE_RESULT           eProcessResult;
+	HMI_INTERRUPT_PARAMETER*    pstEventData;
+	static SGUI_UINT            uiTimer = 3;
+	SGUI_UINT16					uiKeyValue;
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	iProcessResult =			HMI_RESULT_NORMAL;
-	pstUserEvent =				(USER_ACT_KEYPRESS*)pstParameters;
+	eProcessResult =			HMI_RET_NORMAL;
+	pstEventData =				(HMI_INTERRUPT_PARAMETER*)pstParameters;
 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	uiKeyValue = pstUserEvent->KeyValue[0];
-	if(KEY_VALUE_SPACE == uiKeyValue)
+	switch(eEvent)
 	{
-		iProcessResult = HMI_RESULT_CONFIRM;
+        case HMI_ENGINE_EVENT_INTERRUPT:
+        {
+            switch(pstEventData->Source)
+            {
+                case HMI_INT_TIMER:
+                {
+                    if(uiTimer > 0)
+                    {
+                        uiTimer--;
+                    }
+                    else
+                    {
+                        SGUI_Text_DrawMultipleLinesText(szDemoText, SGUI_FONT_SIZE_H12, &stTextDisplayArea, iTextOffset, GUI_DRAW_NORMAL);
+                        if(iTextOffset + iTextHeight == 0)
+                        {
+                            iTextOffset = HMI_TEXT_DEMO_FRAME_TEXT_HEIGHT;
+                        }
+                        else
+                        {
+                            iTextOffset--;
+                        }
+                        uiTimer = 3;
+                    }
+
+                    eProcessResult = HMI_RET_NORMAL;
+                    break;
+                }
+                case HMI_INT_KEY:
+                {
+                    uiKeyValue = *(SGUI_UINT16*)pstEventData->Data;
+                    if(KEY_VALUE_SPACE == uiKeyValue)
+                    {
+                        eProcessResult = HMI_RET_CONFIRM;
+                    }
+                    else
+                    {
+                        eProcessResult = HMI_RET_NOACTION;
+                    }
+                    break;
+                }
+                default:
+                {
+                    eProcessResult = HMI_RET_NOACTION;
+                    break;
+                }
+            }
+            break;
+        }
+        default:
+        {
+            break;
+        }
+
 	}
-	else
-	{
-		iProcessResult = HMI_RESULT_NOACTION;
-	}
-	return iProcessResult;
-}
-
-/*****************************************************************************/
-/** Function Name:	HMI_DemoText_OnInternalEvent							**/
-/** Purpose:		Update data and refresh screen display.					**/
-/** Resources:		List data structure and bind data if existed.			**/
-/** Parameters:																**/
-/** @[in]uiScreenID: 	Matched screen ID.									**/
-/** @[in]pstParameters: User event data pointer.							**/
-/** Return:			Internal event process result.							**/
-/** Limitation:		Parameter pointer is a void type, convert to the 		**/
-/**					appropriate type before use.							**/
-/*****************************************************************************/
-int32_t	HMI_DemoText_OnInternalEvent(uint32_t uiScreenID, const void* pstParameters)
-{
-	/*----------------------------------*/
-	/* Variable Declaration				*/
-	/*----------------------------------*/
-	int32_t						iProcessResult;
-	static uint32_t				uiTimer = 3;
-
-	/*----------------------------------*/
-	/* Process							*/
-	/*----------------------------------*/
-	if(g_stHMI_DemoText.ScreenID == uiScreenID)
-	{
-		if(uiTimer > 0)
-		{
-			uiTimer--;
-		}
-		else
-		{
-			SGUI_Text_DrawMultipleLinesText(szDemoText, SGUI_FONT_SIZE_H12, &stTextDisplayArea, iTextOffset, GUI_DRAW_NORMAL);
-			if(iTextOffset + iTextHeight == 0)
-			{
-				iTextOffset = HMI_TEXT_DEMO_FRAME_TEXT_HEIGHT;
-			}
-			else
-			{
-				iTextOffset--;
-			}
-			uiTimer = 3;
-		}
-
-
-		iProcessResult = HMI_RESULT_NORMAL;
-	}
-	else
-	{
-		iProcessResult = HMI_RESULT_NOACTION;
-	}
-
-	return iProcessResult;
+	return eProcessResult;
 }
 
 /*****************************************************************************/
@@ -223,12 +217,12 @@ int32_t	HMI_DemoText_OnInternalEvent(uint32_t uiScreenID, const void* pstParamet
 /** Return:			Post process result.									**/
 /** Limitation:		None.													**/
 /*****************************************************************************/
-int32_t HMI_DemoText_PostProcess(int32_t iActionResult)
+SGUI_INT HMI_DemoScrollingText_PostProcess(SGUI_INT iActionResult)
 {
-	if(HMI_RESULT_CONFIRM == iActionResult)
+	if(HMI_RET_CONFIRM == iActionResult)
 	{
 		// Go to main list.
-		HMI_Action_Goto(1, NULL);
+		//HMI_Action_Goto(1, NULL);
 	}
-	return HMI_RESULT_NORMAL;
+	return HMI_RET_NORMAL;
 }

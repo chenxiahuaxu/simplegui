@@ -8,17 +8,18 @@
 //=======================================================================//
 //= Include files.													    =//
 //=======================================================================//
-#include "HMI_Demo04_Graph.h"
+#include "DemoProc.h"
+#include "SGUI_Graph.h"
 
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
-static int32_t			HMI_DemoGraph_Initialize(void);
-static int32_t			HMI_DemoGraph_PreProcess(const void* pstParameters);
-static int32_t			HMI_DemoGraph_RefreshScreen(void);
-static int32_t			HMI_DemoGraph_OnInternalEvent(uint32_t uiScreenID, const void* pstParameters);
-static int32_t			HMI_DemoGraph_OnExternalEvent(uint32_t uiScreenID, const void* pstParameters);
-static int32_t			HMI_DemoGraph_PostProcess(int32_t iActionResult);
+static SGUI_INT			HMI_DemoGraph_Initialize(void);
+static SGUI_INT			HMI_DemoGraph_PreProcess(const void* pstParameters);
+static SGUI_INT			HMI_DemoGraph_RefreshScreen(void);
+static SGUI_INT			HMI_DemoGraph_OnInternalEvent(SGUI_INT uiScreenID, const void* pstParameters);
+static SGUI_INT			HMI_DemoGraph_OnExternalEvent(SGUI_INT uiScreenID, const void* pstParameters);
+static SGUI_INT			HMI_DemoGraph_PostProcess(SGUI_INT iActionResult);
 
 //=======================================================================//
 //= Static variable declaration.									    =//
@@ -45,48 +46,48 @@ HMI_SCREEN_ACTION		stHMI_DemoGraphActions =	{	HMI_DemoGraph_Initialize,
 														HMI_DemoGraph_OnExternalEvent,
 														HMI_DemoGraph_PostProcess,
 														};
-HMI_SCREEN				g_stHMI_DemoGraph =			{	HMI_SCREEN_ID_ANY,
-															&stHMI_DemoGraphActions
-														};
+HMI_SCREEN_OBJECT				g_stHMI_DemoGraph =			{	HMI_SCREEN_ID_ANY,
+                                                        &stHMI_DemoGraphActions
+                                                    };
 
 //=======================================================================//
 //= Function implementation.										    =//
 //=======================================================================//
-int32_t HMI_DemoGraph_Initialize(void)
+SGUI_INT HMI_DemoGraph_Initialize(void)
 {
 	SGUI_Graph_InitializeGraphData(&stGraph, &stGraphInitializeData);
-	return HMI_RESULT_NORMAL;
+	return HMI_RET_NORMAL;
 }
 
-int32_t HMI_DemoGraph_PreProcess(const void* pstParameters)
+SGUI_INT HMI_DemoGraph_PreProcess(const void* pstParameters)
 {
 	SGUI_Graph_Refresh(&stGraph);
-	return HMI_RESULT_NORMAL;
+	return HMI_RET_NORMAL;
 }
 
-int32_t HMI_DemoGraph_RefreshScreen(void)
+SGUI_INT HMI_DemoGraph_RefreshScreen(void)
 {
 	SGUI_Graph_Refresh(&stGraph);
-	return HMI_RESULT_NORMAL;
+	return HMI_RET_NORMAL;
 }
 
-int32_t HMI_DemoGraph_OnInternalEvent(uint32_t uiScreenID, const void* pstParameters)
+SGUI_INT HMI_DemoGraph_OnInternalEvent(SGUI_INT uiScreenID, const void* pstParameters)
 {
-	return HMI_RESULT_NOACTION;
+	return HMI_RET_NOACTION;
 }
 
-int32_t HMI_DemoGraph_OnExternalEvent(uint32_t uiScreenID, const void* pstParameters)
+SGUI_INT HMI_DemoGraph_OnExternalEvent(SGUI_INT uiScreenID, const void* pstParameters)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	int32_t						iProcessResult;
+	SGUI_INT					iProcessResult;
 	USER_ACT_KEYPRESS*			pstUserEvent;
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	iProcessResult =			HMI_RESULT_NORMAL;
+	iProcessResult =			HMI_RET_NORMAL;
 	pstUserEvent =				(USER_ACT_KEYPRESS*)pstParameters;
 
 	/*----------------------------------*/
@@ -94,23 +95,23 @@ int32_t HMI_DemoGraph_OnExternalEvent(uint32_t uiScreenID, const void* pstParame
 	/*----------------------------------*/
 	if(KEY_VALUE_ESC == pstUserEvent->KeyValue[0])
 	{
-		iProcessResult = HMI_RESULT_CANCEL;
+		iProcessResult = HMI_RET_CANCEL;
 	}
 	else
 	{
-		iProcessResult = HMI_RESULT_NOACTION;
+		iProcessResult = HMI_RET_NOACTION;
 	}
 	return iProcessResult;
 }
 
-int32_t HMI_DemoGraph_PostProcess(int32_t iActionResult)
+SGUI_INT HMI_DemoGraph_PostProcess(SGUI_INT iActionResult)
 {
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if(HMI_RESULT_CANCEL == iActionResult)
+	if(HMI_RET_CANCEL == iActionResult)
 	{
 		HMI_Action_GoBack();
 	}
-	return HMI_RESULT_NORMAL;
+	return HMI_RET_NORMAL;
 }

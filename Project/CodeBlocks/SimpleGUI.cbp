@@ -59,6 +59,7 @@
 			<Add directory="../../GUI/inc" />
 			<Add directory="../../Library/inc" />
 			<Add directory="../../HMI/inc" />
+			<Add directory="../../Demo/inc" />
 		</Compiler>
 		<ResourceCompiler>
 			<Add directory="$(#wx31)/include" />
@@ -67,6 +68,28 @@
 			<Add option="-mthreads" />
 			<Add library="../../Library/lib/libiconv.a" />
 		</Linker>
+		<Unit filename="../../Demo/inc/DemoProc.h" />
+		<Unit filename="../../Demo/src/DemoProc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../Demo/src/Graph.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../Demo/src/List.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../Demo/src/RTCNotice.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../Demo/src/ScrollingText.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../Demo/src/TextNotice.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../Demo/src/VariableBox.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="../../Frame/inc/LCD_Application.h" />
 		<Unit filename="../../Frame/inc/LCD_OperationIF.h" />
 		<Unit filename="../../Frame/inc/LCD_VirtualDevice.h" />
@@ -125,43 +148,15 @@
 		<Unit filename="../../GUI/src/SGUI_VariableBox.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="../../HMI/inc/HMI_Data.h" />
-		<Unit filename="../../HMI/inc/HMI_Demo01_Text.h" />
-		<Unit filename="../../HMI/inc/HMI_Demo02_List.h" />
-		<Unit filename="../../HMI/inc/HMI_Demo03_Notice1.h" />
-		<Unit filename="../../HMI/inc/HMI_Demo03_Notice2.h" />
-		<Unit filename="../../HMI/inc/HMI_Demo04_Graph.h" />
-		<Unit filename="../../HMI/inc/HMI_Demo05_VariableBox.h" />
-		<Unit filename="../../HMI/inc/HMI_Process.h" />
-		<Unit filename="../../HMI/src/HMI_Data.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="../../HMI/src/HMI_Demo01_Text.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="../../HMI/src/HMI_Demo02_List.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="../../HMI/src/HMI_Demo03_Notice1.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="../../HMI/src/HMI_Demo03_Notice2.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="../../HMI/src/HMI_Demo04_Graph.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="../../HMI/src/HMI_Demo05_VariableBox.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="../../HMI/src/HMI_Procecss.c">
+		<Unit filename="../../HMI/inc/HMI_Engine.h" />
+		<Unit filename="../../HMI/src/HMI_Engine.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../../Resource/Resource.rc">
 			<Option compilerVar="WINDRES" />
 		</Unit>
-		<Unit filename="../../User/inc/UserAction.h" />
-		<Unit filename="../../User/src/UserAction.c">
+		<Unit filename="../../User/inc/VirtualDeviceInterface.h" />
+		<Unit filename="../../User/src/VirtualDeviceInterface.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="HMI_Data.h" />

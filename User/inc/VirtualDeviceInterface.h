@@ -1,5 +1,5 @@
-#ifndef __INCLUDE_USERACTION_H__
-#define __INCLUDE_USERACTION_H__
+#ifndef __INCLUDE_VIRTUAL_DEVICE_INTERFACE_H__
+#define __INCLUDE_VIRTUAL_DEVICE_INTERFACE_H__
 #include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>
@@ -54,4 +54,4 @@ void USR_ACT_OnKeyPress(bool bShift, bool bCtrl, bool bAlt, uint16_t uiKeyCode);
 void USR_ACT_OnTimerEventProcess(void);
 void USR_ACT_OnRTCUpdateEventProcess(uint16_t uiYear, uint16_t uiMonth, uint16_t uiDay, uint16_t uiHour, uint16_t uiMinute, uint16_t uiSecond);
 
-#endif // __INCLUDE_USERACTION_H__
+#endif // __INCLUDE_VIRTUAL_DEVICE_INTERFACE_H__

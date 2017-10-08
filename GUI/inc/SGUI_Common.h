@@ -14,12 +14,12 @@
 //=======================================================================//
 //= User Macro definition.											    =//
 //=======================================================================//
-#define		GUI_NUMBER_STR_LENGTH_MAX		(12)
-#define		GUI_ISDIGIT(C)					(((C>='0')&&(C<='9'))?true:false)
-#define		GUI_ISALPHA(C)					((((C>='A')&&(C<='Z'))||((C>='a')&&(C<='z')))?true:false)
-#define		GUI_ISHEXDIGIT(C)				((((C>='A')&&(C<='F'))||((C>='a')&&(C<='f'))||((C>='0')&&(C<='9')))?true:false)
-#define		GUI_ISUPPER(C)					(((C>='A')&&(C<='Z'))?true:false)
-#define		GUI_TOUPPER(C)					(GUI_ISUPPER(C)?(C):(C-32))
+#define		SGUI_NUMBER_STR_LENGTH_MAX		(12)
+#define		SGUI_ISDIGIT(C)					(((C>='0')&&(C<='9'))?true:false)
+#define		SGUI_ISALPHA(C)					((((C>='A')&&(C<='Z'))||((C>='a')&&(C<='z')))?true:false)
+#define		SGUI_ISHEXDIGIT(C)				((((C>='A')&&(C<='F'))||((C>='a')&&(C<='f'))||((C>='0')&&(C<='9')))?true:false)
+#define		SGUI_ISUPPER(C)					(((C>='A')&&(C<='Z'))?true:false)
+#define		SGUI_TOUPPER(C)					(SGUI_ISUPPER(C)?(C):(C-32))
 
 //=======================================================================//
 //= Public variable declaration.									    =//
@@ -58,7 +58,8 @@ inline void				SGUI_Common_Free(void* pFreePointer);
 #endif
 inline SGUI_PSZSTR		SGUI_Common_StringCopy(SGUI_PSZSTR szDest, SGUI_PCSZSTR szSrc);
 inline SGUI_PSZSTR		SGUI_Common_StringLengthCopy(SGUI_PSZSTR szDest, SGUI_PCSZSTR szSrc, SGUI_SIZE uiSize);
-inline void*			SGUI_Common_MemoryCopy(void* pDest, const void* pSrc, SGUI_SIZE uiSize);
+inline void*			SGUI_Common_MemoryCopy(void* pDest, const void* pSrc, SGUI_UINT uiSize);
+void                    SGUI_Common_MemorySet(void* pMemoryPtr, SGUI_BYTE iSetValue, SGUI_UINT uiSize);
 inline void				SGUI_Common_GetNowTime(SGUI_TIME* pstTime);
 void					SGUI_Common_ReadFlashROM(SGUI_ROM_ADDRESS uiAddressHead, SGUI_SIZE uiDataLength, SGUI_BYTE* pBuffer);
 

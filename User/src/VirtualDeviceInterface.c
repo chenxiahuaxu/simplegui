@@ -12,10 +12,10 @@
 //=======================================================================//
 //= Include files.													    =//
 //=======================================================================//
-#include "UserAction.h"
+#include "VirtualDeviceInterface.h"
 #include "LCD_OperationIF.h"
-#include "HMI_Data.h"
-#include "HMI_Process.h"
+#include "DemoProc.h"
+#include "HMI_Engine.h"
 #include "SGUI_Common.h"
 
 //=======================================================================//
@@ -34,7 +34,7 @@ void USR_ACT_OnInitialize(void)
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	HMI_Action_Initialize();
+	InitializeEngine(&g_stDemoEngine);
 }
 
 /*************************************************************************/
@@ -75,7 +75,7 @@ void USR_ACT_OnKeyPress(bool bShift, bool bCtrl, bool bAlt, uint16_t uiKeyCode)
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	HMI_Action_UserOperatingEventProcess(HMI_SCREEN_ID_ANY, &stUserKeyEvent);
+	HMICore_Action_UserOperatingEventProcess(HMI_SCREEN_ID_ANY, &stUserKeyEvent);
 }
 
 /*************************************************************************/

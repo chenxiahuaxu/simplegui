@@ -1,11 +1,9 @@
 /*************************************************************************/
 /** Copyright.															**/
-/** FileName: GUI_FlashData.c											**/
+/** FileName: SGUI_FlashData.c											**/
 /** Author: Polarix														**/
 /** Version: 1.0.0.0													**/
-/** Description: Internal flash font data.								**/
-/** History:															**/
-/**	Polarix	2017/6/24	1.0.0.0		New create.							**/
+/** Description: Internal font data.									**/
 /*************************************************************************/
 //=======================================================================//
 //= Include files.													    =//

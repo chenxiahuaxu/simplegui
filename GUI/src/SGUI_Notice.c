@@ -1,6 +1,6 @@
 /*************************************************************************/
 /** Copyright.															**/
-/** FileName: GUI_Notice.c												**/
+/** FileName: SGUI_Notice.c												**/
 /** Author: XuYulin														**/
 /** Version: 1.0.0.0													**/
 /** Description: Notice box display interface.							**/
@@ -102,12 +102,12 @@ const uint8_t* g_arrNoticeIcon[] = {
 //= Function implementation.										    =//
 //=======================================================================//
 /*************************************************************************/
-/** Function Name:	GUI_ShowNotice										**/
+/** Function Name:	SGUI_Notice_RefreshNotice							**/
 /** Purpose:		Show a notice box.									**/
-/** Resources:		Icon data.											**/
 /** Params:																**/
-/**	@szNoticeText:		Notice text.									**/
-/**	@eIcon:				Notice icon.									**/
+/**	@szNoticeText[in]:	Notice text.									**/
+/**	@uiTextOffset[in]:	Text top offset.								**/
+/**	@eIcon[in]:			Notice icon index.								**/
 /** Return:			Remaining text height display.						**/
 /** Notice:			None.												**/
 /*************************************************************************/
@@ -178,6 +178,7 @@ SGUI_SIZE SGUI_Notice_RefreshNotice(SGUI_PCSZSTR szNoticeText, SGUI_INT uiTextOf
 	{
 		stTextDisplayArea.Height = NOTICE_TEXT_AREA_HEIGHT_MAX;
 	}
+
     uiTextLines = SGUI_Text_DrawMultipleLinesText(pszNoticeTextPtr, NOTICE_FONT_SIZE, &stTextDisplayArea, uiTextOffset, GUI_DRAW_NORMAL);
 
     return uiTextLines;

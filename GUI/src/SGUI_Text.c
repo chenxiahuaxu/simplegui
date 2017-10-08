@@ -1,6 +1,6 @@
 /*************************************************************************/
 /** Copyright.															**/
-/** FileName: GUI_Font.c												**/
+/** FileName: SGUI_Text.c												**/
 /** Author: XuYulin														**/
 /** Version: 1.0.0.0													**/
 /** Description: Text display interface									**/
@@ -41,17 +41,16 @@ static SGUI_SIZE			SGUI_Text_GetCharacterTableIndex(SGUI_UINT16 uiCharacterCode)
 /*************************************************************************/
 /** Function Name:	SGUI_Text_DrawSingleLineText						**/
 /** Purpose:		Write a single line text in a fixed area.			**/
-/** Resources:		Basic character font module data.					**/
 /** Params:																**/
-/**	@szTextBuffer:		Text array pointer.								**/
-/**	@uiFontSize:		Font size.										**/
-/**	@pstDisplayArea:	Display area size.								**/
-/**	@pstStringDataArea:	Text area size.									**/
-/**	@eFontMode			Character display mode(normal or reverse color).**/
+/**	@szText[in]:		Text array pointer.								**/
+/**	@eFontSize[in]:		Font size.										**/
+/**	@pstDisplayArea[in]: Display area size.								**/
+/**	@pstTextDataArea[in]: Text area size.								**/
+/**	@eFontMode[in]		Character display mode(normal or reverse color).**/
 /** Return:			Next character X coordinate in current line.		**/
 /** Limitation:		None.												**/
 /*************************************************************************/
-void SGUI_Text_DrawSingleLineText(SGUI_PCSZSTR szTextBuffer, SGUI_FONT_SIZE eFontSize, SGUI_RECT_AREA* pstDisplayArea, SGUI_RECT_AREA* pstTextDataArea, SGUI_DRAW_MODE eFontMode)
+void SGUI_Text_DrawSingleLineText(SGUI_PCSZSTR szText, SGUI_FONT_SIZE eFontSize, SGUI_RECT_AREA* pstDisplayArea, SGUI_RECT_AREA* pstTextDataArea, SGUI_DRAW_MODE eFontMode)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -66,7 +65,7 @@ void SGUI_Text_DrawSingleLineText(SGUI_PCSZSTR szTextBuffer, SGUI_FONT_SIZE eFon
 	/* Initialize						*/
 	/*----------------------------------*/
 	// Initialize variable.
-	pcTextPointer =				ENCODE(szTextBuffer);
+	pcTextPointer =				ENCODE(szText);
 	uiCharacterCode =			0x0000;
 	eBackColor =				(eFontMode == GUI_DRAW_NORMAL)?GUI_COLOR_BKGCLR:GUI_COLOR_FRGCLR;
 	// Get font graphics size.
@@ -75,7 +74,7 @@ void SGUI_Text_DrawSingleLineText(SGUI_PCSZSTR szTextBuffer, SGUI_FONT_SIZE eFon
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if((szTextBuffer != NULL) && (RECTANGLE_X_START(*pstDisplayArea) < LCD_SIZE_WIDTH))
+	if((szText != NULL) && (RECTANGLE_X_START(*pstDisplayArea) < LCD_SIZE_WIDTH))
 	{
 		// Recalculate text display area and data area.
         if(RECTANGLE_X_START(*pstDisplayArea) < 0)
@@ -146,16 +145,15 @@ void SGUI_Text_DrawSingleLineText(SGUI_PCSZSTR szTextBuffer, SGUI_FONT_SIZE eFon
 /*****************************************************************************/
 /** Function Name:	GUI_DrawMultipleLinesText								**/
 /** Purpose:		Write a mulitiplt line text in a rectangular area.		**/
-/** Resources:		Character font module data.								**/
 /** Params:																	**/
-/**	@szTextBuffer:		Text array pointer.									**/
-/**	@uiFontSize:		Font size.											**/
-/**	@pstDisplayArea:	Display area size.									**/
-/**	@eFontMode			Character display mode(normal or reverse color).	**/
+/**	@szText[in]:		Text array pointer.									**/
+/**	@eFontSize[in]:		Font size.											**/
+/**	@pstDisplayArea[in]: Display area size.									**/
+/**	@eFontMode[in]:		Character display mode(normal or reverse color).	**/
 /** Return:			Next character X coordinate in current line.			**/
 /** Notice:			None.													**/
 /*****************************************************************************/
-SGUI_SIZE SGUI_Text_DrawMultipleLinesText(SGUI_PCSZSTR szTextBuffer, SGUI_FONT_SIZE eFontSize, SGUI_RECT_AREA* pstDisplayArea, SGUI_INT iTopOffset, SGUI_DRAW_MODE eFontMode)
+SGUI_SIZE SGUI_Text_DrawMultipleLinesText(SGUI_PCSZSTR szText, SGUI_FONT_SIZE eFontSize, SGUI_RECT_AREA* pstDisplayArea, SGUI_INT iTopOffset, SGUI_DRAW_MODE eFontMode)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -170,7 +168,7 @@ SGUI_SIZE SGUI_Text_DrawMultipleLinesText(SGUI_PCSZSTR szTextBuffer, SGUI_FONT_S
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	pcTextPointer =				ENCODE(szTextBuffer);
+	pcTextPointer =				ENCODE(szText);
 	uiCharacterCode =			0x0000;
 	uiLines =					0;
 	eBackColor =				(eFontMode == GUI_DRAW_NORMAL)?GUI_COLOR_BKGCLR:GUI_COLOR_FRGCLR;
@@ -181,7 +179,7 @@ SGUI_SIZE SGUI_Text_DrawMultipleLinesText(SGUI_PCSZSTR szTextBuffer, SGUI_FONT_S
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if((szTextBuffer != NULL) && (RECTANGLE_X_START(*pstDisplayArea) < LCD_SIZE_WIDTH))
+	if((szText != NULL) && (RECTANGLE_X_START(*pstDisplayArea) < LCD_SIZE_WIDTH))
 	{
 		// Recalculate text display area and data area.
 		if(RECTANGLE_X_START(*pstDisplayArea) < 0)
@@ -280,32 +278,33 @@ SGUI_SIZE SGUI_Text_DrawMultipleLinesText(SGUI_PCSZSTR szTextBuffer, SGUI_FONT_S
 /*****************************************************************************/
 /** Function Name:	SGUI_Text_ReadFontData									**/
 /** Purpose:		Read font from internal or external flash memory.		**/
-/** Resources:		External flash read interface.							**/
 /** Params:																	**/
-/**	@uiFontSize[in]: 	Start address of font data.							**/
+/**	@eFontSize[in]: 	Start address of font data.							**/
 /**	@uiCharacterCode[in]: Data buffer pointer of read font data.			**/
-/**	@pDataBuffer[out]:	Read data size.										**/
+/**	@pFontDataBuffer[out]: Read data size.									**/
 /**	@uiFontBufferSize[in]: Free space for font buffer, 0 means ignore the	**/
 /**						data size judgment.									**/
 /** Return:			None.													**/
 /** Limitation:		This function need to override when use external flash	**/
 /**					ROM data.												**/
 /*****************************************************************************/
-void SGUI_Text_ReadFontData(SGUI_FONT_SIZE eFontSize, SGUI_UINT16 uiCharacterCode, SGUI_BYTE* pOutPutBuffer, SGUI_SIZE uiFontBufferSize)
+void SGUI_Text_ReadFontData(SGUI_FONT_SIZE eFontSize, SGUI_UINT16 uiCharacterCode, SGUI_BYTE* pFontDataBuffer, SGUI_UINT32 uiFontBufferSize)
 {
+	// Need rewrite this function for use each different external font data.
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	// Need rewrite this function for use each different external font data.
+#if(_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
 	SGUI_UINT16					uiCharacterIndex;
 	SGUI_UINT					uiFontWidth, uiFontHeight;
-	SGUI_SIZE					uiCharacterDataSize;
+	SGUI_UINT32					uiCharacterDataSize;
 	SGUI_BYTE*					puiFontDataArrayPointer;
 	SGUI_UINT					i;
-
+#endif
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
+#if(_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
 	// Get character font data index in font table.
 	uiCharacterIndex =			SGUI_Text_GetCharacterTableIndex(uiCharacterCode);
 	// Calculates the byte used by each half-width character.
@@ -313,63 +312,66 @@ void SGUI_Text_ReadFontData(SGUI_FONT_SIZE eFontSize, SGUI_UINT16 uiCharacterCod
 	uiFontWidth =				g_stFontSize[eFontSize].Width;
 	uiFontHeight =				g_stFontSize[eFontSize].Height;
 	uiCharacterDataSize =		(((uiFontHeight-1)/8)+1)*uiFontWidth;
-
+#endif
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	switch(eFontSize)
+#if(_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
+	if((NULL != pFontDataBuffer) && (0 < uiFontBufferSize))
 	{
-
-		case(SGUI_FONT_SIZE_H12):
+		switch(eFontSize)
 		{
-			puiFontDataArrayPointer = (SGUI_BYTE*)SGUI_FONT_H12;
-			break;
+			case(SGUI_FONT_SIZE_H12):
+			{
+				puiFontDataArrayPointer = (SGUI_BYTE*)SGUI_FONT_H12;
+				break;
+			}
+			case(SGUI_FONT_SIZE_H16):
+			{
+				puiFontDataArrayPointer = (SGUI_BYTE*)SGUI_FONT_H16;
+				break;
+			}
+			/*
+			case(FONT_SIZE_H24):
+			{
+				puiFontDataArrayPointer = (SGUI_BYTE*)FONT_H24;
+				break;
+			}
+			case(FONT_SIZE_H32):
+			{
+				puiFontDataArrayPointer = (SGUI_BYTE*)SGUI_FONT_H32;
+				break;
+			}
+			*/
+			default:
+			{
+				// In other cases, the basic font is used.
+				puiFontDataArrayPointer = (SGUI_BYTE*)BASIC_FONT_DATA;
+				uiFontWidth = 6;
+				uiFontHeight = 8;
+			}
 		}
-		case(SGUI_FONT_SIZE_H16):
+		// Set character font data head pointer.
+		puiFontDataArrayPointer = puiFontDataArrayPointer + (uiCharacterDataSize * uiCharacterIndex);
+		// Check Buffer size area.
+		if(uiCharacterCode > 127)
 		{
-			puiFontDataArrayPointer = (SGUI_BYTE*)SGUI_FONT_H16;
-			break;
+			// Non-ASCII characters
+			// For GB2312, full-width character use 2 bytes encoding.
+			uiCharacterDataSize = uiCharacterDataSize * 2;
 		}
-		/*
-		case(FONT_SIZE_H24):
+		// Copy data to buffer.
+		for(i=0; ((i<uiCharacterDataSize)&&(i<uiFontBufferSize)); i++)
 		{
-			puiFontDataArrayPointer = (SGUI_BYTE*)FONT_H24;
-			break;
-		}
-		case(FONT_SIZE_H32):
-		{
-			puiFontDataArrayPointer = (SGUI_BYTE*)SGUI_FONT_H32;
-			break;
-		}
-		*/
-		default:
-		{
-			// In other cases, the basic font is used.
-			puiFontDataArrayPointer = (SGUI_BYTE*)BASIC_FONT_DATA;
-			uiFontWidth = 6;
-			uiFontHeight = 8;
+			*(pFontDataBuffer+i) = *(puiFontDataArrayPointer + i);
 		}
 	}
-	// Set character font data head pointer.
-	puiFontDataArrayPointer = puiFontDataArrayPointer + (uiCharacterDataSize * uiCharacterIndex);
-	// Check Buffer size area.
-	if(uiCharacterCode > 127)
-	{
-		// Non-ASCII characters
-		// For GB2312, full-width character use 2 bytes encoding.
-		uiCharacterDataSize = uiCharacterDataSize * 2;
-	}
-	// Copy data to buffer.
-	for(i=0; i<uiCharacterDataSize; i++)
-	{
-		*(pOutPutBuffer+i) = *(puiFontDataArrayPointer + i);
-	}
+#endif
 }
 
 /*****************************************************************************/
 /** Function Name:	SGUI_Text_GetCharacterTableIndex						**/
 /** Purpose:		Get character index in font mode table.					**/
-/** Resources:		External flash read interface.							**/
 /** Params:																	**/
 /**	@uiCharacterCode[in]: Data buffer pointer of read font data.			**/
 /** Return:			Font mode data index in table.							**/
@@ -422,7 +424,6 @@ SGUI_SIZE SGUI_Text_GetCharacterTableIndex(SGUI_UINT16 uiCharacterCode)
 /*****************************************************************************/
 /** Function Name:	SGUI_Text_GetTextGraphicsWidth							**/
 /** Purpose:		Get text displayed full width.							**/
-/** Resources:		None.													**/
 /** Params:																	**/
 /**	@szText[in]: 		Text pointer.										**/
 /**	@eFontSize[in]:		Font size, usually means font height.				**/
@@ -460,8 +461,9 @@ SGUI_SIZE SGUI_Text_GetTextGraphicsWidth(SGUI_PCSZSTR szText, SGUI_FONT_SIZE eFo
 /** Purpose:		Get a string's lines in a fixed width area.				**/
 /** Resources:		None.													**/
 /** Params:																	**/
-/**	@szNoticeText:		Notice text resource.								**/
-/**	@uiHalfWidthCharInLine: Max number of half-width character in each line.**/
+/**	@szNoticeText[in]:	Notice text resource.								**/
+/**	@uiHalfWidthCharInLine[in]: Max number of half-width character in each	**/
+/**						line.												**/
 /** Return:			String lines.											**/
 /** Notice:			None.													**/
 /*****************************************************************************/

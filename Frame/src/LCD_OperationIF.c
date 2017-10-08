@@ -13,7 +13,6 @@
 //= Include files.													    =//
 //=======================================================================//
 #include "LCD_OperationIF.h"
-#include "UserAction.h"
 #include <memory.h>
 #include <stddef.h>
 #include <stdint.h>

@@ -1,6 +1,6 @@
 /*************************************************************************/
 /** Copyright.															**/
-/** FileName: GUI_Frame.c												**/
+/** FileName: SGUI_Frame.c												**/
 /** Author: Polarix														**/
 /** Version: 1.0.0.0													**/
 /** Description: Draw frames on screen.									**/
@@ -14,6 +14,14 @@
 //=======================================================================//
 //= Function implementation.										    =//
 //=======================================================================//
+/*************************************************************************/
+/** Function Name:	SGUI_Frame_DrawFullScreenFrame						**/
+/** Purpose:		Draw a frame on screen, just like a window frame.	**/
+/** Params:																**/
+/**	@pstFrameData[in]:	Frame data structure pointer.					**/
+/** Return:			None.												**/
+/** Notice:			none.												**/
+/*************************************************************************/
 void SGUI_Frame_DrawFullScreenFrame(SGUI_BOX_FRAME_STRUCT* pstFrameData)
 {
 	/*----------------------------------*/

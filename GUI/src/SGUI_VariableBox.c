@@ -1,6 +1,6 @@
 /*************************************************************************/
 /** Copyright.															**/
-/** FileName: GUI_VariableBox.c											**/
+/** FileName: SGUI_VariableBox.c										**/
 /** Author: XuYulin														**/
 /** Version: 1.0.0.0													**/
 /** Description: Show and change variable box.							**/
@@ -34,12 +34,11 @@ void					SGUI_TextVariableBox_UpdateCharacter(SGUI_TEXT_VARBOX_STRUCT* pstTextVa
 /*************************************************************************/
 /** Function Name:	GUI_RefreshVariableBox								**/
 /** Purpose:		Display or refresh a integer value edit box.		**/
-/** Resources:		12 pix ASCII font data.								**/
 /** Params:																**/
-/**	@pstValue:			Value structure, include max value, min value	**/
+/**	@pstValue[in]:		Value structure, include max value, min value	**/
 /**						and current value.								**/
-/**	@eAlignment:		Alignment, might be right, center or left.		**/
-/**	@eMode:				Display mode, normal or reveres.				**/
+/**	@eAlignment[in]:	Alignment, might be right, center or left.		**/
+/**	@eMode[in]:			Display mode, normal or reveres.				**/
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
@@ -59,7 +58,7 @@ void SGUI_IntegerVariableBox_Refresh(SGUI_INT_VARBOX_STRUCT* pstValue, SGUI_VARB
 	/*----------------------------------*/
 	eBackColor =				((eMode==GUI_DRAW_NORMAL)?GUI_COLOR_BKGCLR:GUI_COLOR_FRGCLR);
 	// Draw edge
-	SGUI_Basic_DrawRectangle(pstValue->PosX, pstValue->PosY, pstValue->Width, VARBOX_HEIGHT, eBackColor, eBackColor);
+	SGUI_Basic_DrawRectangle(pstValue->PosX, pstValue->PosY, pstValue->Width, VARBOX_HEIGHT(pstValue->FontSize), eBackColor, eBackColor);
 
 	/*----------------------------------*/
 	/* Process							*/
@@ -78,11 +77,11 @@ void SGUI_IntegerVariableBox_Refresh(SGUI_INT_VARBOX_STRUCT* pstValue, SGUI_VARB
 		}
 		// Convert number to string
 		uiTextLength = SGUI_Common_IntegerToString(pstValue->Value, arrTextBuffer, 10, -1, ' ');
-		uiTextWidth = VARBOX_TEXT_WIDTH(uiTextLength);
+		uiTextWidth = VARBOX_TEXT_WIDTH(pstValue->FontSize, uiTextLength);
 		stTextDisplayArea.PosX = pstValue->PosX+1;
 		stTextDisplayArea.PosY = pstValue->PosY+1;
 		stTextDisplayArea.Width = VARBOX_TEXT_AREA_WIDTH(pstValue->Width);
-		stTextDisplayArea.Height = g_stFontSize[VARBOX_FONT_SIZE].Height;
+		stTextDisplayArea.Height = g_stFontSize[pstValue->FontSize].Height;
 		switch(eAlignment)
 		{
 			case SGUI_RIGHT:
@@ -101,18 +100,17 @@ void SGUI_IntegerVariableBox_Refresh(SGUI_INT_VARBOX_STRUCT* pstValue, SGUI_VARB
 			}
 		}
 		stTextDataArea.PosY = 0;
-		SGUI_Text_DrawSingleLineText(arrTextBuffer, VARBOX_FONT_SIZE, &stTextDisplayArea, &stTextDataArea, eMode);
+		SGUI_Text_DrawSingleLineText(arrTextBuffer, pstValue->FontSize, &stTextDisplayArea, &stTextDataArea, eMode);
 	}
 }
 
 /*************************************************************************/
-/** Function Name:	SGUI_TextVariableBox_UpdateCharacter					**/
+/** Function Name:	SGUI_TextVariableBox_UpdateCharacter				**/
 /** Purpose:		Display or refresh a integer value edit box.		**/
-/** Resources:		12 pix ASCII font data.								**/
 /** Params:																**/
-/** @pstTextValue:		Text value edit box pointer.					**/
-/** @cNewCharacters:	New character of value.							**/
-/**	@eMode:				Display mode, normal or reveres.				**/
+/** @pstTextValue[in]:	Text value edit box pointer.					**/
+/** @cNewCharacters[in]: New character of value.						**/
+/**	@eMode[in]:			Display mode, normal or reveres.				**/
 /** Return:			None.												**/
 /** Notice:			Static function, call by others interface.			**/
 /*************************************************************************/
@@ -135,11 +133,11 @@ void SGUI_TextVariableBox_UpdateCharacter(SGUI_TEXT_VARBOX_STRUCT* pstTextValue,
 	// Clear background.
 	if(NULL != pstTextValue->Value)
 	{
-		SGUI_Basic_DrawRectangle(pstTextValue->PosX, pstTextValue->PosY, pstTextValue->Width, VARBOX_HEIGHT, eBackColor, eBackColor);
+		SGUI_Basic_DrawRectangle(pstTextValue->PosX, pstTextValue->PosY, pstTextValue->Width, VARBOX_HEIGHT(pstTextValue->FontSize), eBackColor, eBackColor);
 	}
 	// Get font graphics size.
-	uiFontWidth =				g_stFontSize[VARBOX_FONT_SIZE].Width;
-	uiFontHeight =				g_stFontSize[VARBOX_FONT_SIZE].Height;
+	uiFontWidth =				g_stFontSize[pstTextValue->FontSize].Width;
+	uiFontHeight =				g_stFontSize[pstTextValue->FontSize].Height;
 
 	/*----------------------------------*/
 	/* Process							*/
@@ -203,7 +201,7 @@ void SGUI_TextVariableBox_UpdateCharacter(SGUI_TEXT_VARBOX_STRUCT* pstTextValue,
 			stFocusArea.PosX = stFocusArea.PosX + stTextDataArea.PosX;
 		}
 		// Display text.
-		SGUI_Text_DrawSingleLineText(pstTextValue->Value, VARBOX_FONT_SIZE, &stTextDisplayArea, &stTextDataArea, eMode);
+		SGUI_Text_DrawSingleLineText(pstTextValue->Value, pstTextValue->FontSize, &stTextDisplayArea, &stTextDataArea, eMode);
 		// Focus first character.
         SGUI_Basic_ReverseBlockColor(stFocusArea.PosX, stFocusArea.PosY, stFocusArea.Width, stFocusArea.Height);
 	}
@@ -212,10 +210,9 @@ void SGUI_TextVariableBox_UpdateCharacter(SGUI_TEXT_VARBOX_STRUCT* pstTextValue,
 /*************************************************************************/
 /** Function Name:	SGUI_TextVariableBox_Refresh						**/
 /** Purpose:		Display or refresh a integer value edit box.		**/
-/** Resources:		12 pix ASCII font data.								**/
 /** Params:																**/
-/** @pstTextValue:		Text value edit box pointer.					**/
-/**	@eMode:				Display mode, normal or reveres.				**/
+/** @pstTextValue[in]:	Text value edit box pointer.					**/
+/**	@eMode[in]:			Display mode, normal or reveres.				**/
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
@@ -241,11 +238,11 @@ void SGUI_TextVariableBox_Refresh(SGUI_TEXT_VARBOX_STRUCT* pstTextValue, SGUI_DR
 /*************************************************************************/
 /** Function Name:	GUI_TextVariableBox_PrevCharacter					**/
 /** Purpose:		Select previous character at current index.			**/
-/** Resources:		12 pix ASCII font data.								**/
 /** Params:																**/
-/** @pstTextValue:		Text value edit box pointer.					**/
-/**	@eMode:				Display mode, normal or reveres.				**/
-/**	@uiCharacterSet:	Mask of characters set.							**/
+/** @pstTextValue[in]:	Text value edit box pointer.					**/
+/**	@eMode[in]:			Display mode, normal or reveres.				**/
+/**	@uiCharacterSet[in]: Mask of characters set.						**/
+/** @eOpt[in]:			Operation.										**/
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
