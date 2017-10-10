@@ -26,15 +26,27 @@ typedef struct
 }HMI_INTERRUPT_PARAMETER;
 
 //=======================================================================//
+//= User Macro definition.											    =//
+//=======================================================================//
+#define		HMI_SCREEN_ID_DEMO_SCROLLING_TEXT			(1001)
+#define		HMI_SCREEN_ID_DEMO_LIST						(1002)
+#define		HMI_SCREEN_ID_DEMO_TEXT_NOTICE				(1003)
+#define		HMI_SCREEN_ID_DEMO_VARIABLE_BOX				(1004)
+
+//=======================================================================//
 //= Public variable declaration.									    =//
 //=======================================================================//
-extern HMI_SCREEN_OBJECT        g_stHMI_DemoText;
 extern HMI_ENGINE_OBJECT        g_stDemoEngine;
+extern HMI_SCREEN_OBJECT        g_stHMIDemo_ScrollingText;
+extern HMI_SCREEN_OBJECT		g_stHMIDemo_List;
+extern HMI_SCREEN_OBJECT		g_stHMIDemo_TextNotice;
+extern HMI_SCREEN_OBJECT        g_stHMIDemo_VariableBox ;
 //=======================================================================//
 //= Function declare.   											    =//
 //=======================================================================//
 void                SimpleGUI_DemoProcess(void);
 HMI_ENGINE_RESULT   InitializeEngine(HMI_ENGINE_OBJECT* pstHMIEngineObject);
+HMI_ENGINE_RESULT	EventProcess(HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent);
 
 
 #endif // __INCLUDE_DEMO_PROC_H__

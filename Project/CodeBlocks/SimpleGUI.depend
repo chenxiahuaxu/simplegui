@@ -1,4 +1,79 @@
 # depslib dependency file v1.0
+1507637125 source:e:\workspace\git\simplegui\demo\src\demoproc.c
+	"DemoProc.h"
+
+1507637099 e:\workspace\git\simplegui\demo\inc\demoproc.h
+	"SGUI_Typedef.h"
+	"HMI_Engine.h"
+
+1506088835 e:\workspace\git\simplegui\gui\inc\sgui_typedef.h
+	"SGUI_Config.h"
+	"stdint.h"
+	"stddef.h"
+
+1507634634 e:\workspace\git\simplegui\gui\inc\sgui_config.h
+
+1507634686 e:\workspace\git\simplegui\hmi\inc\hmi_engine.h
+	"VirtualDeviceInterface.h"
+	"SGUI_Typedef.h"
+
+1507634724 e:\workspace\git\simplegui\user\inc\virtualdeviceinterface.h
+	<stddef.h>
+	<stdint.h>
+	<stdbool.h>
+
+1507637165 source:e:\workspace\git\simplegui\demo\src\list.c
+	"DemoProc.h"
+	"SGUI_List.h"
+	"HMI_Engine.h"
+	<stdio.h>
+
+1506865164 e:\workspace\git\simplegui\gui\inc\sgui_list.h
+	"SGUI_Config.h"
+	"SGUI_Common.h"
+	"SGUI_Basic.h"
+	"SGUI_Text.h"
+	"SGUI_ScrollBar.h"
+
+1506927856 e:\workspace\git\simplegui\gui\inc\sgui_common.h
+	"SGUI_Config.h"
+	"SGUI_Typedef.h"
+	"LCD_OperationIF.h"
+
+1506087679 e:\workspace\git\simplegui\frame\inc\lcd_operationif.h
+	"LCD_VirtualDeviceParameter.h"
+	<stddef.h>
+	<stdint.h>
+	<stdbool.h>
+
+1506855208 e:\workspace\git\simplegui\frame\inc\lcd_virtualdeviceparameter.h
+
+1506855216 e:\workspace\git\simplegui\gui\inc\sgui_basic.h
+	"SGUI_Config.h"
+	"SGUI_Common.h"
+
+1506088823 e:\workspace\git\simplegui\gui\inc\sgui_text.h
+	"SGUI_Config.h"
+	"SGUI_Common.h"
+	"SGUI_Basic.h"
+
+1506088816 e:\workspace\git\simplegui\gui\inc\sgui_scrollbar.h
+	"SGUI_Config.h"
+	"SGUI_Common.h"
+
+1507634596 source:e:\workspace\git\simplegui\demo\src\scrollingtext.c
+	"DemoProc.h"
+	"SGUI_Text.h"
+	"SGUI_Frame.h"
+	"HMI_Engine.h"
+	<stdio.h>
+
+1506865184 e:\workspace\git\simplegui\gui\inc\sgui_frame.h
+	"SGUI_Config.h"
+	"SGUI_Common.h"
+	"SGUI_Basic.h"
+	"SGUI_Text.h"
+
 1506087679 source:e:\workspace\git\simplegui\frame\src\lcd_application.cpp
 	"wx\wx.h"
 	"LCD_Application.h"
@@ -2648,14 +2723,6 @@
 	<wx/toolbar.h>
 	<wx/frame.h>
 
-1506855208 e:\workspace\git\simplegui\frame\inc\lcd_virtualdeviceparameter.h
-
-1506087679 e:\workspace\git\simplegui\frame\inc\lcd_operationif.h
-	"LCD_VirtualDeviceParameter.h"
-	<stddef.h>
-	<stdint.h>
-	<stdbool.h>
-
 1456695217 d:\programs\codeblocks\wxwidgets-3.1.0\include\wx\xrc\xmlres.h
 	"wx/defs.h"
 	"wx/string.h"
@@ -2688,14 +2755,10 @@
 	"wx/imaglist.h"
 	"wx/window.h"
 
-1507437733 source:e:\workspace\git\simplegui\frame\src\lcd_operationif.c
+1507634628 source:e:\workspace\git\simplegui\frame\src\lcd_operationif.c
 	"LCD_OperationIF.h"
+	"VirtualDeviceInterface.h"
 	<memory.h>
-	<stddef.h>
-	<stdint.h>
-	<stdbool.h>
-
-1506087679 e:\workspace\git\simplegui\user\inc\useraction.h
 	<stddef.h>
 	<stdint.h>
 	<stdbool.h>
@@ -2752,22 +2815,6 @@
 1506855277 source:e:\workspace\git\simplegui\gui\src\sgui_basic.c
 	"SGUI_Basic.h"
 
-1506855216 e:\workspace\git\simplegui\gui\inc\sgui_basic.h
-	"SGUI_Config.h"
-	"SGUI_Common.h"
-
-1506863717 e:\workspace\git\simplegui\gui\inc\sgui_config.h
-
-1506927856 e:\workspace\git\simplegui\gui\inc\sgui_common.h
-	"SGUI_Config.h"
-	"SGUI_Typedef.h"
-	"LCD_OperationIF.h"
-
-1506088835 e:\workspace\git\simplegui\gui\inc\sgui_typedef.h
-	"SGUI_Config.h"
-	"stdint.h"
-	"stddef.h"
-
 1506927889 source:e:\workspace\git\simplegui\gui\src\sgui_common.c
 	"SGUI_Common.h"
 	<iconv.h>
@@ -2791,17 +2838,6 @@
 1506855327 source:e:\workspace\git\simplegui\gui\src\sgui_frame.c
 	"SGUI_Frame.h"
 
-1506865184 e:\workspace\git\simplegui\gui\inc\sgui_frame.h
-	"SGUI_Config.h"
-	"SGUI_Common.h"
-	"SGUI_Basic.h"
-	"SGUI_Text.h"
-
-1506088823 e:\workspace\git\simplegui\gui\inc\sgui_text.h
-	"SGUI_Config.h"
-	"SGUI_Common.h"
-	"SGUI_Basic.h"
-
 1506855338 source:e:\workspace\git\simplegui\gui\src\sgui_graph.c
 	"SGUI_Graph.h"
 	"SGUI_Frame.h"
@@ -2812,10 +2848,6 @@
 	"SGUI_Basic.h"
 	"SGUI_ScrollBar.h"
 
-1506088816 e:\workspace\git\simplegui\gui\inc\sgui_scrollbar.h
-	"SGUI_Config.h"
-	"SGUI_Common.h"
-
 1506865527 source:e:\workspace\git\simplegui\gui\src\sgui_list.c
 	"SGUI_Common.h"
 	"SGUI_Basic.h"
@@ -2824,14 +2856,7 @@
 	"SGUI_List.h"
 	"SGUI_Frame.h"
 
-1506865164 e:\workspace\git\simplegui\gui\inc\sgui_list.h
-	"SGUI_Config.h"
-	"SGUI_Common.h"
-	"SGUI_Basic.h"
-	"SGUI_Text.h"
-	"SGUI_ScrollBar.h"
-
-1506855365 source:e:\workspace\git\simplegui\gui\src\sgui_notice.c
+1507634659 source:e:\workspace\git\simplegui\gui\src\sgui_notice.c
 	"SGUI_Common.h"
 	"SGUI_Basic.h"
 	"SGUI_Text.h"
@@ -2862,15 +2887,11 @@
 	<stdint.h>
 	<string.h>
 
-1506855425 source:e:\workspace\git\simplegui\gui\src\sgui_variablebox.c
+1507634672 source:e:\workspace\git\simplegui\gui\src\sgui_variablebox.c
 	"SGUI_Common.h"
 	"SGUI_Basic.h"
 	"SGUI_Text.h"
 	"SGUI_VariableBox.h"
-	<stddef.h>
-	<stdint.h>
-	<stdbool.h>
-	<string.h>
 
 1506855237 e:\workspace\git\simplegui\gui\inc\sgui_variablebox.h
 	"SGUI_Config.h"
@@ -2878,87 +2899,9 @@
 	"SGUI_Basic.h"
 	"SGUI_Text.h"
 
-1506863126 source:e:\workspace\git\simplegui\hmi\src\hmi_demo01_text.c
-	"HMI_Demo.h"
-	"SGUI_Text.h"
-	"SGUI_Frame.h"
-	"HMI_Process.h"
-	<stdio.h>
-
-1506087679 e:\workspace\git\simplegui\hmi\inc\hmi_demo01_text.h
-	"SGUI_Notice.h"
-	"HMI_Process.h"
-	"UserAction.h"
-	<stdio.h>
-
-1506856391 e:\workspace\git\simplegui\hmi_core\inc\hmi_process.h
-	"HMI_Data.h"
-	"UserAction.h"
-	<stdio.h>
-
-1506862667 e:\workspace\git\simplegui\hmi_core\inc\hmi_data.h
-	"SGUI_Typedef.h"
-
-1506865228 source:e:\workspace\git\simplegui\hmi\src\hmi_demo02_list.c
-	"HMI_Demo.h"
-	"SGUI_List.h"
-	"HMI_Process.h"
-	<stdio.h>
-
-1506087679 e:\workspace\git\simplegui\hmi\inc\hmi_demo02_list.h
-	<stdint.h>
-	<stddef.h>
-	"HMI_Data.h"
-	"UserAction.h"
-
-1506862921 source:e:\workspace\git\simplegui\hmi\src\hmi_demo03_notice1.c
-	"HMI_Demo.h"
-	"HMI_Data.h"
-	"HMI_Process.h"
-	"SGUI_Notice.h"
+1507634702 source:e:\workspace\git\simplegui\hmi\src\hmi_engine.c
+	"HMI_Engine.h"
 	"SGUI_Common.h"
-	<stdio.h>
-
-1506087679 e:\workspace\git\simplegui\hmi\inc\hmi_demo03_notice1.h
-	"HMI_Data.h"
-	"UserAction.h"
-
-1506862953 source:e:\workspace\git\simplegui\hmi\src\hmi_demo03_notice2.c
-	"HMI_Demo.h"
-	"string.h"
-
-1506087679 e:\workspace\git\simplegui\hmi\inc\hmi_demo03_notice2.h
-	"HMI_Data.h"
-	"HMI_Process.h"
-	"SGUI_Common.h"
-	"SGUI_Notice.h"
-	"UserAction.h"
-	<stdio.h>
-
-1506862998 source:e:\workspace\git\simplegui\hmi\src\hmi_demo04_graph.c
-	"HMI_Demo.h"
-	"SGUI_Graph.h"
-
-1506087679 e:\workspace\git\simplegui\hmi\inc\hmi_demo04_graph.h
-	<stdint.h>
-	<stddef.h>
-	"SGUI_Graph.h"
-	"HMI_Data.h"
-	"HMI_Process.h"
-	"UserAction.h"
-
-1506863037 source:e:\workspace\git\simplegui\hmi\src\hmi_demo05_variablebox.c
-	"HMI_Demo.h"
-	"SGUI_Frame.h"
-	"SGUI_Notice.h"
-	"SGUI_VariableBox.h"
-
-1506087679 e:\workspace\git\simplegui\hmi\inc\hmi_demo05_variablebox.h
-	"HMI_Data.h"
-	"HMI_Process.h"
-	"SGUI_VariableBox.h"
-	"UserAction.h"
-	<stdio.h>
 
 1506087679 source:e:\workspace\git\simplegui\resource\resource.rc
 	"wx/msw/wx.rc"
@@ -2969,106 +2912,21 @@
 
 1456695217 d:\programs\codeblocks\wxwidgets-3.1.0\include\wx\msw\rcdefs.h
 
-1506924688 source:e:\workspace\git\simplegui\user\src\useraction.c
-	"UserAction.h"
+1507634737 source:e:\workspace\git\simplegui\user\src\virtualdeviceinterface.c
+	"VirtualDeviceInterface.h"
 	"LCD_OperationIF.h"
-	"Demo.h"
+	"DemoProc.h"
 	"HMI_Engine.h"
 	"SGUI_Common.h"
 
-1506861378 source:e:\workspace\git\simplegui\hmi_core\src\hmi_procecss.c
-	"HMI_Process.h"
-	"HMI_Data.h"
-
-1506856152 e:\workspace\git\simplegui\hmi\inc\hmi_demo.h
-	"SGUI_Notice.h"
-	"HMI_Process.h"
-	"UserAction.h"
-	<stdio.h>
-
-1506862683 source:e:\workspace\git\simplegui\hmi_core\src\hmi_data.c
-	"HMI_Data.h"
-	"HMI_Demo.h"
-
-1507437640 source:e:\workspace\git\simplegui\demo\src\graph.c
-	"DemoProc.h"
-	"SGUI_Graph.h"
-
-1506924151 e:\workspace\git\simplegui\demo\inc\hmi_demo.h
-	"SGUI_Notice.h"
-	"HMI_Engine.h"
-	"UserAction.h"
-	<stdio.h>
-
-1506924056 e:\workspace\git\simplegui\hmi\inc\hmi_process.h
-	"UserAction.h"
-	<stdio.h>
-
-1507437650 source:e:\workspace\git\simplegui\demo\src\list.c
-	"DemoProc.h"
-	"SGUI_List.h"
-	"HMI_Engine.h"
-	<stdio.h>
-
-1507437660 source:e:\workspace\git\simplegui\demo\src\rtcnotice.c
-	"DemoProc.h"
-	"HMI_Engine.h"
-	"SGUI_Notice.h"
-	"SGUI_Common.h"
-	<stdio.h>
-
-1507462381 source:e:\workspace\git\simplegui\demo\src\scrollingtext.c
-	"DemoProc.h"
-	"SGUI_Text.h"
-	"SGUI_Frame.h"
-	"HMI_Engine.h"
-	<stdio.h>
-
-1507437675 source:e:\workspace\git\simplegui\demo\src\textnotice.c
+1507636382 source:e:\workspace\git\simplegui\demo\src\textnotice.c
 	"DemoProc.h"
 	"SGUI_Notice.h"
 	"string.h"
 
-1507437720 source:e:\workspace\git\simplegui\demo\src\variablebox.c
+1507637413 source:e:\workspace\git\simplegui\demo\src\variablebox.c
 	"DemoProc.h"
 	"SGUI_Frame.h"
 	"SGUI_Notice.h"
 	"SGUI_VariableBox.h"
-
-1506861378 source:e:\workspace\git\simplegui\hmi\src\hmi_procecss.c
-	"HMI_Process.h"
-	"HMI_Data.h"
-
-1506924277 source:e:\workspace\git\simplegui\demo\src\demo.c
-	"Demo.h"
-
-1506924671 e:\workspace\git\simplegui\demo\inc\demo.h
-	"SGUI_Typedef.h"
-	"HMI_Engine.h"
-
-1507439087 e:\workspace\git\simplegui\hmi\inc\hmi_engine.h
-	"VirtualDeviceInterface.h"
-	"SGUI_Typedef.h"
-
-1507462381 source:e:\workspace\git\simplegui\hmi\src\hmi_engine.c
-	"HMI_Engine.h"
-
-1507437833 source:e:\workspace\git\simplegui\demo\src\demoproc.c
-	"DemoProc.h"
-
-1507437813 e:\workspace\git\simplegui\demo\inc\demoproc.h
-	"SGUI_Typedef.h"
-	"HMI_Engine.h"
-
-1506955638 e:\workspace\git\simplegui\user\inc\virtualdeviceinterface.h
-	<stddef.h>
-	<stdint.h>
-	<stdbool.h>
-
-1507437848 source:e:\workspace\git\simplegui\user\src\virtualdeviceinterface.c
-	"VirtualDeviceInterface.h"
-	"LCD_OperationIF.h"
-	"DemoProc.h"
-	"HMI_Engine.h"
-	"SGUI_Common.h"
 

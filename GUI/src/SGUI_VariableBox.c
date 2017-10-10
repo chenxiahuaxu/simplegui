@@ -14,10 +14,6 @@
 #include "SGUI_Text.h"
 #include "SGUI_VariableBox.h"
 
-#include <stddef.h>
-#include <stdint.h>
-#include <stdbool.h>
-#include <string.h>
 //=======================================================================//
 //= Static variable declaration.									    =//
 //=======================================================================//
@@ -47,7 +43,7 @@ void SGUI_IntegerVariableBox_Refresh(SGUI_INT_VARBOX_STRUCT* pstValue, SGUI_VARB
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	SGUI_RECT_AREA				stTextDisplayArea;
+	SGUI_RECT_AREA				m_stTextDisplayArea;
 	SGUI_RECT_AREA				stTextDataArea;
 	SGUI_SIZE					uiTextLength;
 	SGUI_SIZE					uiTextWidth;
@@ -78,20 +74,20 @@ void SGUI_IntegerVariableBox_Refresh(SGUI_INT_VARBOX_STRUCT* pstValue, SGUI_VARB
 		// Convert number to string
 		uiTextLength = SGUI_Common_IntegerToString(pstValue->Value, arrTextBuffer, 10, -1, ' ');
 		uiTextWidth = VARBOX_TEXT_WIDTH(pstValue->FontSize, uiTextLength);
-		stTextDisplayArea.PosX = pstValue->PosX+1;
-		stTextDisplayArea.PosY = pstValue->PosY+1;
-		stTextDisplayArea.Width = VARBOX_TEXT_AREA_WIDTH(pstValue->Width);
-		stTextDisplayArea.Height = g_stFontSize[pstValue->FontSize].Height;
+		m_stTextDisplayArea.PosX = pstValue->PosX+1;
+		m_stTextDisplayArea.PosY = pstValue->PosY+1;
+		m_stTextDisplayArea.Width = VARBOX_TEXT_AREA_WIDTH(pstValue->Width);
+		m_stTextDisplayArea.Height = g_stFontSize[pstValue->FontSize].Height;
 		switch(eAlignment)
 		{
 			case SGUI_RIGHT:
 			{
-				stTextDataArea.PosX = stTextDisplayArea.Width - uiTextWidth;
+				stTextDataArea.PosX = m_stTextDisplayArea.Width - uiTextWidth;
 				break;
 			}
 			case SGUI_CENTER:
 			{
-				stTextDataArea.PosX = (stTextDisplayArea.Width - uiTextWidth) / 2;
+				stTextDataArea.PosX = (m_stTextDisplayArea.Width - uiTextWidth) / 2;
 				break;
 			}
 			default:
@@ -100,7 +96,7 @@ void SGUI_IntegerVariableBox_Refresh(SGUI_INT_VARBOX_STRUCT* pstValue, SGUI_VARB
 			}
 		}
 		stTextDataArea.PosY = 0;
-		SGUI_Text_DrawSingleLineText(arrTextBuffer, pstValue->FontSize, &stTextDisplayArea, &stTextDataArea, eMode);
+		SGUI_Text_DrawSingleLineText(arrTextBuffer, pstValue->FontSize, &m_stTextDisplayArea, &stTextDataArea, eMode);
 	}
 }
 
@@ -120,7 +116,7 @@ void SGUI_TextVariableBox_UpdateCharacter(SGUI_TEXT_VARBOX_STRUCT* pstTextValue,
 	/* Variable Declaration				*/
 	/*----------------------------------*/
 	SGUI_COLOR					eBackColor;
-	SGUI_RECT_AREA				stTextDisplayArea, stTextDataArea;
+	SGUI_RECT_AREA				m_stTextDisplayArea, stTextDataArea;
 	SGUI_RECT_AREA				stFocusArea;
 	SGUI_UINT16					uiFontWidth, uiFontHeight;
 	SGUI_SIZE					uiTextLength, uiFocusIndexMax;
@@ -183,25 +179,25 @@ void SGUI_TextVariableBox_UpdateCharacter(SGUI_TEXT_VARBOX_STRUCT* pstTextValue,
 			}
 		}
 		// Set text display area.
-		stTextDisplayArea.PosX = pstTextValue->PosX+1;
-		stTextDisplayArea.PosY = pstTextValue->PosY+1;
-		stTextDisplayArea.Width = VARBOX_TEXT_AREA_WIDTH(pstTextValue->Width);
-		stTextDisplayArea.Height = uiFontHeight;
+		m_stTextDisplayArea.PosX = pstTextValue->PosX+1;
+		m_stTextDisplayArea.PosY = pstTextValue->PosY+1;
+		m_stTextDisplayArea.Width = VARBOX_TEXT_AREA_WIDTH(pstTextValue->Width);
+		m_stTextDisplayArea.Height = uiFontHeight;
 		stTextDataArea.PosX = 0;
 		stTextDataArea.PosY = 0;
 
 		// Set focus character area.
-		stFocusArea.PosX = stTextDisplayArea.PosX+pstTextValue->FocusIndex*uiFontWidth;
-		stFocusArea.PosY = stTextDisplayArea.PosY;
+		stFocusArea.PosX = m_stTextDisplayArea.PosX+pstTextValue->FocusIndex*uiFontWidth;
+		stFocusArea.PosY = m_stTextDisplayArea.PosY;
 		stFocusArea.Width = uiFontWidth;
 		stFocusArea.Height = uiFontHeight;
-		if(RECTANGLE_X_END(stFocusArea) > RECTANGLE_X_END(stTextDisplayArea))
+		if(RECTANGLE_X_END(stFocusArea) > RECTANGLE_X_END(m_stTextDisplayArea))
 		{
-			stTextDataArea.PosX = RECTANGLE_X_END(stTextDisplayArea) - RECTANGLE_X_END(stFocusArea);
+			stTextDataArea.PosX = RECTANGLE_X_END(m_stTextDisplayArea) - RECTANGLE_X_END(stFocusArea);
 			stFocusArea.PosX = stFocusArea.PosX + stTextDataArea.PosX;
 		}
 		// Display text.
-		SGUI_Text_DrawSingleLineText(pstTextValue->Value, pstTextValue->FontSize, &stTextDisplayArea, &stTextDataArea, eMode);
+		SGUI_Text_DrawSingleLineText(pstTextValue->Value, pstTextValue->FontSize, &m_stTextDisplayArea, &stTextDataArea, eMode);
 		// Focus first character.
         SGUI_Basic_ReverseBlockColor(stFocusArea.PosX, stFocusArea.PosY, stFocusArea.Width, stFocusArea.Height);
 	}

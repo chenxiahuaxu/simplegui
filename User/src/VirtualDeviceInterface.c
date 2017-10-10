@@ -51,31 +51,33 @@ void USR_ACT_OnKeyPress(bool bShift, bool bCtrl, bool bAlt, uint16_t uiKeyCode)
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	uint16_t				uiOptionKeyFlags;
-	USER_ACT_KEYPRESS		stUserKeyEvent;
+	SGUI_UINT16				arruiPressedKey[HMI_EVENT_KEY_VALUE_LENGTH_MAX];
+	HMI_EVENT				stEvent;
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	uiOptionKeyFlags = KEY_OPTION_NONE;
+	arruiPressedKey[0] = KEY_OPTION_NONE;
+	stEvent.Action = HMI_ENGINE_ACTION_KEY_PRESS;
 	if(true == bShift)
 	{
-		uiOptionKeyFlags |= KEY_OPTION_SHIFT;
+		arruiPressedKey[0] |= KEY_OPTION_SHIFT;
 	}
 	if(true == bCtrl)
 	{
-		uiOptionKeyFlags |= KEY_OPTION_CTRL;
+		arruiPressedKey[0] |= KEY_OPTION_CTRL;
 	}
 	if(true == bAlt)
 	{
-		uiOptionKeyFlags |= KEY_OPTION_ALT;
+		arruiPressedKey[0] |= KEY_OPTION_ALT;
 	}
-	stUserKeyEvent.Options = uiOptionKeyFlags;
-	stUserKeyEvent.KeyValue[0] = uiKeyCode;
+	arruiPressedKey[1] = uiKeyCode;
+	stEvent.Data = (void*)arruiPressedKey;
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	HMICore_Action_UserOperatingEventProcess(HMI_SCREEN_ID_ANY, &stUserKeyEvent);
+	// Call demo process.
+	EventProcess(HMI_ENGINE_EVENT_ACTION, (void*)(&stEvent));
 }
 
 /*************************************************************************/
@@ -89,10 +91,21 @@ void USR_ACT_OnKeyPress(bool bShift, bool bCtrl, bool bAlt, uint16_t uiKeyCode)
 void USR_ACT_OnTimerEventProcess(void)
 {
 	/*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+	HMI_EVENT				stEvent;
+
+	/*----------------------------------*/
+	/* Initialize						*/
+	/*----------------------------------*/
+	stEvent.Action =		HMI_ENGINE_ACTION_ON_TIMER;
+	stEvent.Data =			NULL;
+
+	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
 	// Post timer event.
-	HMI_Action_InternalEventProcess(0, NULL);
+	HMI_ProcessEvent(HMI_ENGINE_EVENT_ACTION, &stEvent);
 }
 
 /*************************************************************************/
@@ -114,21 +127,24 @@ void USR_ACT_OnRTCUpdateEventProcess(uint16_t uiYear, uint16_t uiMonth, uint16_t
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	SGUI_TIME			stRTCTime;
+	SGUI_TIME				stRTCTime;
+	HMI_EVENT				stEvent;
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	stRTCTime.Year = uiYear;
-	stRTCTime.Month = uiMonth;
-	stRTCTime.Day = uiDay;
-	stRTCTime.Hour = uiHour;
-	stRTCTime.Minute = uiMinute;
-	stRTCTime.Second = uiSecond;
+	stRTCTime.Year =		uiYear;
+	stRTCTime.Month =		uiMonth;
+	stRTCTime.Day =			uiDay;
+	stRTCTime.Hour =		uiHour;
+	stRTCTime.Minute =		uiMinute;
+	stRTCTime.Second =		uiSecond;
+	stEvent.Action =		HMI_ENGINE_ACTION_ON_TIMER_RTC;
+	stEvent.Data = 			(void*)(&stRTCTime);
 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
 	// Post RTC update message to a screen.
-	HMI_Action_InternalEventProcess(2, &stRTCTime);
+	HMI_ProcessEvent(HMI_ENGINE_EVENT_DATA, &stEvent);
 }

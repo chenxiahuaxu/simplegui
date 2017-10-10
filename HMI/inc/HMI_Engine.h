@@ -41,8 +41,8 @@ typedef enum
     HMI_RET_CANCEL,
     HMI_RET_FOLLOWUP,
     HMI_RET_FALLBACK,
+    HMI_RET_INPROCESSING,
     HMI_RET_NOACTION,
-    HMI_RET_INPROCESS,
 }HMI_ENGINE_RESULT;
 
 // HMI engine state.
@@ -59,21 +59,30 @@ typedef enum
 {
     HMI_ENGINE_EVENT_BASE =         0,
     HMI_ENGINE_EVENT_UNKNOW =       HMI_ENGINE_EVENT_BASE,
-    HMI_ENGINE_EVENT_ENTER,         // Turn to a new screen.
-    HMI_ENGINE_EVENT_REFRESH,       // Refresh screen display.
-    HMI_ENGINE_EVENT_UPDATE,        // Data in display need update.
-    HMI_ENGINE_EVENT_INTERRUPT,     // System interrupt need process.
-    // Append new engine event here.
+    HMI_ENGINE_EVENT_ACTION,		// Turn to a new screen.
+    HMI_ENGINE_EVENT_DATA,			// Refresh screen display.
 
-    // Add new engine event above here.
-    // User defined screen event
-    HMI_ENGINE_EVENT_USER,
+    HMI_ENGINE_EVENT_MAX,
 }HMI_EVENT_TYPE;
 
+// HMI action type
+typedef enum
+{
+	HMI_ENGINE_ACTION_BASE =		0,
+	HMI_ENGINE_ACTION_UNKNOW =		HMI_ENGINE_ACTION_BASE,
+	// User defined action type.
+	HMI_ENGINE_ACTION_KEY_PRESS,
+	HMI_ENGINE_ACTION_ON_TIMER,
+	HMI_ENGINE_ACTION_ON_TIMER_RTC,
+	// User defined action above.
+	HMI_ENGINE_ACTION_MAX
+}HMI_EVENT_ACTION;
+
+// HMI event data.
 typedef struct
 {
-    HMI_EVENT_TYPE                  Type;
-    SGUI_UINT16                     KeyValue[HMI_EVENT_KEY_VALUE_LENGTH_MAX];
+    HMI_EVENT_ACTION				Action;
+    SGUI_BYTE*						Data;
 }HMI_EVENT;
 
 // Screen action interface function pointer structure.
@@ -82,7 +91,7 @@ typedef struct
     HMI_ENGINE_RESULT               (*Initialize)(void); // Initialize screen data and parameter.
 	HMI_ENGINE_RESULT               (*Prepare)(const void* pstParameters); // Do some thing before current screen display.
 	HMI_ENGINE_RESULT               (*Repaint)(const void* pstParameters); // Repaint screen if needed.
-	HMI_ENGINE_RESULT               (*ProcessEvent)(HMI_EVENT_TYPE eEvent, const void* pstParameters); // Process event.
+	HMI_ENGINE_RESULT               (*ProcessEvent)(HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent); // Process event.
 	HMI_ENGINE_RESULT               (*PostProcess)(SGUI_INT iActionResult);
 	//void*                           (*InstanceData)(void); // Get current screen instance data pointer.
 }HMI_SCREEN_ACTION;
@@ -96,20 +105,12 @@ typedef struct
 typedef struct
 {
     SGUI_INT                        TopIndex;
-#if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0)
     HMI_SCREEN_OBJECT*              Item[HMI_SCREEN_HISTORY_MAX];
-#else
-    HMI_SCREEN_OBJECT**             Item;
-#endif
 }HMI_HISTORY_STACK;
 
 typedef struct
 {
-#if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0)
-    HMI_SCREEN_OBJECT**             Screen;
-#else
     HMI_SCREEN_OBJECT*              Screen[HMI_SCREEN_LIST_MAX];
-#endif
     SGUI_INT                        ScreenCount;
     HMI_SCREEN_OBJECT*              CurrentScreenObject;
     HMI_HISTORY_STACK               History;
@@ -120,10 +121,11 @@ typedef struct
 //= Public function declaration.									    =//
 //=======================================================================//
 HMI_ENGINE_RESULT   HMI_PrepareEngine(HMI_ENGINE_OBJECT* pstHMIEngineObject);
-HMI_ENGINE_RESULT   HMI_AddScreen(HMI_ENGINE_OBJECT* pstHMIEngineObject, HMI_SCREEN_OBJECT* pstScreenObject);
+HMI_ENGINE_RESULT   HMI_AddScreen(HMI_ENGINE_OBJECT* pstHMIEngineObject, HMI_SCREEN_OBJECT* pstScreenObject, SGUI_BOOL bInitializeScreenObject);
 HMI_ENGINE_RESULT   HMI_ActiveEngine(HMI_ENGINE_OBJECT* pstHMIEngineObject, SGUI_INT iScreenID);
 HMI_ENGINE_RESULT   HMI_StartEngine(const void* pstParameters);
-HMI_ENGINE_RESULT   HMI_ProcessEvent(HMI_EVENT_TYPE eEvent, const void* pstParameters);
+HMI_ENGINE_RESULT   HMI_ProcessEvent(HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent);
+HMI_ENGINE_RESULT	HMI_PostProcess(SGUI_INT iActionResult);
 HMI_ENGINE_RESULT   HMI_Goto(SGUI_INT iDestScreenID, const void* pstParameters);
 HMI_ENGINE_RESULT   HMI_GoBack(const void* pstParameters);
 #endif // HMI_PROCESS_H_INCLUDED

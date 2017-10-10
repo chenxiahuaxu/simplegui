@@ -42,13 +42,12 @@ void SimpleGUI_DemoProcess(void)
 }
 
 /*****************************************************************************/
-/** Function Name:	HMI_ActionMap_Initialize								**/
-/** Purpose:		Initialize screen follow-up data.						**/
-/** Resources:		Screen data array and count variable.					**/
-/** Parameters:		None.													**/
-/** Return:			None.													**/
-/** Notice:			This function must be called in action map initialize	**/
-/**					process.												**/
+/** Function Name:	InitializeEngine										**/
+/** Purpose:		Initialize HMI demo engine.								**/
+/** Parameters:																**/
+/** @pstHMIEngineObject[in]: HMI engine object pointer.						**/
+/** Return:			HMI_ENGINE_RESULT.										**/
+/** Notice:			This function must be called when initialize.			**/
 /*****************************************************************************/
 HMI_ENGINE_RESULT InitializeEngine(HMI_ENGINE_OBJECT* pstHMIEngineObject)
 {
@@ -56,13 +55,11 @@ HMI_ENGINE_RESULT InitializeEngine(HMI_ENGINE_OBJECT* pstHMIEngineObject)
 	/* Variable Declaration				*/
 	/*----------------------------------*/
 	HMI_ENGINE_RESULT           eProcessResult;
-	HMI_SCREEN_OBJECT*          pstCurrentScreen;
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
 	eProcessResult =			HMI_RET_NORMAL;
-	pstCurrentScreen =          NULL;
 
 	/*----------------------------------*/
 	/* Process							*/
@@ -76,12 +73,24 @@ HMI_ENGINE_RESULT InitializeEngine(HMI_ENGINE_OBJECT* pstHMIEngineObject)
 
         if(HMI_PROCESS_SUCCESSFUL(eProcessResult))
         {
-            //eProcessResult = HMI_AddScreen(HMI_ENGINE_OBJECT* pstHMIEngineObject, HMI_SCREEN_OBJECT* pstScreenObject)
+            eProcessResult = HMI_AddScreen(pstHMIEngineObject, &g_stHMIDemo_ScrollingText, SGUI_TRUE);
+        }
+        if(HMI_PROCESS_SUCCESSFUL(eProcessResult))
+        {
+            eProcessResult = HMI_AddScreen(pstHMIEngineObject, &g_stHMIDemo_List, SGUI_TRUE);
+        }
+        if(HMI_PROCESS_SUCCESSFUL(eProcessResult))
+        {
+            eProcessResult = HMI_AddScreen(pstHMIEngineObject, &g_stHMIDemo_TextNotice, SGUI_TRUE);
+        }
+        if(HMI_PROCESS_SUCCESSFUL(eProcessResult))
+        {
+            eProcessResult = HMI_AddScreen(pstHMIEngineObject, &g_stHMIDemo_VariableBox, SGUI_TRUE);
         }
 
         if(HMI_PROCESS_SUCCESSFUL(eProcessResult))
         {
-            //eProcessResult = HMI_ENGINE_RESULT HMI_ActiveEngine(pstHMIEngineObject, iScreenID);
+            eProcessResult = HMI_ActiveEngine(pstHMIEngineObject, HMI_SCREEN_ID_DEMO_SCROLLING_TEXT);
         }
 
         if(HMI_PROCESS_SUCCESSFUL(eProcessResult))
@@ -98,4 +107,35 @@ HMI_ENGINE_RESULT InitializeEngine(HMI_ENGINE_OBJECT* pstHMIEngineObject)
 	return eProcessResult;
 }
 
+/*****************************************************************************/
+/** Function Name:	EventProcess											**/
+/** Purpose:		Process posted event.									**/
+/** Parameters:																**/
+/** @pstHMIEngineObject[in]: HMI engine object pointer.						**/
+/** Return:			HMI_ENGINE_RESULT.										**/
+/** Notice:			This function must be called when initialize.			**/
+/*****************************************************************************/
+HMI_ENGINE_RESULT EventProcess(HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent)
+{
+	/*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+	HMI_ENGINE_RESULT           eProcessResult;
 
+	/*----------------------------------*/
+	/* Initialize						*/
+	/*----------------------------------*/
+	eProcessResult =			HMI_RET_NORMAL;
+
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+
+	eProcessResult = HMI_ProcessEvent(eEventType, pstEvent);
+	if(HMI_PROCESS_SUCCESSFUL(eProcessResult))
+	{
+		HMI_PostProcess(eProcessResult);
+	}
+
+	return eProcessResult;
+}

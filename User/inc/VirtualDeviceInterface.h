@@ -38,15 +38,6 @@
 #define		KEY_PRESS_EVENT_VALUE_MAX						(4)
 
 //=======================================================================//
-//= Data type definition.											    =//
-//=======================================================================//
-typedef struct
-{
-	uint16_t		Options;
-	uint16_t		KeyValue[KEY_PRESS_EVENT_VALUE_MAX];
-}USER_ACT_KEYPRESS;
-
-//=======================================================================//
 //= Public function declaration.									    =//
 //=======================================================================//
 void USR_ACT_OnInitialize(void);

@@ -22,12 +22,11 @@
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
-static SGUI_INT			HMI_DemoList_Initialize(void);
-static SGUI_INT			HMI_DemoList_PreProcess(const void* pstParameters);
-static SGUI_INT			HMI_DemoList_RefreshScreen(void);
-static SGUI_INT			HMI_DemoList_InternalEvent(SGUI_INT uiScreenID, const void* pstParameters);
-static SGUI_INT			HMI_DemoList_ExternalEvent(SGUI_INT uiScreenID, const void* pstParameters);
-static SGUI_INT			HMI_DemoList_PostProcess(SGUI_INT iActionResult);
+static HMI_ENGINE_RESULT	HMI_DemoList_Initialize(void);
+static HMI_ENGINE_RESULT	HMI_DemoList_Prepare(const void* pstParameters);
+static HMI_ENGINE_RESULT	HMI_DemoList_RefreshScreen(const void* pstParameters);
+static HMI_ENGINE_RESULT	HMI_DemoList_ProcessEvent(HMI_EVENT_TYPE eEvent, const HMI_EVENT* pstEvent);
+static HMI_ENGINE_RESULT	HMI_DemoList_PostProcess(SGUI_INT iActionResult);
 
 //=======================================================================//
 //= Static variable declaration.									    =//
@@ -51,12 +50,7 @@ static SGUI_LIST_ITEM	arrstAppendListItems[] = {	{8, "添加项1",				LIST_ITEM_
 };
 #endif
 
-
-#if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0)
-static SGUI_LIST_STRUCT	stTestList =			{0x00};
-#else
-static SGUI_LIST_STRUCT	stTestList =			{0x00};
-#endif
+static SGUI_LIST_STRUCT	stTestList;
 
 static char				szNoticeTextBuffer[NOTICE_TEXT_BUFFER_SIZE] = {0x00};
 
@@ -64,26 +58,34 @@ static char				szNoticeTextBuffer[NOTICE_TEXT_BUFFER_SIZE] = {0x00};
 //= Global variable declaration.									    =//
 //=======================================================================//
 HMI_SCREEN_ACTION		stHMI_DemoListActions = {	HMI_DemoList_Initialize,
-													HMI_DemoList_PreProcess,
+													HMI_DemoList_Prepare,
 													HMI_DemoList_RefreshScreen,
-													HMI_DemoList_InternalEvent,
-													HMI_DemoList_ExternalEvent,
+													HMI_DemoList_ProcessEvent,
 													HMI_DemoList_PostProcess
 												};
-HMI_SCREEN_OBJECT       g_stHMI_DemoList =		{	HMI_SCREEN_ID_ANY,
+HMI_SCREEN_OBJECT       g_stHMIDemo_List =		{	HMI_SCREEN_ID_DEMO_LIST,
 													&stHMI_DemoListActions
 												};
 
 //=======================================================================//
 //= Function implementation.										    =//
 //=======================================================================//
-SGUI_INT	HMI_DemoList_Initialize(void)
+HMI_ENGINE_RESULT HMI_DemoList_Initialize(void)
 {
+#if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0)
+	/*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+	uint32_t					i;
+#endif
+
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
     // Initialize list data.
+    SGUI_Common_MemorySet(&stTestList, 0x00, sizeof(SGUI_LIST_STRUCT));
     stTestList.Data.Title = szListTitle;
+    stTestList.FontSize = SGUI_FONT_SIZE_H12;
 #if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0)
     stTestList.Data.Items = NULL;
     stTestList.Data.Count = 0;
@@ -91,146 +93,141 @@ SGUI_INT	HMI_DemoList_Initialize(void)
     stTestList.Data.Items = arrstTestListItems;
     stTestList.Data.Count = sizeof(arrstTestListItems)/sizeof(SGUI_LIST_ITEM);
 #endif
-    stTestList.FontSize = SGUI_FONT_SIZE_H16;
 
     // Initialize logical.
 	SGUI_LIST_InitializeListData(&stTestList);
-	return HMI_RET_NORMAL;
-}
-
-SGUI_INT	HMI_DemoList_PreProcess(const void* pstParameters)
-{
 #if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0)
-	/*----------------------------------*/
-	/* Variable Declaration				*/
-	/*----------------------------------*/
-	uint32_t					i;
-
-	/*----------------------------------*/
-	/* Process							*/
-	/*----------------------------------*/
-	for(i=0; i<(sizeof(arrstTestListItems)/sizeof(SGUI_LIST_ITEM)); i++)
+    // Insert list item.
+    for(i=0; i<(sizeof(arrstTestListItems)/sizeof(SGUI_LIST_ITEM)); i++)
 	{
         SGUI_LIST_InsertItem(&stTestList, &arrstTestListItems[i], stTestList.Data.Count);
 	}
-	SGUI_LIST_RefreshList(&stTestList);
 #endif
 	return HMI_RET_NORMAL;
 }
 
-SGUI_INT HMI_DemoList_RefreshScreen(void)
+HMI_ENGINE_RESULT HMI_DemoList_Prepare (const void* pstParameters)
+{
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	SGUI_LIST_RefreshList(&stTestList);
+	return HMI_RET_NORMAL;
+}
+
+HMI_ENGINE_RESULT HMI_DemoList_RefreshScreen(const void* pstParameters)
 {
 	SGUI_LIST_RefreshList(&stTestList);
 	return HMI_RET_NORMAL;
 }
 
-SGUI_INT HMI_DemoList_InternalEvent(SGUI_INT uiScreenID, const void* pstParameters)
-{
-	return HMI_RET_NORMAL;
-}
-
-SGUI_INT HMI_DemoList_ExternalEvent(SGUI_INT uiScreenID, const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoList_ProcessEvent(HMI_EVENT_TYPE eEvent, const HMI_EVENT* pstEvent)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	SGUI_INT						iProcessResult;
-	USER_ACT_KEYPRESS*			pstUserEvent;
+	HMI_ENGINE_RESULT           eProcessResult;
+	SGUI_UINT16*				parrKeyValue;
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	iProcessResult =			HMI_RET_NORMAL;
-	pstUserEvent = 				(USER_ACT_KEYPRESS*)pstParameters;
+	eProcessResult =			HMI_RET_NORMAL;
 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	switch(pstUserEvent->KeyValue[0])
+	if(eEvent == HMI_ENGINE_EVENT_ACTION)
 	{
-		case KEY_VALUE_SPACE:
+		if(NULL != pstEvent)
 		{
-			break;
-		}
-		case KEY_VALUE_ENTER:
-		{
-			iProcessResult = HMI_RET_CONFIRM;
-			break;
-		}
-		case KEY_VALUE_ESC:
-		{
-			iProcessResult = HMI_RET_CANCEL;
-			break;
-		}
-		case KEY_VALUE_UP:
-		{
-			SGUI_LIST_SelectUpItem(&stTestList);
-			break;
-		}
-		case KEY_VALUE_DOWN:
-		{
-			SGUI_LIST_SelectDownItem(&stTestList);
-			break;
-		}
-		case KEY_VALUE_RIGHT:
-		{
-			if((pstUserEvent->Options & KEY_OPTION_SHIFT) != 0)
+			parrKeyValue = (SGUI_UINT16*)pstEvent->Data;
+			if(NULL != parrKeyValue)
 			{
-				SGUI_LIST_SetListItemValue(&stTestList, stTestList.ControlVariable.SelectIndex, SGUI_LIST_GetListItemPtr(&stTestList, stTestList.ControlVariable.SelectIndex)->Valid.Value, SGUI_LIST_GetListItemPtr(&stTestList, stTestList.ControlVariable.SelectIndex)->Decimal.Value-1);
-			}
-			else
-			{
-				SGUI_LIST_SetListItemValue(&stTestList, stTestList.ControlVariable.SelectIndex, SGUI_LIST_GetListItemPtr(&stTestList, stTestList.ControlVariable.SelectIndex)->Valid.Value+1, SGUI_LIST_GetListItemPtr(&stTestList, stTestList.ControlVariable.SelectIndex)->Decimal.Value);
-			}
-			break;
-		}
-		case KEY_VALUE_LEFT:
-		{
-			if((pstUserEvent->Options & KEY_OPTION_SHIFT) != 0)
-			{
-				SGUI_LIST_SetListItemValue(&stTestList, stTestList.ControlVariable.SelectIndex, SGUI_LIST_GetListItemPtr(&stTestList, stTestList.ControlVariable.SelectIndex)->Valid.Value, SGUI_LIST_GetListItemPtr(&stTestList, stTestList.ControlVariable.SelectIndex)->Decimal.Value+1);
-			}
-			else
-			{
-				SGUI_LIST_SetListItemValue(&stTestList, stTestList.ControlVariable.SelectIndex, SGUI_LIST_GetListItemPtr(&stTestList, stTestList.ControlVariable.SelectIndex)->Valid.Value-1, SGUI_LIST_GetListItemPtr(&stTestList, stTestList.ControlVariable.SelectIndex)->Decimal.Value);
-			}
-			break;
-		}
+				switch(*(parrKeyValue+1))
+				{
+					case KEY_VALUE_ENTER:
+					{
+						eProcessResult = HMI_RET_CONFIRM;
+						break;
+					}
+					case KEY_VALUE_ESC:
+					{
+						eProcessResult = HMI_RET_CANCEL;
+						break;
+					}
+					case KEY_VALUE_UP:
+					{
+						SGUI_LIST_SelectUpItem(&stTestList);
+						break;
+					}
+					case KEY_VALUE_DOWN:
+					{
+						SGUI_LIST_SelectDownItem(&stTestList);
+						break;
+					}
+					case KEY_VALUE_RIGHT:
+					{
+						if((*(parrKeyValue+0) & KEY_OPTION_SHIFT) != 0)
+						{
+							SGUI_LIST_SetListItemValue(&stTestList, stTestList.ControlVariable.SelectIndex, SGUI_LIST_GetListItemPtr(&stTestList, stTestList.ControlVariable.SelectIndex)->Valid.Value, SGUI_LIST_GetListItemPtr(&stTestList, stTestList.ControlVariable.SelectIndex)->Decimal.Value-1);
+						}
+						else
+						{
+							SGUI_LIST_SetListItemValue(&stTestList, stTestList.ControlVariable.SelectIndex, SGUI_LIST_GetListItemPtr(&stTestList, stTestList.ControlVariable.SelectIndex)->Valid.Value+1, SGUI_LIST_GetListItemPtr(&stTestList, stTestList.ControlVariable.SelectIndex)->Decimal.Value);
+						}
+						break;
+					}
+					case KEY_VALUE_LEFT:
+					{
+						if((*(parrKeyValue+0) & KEY_OPTION_SHIFT) != 0)
+						{
+							SGUI_LIST_SetListItemValue(&stTestList, stTestList.ControlVariable.SelectIndex, SGUI_LIST_GetListItemPtr(&stTestList, stTestList.ControlVariable.SelectIndex)->Valid.Value, SGUI_LIST_GetListItemPtr(&stTestList, stTestList.ControlVariable.SelectIndex)->Decimal.Value+1);
+						}
+						else
+						{
+							SGUI_LIST_SetListItemValue(&stTestList, stTestList.ControlVariable.SelectIndex, SGUI_LIST_GetListItemPtr(&stTestList, stTestList.ControlVariable.SelectIndex)->Valid.Value-1, SGUI_LIST_GetListItemPtr(&stTestList, stTestList.ControlVariable.SelectIndex)->Decimal.Value);
+						}
+						break;
+					}
 #if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0)
-		case KEY_VALUE_F8:
-		{
-			SGUI_LIST_RemoveItem(&stTestList, stTestList.ControlVariable.SelectIndex);
-			SGUI_LIST_RefreshList(&stTestList);
-			break;
-		}
-		case KEY_VALUE_F9:	// Insert to head.
-		{
-			SGUI_LIST_InsertItem(&stTestList, &arrstAppendListItems[0], 0);
-			SGUI_LIST_RefreshList(&stTestList);
-			break;
-		}
-		case KEY_VALUE_F10:	// Insert to intermediate.
-		{
-			SGUI_LIST_InsertItem(&stTestList, &arrstAppendListItems[1], 5);
-			SGUI_LIST_RefreshList(&stTestList);
-			break;
-		}
-		case KEY_VALUE_F11:	// Insert to end.
-		{
-			SGUI_LIST_InsertItem(&stTestList, &arrstAppendListItems[2], stTestList.Data.Count);
-			SGUI_LIST_RefreshList(&stTestList);
-			break;
-		}
+					case KEY_VALUE_F8:
+					{
+						SGUI_LIST_RemoveItem(&stTestList, stTestList.ControlVariable.SelectIndex);
+						SGUI_LIST_RefreshList(&stTestList);
+						break;
+					}
+					case KEY_VALUE_F9:	// Insert to head.
+					{
+						SGUI_LIST_InsertItem(&stTestList, &arrstAppendListItems[0], 0);
+						SGUI_LIST_RefreshList(&stTestList);
+						break;
+					}
+					case KEY_VALUE_F10:	// Insert to intermediate.
+					{
+						SGUI_LIST_InsertItem(&stTestList, &arrstAppendListItems[1], 5);
+						SGUI_LIST_RefreshList(&stTestList);
+						break;
+					}
+					case KEY_VALUE_F11:	// Insert to end.
+					{
+						SGUI_LIST_InsertItem(&stTestList, &arrstAppendListItems[2], stTestList.Data.Count);
+						SGUI_LIST_RefreshList(&stTestList);
+						break;
+					}
 #endif
-		default:
-		{
-			break;
+					default:
+					{
+						break;
+					}
+				}
+			}
 		}
 	}
-	return iProcessResult;
+	return eProcessResult;
 }
 
-SGUI_INT HMI_DemoList_PostProcess(int32_t iActionResult)
+HMI_ENGINE_RESULT HMI_DemoList_PostProcess(SGUI_INT iActionResult)
 {
 	uint32_t			uiSelectListIndex;
 	SGUI_LIST_ITEM*		pstSelectedItem;
@@ -241,6 +238,7 @@ SGUI_INT HMI_DemoList_PostProcess(int32_t iActionResult)
 		uiSelectListIndex = stTestList.ControlVariable.SelectIndex;
 		switch(SGUI_LIST_GetListItemPtr(&stTestList, uiSelectListIndex)->Sign)
 		{
+			/*
 			case 1:
 			{
 				// Show notice.
@@ -257,27 +255,28 @@ SGUI_INT HMI_DemoList_PostProcess(int32_t iActionResult)
 				}
 				break;
 			}
+			*/
 			case 6:
 			{
-				HMI_Action_Goto(4, NULL);
+				//HMI_Action_Goto(4, NULL);
 				break;
 			}
 			case 7:
 			{
-				HMI_Action_Goto(5, NULL);
+				HMI_Goto(HMI_SCREEN_ID_DEMO_VARIABLE_BOX, NULL);
 				break;
 			}
 			default:
 			{
 				sprintf(szNoticeTextBuffer, "选择列表项%u.", uiSelectListIndex);
-				HMI_Action_Goto(3, szNoticeTextBuffer);
+				HMI_Goto(HMI_SCREEN_ID_DEMO_TEXT_NOTICE, szNoticeTextBuffer);
 				break;
 			}
 		}
 	}
 	else if(HMI_RET_CANCEL == iActionResult)
 	{
-		HMI_Action_GoBack();
+		HMI_GoBack(NULL);
 	}
 	return HMI_RET_NORMAL;
 }

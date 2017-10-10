@@ -27,13 +27,12 @@
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
-static SGUI_INT			HMI_DemoVariableBox_Initialize(void);
-static SGUI_INT			HMI_DemoVariableBox_PreProcess(const void* pstParameters);
-static SGUI_INT			HMI_DemoVariableBox_RefrershScreen(void);
-static SGUI_INT			HMI_DemoVariableBox_OnInternalEvent(SGUI_INT uiScreenID, const void* pstParameters);
-static SGUI_INT			HMI_DemoVariableBox_OnExternalEvent(SGUI_INT uiScreenID, const void* pstParameters);
-static SGUI_INT			HMI_DemoVariableBox_PostProcess(SGUI_INT iActionResult);
-static void				HMI_DemoVariableBox_DrawFrame(SGUI_PSZSTR szTitle);
+static HMI_ENGINE_RESULT    HMI_DemoVariableBox_Initialize(void);
+static HMI_ENGINE_RESULT	HMI_DemoVariableBox_Prepare(const void* pstParameters);
+static HMI_ENGINE_RESULT	HMI_DemoVariableBox_RefreshScreen(const void* pstParameters);
+static HMI_ENGINE_RESULT    HMI_DemoVariableBox_ProcessEvent(HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent);
+static HMI_ENGINE_RESULT	HMI_DemoVariableBox_PostProcess(SGUI_INT iActionResult);
+static void				    HMI_DemoVariableBox_DrawFrame(SGUI_PSZSTR szTitle);
 
 //=======================================================================//
 //= Static variable declaration.									    =//
@@ -51,26 +50,25 @@ static uint16_t					uiNeedHelp =			5;
 //= Global variable declaration.									    =//
 //=======================================================================//
 HMI_SCREEN_ACTION		stHMI_DemoVariableBoxActions = {HMI_DemoVariableBox_Initialize,
-														HMI_DemoVariableBox_PreProcess,
-														HMI_DemoVariableBox_RefrershScreen,
-														HMI_DemoVariableBox_OnInternalEvent,
-														HMI_DemoVariableBox_OnExternalEvent,
+														HMI_DemoVariableBox_Prepare,
+														HMI_DemoVariableBox_RefreshScreen,
+														HMI_DemoVariableBox_ProcessEvent,
 														HMI_DemoVariableBox_PostProcess,
 														};
-HMI_SCREEN_OBJECT       g_stHMI_DemoVariableBox =	{	HMI_SCREEN_ID_ANY,
+HMI_SCREEN_OBJECT       g_stHMIDemo_VariableBox =	{	HMI_SCREEN_ID_DEMO_VARIABLE_BOX,
 														&stHMI_DemoVariableBoxActions
 														};
 
 //=======================================================================//
 //= Function implementation.										    =//
 //=======================================================================//
-SGUI_INT HMI_DemoVariableBox_Initialize(void)
+HMI_ENGINE_RESULT HMI_DemoVariableBox_Initialize(void)
 {
 	uiFocusedFlag = 0;
 	return HMI_RET_NORMAL;
 }
 
-SGUI_INT HMI_DemoVariableBox_PreProcess(const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoVariableBox_Prepare(const void* pstParameters)
 {
 	/*----------------------------------*/
 	/* Process							*/
@@ -82,182 +80,195 @@ SGUI_INT HMI_DemoVariableBox_PreProcess(const void* pstParameters)
 	return HMI_RET_NORMAL;
 }
 
-SGUI_INT HMI_DemoVariableBox_RefrershScreen(void)
+HMI_ENGINE_RESULT HMI_DemoVariableBox_RefreshScreen(const void* pstParameters)
 {
+    /*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	// Draw frame
+    HMI_DemoVariableBox_DrawFrame((SGUI_PSZSTR)szFrameTitle);
+    // Draw number box
+    SGUI_Basic_DrawRectangle(VARIABLE_BOX_POSX, VARIABLE_BOX_NUMBER_POSY, VARIABLE_BOX_WIDTH+4, g_stFontSize[stNumberVariableBox.FontSize].Height+6, GUI_COLOR_FRGCLR, GUI_COLOR_BKGCLR);
+    SGUI_IntegerVariableBox_Refresh(&stNumberVariableBox, SGUI_CENTER, (0 == uiFocusedFlag)?GUI_DRAW_REVERSE:GUI_DRAW_NORMAL);
+    // Draw text box
+    SGUI_Basic_DrawRectangle(VARIABLE_BOX_POSX, VARIABLE_BOX_TEXT_POSY, VARIABLE_BOX_WIDTH+4,  g_stFontSize[stTextVariableBox.FontSize].Height+6, GUI_COLOR_FRGCLR, GUI_COLOR_BKGCLR);
+    SGUI_TextVariableBox_Refresh(&stTextVariableBox, (0 == uiFocusedFlag)?GUI_DRAW_NORMAL:GUI_DRAW_REVERSE);
+
 	return HMI_RET_NORMAL;
 }
 
-SGUI_INT HMI_DemoVariableBox_OnInternalEvent(SGUI_INT uiScreenID, const void* pstParameters)
-{
-	/*----------------------------------*/
-	/* Process	 						*/
-	/*----------------------------------*/
-	if(uiNeedHelp > 0)
-	{
-		uiNeedHelp--;
-		HMI_Action_Goto(3, szHelpNoticeText);
-	}
-	else
-	{
-		HMI_DemoVariableBox_PreProcess(NULL);
-	}
-	return HMI_RET_NOACTION;
-}
-
-SGUI_INT HMI_DemoVariableBox_OnExternalEvent(SGUI_INT uiScreenID,const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoVariableBox_ProcessEvent(HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	SGUI_INT					iProcessResult;
-	USER_ACT_KEYPRESS*			pstUserEvent;
-	static	uint32_t			iInitialized = 0;
+	HMI_ENGINE_RESULT           eProcessResult;
+	SGUI_UINT16*				parrKeyValue;
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	iProcessResult =			HMI_RET_NORMAL;
-	pstUserEvent =				(USER_ACT_KEYPRESS*)pstParameters;
+	eProcessResult =			HMI_RET_NORMAL;
 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if(0 == iInitialized)
-	{
-		switch(pstUserEvent->KeyValue[0])
-		{
-			case KEY_VALUE_SPACE:
-			{
-				if(0 == iInitialized)
-				{
-					// Draw frame
-					HMI_DemoVariableBox_DrawFrame((SGUI_PSZSTR)szFrameTitle);
-					// Draw number box
-					SGUI_Basic_DrawRectangle(VARIABLE_BOX_POSX, VARIABLE_BOX_NUMBER_POSY, VARIABLE_BOX_WIDTH+4, g_stFontSize[stNumberVariableBox.FontSize].Height+6, GUI_COLOR_FRGCLR, GUI_COLOR_BKGCLR);
-					SGUI_IntegerVariableBox_Refresh(&stNumberVariableBox, SGUI_CENTER, GUI_DRAW_REVERSE);
-					// Draw text box
-					SGUI_Basic_DrawRectangle(VARIABLE_BOX_POSX, VARIABLE_BOX_TEXT_POSY, VARIABLE_BOX_WIDTH+4,  g_stFontSize[stTextVariableBox.FontSize].Height+6, GUI_COLOR_FRGCLR, GUI_COLOR_BKGCLR);
-					SGUI_TextVariableBox_Refresh(&stTextVariableBox, GUI_DRAW_NORMAL);
-					iInitialized = 1;
-				}
-				break;
-			}
-			break;
-			{
-				iProcessResult = HMI_RET_NOACTION;
-				break;
-			}
-		}
-	}
-	else
-	{
-		switch(pstUserEvent->KeyValue[0])
-		{
-			case KEY_VALUE_TAB:
-			{
-				uiFocusedFlag = ((uiFocusedFlag+1)%2);
-				if(0 == uiFocusedFlag)
-				{
-					SGUI_IntegerVariableBox_Refresh(&stNumberVariableBox, SGUI_CENTER, GUI_DRAW_REVERSE);
-					SGUI_TextVariableBox_Refresh(&stTextVariableBox, GUI_DRAW_NORMAL);
-				}
-				else
-				{
-					SGUI_IntegerVariableBox_Refresh(&stNumberVariableBox, SGUI_CENTER, GUI_DRAW_NORMAL);
-					SGUI_TextVariableBox_Refresh(&stTextVariableBox, GUI_DRAW_REVERSE);
-				}
-				iProcessResult = HMI_RET_NOACTION;
-				break;
-			}
-			case KEY_VALUE_ESC:
-			{
-				iProcessResult = HMI_RET_CANCEL;
-				break;
-			}
-			case KEY_VALUE_LEFT:
-			{
-				if(1 == uiFocusedFlag)
-				{
-					if(stTextVariableBox.FocusIndex > 0)
-					{
-						stTextVariableBox.FocusIndex--;
-						SGUI_TextVariableBox_ChangeCharacter(&stTextVariableBox, GUI_DRAW_REVERSE, GUI_TEXT_ASCII, SGUI_TXT_VARBOX_OPT_NONE);
-					}
-				}
-				iProcessResult = HMI_RET_NOACTION;
-				break;
-			}
-			case KEY_VALUE_UP:
-			{
-				if(1 == uiFocusedFlag)
-				{
-					SGUI_TextVariableBox_ChangeCharacter(&stTextVariableBox, GUI_DRAW_REVERSE, GUI_TEXT_ASCII, SGUI_TXT_VARBOX_OPT_PREV);
-				}
-				else
-				{
-					stNumberVariableBox.Value++;
-					SGUI_IntegerVariableBox_Refresh(&stNumberVariableBox, SGUI_CENTER, GUI_DRAW_REVERSE);
-				}
-				iProcessResult = HMI_RET_NOACTION;
-				break;
-			}
-			case KEY_VALUE_RIGHT:
-			{
-				if(1 == uiFocusedFlag)
-				{
-					if(stTextVariableBox.FocusIndex < (stTextVariableBox.MaxTextLength-1))
-					{
-						stTextVariableBox.FocusIndex++;
-						SGUI_TextVariableBox_ChangeCharacter(&stTextVariableBox, GUI_DRAW_REVERSE, GUI_TEXT_ASCII, SGUI_TXT_VARBOX_OPT_NONE);
-					}
-				}
-				iProcessResult = HMI_RET_NOACTION;
-				break;
-			}
-			case KEY_VALUE_DOWN:
-			{
-				if(1 == uiFocusedFlag)
-				{
-					SGUI_TextVariableBox_ChangeCharacter(&stTextVariableBox, GUI_DRAW_REVERSE, GUI_TEXT_ASCII, SGUI_TXT_VARBOX_OPT_NEXT);
-				}
-				else
-				{
-					stNumberVariableBox.Value--;
-					SGUI_IntegerVariableBox_Refresh(&stNumberVariableBox, SGUI_CENTER, GUI_DRAW_REVERSE);
-				}
-				iProcessResult = HMI_RET_NOACTION;
-				break;
-			}
-			case KEY_VALUE_ENTER:
-			{
-				if(1 == uiFocusedFlag)
-				{
-					szFrameTitle = stTextVariableBox.Value;
-					HMI_DemoVariableBox_DrawFrame((SGUI_PSZSTR)szFrameTitle);
-					// Draw number box
-					SGUI_Basic_DrawRectangle(VARIABLE_BOX_POSX, VARIABLE_BOX_NUMBER_POSY, VARIABLE_BOX_WIDTH+4, g_stFontSize[stNumberVariableBox.FontSize].Height+6, GUI_COLOR_FRGCLR, GUI_COLOR_BKGCLR);
-					SGUI_IntegerVariableBox_Refresh(&stNumberVariableBox, SGUI_CENTER, GUI_DRAW_NORMAL);
-					// Draw text box
-					SGUI_Basic_DrawRectangle(VARIABLE_BOX_POSX, VARIABLE_BOX_TEXT_POSY, VARIABLE_BOX_WIDTH+4, g_stFontSize[stTextVariableBox.FontSize].Height+6, GUI_COLOR_FRGCLR, GUI_COLOR_BKGCLR);
-					SGUI_TextVariableBox_Refresh(&stTextVariableBox, GUI_DRAW_REVERSE);
-				}
-				break;
-			}
-			break;
-			{
-				iProcessResult = HMI_RET_NOACTION;
-				break;
-			}
-		}
-	}
-	return iProcessResult;
+	if(uiNeedHelp > 0)
+    {
+        if(NULL != pstEvent)
+        {
+            if(eEventType == HMI_ENGINE_EVENT_ACTION)
+            {
+
+                if(HMI_ENGINE_ACTION_KEY_PRESS == pstEvent->Action)
+                {
+                    parrKeyValue = (SGUI_UINT16*)pstEvent->Data;
+                    if(NULL != parrKeyValue)
+                    {
+                        if(KEY_VALUE_SPACE == *(parrKeyValue+1))
+                        {
+                            // Stop count down when press space.
+                            uiNeedHelp = 0;
+                        }
+                    }
+                }
+            }
+            else if(eEventType == HMI_ENGINE_EVENT_DATA)
+            {
+                if(HMI_ENGINE_ACTION_ON_TIMER_RTC == pstEvent->Action)
+                {
+                    //Count down five seconds
+                    uiNeedHelp--;
+                }
+            }
+        }
+
+        // Redraw screen if time out.
+        if(0 == uiNeedHelp)
+        {
+            eProcessResult = HMI_DemoVariableBox_RefreshScreen(NULL);
+        }
+
+        eProcessResult = HMI_RET_NOACTION;
+    }
+    else
+    {
+        if(HMI_ENGINE_ACTION_KEY_PRESS == pstEvent->Action)
+        {
+            parrKeyValue = (SGUI_UINT16*)pstEvent->Data;
+            if(NULL != parrKeyValue)
+            {
+                switch(*(parrKeyValue+1))
+                {
+                    case KEY_VALUE_TAB:
+                    {
+                        uiFocusedFlag = ((uiFocusedFlag+1)%2);
+                        if(0 == uiFocusedFlag)
+                        {
+                            SGUI_IntegerVariableBox_Refresh(&stNumberVariableBox, SGUI_CENTER, GUI_DRAW_REVERSE);
+                            SGUI_TextVariableBox_Refresh(&stTextVariableBox, GUI_DRAW_NORMAL);
+                        }
+                        else
+                        {
+                            SGUI_IntegerVariableBox_Refresh(&stNumberVariableBox, SGUI_CENTER, GUI_DRAW_NORMAL);
+                            SGUI_TextVariableBox_Refresh(&stTextVariableBox, GUI_DRAW_REVERSE);
+                        }
+                        eProcessResult = HMI_RET_NOACTION;
+                        break;
+                    }
+                    case KEY_VALUE_ESC:
+                    {
+                        eProcessResult = HMI_RET_CANCEL;
+                        break;
+                    }
+                    case KEY_VALUE_LEFT:
+                    {
+                        if(1 == uiFocusedFlag)
+                        {
+                            if(stTextVariableBox.FocusIndex > 0)
+                            {
+                                stTextVariableBox.FocusIndex--;
+                                SGUI_TextVariableBox_ChangeCharacter(&stTextVariableBox, GUI_DRAW_REVERSE, GUI_TEXT_ASCII, SGUI_TXT_VARBOX_OPT_NONE);
+                            }
+                        }
+                        eProcessResult = HMI_RET_NOACTION;
+                        break;
+                    }
+                    case KEY_VALUE_UP:
+                    {
+                        if(1 == uiFocusedFlag)
+                        {
+                            SGUI_TextVariableBox_ChangeCharacter(&stTextVariableBox, GUI_DRAW_REVERSE, GUI_TEXT_ASCII, SGUI_TXT_VARBOX_OPT_PREV);
+                        }
+                        else
+                        {
+                            stNumberVariableBox.Value++;
+                            SGUI_IntegerVariableBox_Refresh(&stNumberVariableBox, SGUI_CENTER, GUI_DRAW_REVERSE);
+                        }
+                        eProcessResult = HMI_RET_NOACTION;
+                        break;
+                    }
+                    case KEY_VALUE_RIGHT:
+                    {
+                        if(1 == uiFocusedFlag)
+                        {
+                            if(stTextVariableBox.FocusIndex < (stTextVariableBox.MaxTextLength-1))
+                            {
+                                stTextVariableBox.FocusIndex++;
+                                SGUI_TextVariableBox_ChangeCharacter(&stTextVariableBox, GUI_DRAW_REVERSE, GUI_TEXT_ASCII, SGUI_TXT_VARBOX_OPT_NONE);
+                            }
+                        }
+                        eProcessResult = HMI_RET_NOACTION;
+                        break;
+                    }
+                    case KEY_VALUE_DOWN:
+                    {
+                        if(1 == uiFocusedFlag)
+                        {
+                            SGUI_TextVariableBox_ChangeCharacter(&stTextVariableBox, GUI_DRAW_REVERSE, GUI_TEXT_ASCII, SGUI_TXT_VARBOX_OPT_NEXT);
+                        }
+                        else
+                        {
+                            stNumberVariableBox.Value--;
+                            SGUI_IntegerVariableBox_Refresh(&stNumberVariableBox, SGUI_CENTER, GUI_DRAW_REVERSE);
+                        }
+                        eProcessResult = HMI_RET_NOACTION;
+                        break;
+                    }
+                    case KEY_VALUE_ENTER:
+                    {
+                        if(1 == uiFocusedFlag)
+                        {
+                            szFrameTitle = stTextVariableBox.Value;
+                            HMI_DemoVariableBox_DrawFrame((SGUI_PSZSTR)szFrameTitle);
+                            // Draw number box
+                            SGUI_Basic_DrawRectangle(VARIABLE_BOX_POSX, VARIABLE_BOX_NUMBER_POSY, VARIABLE_BOX_WIDTH+4, g_stFontSize[stNumberVariableBox.FontSize].Height+6, GUI_COLOR_FRGCLR, GUI_COLOR_BKGCLR);
+                            SGUI_IntegerVariableBox_Refresh(&stNumberVariableBox, SGUI_CENTER, GUI_DRAW_NORMAL);
+                            // Draw text box
+                            SGUI_Basic_DrawRectangle(VARIABLE_BOX_POSX, VARIABLE_BOX_TEXT_POSY, VARIABLE_BOX_WIDTH+4, g_stFontSize[stTextVariableBox.FontSize].Height+6, GUI_COLOR_FRGCLR, GUI_COLOR_BKGCLR);
+                            SGUI_TextVariableBox_Refresh(&stTextVariableBox, GUI_DRAW_REVERSE);
+                        }
+                        break;
+                    }
+                    break;
+                    {
+                        eProcessResult = HMI_RET_NOACTION;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+	return eProcessResult;
 }
 
 SGUI_INT HMI_DemoVariableBox_PostProcess(SGUI_INT iActionResult)
 {
 	if(HMI_RET_CANCEL == iActionResult)
 	{
-		HMI_Action_GoBack();
+	    uiNeedHelp = 5;
+		HMI_GoBack(NULL);
 	}
 	return HMI_RET_NORMAL;
 }

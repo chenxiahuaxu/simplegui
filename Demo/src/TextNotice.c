@@ -20,116 +20,111 @@
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
-static SGUI_INT			HMI_DemoNotice_Initialize(void);
-static SGUI_INT			HMI_DemoNotice_PreProcess(const void* pstParameters);
-static SGUI_INT			HMI_DemoNotice_RefreshScreen(void);
-static SGUI_INT			HMI_DemoNotice_OnInternalEvent(SGUI_INT uiScreenID, const void* pstParameters);
-static SGUI_INT			HMI_DemoNotice_OnExternalEvent(SGUI_INT uiScreenID, const void* pstParameters);
-static SGUI_INT			HMI_DemoNotice_PostProcess(SGUI_INT iActionResult);
+static HMI_ENGINE_RESULT	HMI_DemoNotice_Initialize(void);
+static HMI_ENGINE_RESULT	HMI_DemoNotice_Prepare(const void* pstParameters);
+static HMI_ENGINE_RESULT	HMI_DemoNotice_RefreshScreen(const void* pstParameters);
+static HMI_ENGINE_RESULT	HMI_DemoNotice_ProcessEvent(HMI_EVENT_TYPE eEvent, const HMI_EVENT* pstEvent);
+static HMI_ENGINE_RESULT	HMI_DemoNotice_PostProcess(SGUI_INT iActionResult);
 
 //=======================================================================//
 //= Static variable declaration.									    =//
 //=======================================================================//
-static char				szDemoNoticeText[NOTICE_TEXT_BUFFER_SIZE+1] = {0x00};
+static SGUI_CHAR		m_szDemoNoticeText[NOTICE_TEXT_BUFFER_SIZE+1] = {0x00};
 
 //=======================================================================//
 //= Global variable declaration.									    =//
 //=======================================================================//
 HMI_SCREEN_ACTION		stHMI_DemoTextNoticeActions =	{	HMI_DemoNotice_Initialize,
-															HMI_DemoNotice_PreProcess,
+															HMI_DemoNotice_Prepare,
 															HMI_DemoNotice_RefreshScreen,
-															HMI_DemoNotice_OnInternalEvent,
-															HMI_DemoNotice_OnExternalEvent,
+															HMI_DemoNotice_ProcessEvent,
 															HMI_DemoNotice_PostProcess,
 														};
-HMI_SCREEN_OBJECT       g_stHMI_DemoTextNotice =		{	HMI_SCREEN_ID_ANY,
+HMI_SCREEN_OBJECT       g_stHMIDemo_TextNotice =		{	HMI_SCREEN_ID_DEMO_TEXT_NOTICE,
 															&stHMI_DemoTextNoticeActions
 														};
 
 //=======================================================================//
 //= Function implementation.										    =//
 //=======================================================================//
-
-SGUI_INT HMI_DemoNotice_Initialize(void)
+HMI_ENGINE_RESULT HMI_DemoNotice_Initialize(void)
 {
-	SGUI_Notice_RefreshNotice(szDemoNoticeText, 0, SGUI_ICON_INFORMATION);
+	SGUI_Common_MemorySet(m_szDemoNoticeText, 0x00, sizeof(SGUI_CHAR)*(NOTICE_TEXT_BUFFER_SIZE+1));
 	return HMI_RET_NORMAL;
 }
 
-SGUI_INT HMI_DemoNotice_PreProcess(const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoNotice_Prepare(const void* pstParameters)
 {
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
 	if(NULL == pstParameters)
 	{
-		SGUI_Common_StringCopy(szDemoNoticeText, "无参数。");
+		SGUI_Common_StringLengthCopy(m_szDemoNoticeText, "无参数。", NOTICE_TEXT_BUFFER_SIZE);
 	}
 	else
 	{
-		strncpy(szDemoNoticeText, (SGUI_PSZSTR)pstParameters, NOTICE_TEXT_BUFFER_SIZE);
-		szDemoNoticeText[NOTICE_TEXT_BUFFER_SIZE] = '\0';
+		SGUI_Common_StringLengthCopy(m_szDemoNoticeText, (SGUI_PSZSTR)pstParameters, NOTICE_TEXT_BUFFER_SIZE);
+		m_szDemoNoticeText[NOTICE_TEXT_BUFFER_SIZE] = '\0';
 	}
-	SGUI_Notice_RefreshNotice(szDemoNoticeText, 0, SGUI_ICON_INFORMATION);
+	SGUI_Notice_RefreshNotice(m_szDemoNoticeText, 0, SGUI_ICON_INFORMATION);
 	return HMI_RET_NORMAL;
 }
 
-SGUI_INT HMI_DemoNotice_RefreshScreen(void)
+HMI_ENGINE_RESULT HMI_DemoNotice_RefreshScreen(const void* pstParameters)
 {
+	SGUI_Notice_RefreshNotice(m_szDemoNoticeText, 0, SGUI_ICON_INFORMATION);
 	return HMI_RET_NORMAL;
 }
 
-SGUI_INT HMI_DemoNotice_OnInternalEvent(SGUI_INT uiScreenID, const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoNotice_ProcessEvent(HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	SGUI_INT					iProcessResult;
-
-	/*----------------------------------*/
-	/* Process							*/
-	/*----------------------------------*/
-	iProcessResult = HMI_RET_NOACTION;
-	return iProcessResult;
-}
-
-SGUI_INT HMI_DemoNotice_OnExternalEvent(SGUI_INT uiScreenID, const void* pstParameters)
-{
-	/*----------------------------------*/
-	/* Variable Declaration				*/
-	/*----------------------------------*/
-	SGUI_INT					iProcessResult;
-	USER_ACT_KEYPRESS*			pstUserEvent;
+	HMI_ENGINE_RESULT           eProcessResult;
+	SGUI_UINT16*				parrKeyValue;
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	iProcessResult =			HMI_RET_NORMAL;
-	pstUserEvent =				(USER_ACT_KEYPRESS*)pstParameters;
+	eProcessResult =			HMI_RET_NORMAL;
 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if(KEY_VALUE_ENTER == pstUserEvent->KeyValue[0])
+	if(eEventType == HMI_ENGINE_EVENT_ACTION)
 	{
-		iProcessResult = HMI_RET_CONFIRM;
+		if(NULL != pstEvent)
+		{
+			parrKeyValue = (SGUI_UINT16*)pstEvent->Data;
+			if(NULL != parrKeyValue)
+			{
+				switch(*(parrKeyValue+1))
+				{
+					case KEY_VALUE_ENTER:
+					case KEY_VALUE_ESC:
+					{
+						eProcessResult = HMI_RET_CONFIRM;
+						break;
+					}
+				}
+			}
+		}
 	}
-	else
-	{
-		iProcessResult = HMI_RET_NOACTION;
-	}
-	return iProcessResult;
+
+	return eProcessResult;
 }
 
-SGUI_INT HMI_DemoNotice_PostProcess(SGUI_INT iActionResult)
+HMI_ENGINE_RESULT HMI_DemoNotice_PostProcess(SGUI_INT iActionResult)
 {
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
 	if(HMI_RET_CONFIRM == iActionResult)
 	{
-		HMI_Action_GoBack();
+		HMI_GoBack(NULL);
 	}
-	return 0;
+	return HMI_RET_NORMAL;
 }
 

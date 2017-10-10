@@ -10,6 +10,7 @@
 //= Include files.													    =//
 //=======================================================================//
 #include "HMI_Engine.h"
+#include "SGUI_Common.h"
 
 //=======================================================================//
 //= Static variable declaration.									    =//
@@ -68,6 +69,7 @@ HMI_ENGINE_RESULT HMI_PrepareEngine(HMI_ENGINE_OBJECT* pstHMIEngineObject)
 /** Params:																	**/
 /** @pstHMIEngineObject[in]: Engine object pointer. 						**/
 /**	@pstScreenObject[in]: Screen object pointer.							**/
+/** @bInitializeScreenObject[in]: Initialize or reinitialize screen object.	**/
 /** Return:			HMI_ENGINE_RESULT										**/
 /** @HMI_RET_NORMAL:    Add success.	    								**/
 /**	@HMI_RET_NO_SPACE:  No blank element in engine object for new screen.   **/
@@ -75,7 +77,7 @@ HMI_ENGINE_RESULT HMI_PrepareEngine(HMI_ENGINE_OBJECT* pstHMIEngineObject)
 /**                 object, so please keep the memory area is usable during **/
 /**                 processing.												**/
 /*****************************************************************************/
-HMI_ENGINE_RESULT HMI_AddScreen(HMI_ENGINE_OBJECT* pstHMIEngineObject, HMI_SCREEN_OBJECT* pstScreenObject)
+HMI_ENGINE_RESULT HMI_AddScreen(HMI_ENGINE_OBJECT* pstHMIEngineObject, HMI_SCREEN_OBJECT* pstScreenObject, SGUI_BOOL bInitializeScreenObject)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -97,7 +99,7 @@ HMI_ENGINE_RESULT HMI_AddScreen(HMI_ENGINE_OBJECT* pstHMIEngineObject, HMI_SCREE
         // Looking for the blank element in array.
         while(iIndex < pstHMIEngineObject->ScreenCount)
         {
-            if(NULL != pstHMIEngineObject->Screen)
+            if(NULL == pstHMIEngineObject->Screen)
             {
                 break;
             }
@@ -106,8 +108,12 @@ HMI_ENGINE_RESULT HMI_AddScreen(HMI_ENGINE_OBJECT* pstHMIEngineObject, HMI_SCREE
                 iIndex++;
             }
         }
-        if(iIndex < pstHMIEngineObject->ScreenCount)
+        if(iIndex < HMI_SCREEN_LIST_MAX)
         {
+        	if(SGUI_TRUE == bInitializeScreenObject)
+			{
+				pstScreenObject->Actions->Initialize();
+			}
             // Add screen object pointer to engine.
             pstHMIEngineObject->Screen[iIndex] = pstScreenObject;
             pstHMIEngineObject->ScreenCount++;
@@ -155,28 +161,38 @@ HMI_ENGINE_RESULT HMI_ActiveEngine(HMI_ENGINE_OBJECT* pstHMIEngineObject, SGUI_I
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if(NULL != g_pstActivedEngineObject)
-    {
-        if(HMI_ENGINE_STATE_INPROCESS == g_pstActivedEngineObject->State)
-        {
-            // Current engine is already in processing, cannot active others.
-            eProcessResult = HMI_RET_ERROR_STATE;
-        }
-        else if(HMI_SCREEN_ID_ANY != iScreenID)
-        {
-
-            pstScreenObject = HMI_GetScreenObjectInEngine(pstHMIEngineObject, iScreenID);
-            if(NULL != pstScreenObject)
+	if((NULL != g_pstActivedEngineObject) && (HMI_ENGINE_STATE_INPROCESS == g_pstActivedEngineObject->State))
+	{
+		// Current engine is already in processing, cannot active others.
+		eProcessResult = HMI_RET_ERROR_STATE;
+	}
+	else
+	{
+		if(NULL != pstHMIEngineObject)
+		{
+			if(HMI_SCREEN_ID_ANY != iScreenID)
+			{
+				pstScreenObject = HMI_GetScreenObjectInEngine(pstHMIEngineObject, iScreenID);
+			}
+			else
+			{
+				pstScreenObject = pstHMIEngineObject->Screen[0];
+			}
+			if(NULL != pstScreenObject)
             {
-                g_pstActivedEngineObject = pstHMIEngineObject;
-                g_pstActivedEngineObject->CurrentScreenObject = pstScreenObject;
+                pstHMIEngineObject->CurrentScreenObject = pstScreenObject;
             }
             else
-            {
-                eProcessResult = HMI_RET_INVALID_DATA;
-            }
-        }
-    }
+			{
+				eProcessResult = HMI_RET_INVALID_DATA;
+			}
+		}
+	}
+
+    if(HMI_RET_NORMAL == eProcessResult)
+	{
+		g_pstActivedEngineObject = pstHMIEngineObject;
+	}
     return eProcessResult;
 }
 
@@ -247,12 +263,12 @@ HMI_ENGINE_RESULT HMI_StartEngine(const void* pstParameters)
 /** Function Name:	HMI_ProcessEvent                                        **/
 /** Purpose:		Receive posted event and post to screen object.         **/
 /** Params:																	**/
-/**	@uiDestScreenID:	Screen ID witch will be going to.					**/
-/**	@pstPreProcessData:	New screen initialize data.							**/
-/** Return:			None.													**/
-/** Notice:			Screen will only refresh when pstPreProcessData is NULL	**/
+/**	@eEventType[in]:	Event type, see also declare of HMI_EVENT_TYPE.		**/
+/**	@pstEvent[in]:		Event data, include action type and parameter data.	**/
+/** Return:			HMI_ENGINE_RESULT.										**/
+/** Notice:			None.													**/
 /*****************************************************************************/
-HMI_ENGINE_RESULT HMI_ProcessEvent(HMI_EVENT_TYPE eEvent, const void* pstParameters)
+HMI_ENGINE_RESULT HMI_ProcessEvent(HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent)
 {
     /*----------------------------------*/
 	/* Variable Declaration				*/
@@ -291,7 +307,7 @@ HMI_ENGINE_RESULT HMI_ProcessEvent(HMI_EVENT_TYPE eEvent, const void* pstParamet
                 {
                     if(NULL != pstCurrentScreen->Actions->ProcessEvent)
                     {
-                         eProcessResult = pstCurrentScreen->Actions->ProcessEvent(eEvent, pstParameters);
+                         eProcessResult = pstCurrentScreen->Actions->ProcessEvent(eEventType, pstEvent);
                     }
                 }
             }
@@ -305,6 +321,49 @@ HMI_ENGINE_RESULT HMI_ProcessEvent(HMI_EVENT_TYPE eEvent, const void* pstParamet
     }
 
 	return eProcessResult;
+}
+
+/*****************************************************************************/
+/** Function Name:	HMI_PostProcess											**/
+/** Purpose:		Process after event process.							**/
+/** Params:																	**/
+/**	@iActionResult[in]: Event post result.									**/
+/** Return:			HMI_ENGINE_RESULT.										**/
+/** @HMI_RET_NORMAL:    Post process finished normally.						**/
+/** @HMI_RET_INVALID_DATA: Screen object is error, post process function	**/
+/**						might be unspecified.								**/
+/** Notice:			None.													**/
+/*****************************************************************************/
+HMI_ENGINE_RESULT HMI_PostProcess(SGUI_INT iActionResult)
+{
+	/*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+	HMI_ENGINE_RESULT           eProcessResult;
+
+	/*----------------------------------*/
+	/* Initialize						*/
+	/*----------------------------------*/
+	eProcessResult =			HMI_RET_NORMAL;
+
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	if(NULL != g_pstActivedEngineObject)
+    {
+    	if(	(NULL != g_pstActivedEngineObject) &&
+			(NULL != g_pstActivedEngineObject->CurrentScreenObject) &&
+			(NULL != g_pstActivedEngineObject->CurrentScreenObject->Actions) &&
+			(NULL != g_pstActivedEngineObject->CurrentScreenObject->Actions->PostProcess))
+		{
+			eProcessResult = g_pstActivedEngineObject->CurrentScreenObject->Actions->PostProcess(iActionResult);
+		}
+		else
+		{
+			eProcessResult = HMI_RET_INVALID_DATA;
+		}
+    }
+    return eProcessResult;
 }
 
 /*****************************************************************************/
