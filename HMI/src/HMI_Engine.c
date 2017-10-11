@@ -444,7 +444,7 @@ HMI_ENGINE_RESULT HMI_Goto(SGUI_INT iDestScreenID, const void* pstParameters)
 /** Purpose:		Go back to previous screen in actions history.			**/
 /** Resources:		Screen data structure and action process function.		**/
 /** Params:																	**/
-/**	@pstPreProcessData:	Update screen data.									**/
+/**	@pstPreProcessData[in]:	Update screen data.									**/
 /** Return:			None.													**/
 /** Notice:			Screen will only refresh when pstPreProcessData is NULL	**/
 /*****************************************************************************/
@@ -504,7 +504,19 @@ HMI_ENGINE_RESULT HMI_GoBack(const void* pstParameters)
     return eProcessResult;
 }
 
-
+/*****************************************************************************/
+/** Function Name:	HMI_GetScreenObjectInEngine.                            **/
+/** Purpose:		Get a screen object pointer form a existed HMI engine   **/
+/**                 object, return NULL if screen not existed.              **/
+/** Params:																	**/
+/** @pstHMIEngineObject[in]: The pointer of the engine object.              **/
+/** @iScreenID[in]:     Screen ID of screen object will be searched in HMI  **/
+/**                     engine object.                                      **/
+/** Return:			HMI_SCREEN_OBJECT pointer.                              **/
+/** @NULL:              Screen object not existed or not add in this HMI    **/
+/**                     engine.         	    							**/
+/** Notice:			None.                                                   **/
+/*****************************************************************************/
 HMI_SCREEN_OBJECT* HMI_GetScreenObjectInEngine(HMI_ENGINE_OBJECT* pstHMIEngineObject, SGUI_INT iScreenID)
 {
     /*----------------------------------*/
