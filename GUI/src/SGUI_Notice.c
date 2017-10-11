@@ -119,7 +119,7 @@ SGUI_SIZE SGUI_Notice_RefreshNotice(SGUI_PCSZSTR szNoticeText, SGUI_INT uiTextOf
 	SGUI_SIZE					uiLineCount;
 	SGUI_SIZE					uiNoticeBoxHeight;
 	SGUI_SIZE					uiTextLines;
-	SGUI_RECT_AREA				m_stTextDisplayArea;
+	SGUI_RECT_AREA				stTextDisplayArea;
 	SGUI_RECT_AREA				stIconDisplayArea, stIconDataArea;
 	SGUI_PCSZSTR				pszNoticeTextPtr;
 
@@ -147,7 +147,7 @@ SGUI_SIZE SGUI_Notice_RefreshNotice(SGUI_PCSZSTR szNoticeText, SGUI_INT uiTextOf
 		uiNoticeBoxHeight = NOTICE_BOX_HEIGHT_MAX;
 	}
 	// Draw edge
-    SGUI_Basic_DrawRectangle(NOTICE_BOX_POSX, NOTICE_BOX_POSY(uiNoticeBoxHeight), NOTICE_BOX_WIDTH, uiNoticeBoxHeight, GUI_COLOR_FRGCLR, GUI_COLOR_BKGCLR);
+    SGUI_Basic_DrawRectangle(NOTICE_BOX_POSX, NOTICE_BOX_POSY(uiNoticeBoxHeight), NOTICE_BOX_WIDTH, uiNoticeBoxHeight, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
     // Draw icon if exists.
     if(SGUI_ICON_NONE != eIcon)
 	{
@@ -159,27 +159,27 @@ SGUI_SIZE SGUI_Notice_RefreshNotice(SGUI_PCSZSTR szNoticeText, SGUI_INT uiTextOf
 		stIconDataArea.PosY = 0;
 		stIconDataArea.Width = NOTICE_ICON_SIZE;
 		stIconDataArea.Height = NOTICE_ICON_SIZE;
-		SGUI_Basic_DrawBitMap(&stIconDisplayArea, &stIconDataArea, (SGUI_BYTE*)g_arrNoticeIcon[eIcon], GUI_DRAW_NORMAL);
+		SGUI_Basic_DrawBitMap(&stIconDisplayArea, &stIconDataArea, (SGUI_BYTE*)g_arrNoticeIcon[eIcon], SGUI_DRAW_NORMAL);
 	}
     // Draw text;
     if(SGUI_ICON_NONE != eIcon)
 	{
-		m_stTextDisplayArea.PosX = NOTICE_TEXT_POSX;
-		m_stTextDisplayArea.Width = NOTICE_TEXT_AREA_WIDTH;
+		stTextDisplayArea.PosX = NOTICE_TEXT_POSX;
+		stTextDisplayArea.Width = NOTICE_TEXT_AREA_WIDTH;
 	}
 	else
 	{
-		m_stTextDisplayArea.PosX = NOTICE_TEXT_POSX_NOICON;
-		m_stTextDisplayArea.Width = NOTICE_TEXT_AREA_WIDTH_NOICON;;
+		stTextDisplayArea.PosX = NOTICE_TEXT_POSX_NOICON;
+		stTextDisplayArea.Width = NOTICE_TEXT_AREA_WIDTH_NOICON;;
 	}
-	m_stTextDisplayArea.PosY = NOTICE_TEXT_POSY(uiNoticeBoxHeight);
-	m_stTextDisplayArea.Height = NOTICE_TEXT_AREA_HEIGHT(uiLineCount);
-    if(m_stTextDisplayArea.Height > NOTICE_TEXT_AREA_HEIGHT_MAX)
+	stTextDisplayArea.PosY = NOTICE_TEXT_POSY(uiNoticeBoxHeight);
+	stTextDisplayArea.Height = NOTICE_TEXT_AREA_HEIGHT(uiLineCount);
+    if(stTextDisplayArea.Height > NOTICE_TEXT_AREA_HEIGHT_MAX)
 	{
-		m_stTextDisplayArea.Height = NOTICE_TEXT_AREA_HEIGHT_MAX;
+		stTextDisplayArea.Height = NOTICE_TEXT_AREA_HEIGHT_MAX;
 	}
 
-    uiTextLines = SGUI_Text_DrawMultipleLinesText(pszNoticeTextPtr, NOTICE_FONT_SIZE, &m_stTextDisplayArea, uiTextOffset, GUI_DRAW_NORMAL);
+    uiTextLines = SGUI_Text_DrawMultipleLinesText(pszNoticeTextPtr, NOTICE_FONT_SIZE, &stTextDisplayArea, uiTextOffset, SGUI_DRAW_NORMAL);
 
     return uiTextLines;
 }

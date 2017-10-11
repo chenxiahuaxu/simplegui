@@ -160,7 +160,7 @@ void SGUI_Basic_DrawPoint(SGUI_UINT uiCoordinateX, SGUI_UINT uiCoordinateY, SGUI
 	/*----------------------------------*/
 	if((uiCoordinateX < LCD_SIZE_WIDTH) && (uiCoordinateY < LCD_SIZE_HEIGHT))
 	{
-		if(GUI_COLOR_FRGCLR == eColor)
+		if(SGUI_COLOR_FRGCLR == eColor)
 		{
 #if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
 			VTIF_SetPoint(uiCoordinateX, uiCoordinateY, 1);
@@ -168,7 +168,7 @@ void SGUI_Basic_DrawPoint(SGUI_UINT uiCoordinateX, SGUI_UINT uiCoordinateY, SGUI
 			// Call draw pix interface here.
 #endif //_SIMPLE_GUI_ENABLE_SIMULATOR_
 		}
-		else if(GUI_COLOR_BKGCLR == eColor)
+		else if(SGUI_COLOR_BKGCLR == eColor)
 		{
 #if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
 			VTIF_SetPoint(uiCoordinateX, uiCoordinateY, 0);
@@ -199,7 +199,7 @@ SGUI_COLOR SGUI_Basic_GetPoint(SGUI_UINT uiCoordinateX, SGUI_UINT uiCoordinateY)
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	eColor =					GUI_COLOR_BKGCLR;
+	eColor =					SGUI_COLOR_BKGCLR;
 	uiPixValue =				0;
 
 	/*----------------------------------*/
@@ -214,11 +214,11 @@ SGUI_COLOR SGUI_Basic_GetPoint(SGUI_UINT uiCoordinateX, SGUI_UINT uiCoordinateY)
 #endif //_SIMPLE_GUI_ENABLE_SIMULATOR_
 		if(0 == uiPixValue)
 		{
-			eColor = GUI_COLOR_BKGCLR;
+			eColor = SGUI_COLOR_BKGCLR;
 		}
 		else
 		{
-			eColor = GUI_COLOR_FRGCLR;
+			eColor = SGUI_COLOR_FRGCLR;
 		}
 	}
 
@@ -387,7 +387,7 @@ void SGUI_Basic_DrawRectangle(SGUI_UINT uiStartX, SGUI_UINT uiStartY, SGUI_UINT 
 			SGUI_Basic_DrawLine(uiStartX, uiStartY, uiStartX+uiWidth-1, uiStartY, eEdgeColor);
 			SGUI_Basic_DrawLine(uiStartX, uiStartY+uiHeight-1, uiStartX+uiWidth-1, uiStartY+uiHeight-1, eEdgeColor);
 			// Fill area.
-			if((eFillColor != GUI_COLOR_TRANS) && (uiWidth > 2) && (uiHeight > 2))
+			if((eFillColor != SGUI_COLOR_TRANS) && (uiWidth > 2) && (uiHeight > 2))
 			{
 				for(uiColumnIndex=(uiStartX+1); uiColumnIndex<(uiStartX+uiWidth-1); uiColumnIndex++)
 				{
@@ -444,7 +444,7 @@ void SGUI_Basic_DrawCircle(SGUI_UINT uiCx, SGUI_UINT uiCy, SGUI_UINT uiRadius, S
 			if((uiPosXOffset_Old != uiPosXOffset) || (uiPosYOffset_Old != uiPosYOffset) )
 			{
 				// Fill the circle
-				if((uiRadius > 1) && (eFillColor != GUI_COLOR_TRANS) && (uiPosXOffset_Old != uiPosXOffset))
+				if((uiRadius > 1) && (eFillColor != SGUI_COLOR_TRANS) && (uiPosXOffset_Old != uiPosXOffset))
 				{
 
 					SGUI_Basic_DrawLine(uiCx-uiPosXOffset, uiCy-uiPosYOffset+1, uiCx-uiPosXOffset, uiCy+uiPosYOffset-1, eFillColor);
@@ -503,13 +503,13 @@ void SGUI_Basic_ReverseBlockColor(SGUI_UINT uiStartX, SGUI_UINT uiStartY, SGUI_U
 	{
         for(i_H=0; i_H<uiHeight; i_H++)
 		{
-			if(SGUI_Basic_GetPoint(uiStartX+i_W, uiStartY+i_H) == GUI_COLOR_FRGCLR)
+			if(SGUI_Basic_GetPoint(uiStartX+i_W, uiStartY+i_H) == SGUI_COLOR_FRGCLR)
 			{
-                SGUI_Basic_DrawPoint(uiStartX+i_W, uiStartY+i_H, GUI_COLOR_BKGCLR);
+                SGUI_Basic_DrawPoint(uiStartX+i_W, uiStartY+i_H, SGUI_COLOR_BKGCLR);
 			}
 			else
 			{
-				SGUI_Basic_DrawPoint(uiStartX+i_W, uiStartY+i_H, GUI_COLOR_FRGCLR);
+				SGUI_Basic_DrawPoint(uiStartX+i_W, uiStartY+i_H, SGUI_COLOR_FRGCLR);
 			}
 		}
 	}
@@ -607,11 +607,11 @@ void SGUI_Basic_DrawBitMap(SGUI_RECT_AREA* pstDisplayArea, SGUI_RECT_AREA* pstDa
 					}
 					if(GET_BIT(*pData, uiPixIndex) != eDrawMode)
 					{
-						SGUI_Basic_DrawPoint(iDrawPixX, iDrawPixY, GUI_COLOR_FRGCLR);
+						SGUI_Basic_DrawPoint(iDrawPixX, iDrawPixY, SGUI_COLOR_FRGCLR);
 					}
 					else
 					{
-						SGUI_Basic_DrawPoint(iDrawPixX, iDrawPixY, GUI_COLOR_BKGCLR);
+						SGUI_Basic_DrawPoint(iDrawPixX, iDrawPixY, SGUI_COLOR_BKGCLR);
 					}
 					uiDrawnHeightIndex ++;
 					uiPixIndex ++;

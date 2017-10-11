@@ -75,6 +75,12 @@
 		<Unit filename="../../Demo/src/List.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="../../Demo/src/RTCNotice.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../Demo/src/RealtimeGraph.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="../../Demo/src/ScrollingText.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -99,12 +105,12 @@
 		<Unit filename="../../GUI/inc/SGUI_Frame.h">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
-		<Unit filename="../../GUI/inc/SGUI_Graph.h">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
 		<Unit filename="../../GUI/inc/SGUI_List.h" />
 		<Unit filename="../../GUI/inc/SGUI_Notice.h" />
 		<Unit filename="../../GUI/inc/SGUI_ProcessBar.h" />
+		<Unit filename="../../GUI/inc/SGUI_RealtimeGraph.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
 		<Unit filename="../../GUI/inc/SGUI_ScrollBar.h" />
 		<Unit filename="../../GUI/inc/SGUI_Text.h" />
 		<Unit filename="../../GUI/inc/SGUI_Typedef.h" />
@@ -121,9 +127,6 @@
 		<Unit filename="../../GUI/src/SGUI_Frame.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="../../GUI/src/SGUI_Graph.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="../../GUI/src/SGUI_List.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -131,6 +134,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../../GUI/src/SGUI_ProcessBar.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../GUI/src/SGUI_RealtimeGraph.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../../GUI/src/SGUI_ScrollBar.c">

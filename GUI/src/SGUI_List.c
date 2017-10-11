@@ -70,14 +70,12 @@ void SGUI_LIST_InitializeListData(SGUI_LIST_STRUCT* pstList)
 	/*----------------------------------*/
 	if(NULL != pstList)
 	{
+		// Initialize member object pointer.
 		pstListControl = &(pstList->ControlVariable);
 		pstListData = &(pstList->Data);
 		pstSubElement = &(pstList->SubElement);
-#if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0)
-		pstListData->Count = 0;
-		pstListData->Items = NULL;
-#endif
-		pstListControl->ListTitleHeight = LIST_TITLE_HEIGHT(pstList->FontSize);
+        // Initialize visible area control parameter.
+		pstListControl->ListTitleHeight = LIST_TITLE_HEIGHT(pstList->FontSize); // List title height, Include border.
 		pstListControl->PageStartIndex = 0;
 		pstListControl->SelectIndex = 0;
 		pstListControl->ItemPosYOffSet = 0;
@@ -96,6 +94,7 @@ void SGUI_LIST_InitializeListData(SGUI_LIST_STRUCT* pstList)
 		}
 		pstListControl->VisibleItemsNum = (pstListControl->VisibleItemsAreaHeight-1)/pstListControl->ListItemHeight+1;
 
+		// Initialize scroll bar.
 		pstSubElement->ScrollBar.Parameter.eDirection = SGUI_SCROLLBAR_VERTICAL;
 		pstSubElement->ScrollBar.Parameter.PosX = LIST_SCROLLBAR_POSX;
 		pstSubElement->ScrollBar.Parameter.PosY = pstListControl->FirstVisibleItemPosY;
@@ -153,7 +152,7 @@ void SGUI_LIST_RefreshListItems(SGUI_LIST_STRUCT* pstList)
 			pstSubElement->ScrollBar.Parameter.MaxIndex = (pstListData->Count>pstListControl->VisibleIntegralItemsNum)?(pstListData->Count-pstListControl->VisibleIntegralItemsNum-1):0;
 #endif
 			// Clear list item display area.
-			SGUI_Basic_DrawRectangle(LIST_ITEM_RECT_POSX, pstListControl->FirstVisibleItemPosY, LIST_ITEM_RECT_WIDTH, pstListControl->VisibleItemsAreaHeight, GUI_COLOR_BKGCLR, GUI_COLOR_BKGCLR);
+			SGUI_Basic_DrawRectangle(LIST_ITEM_RECT_POSX, pstListControl->FirstVisibleItemPosY, LIST_ITEM_RECT_WIDTH, pstListControl->VisibleItemsAreaHeight, SGUI_COLOR_BKGCLR, SGUI_COLOR_BKGCLR);
 			// Refresh scroll bar
 			pstSubElement->ScrollBar.Data.Index = pstListControl->PageStartIndex;
 			SGUI_ScrollBar_RefreshScrollBar(&(pstSubElement->ScrollBar));
@@ -392,7 +391,7 @@ void SGUI_LIST_DrawItem(SGUI_LIST_STRUCT* pstList, SGUI_SIZE uiIndex)
 
 			// Draw list item text.
 			SGUI_Text_DrawSingleLineText(	pstListItemPointer->Text, pstList->FontSize,
-											&stItemTextDisplayArea, &stItemTextDataArea, GUI_DRAW_NORMAL);
+											&stItemTextDisplayArea, &stItemTextDataArea, SGUI_DRAW_NORMAL);
 
 			// Prepare draw parameter text.
 			stItemTextDataArea.PosX = LIST_ITEM_PARAMETER_SPLIT_WIDTH+1;
@@ -447,7 +446,7 @@ void SGUI_LIST_DrawItem(SGUI_LIST_STRUCT* pstList, SGUI_SIZE uiIndex)
 					}
 				}
 				// Draw parameter text.
-				SGUI_Text_DrawSingleLineText(szParameterStringBuffer, pstList->FontSize, &stItemTextDisplayArea, &stItemTextDataArea, GUI_DRAW_NORMAL);
+				SGUI_Text_DrawSingleLineText(szParameterStringBuffer, pstList->FontSize, &stItemTextDisplayArea, &stItemTextDataArea, SGUI_DRAW_NORMAL);
 			}
 		}
 	}
@@ -528,7 +527,7 @@ void SGUI_LIST_SetListItemValue(SGUI_LIST_STRUCT* pstList, SGUI_INDEX iItemIndex
 		}
 		// Clear list item area.
 		SGUI_Basic_DrawRectangle(LIST_ITEM_RECT_POSX, pstListControl->FirstVisibleItemPosY+(pstListControl->SelectIndex-pstListControl->PageStartIndex)*pstListControl->ListItemHeight-pstListControl->ItemPosYOffSet,
-								LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight, GUI_COLOR_BKGCLR, GUI_COLOR_BKGCLR);
+								LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight, SGUI_COLOR_BKGCLR, SGUI_COLOR_BKGCLR);
 		// refresh list item
 		SGUI_LIST_DrawItem(pstList, iItemIndex);
 		// High light selected item.

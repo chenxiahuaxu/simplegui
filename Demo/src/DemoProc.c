@@ -85,7 +85,15 @@ HMI_ENGINE_RESULT InitializeEngine(HMI_ENGINE_OBJECT* pstHMIEngineObject)
         }
         if(HMI_PROCESS_SUCCESSFUL(eProcessResult))
         {
+            eProcessResult = HMI_AddScreen(pstHMIEngineObject, &g_stHMIDemo_RTCNotice, SGUI_TRUE);
+        }
+        if(HMI_PROCESS_SUCCESSFUL(eProcessResult))
+        {
             eProcessResult = HMI_AddScreen(pstHMIEngineObject, &g_stHMIDemo_VariableBox, SGUI_TRUE);
+        }
+        if(HMI_PROCESS_SUCCESSFUL(eProcessResult))
+        {
+            eProcessResult = HMI_AddScreen(pstHMIEngineObject, &g_stHMI_DemoRealtimeGraph, SGUI_TRUE);
         }
 
         if(HMI_PROCESS_SUCCESSFUL(eProcessResult))

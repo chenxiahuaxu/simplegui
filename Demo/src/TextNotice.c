@@ -20,64 +20,65 @@
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
-static HMI_ENGINE_RESULT	HMI_DemoNotice_Initialize(void);
-static HMI_ENGINE_RESULT	HMI_DemoNotice_Prepare(const void* pstParameters);
-static HMI_ENGINE_RESULT	HMI_DemoNotice_RefreshScreen(const void* pstParameters);
-static HMI_ENGINE_RESULT	HMI_DemoNotice_ProcessEvent(HMI_EVENT_TYPE eEvent, const HMI_EVENT* pstEvent);
-static HMI_ENGINE_RESULT	HMI_DemoNotice_PostProcess(SGUI_INT iActionResult);
+static HMI_ENGINE_RESULT	HMI_DemoTextNotice_Initialize(void);
+static HMI_ENGINE_RESULT	HMI_DemoTextNotice_Prepare(const void* pstParameters);
+static HMI_ENGINE_RESULT	HMI_DemoTextNotice_RefreshScreen(const void* pstParameters);
+static HMI_ENGINE_RESULT	HMI_DemoTextNotice_ProcessEvent(HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent);
+static HMI_ENGINE_RESULT	HMI_DemoTextNotice_PostProcess(SGUI_INT iActionResult);
 
 //=======================================================================//
 //= Static variable declaration.									    =//
 //=======================================================================//
-static SGUI_CHAR		m_szDemoNoticeText[NOTICE_TEXT_BUFFER_SIZE+1] = {0x00};
+static SGUI_CHAR		s_szDemoNoticeText[NOTICE_TEXT_BUFFER_SIZE+1] = {0x00};
+
+HMI_SCREEN_ACTION		s_stDemoTextNoticeActions =		{	HMI_DemoTextNotice_Initialize,
+															HMI_DemoTextNotice_Prepare,
+															HMI_DemoTextNotice_RefreshScreen,
+															HMI_DemoTextNotice_ProcessEvent,
+															HMI_DemoTextNotice_PostProcess,
+														};
 
 //=======================================================================//
 //= Global variable declaration.									    =//
 //=======================================================================//
-HMI_SCREEN_ACTION		stHMI_DemoTextNoticeActions =	{	HMI_DemoNotice_Initialize,
-															HMI_DemoNotice_Prepare,
-															HMI_DemoNotice_RefreshScreen,
-															HMI_DemoNotice_ProcessEvent,
-															HMI_DemoNotice_PostProcess,
-														};
 HMI_SCREEN_OBJECT       g_stHMIDemo_TextNotice =		{	HMI_SCREEN_ID_DEMO_TEXT_NOTICE,
-															&stHMI_DemoTextNoticeActions
+															&s_stDemoTextNoticeActions
 														};
 
 //=======================================================================//
 //= Function implementation.										    =//
 //=======================================================================//
-HMI_ENGINE_RESULT HMI_DemoNotice_Initialize(void)
+HMI_ENGINE_RESULT HMI_DemoTextNotice_Initialize(void)
 {
-	SGUI_Common_MemorySet(m_szDemoNoticeText, 0x00, sizeof(SGUI_CHAR)*(NOTICE_TEXT_BUFFER_SIZE+1));
+	SGUI_Common_MemorySet(s_szDemoNoticeText, 0x00, sizeof(SGUI_CHAR)*(NOTICE_TEXT_BUFFER_SIZE+1));
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoNotice_Prepare(const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoTextNotice_Prepare(const void* pstParameters)
 {
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
 	if(NULL == pstParameters)
 	{
-		SGUI_Common_StringLengthCopy(m_szDemoNoticeText, "无参数。", NOTICE_TEXT_BUFFER_SIZE);
+		SGUI_Common_StringLengthCopy(s_szDemoNoticeText, "无参数。", NOTICE_TEXT_BUFFER_SIZE);
 	}
 	else
 	{
-		SGUI_Common_StringLengthCopy(m_szDemoNoticeText, (SGUI_PSZSTR)pstParameters, NOTICE_TEXT_BUFFER_SIZE);
-		m_szDemoNoticeText[NOTICE_TEXT_BUFFER_SIZE] = '\0';
+		SGUI_Common_StringLengthCopy(s_szDemoNoticeText, (SGUI_PSZSTR)pstParameters, NOTICE_TEXT_BUFFER_SIZE);
+		s_szDemoNoticeText[NOTICE_TEXT_BUFFER_SIZE] = '\0';
 	}
-	SGUI_Notice_RefreshNotice(m_szDemoNoticeText, 0, SGUI_ICON_INFORMATION);
+	SGUI_Notice_RefreshNotice(s_szDemoNoticeText, 0, SGUI_ICON_INFORMATION);
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoNotice_RefreshScreen(const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoTextNotice_RefreshScreen(const void* pstParameters)
 {
-	SGUI_Notice_RefreshNotice(m_szDemoNoticeText, 0, SGUI_ICON_INFORMATION);
+	SGUI_Notice_RefreshNotice(s_szDemoNoticeText, 0, SGUI_ICON_INFORMATION);
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoNotice_ProcessEvent(HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent)
+HMI_ENGINE_RESULT HMI_DemoTextNotice_ProcessEvent(HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -105,7 +106,7 @@ HMI_ENGINE_RESULT HMI_DemoNotice_ProcessEvent(HMI_EVENT_TYPE eEventType, const H
 					case KEY_VALUE_ENTER:
 					case KEY_VALUE_ESC:
 					{
-						eProcessResult = HMI_RET_CONFIRM;
+						eProcessResult = HMI_RET_CANCEL;
 						break;
 					}
 				}
@@ -116,12 +117,12 @@ HMI_ENGINE_RESULT HMI_DemoNotice_ProcessEvent(HMI_EVENT_TYPE eEventType, const H
 	return eProcessResult;
 }
 
-HMI_ENGINE_RESULT HMI_DemoNotice_PostProcess(SGUI_INT iActionResult)
+HMI_ENGINE_RESULT HMI_DemoTextNotice_PostProcess(SGUI_INT iActionResult)
 {
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if(HMI_RET_CONFIRM == iActionResult)
+	if(HMI_RET_CANCEL == iActionResult)
 	{
 		HMI_GoBack(NULL);
 	}

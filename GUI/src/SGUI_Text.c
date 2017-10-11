@@ -67,7 +67,7 @@ void SGUI_Text_DrawSingleLineText(SGUI_PCSZSTR szText, SGUI_FONT_SIZE eFontSize,
 	// Initialize variable.
 	pcTextPointer =				ENCODE(szText);
 	uiCharacterCode =			0x0000;
-	eBackColor =				(eFontMode == GUI_DRAW_NORMAL)?GUI_COLOR_BKGCLR:GUI_COLOR_FRGCLR;
+	eBackColor =				(eFontMode == SGUI_DRAW_NORMAL)?SGUI_COLOR_BKGCLR:SGUI_COLOR_FRGCLR;
 	// Get font graphics size.
 	uiFontWidth =				g_stFontSize[eFontSize].Width;
 	uiFontHeight =				g_stFontSize[eFontSize].Height;
@@ -171,7 +171,7 @@ SGUI_SIZE SGUI_Text_DrawMultipleLinesText(SGUI_PCSZSTR szText, SGUI_FONT_SIZE eF
 	pcTextPointer =				ENCODE(szText);
 	uiCharacterCode =			0x0000;
 	uiLines =					0;
-	eBackColor =				(eFontMode == GUI_DRAW_NORMAL)?GUI_COLOR_BKGCLR:GUI_COLOR_FRGCLR;
+	eBackColor =				(eFontMode == SGUI_DRAW_NORMAL)?SGUI_COLOR_BKGCLR:SGUI_COLOR_FRGCLR;
 	// Get font graphics size.
 	uiFontWidth =				g_stFontSize[eFontSize].Width;
 	uiFontHeight =				g_stFontSize[eFontSize].Height;

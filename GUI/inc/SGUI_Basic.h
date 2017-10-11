@@ -11,15 +11,15 @@
 //=======================================================================//
 typedef enum
 {
-	GUI_COLOR_BKGCLR = 0,
-	GUI_COLOR_FRGCLR = 1,
-	GUI_COLOR_TRANS	 = 2,
+	SGUI_COLOR_BKGCLR = 0,
+	SGUI_COLOR_FRGCLR = 1,
+	SGUI_COLOR_TRANS	 = 2,
 }SGUI_COLOR;
 
 typedef enum
 {
-	GUI_DRAW_NORMAL = 0,
-	GUI_DRAW_REVERSE = 1,
+	SGUI_DRAW_NORMAL = 0,
+	SGUI_DRAW_REVERSE = 1,
 }SGUI_DRAW_MODE;
 
 //=======================================================================//

@@ -94,6 +94,7 @@ void USR_ACT_OnTimerEventProcess(void)
 	/* Variable Declaration				*/
 	/*----------------------------------*/
 	HMI_EVENT				stEvent;
+	SGUI_INT				iRandomNumber;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -104,6 +105,10 @@ void USR_ACT_OnTimerEventProcess(void)
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
+	iRandomNumber = rand();
+
+	iRandomNumber = (iRandomNumber % 200)-100;
+	stEvent.Data = (void*)(&iRandomNumber);
 	// Post timer event.
 	HMI_ProcessEvent(HMI_ENGINE_EVENT_ACTION, &stEvent);
 }

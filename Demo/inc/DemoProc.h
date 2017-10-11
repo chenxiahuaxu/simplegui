@@ -5,6 +5,7 @@
 //=======================================================================//
 #include "SGUI_Typedef.h"
 #include "HMI_Engine.h"
+#include <stdio.h>
 
 //=======================================================================//
 //= Data type definition.											    =//
@@ -31,7 +32,9 @@ typedef struct
 #define		HMI_SCREEN_ID_DEMO_SCROLLING_TEXT			(1001)
 #define		HMI_SCREEN_ID_DEMO_LIST						(1002)
 #define		HMI_SCREEN_ID_DEMO_TEXT_NOTICE				(1003)
-#define		HMI_SCREEN_ID_DEMO_VARIABLE_BOX				(1004)
+#define		HMI_SCREEN_ID_DEMO_RTC_NOTICE				(1004)
+#define		HMI_SCREEN_ID_DEMO_VARIABLE_BOX				(1005)
+#define		HMI_SCREEN_ID_DEMO_REAL_TIME_GRAPH			(1006)
 
 //=======================================================================//
 //= Public variable declaration.									    =//
@@ -40,7 +43,9 @@ extern HMI_ENGINE_OBJECT        g_stDemoEngine;
 extern HMI_SCREEN_OBJECT        g_stHMIDemo_ScrollingText;
 extern HMI_SCREEN_OBJECT		g_stHMIDemo_List;
 extern HMI_SCREEN_OBJECT		g_stHMIDemo_TextNotice;
-extern HMI_SCREEN_OBJECT        g_stHMIDemo_VariableBox ;
+extern HMI_SCREEN_OBJECT		g_stHMIDemo_RTCNotice;
+extern HMI_SCREEN_OBJECT        g_stHMIDemo_VariableBox;
+extern HMI_SCREEN_OBJECT		g_stHMI_DemoRealtimeGraph;
 //=======================================================================//
 //= Function declare.   											    =//
 //=======================================================================//

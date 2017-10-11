@@ -1,9 +1,9 @@
 /*************************************************************************/
 /** Copyright.															**/
-/** FileName: HMI_Demo01_Text.c											**/
+/** FileName: ScrollingText.c											**/
 /** Author: Polarix														**/
 /** Version: 1.0.0.0													**/
-/** Description: HMI demo for list control interface.					**/
+/** Description: HMI demo for text draw interface.						**/
 /*************************************************************************/
 
 //=======================================================================//
@@ -13,7 +13,6 @@
 #include "SGUI_Text.h"
 #include "SGUI_Frame.h"
 #include "HMI_Engine.h"
-#include <stdio.h>
 
 //=======================================================================//
 //= User Macro definition.											    =//
@@ -42,7 +41,7 @@ static HMI_ENGINE_RESULT    HMI_DemoScrollingText_PostProcess(SGUI_INT iActionRe
 //= Static variable declaration.									    =//
 //=======================================================================//
 // Demo text.
-static char					szDemoText[] =
+static char					s_szDemoText[] =
 {
 "  欢迎来到SimpleGUI演示工程，本工程用于演示SimpleGUI各API的显示效果、\
 使用方法以及运作机理，在演示过程中，您可以通过键盘输入与SimpleGUI演示工\
@@ -50,24 +49,27 @@ static char					szDemoText[] =
   按“空格”键开始演示。"
 };
 
-static int32_t				m_iTextOffset;
-static SGUI_INT				m_iTextHeight;
-static SGUI_RECT_AREA		m_stTextDisplayArea;
+static int32_t				s_iTextOffset;
+static SGUI_INT				s_iTextHeight;
+static SGUI_RECT_AREA		s_stTextDisplayArea;
 
-static SGUI_BOX_FRAME_STRUCT stTextFrame =				{{HMI_TEXT_DEMO_FRAME_EDGE_LAYERS, SGUI_FONT_SIZE_H12}, {NULL}};
-HMI_SCREEN_ACTION		m_stHMIDemo_ScrollingTextActions = {
-														HMI_DemoScrollingText_Initialize,
-														HMI_DemoScrollingText_Prepare,
-														HMI_DemoScrollingText_RefreshScreen,
-														HMI_DemoScrollingText_ProcessEvent,
-														HMI_DemoScrollingText_PostProcess,};
+static SGUI_BOX_FRAME_STRUCT s_stTextFrame =			{	{HMI_TEXT_DEMO_FRAME_EDGE_LAYERS, SGUI_FONT_SIZE_H12},
+															{NULL}
+														};
+static HMI_SCREEN_ACTION	s_stDemoScrollingTextActions =	{
+															HMI_DemoScrollingText_Initialize,
+															HMI_DemoScrollingText_Prepare,
+															HMI_DemoScrollingText_RefreshScreen,
+															HMI_DemoScrollingText_ProcessEvent,
+															HMI_DemoScrollingText_PostProcess
+														};
 
 //=======================================================================//
 //= Global variable declaration.									    =//
 //=======================================================================//
 HMI_SCREEN_OBJECT       g_stHMIDemo_ScrollingText =		{
 														HMI_SCREEN_ID_DEMO_SCROLLING_TEXT,
-														&m_stHMIDemo_ScrollingTextActions};
+														&s_stDemoScrollingTextActions};
 
 //=======================================================================//
 //= Function implementation.										    =//
@@ -82,12 +84,12 @@ HMI_SCREEN_OBJECT       g_stHMIDemo_ScrollingText =		{
 /*****************************************************************************/
 HMI_ENGINE_RESULT HMI_DemoScrollingText_Initialize(void)
 {
-	m_iTextOffset = HMI_TEXT_DEMO_FRAME_TEXT_HEIGHT;
-	m_iTextHeight = SGUI_Text_GetMultiLineTextLines(szDemoText, (HMI_TEXT_DEMO_FRAME_TEXT_WIDTH/g_stFontSize[SGUI_FONT_SIZE_H12].Width))*g_stFontSize[SGUI_FONT_SIZE_H12].Height;
-	m_stTextDisplayArea.PosX = HMI_TEXT_DEMO_FRAME_TEXT_POSX;
-	m_stTextDisplayArea.PosY = HMI_TEXT_DEMO_FRAME_TEXT_POSY;
-	m_stTextDisplayArea.Width = HMI_TEXT_DEMO_FRAME_TEXT_WIDTH;
-	m_stTextDisplayArea.Height = HMI_TEXT_DEMO_FRAME_TEXT_HEIGHT;
+	s_iTextOffset = HMI_TEXT_DEMO_FRAME_TEXT_HEIGHT;
+	s_iTextHeight = SGUI_Text_GetMultiLineTextLines(s_szDemoText, (HMI_TEXT_DEMO_FRAME_TEXT_WIDTH/g_stFontSize[SGUI_FONT_SIZE_H12].Width))*g_stFontSize[SGUI_FONT_SIZE_H12].Height;
+	s_stTextDisplayArea.PosX = HMI_TEXT_DEMO_FRAME_TEXT_POSX;
+	s_stTextDisplayArea.PosY = HMI_TEXT_DEMO_FRAME_TEXT_POSY;
+	s_stTextDisplayArea.Width = HMI_TEXT_DEMO_FRAME_TEXT_WIDTH;
+	s_stTextDisplayArea.Height = HMI_TEXT_DEMO_FRAME_TEXT_HEIGHT;
 	return HMI_RET_NORMAL;
 }
 
@@ -101,7 +103,7 @@ HMI_ENGINE_RESULT HMI_DemoScrollingText_Initialize(void)
 /*****************************************************************************/
 HMI_ENGINE_RESULT HMI_DemoScrollingText_Prepare(const void* pstParameters)
 {
-	SGUI_Frame_DrawFullScreenFrame(&stTextFrame);
+	SGUI_Frame_DrawFullScreenFrame(&s_stTextFrame);
 	return HMI_RET_NORMAL;
 }
 
@@ -115,8 +117,8 @@ HMI_ENGINE_RESULT HMI_DemoScrollingText_Prepare(const void* pstParameters)
 /*****************************************************************************/
 HMI_ENGINE_RESULT HMI_DemoScrollingText_RefreshScreen(const void* pstParameters)
 {
-	SGUI_Frame_DrawFullScreenFrame(&stTextFrame);
-	SGUI_Text_DrawMultipleLinesText(szDemoText, SGUI_FONT_SIZE_H12, &m_stTextDisplayArea, m_iTextOffset, GUI_DRAW_NORMAL);
+	SGUI_Frame_DrawFullScreenFrame(&s_stTextFrame);
+	SGUI_Text_DrawMultipleLinesText(s_szDemoText, SGUI_FONT_SIZE_H12, &s_stTextDisplayArea, s_iTextOffset, SGUI_DRAW_NORMAL);
 	return HMI_RET_NORMAL;
 }
 
@@ -175,16 +177,16 @@ HMI_ENGINE_RESULT HMI_DemoScrollingText_ProcessEvent(HMI_EVENT_TYPE eEventType, 
                     }
                     else
                     {
-                        SGUI_Text_DrawMultipleLinesText(szDemoText, SGUI_FONT_SIZE_H12, &m_stTextDisplayArea, m_iTextOffset, GUI_DRAW_NORMAL);
-                        if(m_iTextOffset + m_iTextHeight == 0)
+                        SGUI_Text_DrawMultipleLinesText(s_szDemoText, SGUI_FONT_SIZE_H12, &s_stTextDisplayArea, s_iTextOffset, SGUI_DRAW_NORMAL);
+                        if(s_iTextOffset + s_iTextHeight == 0)
                         {
-                            m_iTextOffset = HMI_TEXT_DEMO_FRAME_TEXT_HEIGHT;
+                            s_iTextOffset = HMI_TEXT_DEMO_FRAME_TEXT_HEIGHT;
                         }
                         else
                         {
-                            m_iTextOffset--;
+                            s_iTextOffset--;
                         }
-                        uiTimer = 3;
+                        uiTimer = 2;
                     }
                     eProcessResult = HMI_RET_NOACTION;
                     break;
