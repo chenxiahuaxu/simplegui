@@ -379,7 +379,7 @@ SGUI_SIZE SGUI_Common_IntegerToString(SGUI_INT iInteger, SGUI_PSZSTR pszStringBu
 /** Return:			Converted number.									**/
 /** Notice:			None.												**/
 /*************************************************************************/
-SGUI_UINT32 SGUI_Common_ConvertStringToUnsignedInteger(SGUI_PSZSTR szString, SGUI_CHAR** ppcEndPointer, SGUI_UINT uiBase)
+SGUI_UINT SGUI_Common_ConvertStringToUnsignedInteger(SGUI_PSZSTR szString, SGUI_CHAR** ppcEndPointer, SGUI_UINT uiBase)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -445,13 +445,13 @@ SGUI_UINT32 SGUI_Common_ConvertStringToUnsignedInteger(SGUI_PSZSTR szString, SGU
 /** Return:			Converted number.									**/
 /** Notice:			None.												**/
 /*************************************************************************/
-SGUI_INT32 SGUI_Common_ConvertStringToInteger(SGUI_PSZSTR szString, SGUI_CHAR** ppcEndPointer, SGUI_UINT uiBase)
+SGUI_INT SGUI_Common_ConvertStringToInteger(SGUI_PSZSTR szString, SGUI_CHAR** ppcEndPointer, SGUI_UINT uiBase)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-    SGUI_INT32					iResult;
-    SGUI_INT32					iSign;
+    SGUI_INT					iResult;
+    SGUI_INT					iSign;
 	SGUI_PSZSTR					pcCurPtr;
 
 	/*----------------------------------*/
@@ -591,7 +591,6 @@ void SGUI_Common_Free(void* pFreePointer)
 	/*----------------------------------*/
 	if(NULL != pFreePointer)
 	{
-		free(pFreePointer);
 #if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
 		free(pFreePointer);
 #else
@@ -833,7 +832,9 @@ void SGUI_Common_GetNowTime(SGUI_TIME* pstTime)
 /*************************************************************************/
 void SGUI_Common_RefreshScreen(void)
 {
+#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ == 0)
 	/* Add screen refresh function or process here. */
+#endif
 }
 
 /*************************************************************************/

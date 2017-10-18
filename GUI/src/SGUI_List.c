@@ -218,44 +218,40 @@ void SGUI_LIST_SelectUpItem(SGUI_LIST_STRUCT* pstList)
 	SGUI_LIST_DATA				*pstListData;
 	SGUI_UINT16					uiReverseBlockPosY;
 
-	/*----------------------------------*/
-	/* Initialize						*/
+    /*----------------------------------*/
+	/* Process							*/
 	/*----------------------------------*/
 	if(NULL != pstList)
 	{
 		pstListControl = &(pstList->ControlVariable);
 		pstListData = &(pstList->Data);
-	}
-
-	/*----------------------------------*/
-	/* Process							*/
-	/*----------------------------------*/
-	if((pstListControl->SelectIndex > 0) && (pstListData->Count > 1))
-	{
-		//Focused item and select item is visible and Integral;
-		if((pstListControl->SelectIndex>pstListControl->PageStartIndex+1) && (pstListControl->VisibleIntegralItemsNum>1))
-		{
-			// Unfocused current item.
-			uiReverseBlockPosY = pstListControl->FirstVisibleItemPosY+(pstListControl->SelectIndex-pstListControl->PageStartIndex)*pstListControl->ListItemHeight-pstListControl->ItemPosYOffSet;
-			SGUI_Basic_ReverseBlockColor(LIST_ITEM_RECT_POSX, uiReverseBlockPosY, LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight);
-			pstListControl->SelectIndex--;
-			// Focused previous item.
-			uiReverseBlockPosY = pstListControl->FirstVisibleItemPosY+(pstListControl->SelectIndex-pstListControl->PageStartIndex)*pstListControl->ListItemHeight-pstListControl->ItemPosYOffSet;
-			SGUI_Basic_ReverseBlockColor(LIST_ITEM_RECT_POSX, uiReverseBlockPosY, LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight);
-		}
-		else
-		{
-			pstListControl->SelectIndex--;
-			if(pstListControl->PageStartIndex == pstListControl->SelectIndex)
-			{
-				pstListControl->ItemPosYOffSet = 0;
-			}
-			if(pstListControl->SelectIndex < pstListControl->PageStartIndex)
-			{
-				pstListControl->PageStartIndex--;
-			}
-			SGUI_LIST_RefreshListItems(pstList);
-		}
+        if((pstListControl->SelectIndex > 0) && (pstListData->Count > 1))
+        {
+            //Focused item and select item is visible and Integral;
+            if((pstListControl->SelectIndex>pstListControl->PageStartIndex+1) && (pstListControl->VisibleIntegralItemsNum>1))
+            {
+                // Unfocused current item.
+                uiReverseBlockPosY = pstListControl->FirstVisibleItemPosY+(pstListControl->SelectIndex-pstListControl->PageStartIndex)*pstListControl->ListItemHeight-pstListControl->ItemPosYOffSet;
+                SGUI_Basic_ReverseBlockColor(LIST_ITEM_RECT_POSX, uiReverseBlockPosY, LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight);
+                pstListControl->SelectIndex--;
+                // Focused previous item.
+                uiReverseBlockPosY = pstListControl->FirstVisibleItemPosY+(pstListControl->SelectIndex-pstListControl->PageStartIndex)*pstListControl->ListItemHeight-pstListControl->ItemPosYOffSet;
+                SGUI_Basic_ReverseBlockColor(LIST_ITEM_RECT_POSX, uiReverseBlockPosY, LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight);
+            }
+            else
+            {
+                pstListControl->SelectIndex--;
+                if(pstListControl->PageStartIndex == pstListControl->SelectIndex)
+                {
+                    pstListControl->ItemPosYOffSet = 0;
+                }
+                if(pstListControl->SelectIndex < pstListControl->PageStartIndex)
+                {
+                    pstListControl->PageStartIndex--;
+                }
+                SGUI_LIST_RefreshListItems(pstList);
+            }
+        }
 	}
 }
 
@@ -277,43 +273,39 @@ void SGUI_LIST_SelectDownItem(SGUI_LIST_STRUCT* pstList)
 	SGUI_UINT16					uiReverseBlockPosY;
 
 	/*----------------------------------*/
-	/* Initialize						*/
+	/* Process							*/
 	/*----------------------------------*/
 	if(NULL != pstList)
 	{
 		pstListControl = &(pstList->ControlVariable);
 		pstListData = &(pstList->Data);
-	}
-
-	/*----------------------------------*/
-	/* Process							*/
-	/*----------------------------------*/
-	if((pstListControl->SelectIndex < pstListData->Count-1) && (pstListData->Count > 1))
-	{
-		//Focused item and select item is visible and Integral;
-		if((pstListControl->VisibleIntegralItemsNum>1) && ((pstListControl->SelectIndex)<(pstListControl->PageStartIndex+pstListControl->VisibleIntegralItemsNum-1)))
-		{
-			// Unfocused current item.
-			uiReverseBlockPosY = pstListControl->FirstVisibleItemPosY+(pstListControl->SelectIndex-pstListControl->PageStartIndex)*pstListControl->ListItemHeight-pstListControl->ItemPosYOffSet;
-			SGUI_Basic_ReverseBlockColor(LIST_ITEM_RECT_POSX, uiReverseBlockPosY, LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight);
-			pstListControl->SelectIndex++;
-			// Focused previous item.
-			uiReverseBlockPosY = pstListControl->FirstVisibleItemPosY+(pstListControl->SelectIndex-pstListControl->PageStartIndex)*pstListControl->ListItemHeight-pstListControl->ItemPosYOffSet;
-			SGUI_Basic_ReverseBlockColor(LIST_ITEM_RECT_POSX, uiReverseBlockPosY, LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight);
-		}
-		else
-		{
-			pstListControl->SelectIndex++;
-			if((pstListControl->SelectIndex-pstListControl->PageStartIndex+1) == pstListControl->VisibleItemsNum)
-			{
-				pstListControl->ItemPosYOffSet = pstListControl->ListItemHeight-pstListControl->VisibleItemsAreaHeight%pstListControl->ListItemHeight;
-			}
-			if((pstListControl->SelectIndex-pstListControl->PageStartIndex+1) > pstListControl->VisibleItemsNum)
-			{
-				pstListControl->PageStartIndex++;
-			}
-			SGUI_LIST_RefreshListItems(pstList);
-		}
+        if((pstListControl->SelectIndex < pstListData->Count-1) && (pstListData->Count > 1))
+        {
+            //Focused item and select item is visible and Integral;
+            if((pstListControl->VisibleIntegralItemsNum>1) && ((pstListControl->SelectIndex)<(pstListControl->PageStartIndex+pstListControl->VisibleIntegralItemsNum-1)))
+            {
+                // Unfocused current item.
+                uiReverseBlockPosY = pstListControl->FirstVisibleItemPosY+(pstListControl->SelectIndex-pstListControl->PageStartIndex)*pstListControl->ListItemHeight-pstListControl->ItemPosYOffSet;
+                SGUI_Basic_ReverseBlockColor(LIST_ITEM_RECT_POSX, uiReverseBlockPosY, LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight);
+                pstListControl->SelectIndex++;
+                // Focused previous item.
+                uiReverseBlockPosY = pstListControl->FirstVisibleItemPosY+(pstListControl->SelectIndex-pstListControl->PageStartIndex)*pstListControl->ListItemHeight-pstListControl->ItemPosYOffSet;
+                SGUI_Basic_ReverseBlockColor(LIST_ITEM_RECT_POSX, uiReverseBlockPosY, LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight);
+            }
+            else
+            {
+                pstListControl->SelectIndex++;
+                if((pstListControl->SelectIndex-pstListControl->PageStartIndex+1) == pstListControl->VisibleItemsNum)
+                {
+                    pstListControl->ItemPosYOffSet = pstListControl->ListItemHeight-pstListControl->VisibleItemsAreaHeight%pstListControl->ListItemHeight;
+                }
+                if((pstListControl->SelectIndex-pstListControl->PageStartIndex+1) > pstListControl->VisibleItemsNum)
+                {
+                    pstListControl->PageStartIndex++;
+                }
+                SGUI_LIST_RefreshListItems(pstList);
+            }
+        }
 	}
 }
 

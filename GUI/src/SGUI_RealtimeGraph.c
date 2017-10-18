@@ -230,6 +230,7 @@ SGUI_INT SGUI_RealtimeGraph_GetValuePointYCoordinate(SGUI_RTGRAPH* pstRTGraph, S
 	/* Initialize						*/
 	/*----------------------------------*/
 	iDisplayValuePointAreaHeight = LCD_SIZE_HEIGHT-9*2;
+	iValuePointCoordinate =     -1;
 
 	/*----------------------------------*/
 	/* Process							*/

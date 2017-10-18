@@ -38,7 +38,7 @@ HMI_ENGINE_OBJECT       g_stDemoEngine;
 /*****************************************************************************/
 void SimpleGUI_DemoProcess(void)
 {
-
+	InitializeEngine(&g_stDemoEngine);
 }
 
 /*****************************************************************************/

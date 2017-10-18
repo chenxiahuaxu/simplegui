@@ -47,21 +47,22 @@ SGUI_PSZSTR				SGUI_Common_EncodeConvert(SGUI_PCSZSTR szSourceEncode, SGUI_PSZST
 //=======================================================================//
 //= Public function declaration.									    =//
 //=======================================================================//
-SGUI_SIZE				SGUI_Common_IntegerToStringWithDecimalPoint(SGUI_INT iInteger, SGUI_UINT uiDecimalPlaces, SGUI_PSZSTR szStringBuffer, SGUI_INT iAlignment, SGUI_CHAR cFillCharacter);
-SGUI_SIZE				SGUI_Common_IntegerToString(SGUI_INT iInteger, SGUI_PSZSTR szStringBuffer, SGUI_UINT uiBase, SGUI_INT iAlignment, SGUI_CHAR cFillCharacter);
-SGUI_UINT32				SGUI_Common_ConvertStringToUnsignedInteger(SGUI_PSZSTR szString, SGUI_PSZSTR* pcEndPointer, SGUI_UINT uiBase);
-SGUI_INT32				SGUI_Common_ConvertStringToInteger(SGUI_PSZSTR szString, SGUI_PSZSTR* pcEndPointer, SGUI_UINT uiBase);
-inline SGUI_SIZE		SGUI_Common_StringLength(SGUI_PCSZSTR szString);
-void					SGUI_Common_RefreshScreen(void);
+SGUI_SIZE               SGUI_Common_IntegerToStringWithDecimalPoint(SGUI_INT iInteger, SGUI_UINT uiDecimalPlaces, SGUI_PSZSTR pszStringBuffer, SGUI_INT iAlignment, SGUI_CHAR cFillCharacter);
+SGUI_SIZE               SGUI_Common_IntegerToString(SGUI_INT iInteger, SGUI_PSZSTR pszStringBuffer, SGUI_UINT uiBase, SGUI_INT iAlignment, SGUI_CHAR cFillCharacter);
+SGUI_UINT               SGUI_Common_ConvertStringToUnsignedInteger(SGUI_PSZSTR szString, SGUI_CHAR** ppcEndPointer, SGUI_UINT uiBase);
+SGUI_INT                SGUI_Common_ConvertStringToInteger(SGUI_PSZSTR szString, SGUI_CHAR** ppcEndPointer, SGUI_UINT uiBase);
 #if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0)
-inline void*			SGUI_Common_Allocate(SGUI_SIZE uiSize);
-inline void				SGUI_Common_Free(void* pFreePointer);
+void*					SGUI_Common_Allocate(SGUI_SIZE uiSize);
+void					SGUI_Common_Free(void* pFreePointer);
 #endif
-inline SGUI_PSZSTR		SGUI_Common_StringCopy(SGUI_PSZSTR szDest, SGUI_PCSZSTR szSrc);
-inline SGUI_PSZSTR		SGUI_Common_StringLengthCopy(SGUI_PSZSTR szDest, SGUI_PCSZSTR szSrc, SGUI_SIZE uiSize);
-inline void*			SGUI_Common_MemoryCopy(void* pDest, const void* pSrc, SGUI_UINT uiSize);
+void*                   SGUI_Common_MemoryCopy(void* pDest, const void* pSrc, SGUI_UINT uiSize);
 void                    SGUI_Common_MemorySet(void* pMemoryPtr, SGUI_BYTE iSetValue, SGUI_UINT uiSize);
-inline void				SGUI_Common_GetNowTime(SGUI_TIME* pstTime);
-void					SGUI_Common_ReadFlashROM(SGUI_ROM_ADDRESS uiAddressHead, SGUI_SIZE uiDataLength, SGUI_BYTE* pBuffer);
+SGUI_SIZE               SGUI_Common_StringLength(SGUI_PCSZSTR szString);
+SGUI_PSZSTR             SGUI_Common_StringCopy(SGUI_PSZSTR szDest, SGUI_PCSZSTR szSrc);
+SGUI_PSZSTR             SGUI_Common_StringLengthCopy(SGUI_PSZSTR szDest, SGUI_PCSZSTR szSrc, SGUI_SIZE uiSize);
+void                    SGUI_Common_GetNowTime(SGUI_TIME* pstTime);
+void                    SGUI_Common_RefreshScreen(void);
+void                    SGUI_Common_ReadFlashROM(SGUI_ROM_ADDRESS uiAddressHead, SGUI_SIZE uiDataLength, SGUI_BYTE* pBuffer);
+void                    SGUI_Common_Delay(SGUI_UINT32 uiTimeMs);
 
 #endif // __INCLUDE_GUI_COMMON_H__

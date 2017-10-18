@@ -31,7 +31,7 @@ const SGUI_FONT_SIZE_STRUCT	g_stFontSize[SGUI_FONT_SIZE_MAX] = {	{6, 4, 6},
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
-static void					SGUI_Text_ReadFontData(SGUI_FONT_SIZE eFontSize, SGUI_UINT16 uiCharacterCode, SGUI_BYTE* pOutPutBuffer, SGUI_SIZE uiFontBufferSize);
+static void                 SGUI_Text_ReadFontData(SGUI_FONT_SIZE eFontSize, SGUI_UINT16 uiCharacterCode, SGUI_BYTE* pFontDataBuffer, SGUI_UINT32 uiFontBufferSize);
 static SGUI_SIZE			SGUI_Text_GetCharacterTableIndex(SGUI_UINT16 uiCharacterCode);
 
 //=======================================================================//

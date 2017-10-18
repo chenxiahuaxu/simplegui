@@ -34,7 +34,7 @@ void USR_ACT_OnInitialize(void)
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	InitializeEngine(&g_stDemoEngine);
+	SimpleGUI_DemoProcess();
 }
 
 /*************************************************************************/

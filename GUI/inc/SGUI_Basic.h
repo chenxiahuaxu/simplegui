@@ -11,15 +11,15 @@
 //=======================================================================//
 typedef enum
 {
-	SGUI_COLOR_BKGCLR = 0,
-	SGUI_COLOR_FRGCLR = 1,
-	SGUI_COLOR_TRANS	 = 2,
+	SGUI_COLOR_BKGCLR   = 0,
+	SGUI_COLOR_FRGCLR   = 1,
+	SGUI_COLOR_TRANS    = 2,
 }SGUI_COLOR;
 
 typedef enum
 {
-	SGUI_DRAW_NORMAL = 0,
-	SGUI_DRAW_REVERSE = 1,
+	SGUI_DRAW_NORMAL    = 0,
+	SGUI_DRAW_REVERSE   = 1,
 }SGUI_DRAW_MODE;
 
 //=======================================================================//
@@ -29,8 +29,6 @@ typedef enum
 #define		BASIC_FONT_WIDTH				(6)
 #define		BASIC_FONT_CHAR_DATA_SIZE		(((BASIC_FONT_HEIGHT-1)/8)+1)*BASIC_FONT_WIDTH
 #define		BASIC_FONT_DATA					(SGUI_BASIC_FONT_H8)
-
-#define		GET_BIT(PAGE, Bit)		((((PAGE) & (0x01 << (Bit)))>0)?1:0)
 
 //=======================================================================//
 //= Public variable declaration.									    =//
