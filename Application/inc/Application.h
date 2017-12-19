@@ -13,9 +13,14 @@
 #include <wx/dialog.h>
 #include <wx/app.h>
 
+#include "LCD_VirtualDevice.h"
 
-class LCD_Application : public wxApp
+
+class Application : public wxApp
 {
+    private:
+        LCD_VirtualDevice*          m_pclsMainFrame;
+
     public:
 
     private:
