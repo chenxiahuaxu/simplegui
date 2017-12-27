@@ -25,7 +25,7 @@ static char				arrTextBuffer[VARBOX_TEXT_BUFFER_SIZE] = {0x00};	//Used when conv
 void					SGUI_TextVariableBox_UpdateCharacter(SGUI_TEXT_VARBOX_STRUCT* pstTextValue, char cNewCharacters, SGUI_DRAW_MODE eMode);
 
 //=======================================================================//
-//= Function implementation.										    =//
+//= Function define.										            =//
 //=======================================================================//
 /*************************************************************************/
 /** Function Name:	GUI_RefreshVariableBox								**/

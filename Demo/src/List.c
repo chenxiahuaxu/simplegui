@@ -67,7 +67,7 @@ HMI_SCREEN_OBJECT       g_stHMIDemo_List =			{	HMI_SCREEN_ID_DEMO_LIST,
 													};
 
 //=======================================================================//
-//= Function implementation.										    =//
+//= Function define.										            =//
 //=======================================================================//
 HMI_ENGINE_RESULT HMI_DemoList_Initialize(void)
 {

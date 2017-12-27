@@ -1,5 +1,5 @@
-#ifndef _INCLUDE_CLASS_PANELLCD_H__
-#define _INCLUDE_CLASS_PANELLCD_H__
+#ifndef _INCLUDE_CLASS_WXEX_PIXEL_PANEL_H__
+#define _INCLUDE_CLASS_WXEX_PIXEL_PANEL_H__
 
 #include <wx/panel.h>
 #include <wx/dcbuffer.h>
@@ -9,7 +9,7 @@
 /// Class LCD_DisplayPanel
 ///////////////////////////////////////////////////////////////////////////////
 
-class wxPixelPanel : public wxPanel
+class wxDotLCD : public wxPanel
 {
 private:	//Appearance parameters.
 	// Colors
@@ -27,20 +27,20 @@ private:	//Appearance parameters.
 private:	// Private data.
 	uint32_t*			m_parrDisplayBuffer;
 	wxWindow*			m_pclsParent;
-	void				(wxPixelPanel::*m_pfDrawPoint)(wxMemoryDC& clsCDCObject, uint32_t uiPosX, uint32_t uiPosY, uint32_t uiPixelSize);
+	void				(wxDotLCD::*m_pfDrawPoint)(wxMemoryDC& clsCDCObject, uint32_t uiPosX, uint32_t uiPosY, uint32_t uiPixelSize);
 
 private:	// Private object;
-	wxClientDC			m_CDC;
-	wxPen				m_CPen;
-	wxBrush				m_CBrush;
+	wxClientDC			m_clsCDC;
+	wxPen				m_clsPen;
+	wxBrush				m_clsBrush;
 
 private:	// Event callback function.
-	void				wxEvent_OnPaint(wxPaintEvent &event)		{OnPaint();event.Skip();}
+	void				_wxEvent_OnPaint(wxPaintEvent &event)		{OnPaint();event.Skip();}
 
 
 public:		// Constructor/Destructor
-						wxPixelPanel(wxWindow *parent, wxWindowID winid = wxID_ANY, const wxPoint& pos = wxDefaultPosition,  const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL | wxNO_BORDER,const wxString& name = wxPanelNameStr);
-						~wxPixelPanel();
+						wxDotLCD(wxWindow *parent, wxWindowID winid = wxID_ANY, const wxPoint& pos = wxDefaultPosition,  const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL | wxNO_BORDER,const wxString& name = wxPanelNameStr);
+						~wxDotLCD();
 
 public:		// Public interface
 	void				SetDisplaySizes(uint32_t uiEdgeWidth, uint32_t uiHorizontalPixelNumber, uint32_t uiVerticalPixelNumber, uint32_t uiPixelSize, bool bGridVisible);
@@ -58,27 +58,26 @@ public:		// Public interface
 	void				SetGridColor(const wxColor& clsColor);
 	wxWindow*			GetParentWindow(void);
 	void				OnPaint(void);
-	void				SetPixel(uint32_t uiPosX, uint32_t uiPosY, wxColor& clsColor, bool bRefreshNow = false);
+	void				SetPixelColor(uint32_t uiPosX, uint32_t uiPosY, wxColor& clsColor, bool bRefreshNow = false);
 	void                DrawPixel(uint32_t uiPosX, uint32_t uiPosY, wxColor& clsColor);
-	uint32_t			GetPixel(uint32_t uiPosX, uint32_t uiPosY);
+	uint32_t			GetPixelColor(uint32_t uiPosX, uint32_t uiPosY);
 	void				RefreshDisplay(void);
 	void				CleanPanel(void);
-	bool				SaveToFile(const wxString& CStrFilePath);
-	bool				CopyToClipBoard(void);
+	bool				SaveScreenImageToFile(const wxString& strFilePath);
+	bool				CopyScreenImageToClipBoard(void);
 	void				ResizeParent(void);
 
 private:	// Private process function.
-
 	inline void			DrawPointSinglePixel(wxMemoryDC& clsCDCObject, uint32_t uiPosX, uint32_t uiPosY, uint32_t uiPixelSize);
 	inline void			DrawPointMultiplePixel(wxMemoryDC& clsCDCObject, uint32_t uiPosX, uint32_t uiPosY, uint32_t uiPixelSize);
 	inline void			DrawPointMultiplePixelWithGrid(wxMemoryDC& clsCDCObject, uint32_t uiPosX, uint32_t uiPosY, uint32_t uiPixelSize);
 	inline void			ReleaseDC(wxMemoryDC& clsCDCObject)			{clsCDCObject.SetBrush(wxNullBrush); clsCDCObject.SetPen(wxNullPen);}
-	inline void			PrepareDC(wxMemoryDC& clsCDCObject)			{clsCDCObject.SetBrush(m_CBrush); clsCDCObject.SetPen(m_CPen);}
+	inline void			PrepareDC(wxMemoryDC& clsCDCObject)			{clsCDCObject.SetBrush(m_clsBrush); clsCDCObject.SetPen(m_clsPen);}
 	inline void			ReleaseDC(wxClientDC& clsCDCObject)			{clsCDCObject.SetBrush(wxNullBrush); clsCDCObject.SetPen(wxNullPen);}
-	inline void			PrepareDC(wxClientDC& clsCDCObject)			{clsCDCObject.SetBrush(m_CBrush); clsCDCObject.SetPen(m_CPen);}
-	inline void			SetDCColor(const wxColor& clsColour)		{m_CPen.SetColour(clsColour);m_CBrush.SetColour(clsColour);}
+	inline void			PrepareDC(wxClientDC& clsCDCObject)			{clsCDCObject.SetBrush(m_clsBrush); clsCDCObject.SetPen(m_clsPen);}
+	inline void			SetDCColor(const wxColor& clsColour)		{m_clsPen.SetColour(clsColour);m_clsBrush.SetColour(clsColour);}
 
 	DECLARE_EVENT_TABLE();
 };
 
-#endif // _INCLUDE_CLASS_PANELLCD_H__
+#endif // _INCLUDE_CLASS_WXEX_PIXEL_PANEL_H__

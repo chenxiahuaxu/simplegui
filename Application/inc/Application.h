@@ -7,27 +7,24 @@
  * License:
  **************************************************************/
 
-#ifndef __INCLUDE_LCD_APPLICATION_H__
-#define __INCLUDE_LCD_APPLICATION_H__
+#ifndef __INCLUDE_CLASS_APPLICATION_H__
+#define __INCLUDE_CLASS_APPLICATION_H__
 
 #include <wx/dialog.h>
 #include <wx/app.h>
 
-#include "LCD_VirtualDevice.h"
+#include "LCDFrame.h"
 
 
 class Application : public wxApp
 {
     private:
-        LCD_VirtualDevice*          m_pclsMainFrame;
-
-    public:
+        LCDFrame*          m_pclsMainFrame;
 
     private:
-
-		bool OnInit(void);
-		int OnExit(void);
+		bool            OnInit(void);
+		int             OnExit(void);
 
 };
 
-#endif //__INCLUDE_LCD_APPLICATION_H__
+#endif //__INCLUDE_CLASS_APPLICATION_H__

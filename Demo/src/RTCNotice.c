@@ -45,7 +45,7 @@ HMI_SCREEN_OBJECT       g_stHMIDemo_RTCNotice =			{	HMI_SCREEN_ID_DEMO_RTC_NOTIC
 														};
 
 //=======================================================================//
-//= Function implementation.										    =//
+//= Function define.										            =//
 //=======================================================================//
 HMI_ENGINE_RESULT HMI_DemoRTCNotice_Initialize(void)
 {

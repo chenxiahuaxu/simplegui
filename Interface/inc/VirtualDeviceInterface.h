@@ -1,9 +1,9 @@
 #ifndef __INCLUDE_VIRTUAL_DEVICE_INTERFACE_H__
 #define __INCLUDE_VIRTUAL_DEVICE_INTERFACE_H__
-#include <stddef.h>
+//=======================================================================//
+//= Include files.													    =//
+//=======================================================================//
 #include <stdint.h>
-#include <stdbool.h>
-#include <stdlib.h>
 
 //=======================================================================//
 //= User definition.												    =//
@@ -38,12 +38,38 @@
 
 #define		KEY_PRESS_EVENT_VALUE_MAX						(4)
 
+// Parameter
+#define     LCD_SIZE_WIDTH					                (128)
+#define     LCD_SIZE_HEIGHT					                (64)
+
+#if LCD_SIZE_WIDTH < 16
+#error Define width of LCD size must greater then 16.
+#endif
+#if LCD_SIZE_HEIGHT < 16
+#error Define height of LCD size must greater then 16.
+#endif
+
+//Common operation
+//#define SET_BIT(PAGE, Bit)		((PAGE) = (PAGE) | (0x01 << (Bit)))
+//#define CLR_BIT(PAGE, Bit)		((PAGE) = (PAGE) & (~(0x01 << (Bit))))
+#define GET_BIT(PAGE, Bit)		((((PAGE) & (0x01 << (Bit)))>0)?1:0)
+
 //=======================================================================//
 //= Public function declaration.									    =//
 //=======================================================================//
-void USR_ACT_OnInitialize(void);
-void USR_ACT_OnKeyPress(bool bShift, bool bCtrl, bool bAlt, uint16_t uiKeyCode);
-void USR_ACT_OnTimerEventProcess(void);
-void USR_ACT_OnRTCUpdateEventProcess(uint16_t uiYear, uint16_t uiMonth, uint16_t uiDay, uint16_t uiHour, uint16_t uiMinute, uint16_t uiSecond);
+#ifdef __cplusplus
+extern "C"
+{
+#endif /* __cplusplus */
+void        VDIF_SetPixel(uint32_t uiPosX, uint32_t uiPosY, uint32_t uiPixelValue);
+uint32_t    VDIF_GetPixel(uint32_t uiPosX, uint32_t uiPosY);
+void        VDIF_RefreshDisplay(void);
+void        VDIF_ClearDisplay(void);
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+
 
 #endif // __INCLUDE_VIRTUAL_DEVICE_INTERFACE_H__

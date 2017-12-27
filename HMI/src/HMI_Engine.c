@@ -23,7 +23,7 @@ static HMI_ENGINE_OBJECT*           g_pstActivedEngineObject;
 static inline HMI_SCREEN_OBJECT* HMI_GetScreenObjectInEngine(HMI_ENGINE_OBJECT* pstHMIEngineObject, SGUI_INT iScreenID);
 
 //=======================================================================//
-//= Function implementation.										    =//
+//= Function define.										            =//
 //=======================================================================//
 /*****************************************************************************/
 /** Function Name:	HMI_PrepareEngine.                                      **/

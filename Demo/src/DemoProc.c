@@ -1,6 +1,6 @@
 /*************************************************************************/
 /** Copyright.															**/
-/** FileName: HMI_Data.c												**/
+/** FileName: DemoProc.c												**/
 /** Author: Polarix														**/
 /** Version: 1.0.0.0													**/
 /** Description: User operation interface.								**/
@@ -24,7 +24,7 @@
 //=======================================================================//
 HMI_ENGINE_OBJECT       g_stDemoEngine;
 //=======================================================================//
-//= Function implementation.										    =//
+//= Function define.										            =//
 //=======================================================================//
 
 /*****************************************************************************/
@@ -33,10 +33,9 @@ HMI_ENGINE_OBJECT       g_stDemoEngine;
 /** Parameters:		None.													**/
 /** Return:			None.													**/
 /** Notice:			This function demonstrates how to use the interface and **/
-/**                 HMI engine of Simple GUI.
-								**/
+/**                 HMI engine of Simple GUI.                               **/
 /*****************************************************************************/
-void SimpleGUI_DemoProcess(void)
+void SimpleGUI_DemoProcessInitialize(void)
 {
 	InitializeEngine(&g_stDemoEngine);
 }
@@ -45,7 +44,7 @@ void SimpleGUI_DemoProcess(void)
 /** Function Name:	InitializeEngine										**/
 /** Purpose:		Initialize HMI demo engine.								**/
 /** Parameters:																**/
-/** @pstHMIEngineObject[in]: HMI engine object pointer.						**/
+/** @ pstHMIEngineObject[in]: HMI engine object pointer.					**/
 /** Return:			HMI_ENGINE_RESULT.										**/
 /** Notice:			This function must be called when initialize.			**/
 /*****************************************************************************/
@@ -119,7 +118,8 @@ HMI_ENGINE_RESULT InitializeEngine(HMI_ENGINE_OBJECT* pstHMIEngineObject)
 /** Function Name:	EventProcess											**/
 /** Purpose:		Process posted event.									**/
 /** Parameters:																**/
-/** @pstHMIEngineObject[in]: HMI engine object pointer.						**/
+/** @ eEventType[in]:   HMI event type.         						    **/
+/** @ pstEvent[in]:     HMI event data.                                     **/
 /** Return:			HMI_ENGINE_RESULT.										**/
 /** Notice:			This function must be called when initialize.			**/
 /*****************************************************************************/

@@ -26,7 +26,7 @@
 static SGUI_INT SGUI_RealtimeGraph_GetValuePointYCoordinate(SGUI_RTGRAPH* pstRTGraph, SGUI_INT iValue);
 
 //=======================================================================//
-//= Function implementation.										    =//
+//= Function define.										            =//
 //=======================================================================//
 /*************************************************************************/
 /** Function Name:	SGUI_RealtimeGraph_Initialize						**/

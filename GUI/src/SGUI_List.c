@@ -46,7 +46,7 @@ static inline void			SGUI_LIST_RefreshListItems(SGUI_LIST_STRUCT* pstList);
 static inline void			SGUI_LIST_DrawItem(SGUI_LIST_STRUCT* pstList, SGUI_SIZE uiIndex);
 
 //=======================================================================//
-//= Function implementation.										    =//
+//= Function define.										            =//
 //=======================================================================//
 /*************************************************************************/
 /** Function Name:	SGUI_LIST_InitializeListData						**/

@@ -73,7 +73,7 @@ HMI_SCREEN_OBJECT       		g_stHMIDemo_VariableBox =	{	HMI_SCREEN_ID_DEMO_VARIABL
 															};
 
 //=======================================================================//
-//= Function implementation.										    =//
+//= Function define.										            =//
 //=======================================================================//
 HMI_ENGINE_RESULT HMI_DemoVariableBox_Initialize(void)
 {

@@ -1,5 +1,5 @@
-#ifndef HMI_PROCESS_H_INCLUDED
-#define HMI_PROCESS_H_INCLUDED
+#ifndef __INCLUDE_HMI_ENGINE_H__
+#define __INCLUDE_HMI_ENGINE_H__
 //=======================================================================//
 //= Include files.													    =//
 //=======================================================================//
@@ -128,4 +128,4 @@ HMI_ENGINE_RESULT   HMI_ProcessEvent(HMI_EVENT_TYPE eEventType, const HMI_EVENT*
 HMI_ENGINE_RESULT	HMI_PostProcess(SGUI_INT iActionResult);
 HMI_ENGINE_RESULT   HMI_Goto(SGUI_INT iDestScreenID, const void* pstParameters);
 HMI_ENGINE_RESULT   HMI_GoBack(const void* pstParameters);
-#endif // HMI_PROCESS_H_INCLUDED
+#endif // __INCLUDE_HMI_ENGINE_H__

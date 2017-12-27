@@ -3,10 +3,13 @@
 //=======================================================================//
 //= Include files.													    =//
 //=======================================================================//
+#include <stdbool.h>
+
 #include "SGUI_Config.h"
 #include "SGUI_Typedef.h"
 #if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
-#include "LCD_OperationIF.h"
+//#include "LCD_OperationIF.h"
+#include "VirtualDeviceInterface.h"
 #else
 // Insert platform driver head file here.
 #endif //_SIMPLE_GUI_ENABLE_SIMULATOR_

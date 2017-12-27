@@ -41,7 +41,7 @@ static HMI_ENGINE_RESULT    HMI_DemoScrollingText_PostProcess(SGUI_INT iActionRe
 //= Static variable declaration.									    =//
 //=======================================================================//
 // Demo text.
-static char					s_szDemoText[] =
+static SGUI_CCHAR           s_szDemoText[] =
 {
 "  欢迎来到SimpleGUI演示工程，本工程用于演示SimpleGUI各API的显示效果、\
 使用方法以及运作机理，在演示过程中，您可以通过键盘输入与SimpleGUI演示工\
@@ -72,7 +72,7 @@ HMI_SCREEN_OBJECT       g_stHMIDemo_ScrollingText =		{
 														&s_stDemoScrollingTextActions};
 
 //=======================================================================//
-//= Function implementation.										    =//
+//= Function define.										            =//
 //=======================================================================//
 /*****************************************************************************/
 /** Function Name:	HMI_DemoScrollingText_Initialize                        **/
@@ -139,7 +139,7 @@ HMI_ENGINE_RESULT HMI_DemoScrollingText_ProcessEvent(HMI_EVENT_TYPE eEventType, 
 	/* Variable Declaration				*/
 	/*----------------------------------*/
 	HMI_ENGINE_RESULT           eProcessResult;
-	static SGUI_UINT            uiTimer = 3;
+	static SGUI_UINT            uiTimer = 1;
 	SGUI_UINT16*				parrKeyValue;
 
 	/*----------------------------------*/
@@ -177,6 +177,7 @@ HMI_ENGINE_RESULT HMI_DemoScrollingText_ProcessEvent(HMI_EVENT_TYPE eEventType, 
                     }
                     else
                     {
+                        SGUI_Frame_DrawFullScreenFrame(&s_stTextFrame);
                         SGUI_Text_DrawMultipleLinesText(s_szDemoText, SGUI_FONT_SIZE_H12, &s_stTextDisplayArea, s_iTextOffset, SGUI_DRAW_NORMAL);
                         if(s_iTextOffset + s_iTextHeight == 0)
                         {
@@ -186,7 +187,7 @@ HMI_ENGINE_RESULT HMI_DemoScrollingText_ProcessEvent(HMI_EVENT_TYPE eEventType, 
                         {
                             s_iTextOffset--;
                         }
-                        uiTimer = 2;
+                        uiTimer = 1;
                     }
                     eProcessResult = HMI_RET_NOACTION;
                     break;

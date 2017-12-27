@@ -42,7 +42,7 @@ static SGUI_CHAR g_arrcEncodeBuffer[_SIMPLE_GUI_ENCODE_BUFFER_SIZE];
 #endif
 
 //=======================================================================//
-//= Function implementation.										    =//
+//= Function define.										            =//
 //=======================================================================//
 /*************************************************************************/
 /** Function Name:	SGUI_Common_IntegerToStringWithDecimalPoint			**/

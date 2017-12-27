@@ -40,7 +40,7 @@ HMI_SCREEN_OBJECT				g_stHMI_DemoRealtimeGraph =		{	HMI_SCREEN_ID_DEMO_REAL_TIME
                                                     };
 
 //=======================================================================//
-//= Function implementation.										    =//
+//= Function define.										            =//
 //=======================================================================//
 HMI_ENGINE_RESULT HMI_DemoRealGraph_Initialize(void)
 {
@@ -107,7 +107,7 @@ HMI_ENGINE_RESULT HMI_DemoRealGraph_ProcessEvent(HMI_EVENT_TYPE eEventType, cons
 					}
 					else
 					{
-						uiTimer = 10;
+						uiTimer = 5;
 						iNewValue = *((SGUI_INT*)pstEvent->Data);
 						SGUI_RealtimeGraph_AppendValue(&s_stRealtimeGraph, iNewValue);
 						HMI_DemoRealGraph_RefreshScreen(NULL);

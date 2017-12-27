@@ -46,7 +46,7 @@ HMI_SCREEN_OBJECT       g_stHMIDemo_TextNotice =		{	HMI_SCREEN_ID_DEMO_TEXT_NOTI
 														};
 
 //=======================================================================//
-//= Function implementation.										    =//
+//= Function define.										            =//
 //=======================================================================//
 HMI_ENGINE_RESULT HMI_DemoTextNotice_Initialize(void)
 {

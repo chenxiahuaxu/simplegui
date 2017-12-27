@@ -8,12 +8,12 @@
 		<Build>
 			<Target title="Debug">
 				<Option output="../../Build/Debug/bin/SimpleGUI" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="../../Build" />
 				<Option object_output="../../Build/Debug/obj/" />
 				<Option type="0" />
 				<Option compiler="gcc" />
 				<Option projectLinkerOptionsRelation="2" />
 				<Compiler>
-					<Add option="-std=c++11" />
 					<Add option="-g" />
 					<Add directory="$(#wx31)/lib/gcc_dll/mswu" />
 				</Compiler>
@@ -27,6 +27,7 @@
 			</Target>
 			<Target title="Release">
 				<Option output="../../Build/Release/bin/SimpleGUI" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="../../Build" />
 				<Option object_output="../../Build/Release/obj/" />
 				<Option type="0" />
 				<Option compiler="gcc" />
@@ -47,6 +48,7 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
+			<Add option="-std=c++11" />
 			<Add option="-pipe" />
 			<Add option="-mthreads" />
 			<Add option="-D__GNUWIN32__" />
@@ -55,7 +57,6 @@
 			<Add option="-DwxUSE_UNICODE" />
 			<Add directory="$(#wx31)/include" />
 			<Add directory="../../Frame/inc" />
-			<Add directory="../../User/inc" />
 			<Add directory="../../GUI/inc" />
 			<Add directory="../../Library/inc" />
 			<Add directory="../../HMI/inc" />
@@ -63,6 +64,7 @@
 			<Add directory="../../wxExpand/inc" />
 			<Add directory="../../Application/inc" />
 			<Add directory="../../Common/inc" />
+			<Add directory="../../Interface/inc" />
 		</Compiler>
 		<ResourceCompiler>
 			<Add directory="$(#wx31)/include" />
@@ -75,7 +77,9 @@
 		<Unit filename="../../Application/inc/Application.h" />
 		<Unit filename="../../Application/src/Application.cpp" />
 		<Unit filename="../../Common/inc/Common.h" />
+		<Unit filename="../../Common/src/Common.cpp" />
 		<Unit filename="../../Demo/inc/DemoProc.h" />
+		<Unit filename="../../Demo/inc/DemoProcText.h" />
 		<Unit filename="../../Demo/src/DemoProc.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -97,15 +101,10 @@
 		<Unit filename="../../Demo/src/VariableBox.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="../../Frame/inc/LCD_OperationIF.h" />
-		<Unit filename="../../Frame/inc/LCD_VirtualDevice.h" />
-		<Unit filename="../../Frame/inc/LCD_VirtualDeviceParameter.h" />
-		<Unit filename="../../Frame/inc/PixelPanel.h" />
-		<Unit filename="../../Frame/src/LCD_OperationIF.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="../../Frame/src/LCD_VirtualDevice.cpp" />
-		<Unit filename="../../Frame/src/PixelPanel.cpp" />
+		<Unit filename="../../Frame/inc/LCDFrame.h" />
+		<Unit filename="../../Frame/inc/MonochromeDotLCD.h" />
+		<Unit filename="../../Frame/src/LCDFrame.cpp" />
+		<Unit filename="../../Frame/src/MonochromeDotLCD.cpp" />
 		<Unit filename="../../GUI/inc/SGUI_Basic.h" />
 		<Unit filename="../../GUI/inc/SGUI_Common.h" />
 		<Unit filename="../../GUI/inc/SGUI_Config.h" />
@@ -159,16 +158,22 @@
 		<Unit filename="../../HMI/src/HMI_Engine.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="../../Interface/inc/UserActionInterface.h" />
+		<Unit filename="../../Interface/inc/VirtualDeviceInterface.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="../../Interface/src/UserActionInterface.cpp">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../Interface/src/VirtualDeviceInterface.cpp">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="../../Library/inc/iconv.h" />
 		<Unit filename="../../Resource/Resource.rc">
 			<Option compilerVar="WINDRES" />
 		</Unit>
-		<Unit filename="../../User/inc/VirtualDeviceInterface.h" />
-		<Unit filename="../../User/src/VirtualDeviceInterface.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="../../wxExpand/inc/wxPixelPanel.h" />
-		<Unit filename="../../wxExpand/src/wxPixelPanel.cpp" />
+		<Unit filename="../../wxExpand/inc/wxDotLCD.h" />
+		<Unit filename="../../wxExpand/src/wxDotLCD.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

@@ -49,9 +49,15 @@ extern HMI_SCREEN_OBJECT		g_stHMI_DemoRealtimeGraph;
 //=======================================================================//
 //= Function declare.   											    =//
 //=======================================================================//
-void                SimpleGUI_DemoProcess(void);
+#ifdef __cplusplus
+extern "C"
+{
+#endif /* __cplusplus */
+void                SimpleGUI_DemoProcessInitialize(void);
 HMI_ENGINE_RESULT   InitializeEngine(HMI_ENGINE_OBJECT* pstHMIEngineObject);
 HMI_ENGINE_RESULT	EventProcess(HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent);
 
-
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 #endif // __INCLUDE_DEMO_PROC_H__

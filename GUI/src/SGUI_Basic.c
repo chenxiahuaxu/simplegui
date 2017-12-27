@@ -10,6 +10,11 @@
 //= Include files.													    =//
 //=======================================================================//
 #include "SGUI_Basic.h"
+#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
+#include "VirtualDeviceInterface.h"
+#else
+// Include your device driver interface here.
+#endif //_SIMPLE_GUI_ENABLE_SIMULATOR_
 
 //=======================================================================//
 //= Static variable declaration.									    =//
@@ -140,7 +145,7 @@ SGUI_CBYTE SGUI_BASIC_FONT_H8[] = {
 };
 
 //=======================================================================//
-//= Function implementation.										    =//
+//= Function define.										            =//
 //=======================================================================//
 /*************************************************************************/
 /** Function Name:	SGUI_Basic_DrawPoint								**/
@@ -163,7 +168,7 @@ void SGUI_Basic_DrawPoint(SGUI_UINT uiCoordinateX, SGUI_UINT uiCoordinateY, SGUI
 		if(SGUI_COLOR_FRGCLR == eColor)
 		{
 #if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
-			VTIF_SetPoint(uiCoordinateX, uiCoordinateY, 1);
+			VDIF_SetPixel(uiCoordinateX, uiCoordinateY, 1);
 #else
 			// Call draw pix interface here.
 #endif //_SIMPLE_GUI_ENABLE_SIMULATOR_
@@ -171,7 +176,7 @@ void SGUI_Basic_DrawPoint(SGUI_UINT uiCoordinateX, SGUI_UINT uiCoordinateY, SGUI
 		else if(SGUI_COLOR_BKGCLR == eColor)
 		{
 #if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
-			VTIF_SetPoint(uiCoordinateX, uiCoordinateY, 0);
+			VDIF_SetPixel(uiCoordinateX, uiCoordinateY, 0);
 #else
 			// Call draw pix interface here.
 #endif //_SIMPLE_GUI_ENABLE_SIMULATOR_
@@ -208,7 +213,7 @@ SGUI_COLOR SGUI_Basic_GetPoint(SGUI_UINT uiCoordinateX, SGUI_UINT uiCoordinateY)
 	if((uiCoordinateX < LCD_SIZE_WIDTH) && (uiCoordinateY < LCD_SIZE_HEIGHT))
 	{
 #if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
-		uiPixValue = VTIF_GetPoint(uiCoordinateX, uiCoordinateY);
+		uiPixValue = VDIF_GetPixel(uiCoordinateX, uiCoordinateY);
 #else
 		// Call read pix interface here.
 #endif //_SIMPLE_GUI_ENABLE_SIMULATOR_
@@ -238,7 +243,7 @@ void SGUI_Basic_ClearScreen(void)
 	/* Process							*/
 	/*----------------------------------*/
 #if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
-	VTIF_ClearScreen();
+	VDIF_ClearDisplay();
 #else
 	// Call clear screen function here;
 #endif //_SIMPLE_GUI_ENABLE_SIMULATOR_

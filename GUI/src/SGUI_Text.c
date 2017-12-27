@@ -35,7 +35,7 @@ static void                 SGUI_Text_ReadFontData(SGUI_FONT_SIZE eFontSize, SGU
 static SGUI_SIZE			SGUI_Text_GetCharacterTableIndex(SGUI_UINT16 uiCharacterCode);
 
 //=======================================================================//
-//= Function implementation.										    =//
+//= Function define.										            =//
 //=======================================================================//
 
 /*************************************************************************/
