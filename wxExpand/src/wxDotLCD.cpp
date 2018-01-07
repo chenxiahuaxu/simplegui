@@ -14,11 +14,10 @@ END_EVENT_TABLE()
 //=======================================================================//
 //= Function define.										            =//
 //=======================================================================//
-wxDotLCD::wxDotLCD(wxWindow *parent, wxWindowID winid, const wxPoint& pos,  const wxSize& size, long style, const wxString& name):
-wxPanel(parent, winid, pos, size, style, name),
+wxDotLCD::wxDotLCD(wxWindow *pclsParent, wxWindowID iWinID, const wxPoint& clsPosition):
+wxPanel(pclsParent, iWinID, clsPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxNO_BORDER, wxPanelNameStr),
 m_clsCDC(this)
 {
-	m_pclsParent = parent;
 	m_parrDisplayBuffer =			NULL;
 	m_pfDrawPoint =					NULL;
 
@@ -45,37 +44,12 @@ wxDotLCD::~wxDotLCD()
 	delete m_pclsGridColor;
 }
 
-void wxDotLCD::SetDisplaySizes(uint32_t uiEdgeWidth, uint32_t uiHorizontalPixelNumber, uint32_t uiVerticalPixelNumber, uint32_t uiPixelSize, bool bGridVisible)
+void wxDotLCD::SetDisplaySizes(uint32_t uiHorizontalPixelNumber, uint32_t uiVerticalPixelNumber)
 {
-	// Set grid visible status.
-	m_uiEdgeWidth =		uiEdgeWidth;
-	m_bGridVisible =	bGridVisible;
-	m_uiPixelSize =		uiPixelSize;
-
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if(m_uiPixelSize == 0)
-	{
-		m_pfDrawPoint = NULL;
-	}
-	else if(m_uiPixelSize == 1)
-	{
-		m_pfDrawPoint = &DrawPointSinglePixel;
-	}
-	else
-	{
-		if((true == bGridVisible) && (m_uiPixelSize > 2))
-		{
-			m_pfDrawPoint = &DrawPointMultiplePixelWithGrid;
-		}
-		else
-		{
-			m_pfDrawPoint = &DrawPointMultiplePixel;
-		}
-	}
-
-	// Free current buffer.
+		// Free current buffer.
 	if(NULL != m_parrDisplayBuffer)
 	{
 		free(m_parrDisplayBuffer);
@@ -102,16 +76,11 @@ void wxDotLCD::SetDisplaySizes(uint32_t uiEdgeWidth, uint32_t uiHorizontalPixelN
 	}
 }
 
-void wxDotLCD::GetDisplaySize(uint32_t* puiEdgeWidth, uint32_t* puiHorizontalPixelNumber, uint32_t* puiVerticalPixelNumber, uint32_t* puiPixelSize, bool* pbGridVisible)
+void wxDotLCD::GetDisplaySize(uint32_t* puiHorizontalPixelNumber, uint32_t* puiVerticalPixelNumber)
 {
     /*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if(NULL != puiEdgeWidth)
-	{
-		*puiEdgeWidth = m_uiEdgeWidth;
-	}
-
 	if(NULL != puiHorizontalPixelNumber)
 	{
 		*puiHorizontalPixelNumber = m_uiHorizontalPixelNumber;
@@ -120,16 +89,6 @@ void wxDotLCD::GetDisplaySize(uint32_t* puiEdgeWidth, uint32_t* puiHorizontalPix
 	if(NULL != puiVerticalPixelNumber)
 	{
 		*puiVerticalPixelNumber = m_uiVerticalPixelNumber;
-	}
-
-	if(NULL != puiPixelSize)
-	{
-		*puiPixelSize = m_uiPixelSize;
-	}
-
-	if(NULL != pbGridVisible)
-	{
-		*pbGridVisible = m_bGridVisible;
 	}
 }
 
@@ -174,7 +133,38 @@ void wxDotLCD::SetPixelSize(uint32_t uiPixelSize)
     /*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
+	// Save the pixel size value.
     m_uiPixelSize = uiPixelSize;
+
+	if(3 > m_uiPixelSize)
+    // If pixel size is less then 3, grid is fixed to NOT visible.
+	{
+        if(0 == m_uiPixelSize)
+        // If pixel size is 0, the pixel drawing function will set to invalid.
+        {
+            m_pfDrawPoint = NULL;
+        }
+        else if(1 == m_uiPixelSize)
+        // If pixel size is 1, the pixel drawing function will set to draw pixel unit by point.
+        {
+            m_pfDrawPoint = &DrawPointSinglePixel;
+        }
+        else
+        {
+            m_pfDrawPoint = &DrawPointMultiplePixel;
+        }
+	}
+	else
+	{
+		if(true == m_bGridVisible)
+		{
+			m_pfDrawPoint = &DrawPointMultiplePixelWithGrid;
+		}
+		else
+		{
+			m_pfDrawPoint = &DrawPointMultiplePixel;
+		}
+	}
 }
 
 void wxDotLCD::SetGridVisibled(bool bGridVisible)
@@ -182,7 +172,20 @@ void wxDotLCD::SetGridVisibled(bool bGridVisible)
     /*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
+	// Save the grid visible value set.
     m_bGridVisible = bGridVisible;
+
+    if(3 <= m_uiPixelSize)
+	{
+		if(true == m_bGridVisible)
+		{
+			m_pfDrawPoint = &DrawPointMultiplePixelWithGrid;
+		}
+		else
+		{
+			m_pfDrawPoint = &DrawPointMultiplePixel;
+		}
+	}
 }
 
 void wxDotLCD::CleanPanel(void)
@@ -271,7 +274,7 @@ void wxDotLCD::DrawPointMultiplePixelWithGrid(wxMemoryDC& clsCDCObject, uint32_t
 }
 
 /*************************************************************************/
-/** Function Name:	SetPixelColor                                       **/
+/** Function Name:	SetPixelUnitColor                                   **/
 /** Purpose:		Set a pixel RGBA color value.                       **/
 /** Params:																**/
 /**	@ uiPosX[in]:       X-Coordinate of pixel.                          **/
@@ -286,7 +289,7 @@ void wxDotLCD::DrawPointMultiplePixelWithGrid(wxMemoryDC& clsCDCObject, uint32_t
 /**                 only one pixel, please use the DrawPixel function   **/
 /**                 directly.                                           **/
 /*************************************************************************/
-void wxDotLCD::SetPixelColor(uint32_t uiPosX, uint32_t uiPosY, wxColor& clsColor, bool bRefreshNow)
+void wxDotLCD::SetPixelUnitColor(uint32_t uiPosX, uint32_t uiPosY, wxColor& clsColor, bool bRefreshNow)
 {
     /*----------------------------------*/
 	/* Process							*/
@@ -304,7 +307,16 @@ void wxDotLCD::SetPixelColor(uint32_t uiPosX, uint32_t uiPosY, wxColor& clsColor
 	}
 }
 
-uint32_t wxDotLCD::GetPixelColor(uint32_t uiPosX, uint32_t uiPosY)
+/*************************************************************************/
+/** Function Name:	GetPixelUnitColor                                   **/
+/** Purpose:		Get color of a pixel unit.                          **/
+/** Params:																**/
+/**	@ uiPosX[in]:       X-Coordinate of pixel.                          **/
+/**	@ uiPosY[in]:       Y-Coordinate of pixel.                          **/
+/** Return:			RGBA color value of the pixel unit.                 **/
+/** Notice:			None.                                               **/
+/*************************************************************************/
+uint32_t wxDotLCD::GetPixelUnitColor(uint32_t uiPosX, uint32_t uiPosY)
 {
     /*----------------------------------*/
 	/* Variable Declaration				*/
@@ -359,7 +371,7 @@ void wxDotLCD::DrawPixel(uint32_t uiPosX, uint32_t uiPosY, wxColor& clsColor)
 				m_clsCDC.DrawRectangle(wxPoint(m_uiEdgeWidth+uiPosX*m_uiPixelSize, m_uiEdgeWidth+uiPosY*m_uiPixelSize), wxSize(m_uiPixelSize, m_uiPixelSize));
 			}
 		}
-		SetPixelColor(uiPosX, uiPosY, clsColor);
+		SetPixelUnitColor(uiPosX, uiPosY, clsColor);
 		ReleaseDC(m_clsCDC);
 	}
 
@@ -460,11 +472,11 @@ void wxDotLCD::ResizeParent(void)
 	/*----------------------------------*/
 	if((true == m_bGridVisible) && (2 <m_uiPixelSize))
 	{
-		m_pclsParent->SetClientSize(uiPaintSizeWidth+1, uiPaintSizeHeight+1);
+		GetParent()->SetClientSize(uiPaintSizeWidth+1, uiPaintSizeHeight+1);
 	}
 	else
 	{
-		m_pclsParent->SetClientSize(uiPaintSizeWidth, uiPaintSizeHeight);
+		GetParent()->SetClientSize(uiPaintSizeWidth, uiPaintSizeHeight);
 	}
 }
 
@@ -486,7 +498,6 @@ bool wxDotLCD::SaveScreenImageToFile(const wxString& strFilePath)
     /*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	// Create and initialize bitmap.
 	wxBitmap*               pclsBitMap;
 	wxMemoryDC*             pclsMemoryDC;
 	bool                    bReturn;
@@ -520,30 +531,54 @@ bool wxDotLCD::SaveScreenImageToFile(const wxString& strFilePath)
 	return bReturn;
 }
 
+/*************************************************************************/
+/** Function Name:	CopyScreenImageToClipBoard                          **/
+/** Purpose:		Copy current screen image to clip board.            **/
+/** Params:			None.                                               **/
+/** Return:                                                             **/
+/** @ true:             Copy successfully.                              **/
+/** @ false:            Copy failed.                                    **/
+/** Notice:			None.                                               **/
+/*************************************************************************/
 bool wxDotLCD::CopyScreenImageToClipBoard(void)
 {
-	uint32_t			uiPictureWidth, uiPictureHeight;
-	// Get panel size
-	uiPictureWidth = GetSize().GetX();
-	uiPictureHeight = GetSize().GetY();
+    /*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+	uint32_t                uiPictureWidth, uiPictureHeight;
+	wxBitmap*               pclsDCBufferBitmap;
+	wxMemoryDC*             pclsDCBuffer;
+	bool                    bReturn;
 
-	wxBitmap		CBitMap(uiPictureWidth, uiPictureHeight, wxBITMAP_SCREEN_DEPTH);
-	wxMemoryDC		CMemoryDC(CBitMap);
-	CMemoryDC.Blit(wxPoint(0, 0), wxSize(uiPictureWidth, uiPictureHeight), &m_clsCDC, wxPoint(0, 0));
+	/*----------------------------------*/
+	/* Initialize						*/
+	/*----------------------------------*/
+	uiPictureWidth =        GetSize().GetX();
+	uiPictureHeight =       GetSize().GetY();
+	pclsDCBufferBitmap =    new wxBitmap(uiPictureWidth, uiPictureHeight, wxBITMAP_SCREEN_DEPTH);
+	pclsDCBuffer =          new wxMemoryDC(*pclsDCBufferBitmap);
+	bReturn =               true;
 
-	if(wxTheClipboard->Open())
-	{
-		wxTheClipboard->SetData(new wxBitmapDataObject(CBitMap));
-		wxTheClipboard->Close();
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	if((NULL != pclsDCBufferBitmap) && (NULL != pclsDCBuffer))
+    {
+        if(true == wxTheClipboard->Open())
+        {
+            pclsDCBuffer->Blit(0, 0, uiPictureWidth, uiPictureHeight, &m_clsCDC, 0, 0);
+            wxTheClipboard->SetData(new wxBitmapDataObject(*pclsDCBufferBitmap));
+            wxTheClipboard->Close();
+        }
+        else
+        {
+            bReturn = false;
+        }
+    }
+
+    delete pclsDCBufferBitmap;
+    delete pclsDCBuffer;
+
+	return bReturn;
 }
 
-wxWindow* wxDotLCD::GetParentWindow(void)
-{
-	return m_pclsParent;
-}

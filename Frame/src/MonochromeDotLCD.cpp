@@ -20,8 +20,8 @@ END_EVENT_TABLE()
 //=======================================================================//
 //= Function define.										            =//
 //=======================================================================//
-MonochromeDotLCD::MonochromeDotLCD(wxWindow *parent, wxWindowID winid, const wxPoint& pos, const wxSize& size, long style, const wxString& name):
-wxDotLCD(parent, winid, pos, size, style, name)
+MonochromeDotLCD::MonochromeDotLCD(wxWindow *pclsParent, wxWindowID iWinID, const wxPoint& clsPosition):
+wxDotLCD(pclsParent, iWinID, clsPosition)
 {
 	m_pclsPanelColor = new wxColor(0x00, 0x00, 0x00, 0x00);
 	m_pclsPixelColor = new wxColor(0x00, 0x00, 0x00, 0x00);
@@ -37,11 +37,10 @@ void MonochromeDotLCD::SetParameter(PixelPanelParameter* pstPanelParameter)
 {
 	if(NULL != pstPanelParameter)
 	{
-		wxDotLCD::SetDisplaySizes(	pstPanelParameter->EdgeWidth,
-										pstPanelParameter->HorizontalPixelNumber,
-										pstPanelParameter->VerticalPixelNumber,
-										pstPanelParameter->PixelSize,
-										pstPanelParameter->EnableGrid);
+	    wxDotLCD::SetEdgeWidth(pstPanelParameter->EdgeWidth);
+	    wxDotLCD::SetPixelSize(pstPanelParameter->PixelSize);
+	    wxDotLCD::SetGridVisibled(pstPanelParameter->EnableGrid);
+		wxDotLCD::SetDisplaySizes(pstPanelParameter->HorizontalPixelNumber, pstPanelParameter->VerticalPixelNumber);
 		m_uiColumnCount = pstPanelParameter->HorizontalPixelNumber;
 		m_uiPageCount = pstPanelParameter->VerticalPixelNumber/8;
 
@@ -58,11 +57,11 @@ void MonochromeDotLCD::SetPixel(uint32_t uiPosX, uint32_t uiPosY, LCD_PIXEL_COLO
 {
     if(LCD_PIXEL_COLOR_L == ePixelValue)
     {
-        wxDotLCD::SetPixelColor(uiPosX, uiPosY, *m_pclsPanelColor);
+        wxDotLCD::SetPixelUnitColor(uiPosX, uiPosY, *m_pclsPanelColor);
     }
     else
     {
-        wxDotLCD::SetPixelColor(uiPosX, uiPosY, *m_pclsPixelColor);
+        wxDotLCD::SetPixelUnitColor(uiPosX, uiPosY, *m_pclsPixelColor);
     }
 }
 
@@ -77,7 +76,7 @@ MonochromeDotLCD::LCD_PIXEL_COLOR_T MonochromeDotLCD::GetPixel(uint32_t uiPosX, 
     /*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-    uiPixelColor = GetPixelColor(uiPosX, uiPosY);
+    uiPixelColor = GetPixelUnitColor(uiPosX, uiPosY);
 
     /*----------------------------------*/
 	/* Process							*/
@@ -116,12 +115,12 @@ void MonochromeDotLCD::CleanScreen(void)
 {
 	uint32_t uiHorizontalPixelNumber, uiVerticalPixelNumber;
 
-	GetDisplaySize(NULL, &uiHorizontalPixelNumber, &uiVerticalPixelNumber, NULL, NULL);
+	GetDisplaySize(&uiHorizontalPixelNumber, &uiVerticalPixelNumber);
 	for(uint32_t i_V=0; i_V<uiVerticalPixelNumber; i_V++)
 	{
 		for(uint32_t i_H=0; i_H<uiHorizontalPixelNumber; i_H++)
 		{
-			SetPixelColor(i_H, i_V, *m_pclsPanelColor);
+			SetPixelUnitColor(i_H, i_V, *m_pclsPanelColor);
 		}
 	}
 }

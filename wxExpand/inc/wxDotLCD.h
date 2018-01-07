@@ -26,7 +26,6 @@ private:	//Appearance parameters.
 	// Private data declare.
 private:	// Private data.
 	uint32_t*			m_parrDisplayBuffer;
-	wxWindow*			m_pclsParent;
 	void				(wxDotLCD::*m_pfDrawPoint)(wxMemoryDC& clsCDCObject, uint32_t uiPosX, uint32_t uiPosY, uint32_t uiPixelSize);
 
 private:	// Private object;
@@ -39,28 +38,28 @@ private:	// Event callback function.
 
 
 public:		// Constructor/Destructor
-						wxDotLCD(wxWindow *parent, wxWindowID winid = wxID_ANY, const wxPoint& pos = wxDefaultPosition,  const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL | wxNO_BORDER,const wxString& name = wxPanelNameStr);
+						wxDotLCD(wxWindow *pclsParent, wxWindowID iWinID = wxID_ANY, const wxPoint& clsPosition = wxDefaultPosition);
 						~wxDotLCD();
 
 public:		// Public interface
-	void				SetDisplaySizes(uint32_t uiEdgeWidth, uint32_t uiHorizontalPixelNumber, uint32_t uiVerticalPixelNumber, uint32_t uiPixelSize, bool bGridVisible);
-	void				GetDisplaySize(uint32_t* puiEdgeWidth, uint32_t* puiHorizontalPixelNumber, uint32_t* puiVerticalPixelNumber, uint32_t* puiPixelSize, bool* pbGridVisible);
+	void				SetDisplaySizes(uint32_t uiHorizontalPixelNumber, uint32_t uiVerticalPixelNumber);
+	void				GetDisplaySize(uint32_t* puiHorizontalPixelNumber, uint32_t* puiVerticalPixelNumber);
 	void				SetDisplayColors(const wxColor& clsEdgeColor, const wxColor& clsBaseColor, const wxColor& clsGridColor);
 	void				SetEdgeWidth(uint32_t uiEdgeWidth);
 	uint32_t			GetEdgeWidth(void)							{return m_uiEdgeWidth;}
 	void				SetPixelSize(uint32_t uiPixelSize);
 	uint32_t			GetPixelSize(void)							{return m_uiPixelSize;}
 	void				SetGridVisibled(bool bGridVisible);
+	bool                GetGridVisibled(void)          {return m_bGridVisible;}
 	void				SetDisplayAreaSize( uint32_t uiHorizontalPixelNumber, uint32_t uiVerticalPixelNumber);
 	void				SetEdgeColor(const wxColor& clsColor);
 	void				SetBaseColor(const wxColor& clsColor);
 	void				SetDrawColor(const wxColor& clsColor);
 	void				SetGridColor(const wxColor& clsColor);
-	wxWindow*			GetParentWindow(void);
 	void				OnPaint(void);
-	void				SetPixelColor(uint32_t uiPosX, uint32_t uiPosY, wxColor& clsColor, bool bRefreshNow = false);
+	void				SetPixelUnitColor(uint32_t uiPosX, uint32_t uiPosY, wxColor& clsColor, bool bRefreshNow = false);
 	void                DrawPixel(uint32_t uiPosX, uint32_t uiPosY, wxColor& clsColor);
-	uint32_t			GetPixelColor(uint32_t uiPosX, uint32_t uiPosY);
+	uint32_t			GetPixelUnitColor(uint32_t uiPosX, uint32_t uiPosY);
 	void				RefreshDisplay(void);
 	void				CleanPanel(void);
 	bool				SaveScreenImageToFile(const wxString& strFilePath);

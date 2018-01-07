@@ -30,12 +30,9 @@ class MonochromeDotLCD : public wxDotLCD
             LCD_PIXEL_COLOR_H,
         }LCD_PIXEL_COLOR_T;
 
-                            MonochromeDotLCD(wxWindow *parent,
-											wxWindowID winid = wxID_ANY,
-											const wxPoint& pos = wxDefaultPosition,
-											const wxSize& size = wxDefaultSize,
-											long style = wxTAB_TRAVERSAL | wxNO_BORDER,
-											const wxString& name = wxPanelNameStr);
+                            MonochromeDotLCD(wxWindow *pclsParent,
+											wxWindowID iWinID = wxID_ANY,
+											const wxPoint& clsPosition = wxDefaultPosition);
                             ~MonochromeDotLCD(void);
 
 	void				    SetParameter(PixelPanelParameter* pstPanelParameter);
