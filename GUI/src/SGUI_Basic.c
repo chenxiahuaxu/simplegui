@@ -10,11 +10,6 @@
 //= Include files.													    =//
 //=======================================================================//
 #include "SGUI_Basic.h"
-#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
-#include "VirtualDeviceInterface.h"
-#else
-// Include your device driver interface here.
-#endif //_SIMPLE_GUI_ENABLE_SIMULATOR_
 
 //=======================================================================//
 //= Static variable declaration.									    =//
@@ -171,6 +166,7 @@ void SGUI_Basic_DrawPoint(SGUI_UINT uiCoordinateX, SGUI_UINT uiCoordinateY, SGUI
 			VDIF_SetPixel(uiCoordinateX, uiCoordinateY, 1);
 #else
 			// Call draw pix interface here.
+			OLED_SetPixel(uiCoordinateX, uiCoordinateY, OLED_COLOR_FRG);
 #endif //_SIMPLE_GUI_ENABLE_SIMULATOR_
 		}
 		else if(SGUI_COLOR_BKGCLR == eColor)
@@ -179,6 +175,7 @@ void SGUI_Basic_DrawPoint(SGUI_UINT uiCoordinateX, SGUI_UINT uiCoordinateY, SGUI
 			VDIF_SetPixel(uiCoordinateX, uiCoordinateY, 0);
 #else
 			// Call draw pix interface here.
+			OLED_SetPixel(uiCoordinateX, uiCoordinateY, OLED_COLOR_BKG);
 #endif //_SIMPLE_GUI_ENABLE_SIMULATOR_
 		}
 	}
@@ -216,6 +213,7 @@ SGUI_COLOR SGUI_Basic_GetPoint(SGUI_UINT uiCoordinateX, SGUI_UINT uiCoordinateY)
 		uiPixValue = VDIF_GetPixel(uiCoordinateX, uiCoordinateY);
 #else
 		// Call read pix interface here.
+		uiPixValue = OLED_GetPixel(uiCoordinateX, uiCoordinateY);
 #endif //_SIMPLE_GUI_ENABLE_SIMULATOR_
 		if(0 == uiPixValue)
 		{
@@ -246,6 +244,7 @@ void SGUI_Basic_ClearScreen(void)
 	VDIF_ClearDisplay();
 #else
 	// Call clear screen function here;
+	OLED_ClearDisplay();
 #endif //_SIMPLE_GUI_ENABLE_SIMULATOR_
 }
 
@@ -610,7 +609,7 @@ void SGUI_Basic_DrawBitMap(SGUI_RECT_AREA* pstDisplayArea, SGUI_RECT_AREA* pstDa
 						uiPixIndex = 0;
 						pData += RECTANGLE_WIDTH(*pstDataArea);
 					}
-					if(GET_BIT(*pData, uiPixIndex) != eDrawMode)
+					if(GET_PAGE_BIT(*pData, uiPixIndex) != eDrawMode)
 					{
 						SGUI_Basic_DrawPoint(iDrawPixX, iDrawPixY, SGUI_COLOR_FRGCLR);
 					}
@@ -631,3 +630,22 @@ void SGUI_Basic_DrawBitMap(SGUI_RECT_AREA* pstDisplayArea, SGUI_RECT_AREA* pstDa
 	}
 }
 
+/*************************************************************************/
+/** Function Name:	SGUI_Basic_RefreshDisplay							**/
+/** Purpose:		Sync display buffer to screen.                      **/
+/** Params:			None.                                               **/
+/** Return:			None.												**/
+/** Notice:			None.												**/
+/*************************************************************************/
+void SGUI_Basic_RefreshDisplay(void)
+{
+    /*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
+	VDIF_RefreshDisplay();
+#else
+	// Call clear screen function here;
+	OLED_RefreshScreen();
+#endif //_SIMPLE_GUI_ENABLE_SIMULATOR_
+}

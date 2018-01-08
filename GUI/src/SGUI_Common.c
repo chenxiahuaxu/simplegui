@@ -664,7 +664,7 @@ void SGUI_Common_MemorySet(void* pMemoryPtr, SGUI_BYTE iSetValue, SGUI_UINT uiSi
 #else
         for(uiIdx=0; uiIdx<uiSize; uiIdx++)
         {
-            *(pMemoryPtr+uiIdx) = iSetValue;
+            *(SGUI_BYTE*)(pMemoryPtr+uiIdx) = iSetValue;
         }
 #endif
 	}

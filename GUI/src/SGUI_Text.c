@@ -294,17 +294,17 @@ void SGUI_Text_ReadFontData(SGUI_FONT_SIZE eFontSize, SGUI_UINT16 uiCharacterCod
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-#if(_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
+//#if(_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
 	SGUI_UINT16					uiCharacterIndex;
 	SGUI_UINT					uiFontWidth, uiFontHeight;
 	SGUI_UINT32					uiCharacterDataSize;
 	SGUI_BYTE*					puiFontDataArrayPointer;
 	SGUI_UINT					i;
-#endif
+//#endif
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-#if(_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
+//#if(_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
 	// Get character font data index in font table.
 	uiCharacterIndex =			SGUI_Text_GetCharacterTableIndex(uiCharacterCode);
 	// Calculates the byte used by each half-width character.
@@ -312,11 +312,11 @@ void SGUI_Text_ReadFontData(SGUI_FONT_SIZE eFontSize, SGUI_UINT16 uiCharacterCod
 	uiFontWidth =				g_stFontSize[eFontSize].Width;
 	uiFontHeight =				g_stFontSize[eFontSize].Height;
 	uiCharacterDataSize =		(((uiFontHeight-1)/8)+1)*uiFontWidth;
-#endif
+//#endif
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-#if(_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
+//#if(_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
 	if((NULL != pFontDataBuffer) && (0 < uiFontBufferSize))
 	{
 		switch(eFontSize)
@@ -366,7 +366,7 @@ void SGUI_Text_ReadFontData(SGUI_FONT_SIZE eFontSize, SGUI_UINT16 uiCharacterCod
 			*(pFontDataBuffer+i) = *(puiFontDataArrayPointer + i);
 		}
 	}
-#endif
+//#endif
 }
 
 /*****************************************************************************/

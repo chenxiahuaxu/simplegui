@@ -3,8 +3,13 @@
 //=======================================================================//
 //= Include files.													    =//
 //=======================================================================//
-#include "SGUI_Config.h"
 #include "SGUI_Common.h"
+#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
+#include "VirtualDeviceInterface.h"
+#else
+// Include your device driver interface here.
+#include "OLED.h"
+#endif //_SIMPLE_GUI_ENABLE_SIMULATOR_
 
 //=======================================================================//
 //= Data type definition.											    =//
@@ -46,5 +51,6 @@ void					SGUI_Basic_DrawRectangle(SGUI_UINT uiStartX, SGUI_UINT uiStartY, SGUI_U
 void					SGUI_Basic_DrawCircle(SGUI_UINT uiCx, SGUI_UINT uiCy, SGUI_UINT uiRadius, SGUI_COLOR eEdgeColor, SGUI_COLOR eFillColor);
 void					SGUI_Basic_ReverseBlockColor(SGUI_UINT uiStartX, SGUI_UINT uiStartY, SGUI_UINT uiWidth, SGUI_UINT uiHeight);
 void					SGUI_Basic_DrawBitMap(SGUI_RECT_AREA* pstDisplayArea, SGUI_RECT_AREA* pstDataArea, SGUI_BYTE* pDataBuffer, SGUI_DRAW_MODE eDrawMode);
+void                    SGUI_Basic_RefreshDisplay(void);
 
 #endif

@@ -4,11 +4,8 @@
 //= Include files.													    =//
 //=======================================================================//
 #include <stdbool.h>
-
-#include "SGUI_Config.h"
 #include "SGUI_Typedef.h"
 #if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
-//#include "LCD_OperationIF.h"
 #include "VirtualDeviceInterface.h"
 #else
 // Insert platform driver head file here.
@@ -28,12 +25,12 @@
 //=======================================================================//
 //= Public variable declaration.									    =//
 //=======================================================================//
-#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
+//#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
 extern SGUI_CBYTE		SGUI_FONT_H8[];
 extern SGUI_CBYTE		SGUI_FONT_H12[];
 extern SGUI_CBYTE		SGUI_FONT_H16[];
 extern SGUI_CBYTE		SGUI_FONT_H32[];
-#endif
+//#endif
 
 //=======================================================================//
 //= Public function declaration.									    =//

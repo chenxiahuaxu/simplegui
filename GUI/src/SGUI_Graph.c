@@ -163,8 +163,7 @@ void SGUI_Graph_DrawLine(SGUI_GRAPH* pstGraph, SGUI_UINT32 uiStartPointIndex, SG
 		SGUI_Praph_GetPointDrawingCoordinate(pstEndPoint, pstGraph->Control, &stGEndPoint);
 
 		// End point.
-
-		SGUI_Basic_DrawLine(stGStartPoint.x, stGStartPoint.y, stGEndPoint.x, stGEndPoint.y, GUI_COLOR_FRGCLR);
+		SGUI_Basic_DrawLine(stGStartPoint.x, stGStartPoint.y, stGEndPoint.x, stGEndPoint.y, SGUI_COLOR_FRGCLR);
 	}
 }
 
