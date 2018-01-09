@@ -71,8 +71,8 @@ int main(void)
 
     SGUI_Basic_DrawRectangle(0, 0, 128, 64, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
 
-    stDisplayArea.PosX = 5;
-    stDisplayArea.PosY = 5;
+    stDisplayArea.PosX = 4;
+    stDisplayArea.PosY = 4;
     stDisplayArea.Width = 120;
     stDisplayArea.Height = 12;
 
@@ -85,7 +85,6 @@ int main(void)
 		{
 			printf("%04u-%02u-%02u %02u:%02u:%02u.\r\n", g_stCleandar.tm_year, g_stCleandar.tm_mon, g_stCleandar.tm_mday, g_stCleandar.tm_hour, g_stCleandar.tm_min, g_stCleandar.tm_sec);
 			sprintf(szOutputBuffer, "%04u-%02u-%02u %02u:%02u:%02u.", g_stCleandar.tm_year, g_stCleandar.tm_mon, g_stCleandar.tm_mday, g_stCleandar.tm_hour, g_stCleandar.tm_min, g_stCleandar.tm_sec);
-			//SSD1306_SPI_6x8Str(0, 2, szOutputBuffer);
 			SGUI_Text_DrawSingleLineText(szOutputBuffer, SGUI_FONT_SIZE_H12, &stDisplayArea, &stDataArea, SGUI_DRAW_NORMAL);
 			SGUI_Basic_RefreshDisplay();
 			g_eRTCRefreshedFlag = RTC_HOLD;

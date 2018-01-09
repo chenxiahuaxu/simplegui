@@ -50,12 +50,14 @@ public:		// Public interface
 	void				SetPixelSize(uint32_t uiPixelSize);
 	uint32_t			GetPixelSize(void)							{return m_uiPixelSize;}
 	void				SetGridVisibled(bool bGridVisible);
-	bool                GetGridVisibled(void)          {return m_bGridVisible;}
+	bool                GetGridVisibled(void)                       {return m_bGridVisible;}
 	void				SetDisplayAreaSize( uint32_t uiHorizontalPixelNumber, uint32_t uiVerticalPixelNumber);
 	void				SetEdgeColor(const wxColor& clsColor);
+	wxColor&            GetEdgeColor(void);
 	void				SetBaseColor(const wxColor& clsColor);
-	void				SetDrawColor(const wxColor& clsColor);
+	wxColor&            GetBaseColor(void);
 	void				SetGridColor(const wxColor& clsColor);
+	wxColor&            GetGridColor(void);
 	void				OnPaint(void);
 	void				SetPixelUnitColor(uint32_t uiPosX, uint32_t uiPosY, wxColor& clsColor, bool bRefreshNow = false);
 	void                DrawPixel(uint32_t uiPosX, uint32_t uiPosY, wxColor& clsColor);

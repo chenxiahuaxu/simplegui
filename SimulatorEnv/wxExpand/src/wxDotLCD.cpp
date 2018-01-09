@@ -218,6 +218,11 @@ void wxDotLCD::SetEdgeColor(const wxColor& clsColor)
 	}
 }
 
+wxColor& wxDotLCD::GetEdgeColor(void)
+{
+    return *m_pclsEdgeColor;
+}
+
 void wxDotLCD::SetBaseColor(const wxColor& clsColor)
 {
     /*----------------------------------*/
@@ -229,6 +234,11 @@ void wxDotLCD::SetBaseColor(const wxColor& clsColor)
 	}
 }
 
+wxColor& wxDotLCD::GetBaseColor(void)
+{
+    return *m_pclsBaseColor;
+}
+
 void wxDotLCD::SetGridColor(const wxColor& clsColor)
 {
     /*----------------------------------*/
@@ -238,6 +248,11 @@ void wxDotLCD::SetGridColor(const wxColor& clsColor)
 	{
 		m_pclsGridColor->SetRGB(clsColor.GetRGB());
 	}
+}
+
+wxColor& wxDotLCD::GetGridColor(void)
+{
+    return *m_pclsGridColor;
 }
 
 void wxDotLCD::OnPaint(void)
