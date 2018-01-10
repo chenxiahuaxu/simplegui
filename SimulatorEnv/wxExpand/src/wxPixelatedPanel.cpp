@@ -2,23 +2,23 @@
 //= Include files.													    =//
 //=======================================================================//
 #include <wx/clipbrd.h>
-#include "wxDotLCD.h"
+#include "wxPixelatedPanel.h"
 
 //=======================================================================//
 //= Event table.													    =//
 //=======================================================================//
-BEGIN_EVENT_TABLE(wxDotLCD,wxPanel)
-	EVT_PAINT		(wxDotLCD::_wxEvent_OnPaint)
+BEGIN_EVENT_TABLE(wxPixelatedPanel,wxPanel)
+	EVT_PAINT		(wxPixelatedPanel::_wxEvent_OnPaint)
 END_EVENT_TABLE()
 
 //=======================================================================//
 //= Function define.										            =//
 //=======================================================================//
-wxDotLCD::wxDotLCD(wxWindow *pclsParent, wxWindowID iWinID, const wxPoint& clsPosition):
+wxPixelatedPanel::wxPixelatedPanel(wxWindow *pclsParent, wxWindowID iWinID, const wxPoint& clsPosition):
 wxPanel(pclsParent, iWinID, clsPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxNO_BORDER, wxPanelNameStr),
 m_clsCDC(this)
 {
-	m_parrDisplayBuffer =			NULL;
+	m_ppuiDisplayBuffer =			NULL;
 	m_pfDrawPoint =					NULL;
 
 	m_uiHorizontalPixelNumber =		0;
@@ -32,51 +32,54 @@ m_clsCDC(this)
 	m_pclsGridColor =				new wxColor(0x80, 0x80, 0x80, 0x00);
 }
 
-wxDotLCD::~wxDotLCD()
+wxPixelatedPanel::~wxPixelatedPanel()
 {
-	if(NULL != m_parrDisplayBuffer)
-	{
-		free(m_parrDisplayBuffer);
-	}
-
+	_freeDisplayBuffer(m_ppuiDisplayBuffer);
 	delete m_pclsEdgeColor;
 	delete m_pclsBaseColor;
 	delete m_pclsGridColor;
 }
 
-void wxDotLCD::SetDisplaySizes(uint32_t uiHorizontalPixelNumber, uint32_t uiVerticalPixelNumber)
+void wxPixelatedPanel::SetPixelNumber(uint32_t uiHorizontalPixelNumber, uint32_t uiVerticalPixelNumber)
 {
+    /*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+	uint32_t**              ppuiNewDisplayBuffer;
+	uint32_t                uiCopiedRowNumber;
+	uint32_t                uiCopiedColumnNumber;
+
+	/*----------------------------------*/
+	/* Initialize						*/
+	/*----------------------------------*/
+	ppuiNewDisplayBuffer =  NULL;
+
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-		// Free current buffer.
-	if(NULL != m_parrDisplayBuffer)
-	{
-		free(m_parrDisplayBuffer);
-	}
 	if((uiHorizontalPixelNumber > 0) && (uiVerticalPixelNumber > 0))
-	{
-		uint32_t		uiDisplayBufferSize;
-		// Recalculate buffer size.
-		m_uiHorizontalPixelNumber = uiHorizontalPixelNumber;
-		m_uiVerticalPixelNumber = uiVerticalPixelNumber;
-		uiDisplayBufferSize = m_uiHorizontalPixelNumber*m_uiVerticalPixelNumber;
-		// Reallocate display buffer;
-		m_parrDisplayBuffer = (uint32_t*)malloc(uiDisplayBufferSize*sizeof(uint32_t));
-		if(NULL != m_parrDisplayBuffer)
-		{
-			// Clear memory.
-			memset(m_parrDisplayBuffer, 0x00, uiDisplayBufferSize);
-		}
-	}
-	else
-	{
-		m_uiHorizontalPixelNumber = 0;
-		m_uiVerticalPixelNumber = 0;
-	}
+    {
+        // Create a new display buffer
+        ppuiNewDisplayBuffer = _createNewDisplayBuffer(uiHorizontalPixelNumber, uiVerticalPixelNumber);
+        if(NULL != ppuiNewDisplayBuffer)
+        {
+            uiCopiedRowNumber = m_uiVerticalPixelNumber<uiVerticalPixelNumber?m_uiVerticalPixelNumber:uiVerticalPixelNumber;
+            uiCopiedColumnNumber = m_uiHorizontalPixelNumber<uiHorizontalPixelNumber?m_uiHorizontalPixelNumber:uiHorizontalPixelNumber;
+            // Copy old buffer content to new buffer;
+            for(uint32_t uiIdxV=0; uiIdxV<uiCopiedRowNumber; uiIdxV++)
+            {
+                memcpy(*(ppuiNewDisplayBuffer+uiIdxV), *(m_ppuiDisplayBuffer+uiIdxV), sizeof(uint32_t)*uiCopiedColumnNumber);
+            }
+            // Free current buffer.
+            _freeDisplayBuffer(m_ppuiDisplayBuffer);
+            m_ppuiDisplayBuffer = ppuiNewDisplayBuffer;
+            m_uiHorizontalPixelNumber = uiHorizontalPixelNumber;
+            m_uiVerticalPixelNumber = uiVerticalPixelNumber;
+        }
+    }
 }
 
-void wxDotLCD::GetDisplaySize(uint32_t* puiHorizontalPixelNumber, uint32_t* puiVerticalPixelNumber)
+void wxPixelatedPanel::GetPixelNumber(uint32_t* puiHorizontalPixelNumber, uint32_t* puiVerticalPixelNumber)
 {
     /*----------------------------------*/
 	/* Process							*/
@@ -92,7 +95,7 @@ void wxDotLCD::GetDisplaySize(uint32_t* puiHorizontalPixelNumber, uint32_t* puiV
 	}
 }
 
-void wxDotLCD::SetDisplayColors(const wxColor& clsEdgeColor, const wxColor& clsBaseColor, const wxColor& clsGridColor)
+void wxPixelatedPanel::SetColors(const wxColor& clsEdgeColor, const wxColor& clsBaseColor, const wxColor& clsGridColor)
 {
     /*----------------------------------*/
 	/* Process							*/
@@ -111,16 +114,7 @@ void wxDotLCD::SetDisplayColors(const wxColor& clsEdgeColor, const wxColor& clsB
 	}
 }
 
-void wxDotLCD::SetDisplayAreaSize( uint32_t uiHorizontalPixelNumber, uint32_t uiVerticalPixelNumber)
-{
-    /*----------------------------------*/
-	/* Process							*/
-	/*----------------------------------*/
-    m_uiHorizontalPixelNumber = uiHorizontalPixelNumber;
-    m_uiVerticalPixelNumber = uiVerticalPixelNumber;
-}
-
-void wxDotLCD::SetEdgeWidth(uint32_t uiEdgeWidth)
+void wxPixelatedPanel::SetEdgeWidth(uint32_t uiEdgeWidth)
 {
     /*----------------------------------*/
 	/* Process							*/
@@ -128,7 +122,7 @@ void wxDotLCD::SetEdgeWidth(uint32_t uiEdgeWidth)
 	m_uiEdgeWidth = uiEdgeWidth;
 }
 
-void wxDotLCD::SetPixelSize(uint32_t uiPixelSize)
+void wxPixelatedPanel::SetPixelSize(uint32_t uiPixelSize)
 {
     /*----------------------------------*/
 	/* Process							*/
@@ -147,27 +141,27 @@ void wxDotLCD::SetPixelSize(uint32_t uiPixelSize)
         else if(1 == m_uiPixelSize)
         // If pixel size is 1, the pixel drawing function will set to draw pixel unit by point.
         {
-            m_pfDrawPoint = &DrawPointSinglePixel;
+            m_pfDrawPoint = &_drawPointSinglePixel;
         }
         else
         {
-            m_pfDrawPoint = &DrawPointMultiplePixel;
+            m_pfDrawPoint = &_drawPointMultiplePixel;
         }
 	}
 	else
 	{
 		if(true == m_bGridVisible)
 		{
-			m_pfDrawPoint = &DrawPointMultiplePixelWithGrid;
+			m_pfDrawPoint = &_drawPointMultiplePixelWithGrid;
 		}
 		else
 		{
-			m_pfDrawPoint = &DrawPointMultiplePixel;
+			m_pfDrawPoint = &_drawPointMultiplePixel;
 		}
 	}
 }
 
-void wxDotLCD::SetGridVisibled(bool bGridVisible)
+void wxPixelatedPanel::SetGridVisibled(bool bGridVisible)
 {
     /*----------------------------------*/
 	/* Process							*/
@@ -179,83 +173,76 @@ void wxDotLCD::SetGridVisibled(bool bGridVisible)
 	{
 		if(true == m_bGridVisible)
 		{
-			m_pfDrawPoint = &DrawPointMultiplePixelWithGrid;
+			m_pfDrawPoint = &_drawPointMultiplePixelWithGrid;
 		}
 		else
 		{
-			m_pfDrawPoint = &DrawPointMultiplePixel;
+			m_pfDrawPoint = &_drawPointMultiplePixel;
 		}
 	}
 }
 
-void wxDotLCD::CleanPanel(void)
+void wxPixelatedPanel::CleanPanel(void)
 {
-    /*----------------------------------*/
-	/* Variable Declaration				*/
-	/*----------------------------------*/
-	uint32_t                    uiDisplayBufferSize;
-
-	/*----------------------------------*/
-	/* Initialize						*/
-	/*----------------------------------*/
-	uiDisplayBufferSize =       m_uiHorizontalPixelNumber*m_uiVerticalPixelNumber;
-
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	memset(m_parrDisplayBuffer, 0x00, sizeof(uint32_t)*uiDisplayBufferSize);
+	for(uint32_t uiIdxV=0; uiIdxV<m_uiVerticalPixelNumber; uiIdxV++)
+    {
+        memset(*(m_ppuiDisplayBuffer+uiIdxV), 0x00, sizeof(uint32_t)*m_uiHorizontalPixelNumber);
+    }
 	RefreshDisplay();
 }
 
-void wxDotLCD::SetEdgeColor(const wxColor& clsColor)
+void wxPixelatedPanel::SetEdgeColor(const wxColor& clsColor)
 {
     /*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
     if(NULL != m_pclsEdgeColor)
 	{
-		m_pclsEdgeColor->SetRGB(clsColor.GetRGB());
+		*m_pclsEdgeColor = clsColor;
 	}
 }
 
-wxColor& wxDotLCD::GetEdgeColor(void)
+wxColor& wxPixelatedPanel::GetEdgeColor(void)
 {
     return *m_pclsEdgeColor;
 }
 
-void wxDotLCD::SetBaseColor(const wxColor& clsColor)
+void wxPixelatedPanel::SetBaseColor(const wxColor& clsColor)
 {
     /*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
 	if(NULL != m_pclsBaseColor)
 	{
-		m_pclsBaseColor->SetRGB(clsColor.GetRGB());
+		*m_pclsBaseColor = clsColor;
 	}
 }
 
-wxColor& wxDotLCD::GetBaseColor(void)
+wxColor& wxPixelatedPanel::GetBaseColor(void)
 {
     return *m_pclsBaseColor;
 }
 
-void wxDotLCD::SetGridColor(const wxColor& clsColor)
+void wxPixelatedPanel::SetGridColor(const wxColor& clsColor)
 {
     /*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
 	if(NULL != m_pclsGridColor)
 	{
-		m_pclsGridColor->SetRGB(clsColor.GetRGB());
+		*m_pclsGridColor = clsColor;
 	}
 }
 
-wxColor& wxDotLCD::GetGridColor(void)
+wxColor& wxPixelatedPanel::GetGridColor(void)
 {
     return *m_pclsGridColor;
 }
 
-void wxDotLCD::OnPaint(void)
+void wxPixelatedPanel::OnPaint(void)
 {
     /*----------------------------------*/
 	/* Process							*/
@@ -264,7 +251,7 @@ void wxDotLCD::OnPaint(void)
 }
 
 
-void wxDotLCD::DrawPointSinglePixel(wxMemoryDC& clsCDCObject, uint32_t uiPosX, uint32_t uiPosY, uint32_t uiPixelSize)
+void wxPixelatedPanel::_drawPointSinglePixel(wxMemoryDC& clsCDCObject, uint32_t uiPosX, uint32_t uiPosY, uint32_t uiPixelSize)
 {
     /*----------------------------------*/
 	/* Process							*/
@@ -272,7 +259,7 @@ void wxDotLCD::DrawPointSinglePixel(wxMemoryDC& clsCDCObject, uint32_t uiPosX, u
 	clsCDCObject.DrawPoint(wxPoint(m_uiEdgeWidth+uiPosX, m_uiEdgeWidth+uiPosY));
 }
 
-void wxDotLCD::DrawPointMultiplePixel(wxMemoryDC& clsCDCObject, uint32_t uiPosX, uint32_t uiPosY, uint32_t uiPixelSize)
+void wxPixelatedPanel::_drawPointMultiplePixel(wxMemoryDC& clsCDCObject, uint32_t uiPosX, uint32_t uiPosY, uint32_t uiPixelSize)
 {
     /*----------------------------------*/
 	/* Process							*/
@@ -280,7 +267,7 @@ void wxDotLCD::DrawPointMultiplePixel(wxMemoryDC& clsCDCObject, uint32_t uiPosX,
 	clsCDCObject.DrawRectangle(wxPoint(m_uiEdgeWidth+uiPosX*uiPixelSize, m_uiEdgeWidth+uiPosY*uiPixelSize), wxSize(uiPixelSize, uiPixelSize));
 }
 
-void wxDotLCD::DrawPointMultiplePixelWithGrid(wxMemoryDC& clsCDCObject, uint32_t uiPosX, uint32_t uiPosY, uint32_t uiPixelSize)
+void wxPixelatedPanel::_drawPointMultiplePixelWithGrid(wxMemoryDC& clsCDCObject, uint32_t uiPosX, uint32_t uiPosY, uint32_t uiPixelSize)
 {
     /*----------------------------------*/
 	/* Process							*/
@@ -304,16 +291,16 @@ void wxDotLCD::DrawPointMultiplePixelWithGrid(wxMemoryDC& clsCDCObject, uint32_t
 /**                 only one pixel, please use the DrawPixel function   **/
 /**                 directly.                                           **/
 /*************************************************************************/
-void wxDotLCD::SetPixelUnitColor(uint32_t uiPosX, uint32_t uiPosY, wxColor& clsColor, bool bRefreshNow)
+void wxPixelatedPanel::SetPixelUnitColor(uint32_t uiPosX, uint32_t uiPosY, const wxColor& clsColor, bool bRefreshNow)
 {
     /*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
 	if((uiPosX < m_uiHorizontalPixelNumber) && (uiPosY < m_uiVerticalPixelNumber))
 	{
-		if(NULL != m_parrDisplayBuffer)
+		if(NULL != m_ppuiDisplayBuffer)
 		{
-			*(m_parrDisplayBuffer+uiPosX+(uiPosY*m_uiHorizontalPixelNumber)) = clsColor.GetRGBA();
+		    *(*(m_ppuiDisplayBuffer+uiPosY)+uiPosX) = clsColor.GetRGBA();
 		}
 		if(true == bRefreshNow)
 		{
@@ -331,7 +318,7 @@ void wxDotLCD::SetPixelUnitColor(uint32_t uiPosX, uint32_t uiPosY, wxColor& clsC
 /** Return:			RGBA color value of the pixel unit.                 **/
 /** Notice:			None.                                               **/
 /*************************************************************************/
-uint32_t wxDotLCD::GetPixelUnitColor(uint32_t uiPosX, uint32_t uiPosY)
+uint32_t wxPixelatedPanel::GetPixelUnitColor(uint32_t uiPosX, uint32_t uiPosY)
 {
     /*----------------------------------*/
 	/* Variable Declaration				*/
@@ -343,9 +330,9 @@ uint32_t wxDotLCD::GetPixelUnitColor(uint32_t uiPosX, uint32_t uiPosY)
 	/*----------------------------------*/
 	if((uiPosX < m_uiHorizontalPixelNumber) && (uiPosY < m_uiVerticalPixelNumber))
 	{
-		if(NULL != m_parrDisplayBuffer)
+		if(NULL != m_ppuiDisplayBuffer)
 		{
-			uiReturnValue = *(m_parrDisplayBuffer+uiPosX+(uiPosY*m_uiHorizontalPixelNumber));
+			uiReturnValue = *(*(m_ppuiDisplayBuffer+uiPosY)+uiPosX);
 		}
 	}
 
@@ -362,15 +349,15 @@ uint32_t wxDotLCD::GetPixelUnitColor(uint32_t uiPosX, uint32_t uiPosY)
 /** Return:			None.                                               **/
 /** Notice:			Draw only one pixel directly.                       **/
 /*************************************************************************/
-void wxDotLCD::DrawPixel(uint32_t uiPosX, uint32_t uiPosY, wxColor& clsColor)
+void wxPixelatedPanel::DrawPixel(uint32_t uiPosX, uint32_t uiPosY, wxColor& clsColor)
 {
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if(m_uiPixelSize != 0)
+	if((uiPosX < m_uiHorizontalPixelNumber) && (uiPosY < m_uiVerticalPixelNumber) && (m_uiPixelSize != 0))
 	{
-		SetDCColor(clsColor);
-		PrepareDC(m_clsCDC);
+		_setDCColor(clsColor);
+		_prepareDC(m_clsCDC);
 		if(m_uiPixelSize == 1)
 		{
 			m_clsCDC.DrawPoint(wxPoint(m_uiEdgeWidth+uiPosX, m_uiEdgeWidth+uiPosY));
@@ -387,14 +374,13 @@ void wxDotLCD::DrawPixel(uint32_t uiPosX, uint32_t uiPosY, wxColor& clsColor)
 			}
 		}
 		SetPixelUnitColor(uiPosX, uiPosY, clsColor);
-		ReleaseDC(m_clsCDC);
+		_releaseDC(m_clsCDC);
+
+		if(NULL != m_ppuiDisplayBuffer)
+        {
+            *(*(m_ppuiDisplayBuffer+uiPosY)+uiPosX) = clsColor.GetRGBA();
+        }
 	}
-
-	if(NULL != m_parrDisplayBuffer)
-    {
-        *(m_parrDisplayBuffer+uiPosX+(uiPosY*m_uiHorizontalPixelNumber)) = clsColor.GetRGBA();
-    }
-
 }
 
 /*************************************************************************/
@@ -406,7 +392,7 @@ void wxDotLCD::DrawPixel(uint32_t uiPosX, uint32_t uiPosY, wxColor& clsColor)
 /**                 all pixels of the LCD panel will be repaint by the  **/
 /**                 pixels's RGBA value register array.                 **/
 /*************************************************************************/
-void wxDotLCD::RefreshDisplay(void)
+void wxPixelatedPanel::RefreshDisplay(void)
 {
     /*----------------------------------*/
 	/* Variable Declaration				*/
@@ -430,15 +416,15 @@ void wxDotLCD::RefreshDisplay(void)
 	wxBufferedDC		clsBufferedDC(&m_clsCDC, clsBufferImage);
 
 	// Draw background.
-	SetDCColor(*m_pclsEdgeColor);
-	PrepareDC(clsBufferedDC);
+	_setDCColor(*m_pclsEdgeColor);
+	_prepareDC(clsBufferedDC);
 	clsBufferedDC.DrawRectangle(wxPoint(0, 0),wxSize(uiPaintSizeWidth, uiPaintSizeHeight));
 
 	// Draw grid line.
 	if((true == m_bGridVisible) && (2 < m_uiPixelSize))
 	{
-		SetDCColor(*m_pclsGridColor);
-		PrepareDC(clsBufferedDC);
+		_setDCColor(*m_pclsGridColor);
+		_prepareDC(clsBufferedDC);
 		clsBufferedDC.DrawRectangle(wxPoint(m_uiEdgeWidth, m_uiEdgeWidth),
 							wxSize(	m_uiHorizontalPixelNumber*m_uiPixelSize+1,
 									m_uiVerticalPixelNumber*m_uiPixelSize+1));
@@ -451,8 +437,8 @@ void wxDotLCD::RefreshDisplay(void)
 		{
 			for(uint32_t i_W=0; i_W<m_uiHorizontalPixelNumber; i_W++)
 			{
-				SetDCColor(wxColor(*(m_parrDisplayBuffer+(i_W+i_H*m_uiHorizontalPixelNumber))));
-				PrepareDC(clsBufferedDC);
+				_setDCColor(wxColor(*(*(m_ppuiDisplayBuffer+i_H)+i_W)));
+				_prepareDC(clsBufferedDC);
 				(this->*m_pfDrawPoint)(clsBufferedDC, i_W, i_H, m_uiPixelSize);
 			}
 		}
@@ -468,7 +454,7 @@ void wxDotLCD::RefreshDisplay(void)
 /**                 all pixels of the LCD panel will be repaint by the  **/
 /**                 pixels's RGBA value register array.                 **/
 /*************************************************************************/
-void wxDotLCD::ResizeParent(void)
+void wxPixelatedPanel::ResizeParent(void)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -508,7 +494,7 @@ void wxDotLCD::ResizeParent(void)
 /**                 the wxApp Object.                                   **/
 /**                 wxImage::AddHandler(new wxJPEGHandler)              **/
 /*************************************************************************/
-bool wxDotLCD::SaveScreenImageToFile(const wxString& strFilePath)
+bool wxPixelatedPanel::SaveScreenImageToFile(const wxString& strFilePath)
 {
     /*----------------------------------*/
 	/* Variable Declaration				*/
@@ -555,7 +541,7 @@ bool wxDotLCD::SaveScreenImageToFile(const wxString& strFilePath)
 /** @ false:            Copy failed.                                    **/
 /** Notice:			None.                                               **/
 /*************************************************************************/
-bool wxDotLCD::CopyScreenImageToClipBoard(void)
+bool wxPixelatedPanel::CopyScreenImageToClipBoard(void)
 {
     /*----------------------------------*/
 	/* Variable Declaration				*/
@@ -597,3 +583,58 @@ bool wxDotLCD::CopyScreenImageToClipBoard(void)
 	return bReturn;
 }
 
+void wxPixelatedPanel::_freeDisplayBuffer(uint32_t** ppuiDisplayBuffer)
+{
+    if(NULL != ppuiDisplayBuffer)
+	{
+	    for(uint32_t uiIdxV=0; uiIdxV<m_uiVerticalPixelNumber; uiIdxV++)
+        {
+            free(*(ppuiDisplayBuffer+uiIdxV));
+        }
+        free(ppuiDisplayBuffer);
+	}
+}
+
+uint32_t** wxPixelatedPanel::_createNewDisplayBuffer(uint32_t uiHorizontalPixelNumber, uint32_t uiVerticalPixelNumber)
+{
+    /*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+	uint32_t**              ppuiNewDisplayBuffer;
+	uint32_t*               puiNewHorizontalPixelBuffer;
+
+	/*----------------------------------*/
+	/* Initialize						*/
+	/*----------------------------------*/
+	ppuiNewDisplayBuffer =  NULL;
+
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+
+	if((uiHorizontalPixelNumber > 0) && (uiVerticalPixelNumber > 0))
+    {
+        ppuiNewDisplayBuffer = (uint32_t**)malloc(sizeof(uint32_t*)*uiVerticalPixelNumber);
+        if(NULL != ppuiNewDisplayBuffer)
+        {
+            memset(ppuiNewDisplayBuffer, 0x00, sizeof(uint32_t*)*uiVerticalPixelNumber);
+            for(uint32_t uiIdxV=0; uiIdxV<uiVerticalPixelNumber; uiIdxV++)
+            {
+                puiNewHorizontalPixelBuffer = (uint32_t*)malloc(sizeof(uint32_t)*uiHorizontalPixelNumber);
+                if(NULL != puiNewHorizontalPixelBuffer)
+                {
+                    memset(puiNewHorizontalPixelBuffer, 0x00, sizeof(uint32_t)*uiHorizontalPixelNumber);
+                    *(ppuiNewDisplayBuffer+uiIdxV) = puiNewHorizontalPixelBuffer;
+                }
+                else
+                {
+                    _freeDisplayBuffer(ppuiNewDisplayBuffer);
+                    ppuiNewDisplayBuffer = NULL;
+                    break;
+                }
+            }
+        }
+    }
+
+    return ppuiNewDisplayBuffer;
+}

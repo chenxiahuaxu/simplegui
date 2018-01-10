@@ -3,14 +3,14 @@
 //=======================================================================//
 //= Include files.													    =//
 //=======================================================================//
-#include "wxDotLCD.h"
+#include "wxPixelatedPanel.h"
 #include "Common.h"
 #include <wx/colour.h>
 
 //=======================================================================//
 //= Class declare.                                                      =//
 //=======================================================================//
-class MonochromeDotLCD : public wxDotLCD
+class MonochromeDotLCD : public wxPixelatedPanel
 {
     private:
         uint32_t			m_uiPageCount;

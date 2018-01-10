@@ -13,7 +13,7 @@
 //=======================================================================//
 //= Event table.													    =//
 //=======================================================================//
-BEGIN_EVENT_TABLE(MonochromeDotLCD,wxDotLCD)
+BEGIN_EVENT_TABLE(MonochromeDotLCD,wxPixelatedPanel)
 	EVT_SET_FOCUS       (MonochromeDotLCD::wxEvent_OnSetFocus)
 END_EVENT_TABLE()
 
@@ -21,7 +21,7 @@ END_EVENT_TABLE()
 //= Function define.										            =//
 //=======================================================================//
 MonochromeDotLCD::MonochromeDotLCD(wxWindow *pclsParent, wxWindowID iWinID, const wxPoint& clsPosition):
-wxDotLCD(pclsParent, iWinID, clsPosition)
+wxPixelatedPanel(pclsParent, iWinID, clsPosition)
 {
 	m_pclsPanelColor = new wxColor(0x00, 0x00, 0x00, 0x00);
 	m_pclsPixelColor = new wxColor(0x00, 0x00, 0x00, 0x00);
@@ -37,16 +37,16 @@ void MonochromeDotLCD::SetParameter(PixelPanelParameter* pstPanelParameter)
 {
 	if(NULL != pstPanelParameter)
 	{
-	    wxDotLCD::SetEdgeWidth(pstPanelParameter->EdgeWidth);
-	    wxDotLCD::SetPixelSize(pstPanelParameter->PixelSize);
-	    wxDotLCD::SetGridVisibled(pstPanelParameter->EnableGrid);
-		wxDotLCD::SetDisplaySizes(pstPanelParameter->HorizontalPixelNumber, pstPanelParameter->VerticalPixelNumber);
+	    wxPixelatedPanel::SetEdgeWidth(pstPanelParameter->EdgeWidth);
+	    wxPixelatedPanel::SetPixelSize(pstPanelParameter->PixelSize);
+	    wxPixelatedPanel::SetGridVisibled(pstPanelParameter->EnableGrid);
+		wxPixelatedPanel::SetPixelNumber(pstPanelParameter->HorizontalPixelNumber, pstPanelParameter->VerticalPixelNumber);
 		m_uiColumnCount = pstPanelParameter->HorizontalPixelNumber;
 		m_uiPageCount = pstPanelParameter->VerticalPixelNumber/8;
 
 		m_pclsPanelColor->SetRGBA(pstPanelParameter->PanelColor.RGBA);
 		m_pclsPixelColor->SetRGBA(pstPanelParameter->PixelColor.RGBA);
-		wxDotLCD::SetDisplayColors(	wxColor(pstPanelParameter->EdgeColor.RGBA),
+		wxPixelatedPanel::SetColors(	wxColor(pstPanelParameter->EdgeColor.RGBA),
 										wxColor(pstPanelParameter->PanelColor.RGBA),
 										wxColor(pstPanelParameter->GridColor.RGBA));
 	}
@@ -57,11 +57,11 @@ void MonochromeDotLCD::SetPixel(uint32_t uiPosX, uint32_t uiPosY, LCD_PIXEL_COLO
 {
     if(LCD_PIXEL_COLOR_L == ePixelValue)
     {
-        wxDotLCD::SetPixelUnitColor(uiPosX, uiPosY, *m_pclsPanelColor);
+        wxPixelatedPanel::SetPixelUnitColor(uiPosX, uiPosY, *m_pclsPanelColor);
     }
     else
     {
-        wxDotLCD::SetPixelUnitColor(uiPosX, uiPosY, *m_pclsPixelColor);
+        wxPixelatedPanel::SetPixelUnitColor(uiPosX, uiPosY, *m_pclsPixelColor);
     }
 }
 
@@ -97,11 +97,11 @@ void MonochromeDotLCD::DrawPixel(uint32_t uiPosX, uint32_t uiPosY, LCD_PIXEL_COL
 {
     if(LCD_PIXEL_COLOR_L == ePixelValue)
     {
-        wxDotLCD::DrawPixel(uiPosX, uiPosY, *m_pclsPanelColor);
+        wxPixelatedPanel::DrawPixel(uiPosX, uiPosY, *m_pclsPanelColor);
     }
     else
     {
-        wxDotLCD::DrawPixel(uiPosX, uiPosY, *m_pclsPixelColor);
+        wxPixelatedPanel::DrawPixel(uiPosX, uiPosY, *m_pclsPixelColor);
     }
 }
 
@@ -115,7 +115,7 @@ void MonochromeDotLCD::CleanScreen(void)
 {
 	uint32_t uiHorizontalPixelNumber, uiVerticalPixelNumber;
 
-	GetDisplaySize(&uiHorizontalPixelNumber, &uiVerticalPixelNumber);
+	GetPixelNumber(&uiHorizontalPixelNumber, &uiVerticalPixelNumber);
 	for(uint32_t i_V=0; i_V<uiVerticalPixelNumber; i_V++)
 	{
 		for(uint32_t i_H=0; i_H<uiHorizontalPixelNumber; i_H++)

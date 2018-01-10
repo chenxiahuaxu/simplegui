@@ -101,10 +101,6 @@
 		<Unit filename="../../../DemoProc/src/VariableBox.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="../../../GUI/inc/Font_H12.h" />
-		<Unit filename="../../../GUI/inc/Font_H16.h" />
-		<Unit filename="../../../GUI/inc/Font_H32.h" />
-		<Unit filename="../../../GUI/inc/Font_H8.h" />
 		<Unit filename="../../../GUI/inc/SGUI_Basic.h" />
 		<Unit filename="../../../GUI/inc/SGUI_Common.h" />
 		<Unit filename="../../../GUI/inc/SGUI_Frame.h" />
@@ -179,8 +175,8 @@
 		<Unit filename="../../Resource/Resource.rc">
 			<Option compilerVar="WINDRES" />
 		</Unit>
-		<Unit filename="../../wxExpand/inc/wxDotLCD.h" />
-		<Unit filename="../../wxExpand/src/wxDotLCD.cpp" />
+		<Unit filename="../../wxExpand/inc/wxPixelatedPanel.h" />
+		<Unit filename="../../wxExpand/src/wxPixelatedPanel.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
