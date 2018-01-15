@@ -70,7 +70,7 @@ HMI_ENGINE_RESULT HMI_DemoRTCNotice_RefreshScreen(const void* pstParameters)
 	/* Process							*/
 	/*----------------------------------*/
 	SGUI_Common_GetNowTime(&stRTCTime);
-	sprintf(s_szRTCNoticeText, "系统时间\n%04u-%02u-%02u\n%02u:%02u:%02u",
+	sprintf(s_szRTCNoticeText, DEMO_RTC_NOTICE_TEXT_FMT,
 				stRTCTime.Year, stRTCTime.Month, stRTCTime.Day,
 				stRTCTime.Hour, stRTCTime.Minute, stRTCTime.Second);
 	SGUI_Notice_RefreshNotice(s_szRTCNoticeText, 0, SGUI_ICON_INFORMATION);
@@ -119,7 +119,7 @@ HMI_ENGINE_RESULT HMI_DemoRTCNotice_ProcessEvent(HMI_EVENT_TYPE eEventType, cons
 				pstRTCTime = (SGUI_TIME*)pstEvent->Data;
 				if(NULL != pstRTCTime)
 				{
-					sprintf(s_szRTCNoticeText, "系统时间\n%04u-%02u-%02u\n%02u:%02u:%02u",
+					sprintf(s_szRTCNoticeText, DEMO_RTC_NOTICE_TEXT_FMT,
 					pstRTCTime->Year, pstRTCTime->Month+1, pstRTCTime->Day,
 					pstRTCTime->Hour, pstRTCTime->Minute, pstRTCTime->Second);
 					SGUI_Notice_RefreshNotice(s_szRTCNoticeText, 0, SGUI_ICON_INFORMATION);

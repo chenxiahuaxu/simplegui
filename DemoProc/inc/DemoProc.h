@@ -5,6 +5,11 @@
 //=======================================================================//
 #include "SGUI_Typedef.h"
 #include "HMI_Engine.h"
+#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
+#include "DemoResource_UTF8.h"
+#else
+#include "DemoResource_GB2312.h"
+#endif
 #include <stdio.h>
 
 //=======================================================================//

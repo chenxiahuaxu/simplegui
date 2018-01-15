@@ -60,15 +60,16 @@
 			<Add option="-D_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_=1" />
 			<Add option="-D_SIMPLE_GUI_ENABLE_BASIC_FONT_=1" />
 			<Add directory="$(#wx31)/include" />
-			<Add directory="../../Frame/inc" />
-			<Add directory="../../../GUI/inc" />
-			<Add directory="../../Library/inc" />
-			<Add directory="../../../HMI/inc" />
-			<Add directory="../../../DemoProc/inc" />
-			<Add directory="../../wxExpand/inc" />
 			<Add directory="../../Application/inc" />
 			<Add directory="../../Common/inc" />
+			<Add directory="../../Library/inc" />
+			<Add directory="../../Frame/inc" />
 			<Add directory="../../Interface/inc" />
+			<Add directory="../../wxExpand/inc" />
+			<Add directory="../../Demo/inc" />
+			<Add directory="../../../GUI/inc" />
+			<Add directory="../../../HMI/inc" />
+			<Add directory="../../../DemoProc/inc" />
 		</Compiler>
 		<ResourceCompiler>
 			<Add directory="$(#wx31)/include" />
@@ -79,7 +80,6 @@
 			<Add directory="../../Library/lib" />
 		</Linker>
 		<Unit filename="../../../DemoProc/inc/DemoProc.h" />
-		<Unit filename="../../../DemoProc/inc/DemoProcText.h" />
 		<Unit filename="../../../DemoProc/src/DemoProc.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -157,6 +157,7 @@
 		<Unit filename="../../Application/src/Application.cpp" />
 		<Unit filename="../../Common/inc/Common.h" />
 		<Unit filename="../../Common/src/Common.cpp" />
+		<Unit filename="../../Demo/inc/DemoResource_UTF8.h" />
 		<Unit filename="../../Frame/inc/LCDFrame.h" />
 		<Unit filename="../../Frame/inc/MonochromeDotLCD.h" />
 		<Unit filename="../../Frame/src/LCDFrame.cpp" />

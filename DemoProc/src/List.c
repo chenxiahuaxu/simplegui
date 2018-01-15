@@ -30,21 +30,22 @@ static HMI_ENGINE_RESULT	HMI_DemoList_PostProcess(SGUI_INT iActionResult);
 //=======================================================================//
 //= Static variable declaration.									    =//
 //=======================================================================//
-static SGUI_PCSZSTR     s_szListTitle = 			"测试列表";
-static SGUI_PCSZSTR		s_arrszNoticeType[] =		{	"文字消息", "系统时间"};
-static SGUI_LIST_ITEM	s_arrstTestListItems[] =	{	{ 0, "简单列表项",			LIST_ITEM_NORMAL,		{0}, 					{0, 0, 0}, NULL},
-														{ 1, "枚举类型列表项",		LIST_ITEM_ENUM,			{0, 0, 1},				{0, 0, 0}, s_arrszNoticeType},
-														{ 2, "数字列表项",			LIST_ITEM_DIGIT,		{0, -50, 50},			{0, 0, 3}, NULL},
-														{ 3, "带小数的数字列表项",	LIST_ITEM_DIGIT,		{1, -50, 50},			{2, 0, 5}, NULL},
-														{ 4, "超长文字的简单列表项",	LIST_ITEM_NORMAL,		{0, 0, 0},				{0, 0, 0}, NULL},
-														{ 5, "编辑框",				LIST_ITEM_NORMAL,		{0, 0, 0},				{0, 0, 0}, NULL},
-														{ 6, "实时曲线",				LIST_ITEM_NORMAL,		{0, 0, 0},				{0, 0, 0}, NULL},
+static SGUI_PCSZSTR     s_szListTitle = 			    DEMO_LIST_TITLE;
+static SGUI_PCSZSTR		s_arrszNoticeType[] =		{	DEMO_LIST_ITEM_NOTICE_TEXT, DEMO_LIST_ITEM_NOTICE_TIME};
+static SGUI_PCSZSTR		s_arrszEnumedValue[] =		{	DEMO_LIST_ITEM_ENUM_VALUE1, DEMO_LIST_ITEM_ENUM_VALUE2, DEMO_LIST_ITEM_ENUM_VALUE3};
+static SGUI_LIST_ITEM	s_arrstTestListItems[] =	{	DEMO_LIST_ITEM_0,
+														DEMO_LIST_ITEM_1,
+														DEMO_LIST_ITEM_2,
+														DEMO_LIST_ITEM_3,
+														DEMO_LIST_ITEM_4,
+														DEMO_LIST_ITEM_5,
+														DEMO_LIST_ITEM_6,
 													};
 
 #if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0)
-static SGUI_LIST_ITEM	s_arrstAppendListItems[] =	{	{ 8, "添加项1",				LIST_ITEM_NORMAL,		{0}, 					{0, 0, 0}, NULL},
-														{ 9, "添加项2",				LIST_ITEM_ENUM,			{0, 0, 1},				{0, 0, 0}, s_arrszNoticeType},
-														{10, "添加项3",				LIST_ITEM_DIGIT,		{0, -50, 50},			{0, 0, 3}, NULL}
+static SGUI_LIST_ITEM	s_arrstAppendListItems[] =	{	DEMO_LIST_ITEM_7,
+														DEMO_LIST_ITEM_8,
+														DEMO_LIST_ITEM_9
 													};
 #endif
 
@@ -245,7 +246,7 @@ HMI_ENGINE_RESULT HMI_DemoList_PostProcess(SGUI_INT iActionResult)
 				iListItemParameterValue = pstSelectedItem->Valid.Value;
 				if(0 == iListItemParameterValue)
 				{
-					sprintf(s_szNoticeTextBuffer, "选择列表项%u.", uiSelectListIndex);
+					sprintf(s_szNoticeTextBuffer, DEMO_LIST_NOTICE_TEXT_FMT, uiSelectListIndex);
 					HMI_Goto(HMI_SCREEN_ID_DEMO_TEXT_NOTICE, s_szNoticeTextBuffer);
 				}
 				else
@@ -266,7 +267,7 @@ HMI_ENGINE_RESULT HMI_DemoList_PostProcess(SGUI_INT iActionResult)
 			}
 			default:
 			{
-				sprintf(s_szNoticeTextBuffer, "选择列表项%u.", uiSelectListIndex);
+				sprintf(s_szNoticeTextBuffer, DEMO_LIST_NOTICE_TEXT_FMT, uiSelectListIndex);
 				HMI_Goto(HMI_SCREEN_ID_DEMO_TEXT_NOTICE, s_szNoticeTextBuffer);
 				break;
 			}

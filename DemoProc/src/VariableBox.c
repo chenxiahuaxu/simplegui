@@ -52,10 +52,10 @@ static SGUI_TEXT_VARBOX_STRUCT	s_stTextVariableBox =		{	VARIABLE_BOX_POSX+2,
 																TEXT_VARIABLE_LENGTH,
 																s_szTextVariableBuffer,
 															};
-static SGUI_CHAR				s_szDefaultFrameTitle[] =	"数值/文本编辑演示";
+static SGUI_CHAR				s_szDefaultFrameTitle[] =	DEMO_VARIABLE_BOX_TITLE;
 static SGUI_PSZSTR				s_szFrameTitle =			s_szDefaultFrameTitle;
 static SGUI_INT					s_uiFocusedFlag;
-static SGUI_PCSZSTR				s_szHelpNoticeText =		"TAB键切换焦点编辑框。\n上下箭头调整数值。\n左右箭头调整焦点字符。\n按空格键继续。";
+static SGUI_PCSZSTR				s_szHelpNoticeText =		DEMO_VARIABLE_BOX_HELPER;
 static SGUI_INT					s_uiAutoConfirmTimer =		5;
 HMI_SCREEN_ACTION				s_stDemoVariableBoxActions = {
 																HMI_DemoVariableBox_Initialize,
@@ -277,7 +277,7 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_ProcessEvent(HMI_EVENT_TYPE eEventType, co
 	return eProcessResult;
 }
 
-SGUI_INT HMI_DemoVariableBox_PostProcess(SGUI_INT iActionResult)
+HMI_ENGINE_RESULT HMI_DemoVariableBox_PostProcess(SGUI_INT iActionResult)
 {
 	if(HMI_RET_CANCEL == iActionResult)
 	{
