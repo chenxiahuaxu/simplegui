@@ -28,6 +28,7 @@
 #include "stm32f10x_gpio.h"
 #include "Systick.h"
 #include "Delay.h"
+#include "Timer.h"
 
 #include "GPIO.h"
 #include "RTC.h"
@@ -37,14 +38,14 @@
 #include "SGUI_Basic.h"
 #include "SGUI_Text.h"
 
+#include "DemoProc.h"
+
 char		szOutputBuffer[64] = {0x00};
 
 void UpdateRTC(void);
 
 int main(void)
 {
-    SGUI_RECT_AREA      stDisplayArea, stDataArea;
-
 	HSEClocks_Initialize(RCC_PLLMul_9);
 	NVIC_Initialize(NVIC_PriorityGroup_2);
 	DebugPort_Initialize(DEBUG_SWD);
@@ -55,7 +56,7 @@ int main(void)
 	printf("RTC Initialized.\r\n");
 
 	Systick_Initialize(72, TRUE);
-	printf("Systick interrupt Initialized.\r\n");
+	printf("Systick timer Initialized.\r\n");
 
 	GPIO_Initialize(astGPIOInitData, 2);
 	printf("General GPIO Initialized.\r\n");
@@ -65,38 +66,17 @@ int main(void)
 	printf("LCD controller Initialized.\r\n");
 
     //UpdateRTC();
+    InitializeEngine();
+    printf("HMI engine Initialized.\r\n");
+
+    TIM3_Int_Init(TIM3, 9, 7199);
+	printf("General Timer-3 Initialized.\r\n");
 
     printf("System Initialize finished.\r\n");
 
-
-    SGUI_Basic_DrawRectangle(0, 0, 128, 64, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
-
-    stDisplayArea.PosX = 4;
-    stDisplayArea.PosY = 4;
-    stDisplayArea.Width = 120;
-    stDisplayArea.Height = 12;
-
-    stDataArea.PosX=0;
-    stDataArea.PosY=0;
-
 	while(1)
 	{
-		if(g_eRTCRefreshedFlag == RTC_REFRESHED)
-		{
-			printf("%04u-%02u-%02u %02u:%02u:%02u.\r\n", g_stCleandar.tm_year, g_stCleandar.tm_mon, g_stCleandar.tm_mday, g_stCleandar.tm_hour, g_stCleandar.tm_min, g_stCleandar.tm_sec);
-			sprintf(szOutputBuffer, "%04u-%02u-%02u %02u:%02u:%02u.", g_stCleandar.tm_year, g_stCleandar.tm_mon, g_stCleandar.tm_mday, g_stCleandar.tm_hour, g_stCleandar.tm_min, g_stCleandar.tm_sec);
-			SGUI_Text_DrawSingleLineText(szOutputBuffer, SGUI_FONT_SIZE_H12, &stDisplayArea, &stDataArea, SGUI_DRAW_NORMAL);
-			SGUI_Basic_RefreshDisplay();
-			g_eRTCRefreshedFlag = RTC_HOLD;
-			if(GPIO_STATE_LOW == GPIO_ReadPin(astGPIOInitData, 1))
-            {
-                GPIO_SetPinHigh(astGPIOInitData, 1);
-            }
-            else
-            {
-                GPIO_SetPinLow(astGPIOInitData, 1);
-            }
-		}
+
 	}
 }
 

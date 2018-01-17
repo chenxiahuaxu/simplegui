@@ -17,7 +17,7 @@
 //=======================================================================//
 //= Static function declare											    =//
 //=======================================================================//
-
+static HMI_ENGINE_RESULT   InitializeEngine_Internal(HMI_ENGINE_OBJECT* pstHMIEngineObject);
 
 //=======================================================================//
 //= Static variable declaration.									    =//
@@ -35,9 +35,9 @@ HMI_ENGINE_OBJECT       g_stDemoEngine;
 /** Notice:			This function demonstrates how to use the interface and **/
 /**                 HMI engine of Simple GUI.                               **/
 /*****************************************************************************/
-void SimpleGUI_DemoProcessInitialize(void)
+void InitializeEngine(void)
 {
-	InitializeEngine(&g_stDemoEngine);
+	InitializeEngine_Internal(&g_stDemoEngine);
 }
 
 /*****************************************************************************/
@@ -48,7 +48,7 @@ void SimpleGUI_DemoProcessInitialize(void)
 /** Return:			HMI_ENGINE_RESULT.										**/
 /** Notice:			This function must be called when initialize.			**/
 /*****************************************************************************/
-HMI_ENGINE_RESULT InitializeEngine(HMI_ENGINE_OBJECT* pstHMIEngineObject)
+HMI_ENGINE_RESULT InitializeEngine_Internal(HMI_ENGINE_OBJECT* pstHMIEngineObject)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/

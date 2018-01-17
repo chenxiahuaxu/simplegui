@@ -117,6 +117,7 @@
 		<Unit filename="..\..\Core\inc\core_cm3.h" />
 		<Unit filename="..\..\Core\inc\core_cmFunc.h" />
 		<Unit filename="..\..\Core\inc\core_cmInstr.h" />
+		<Unit filename="..\..\Demo\inc\DemoResource_GB2312.h" />
 		<Unit filename="..\..\Device\inc\ASCII_Font8Pix.h" />
 		<Unit filename="..\..\Device\inc\OLED.h" />
 		<Unit filename="..\..\Device\inc\SSD1306_SPI.h" />
@@ -214,6 +215,9 @@
 		<Unit filename="..\..\SPL\src\stm32f10x_spi.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\SPL\src\stm32f10x_tim.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="..\..\SPL\src\stm32f10x_usart.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -232,6 +236,7 @@
 		<Unit filename="..\..\System\inc\RTC.h" />
 		<Unit filename="..\..\System\inc\SDIO.h" />
 		<Unit filename="..\..\System\inc\Systick.h" />
+		<Unit filename="..\..\System\inc\Timer.h" />
 		<Unit filename="..\..\System\inc\Usart.h" />
 		<Unit filename="..\..\System\inc\UsartKey.h" />
 		<Unit filename="..\..\System\src\Delay.c">
@@ -256,6 +261,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\System\src\Systick.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\System\src\Timer.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\System\src\Usart.c">
@@ -330,8 +338,8 @@
 		<Extensions>
 			<code_completion />
 			<debugger>
-				<target_debugging_settings target="Release" active_interface="J-link">
-					<debug_interface interface_id="J-link" ip_address="localhost" ip_port="2331" path="%Software\SEGGER\J-Link:InstallPath%" executable="JLinkGDBServer.exe" description="" dont_start_server="false" backoff_time="2000" options="0" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
+				<target_debugging_settings target="Debug" active_interface="J-link">
+					<debug_interface interface_id="J-link" ip_address="localhost" ip_port="2331" path="%Software\SEGGER\J-Link:InstallPath%" executable="JLinkGDBServer.exe" description="" dont_start_server="false" backoff_time="2000" options="2" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
 						<family_options family_id="STMicroelectronics">
 							<option opt_id="ID_DEVICE" opt_value="STM32F103ZE" />
 							<option opt_id="ID_JTAG_SWD" opt_value="swd" />
@@ -369,8 +377,8 @@
 						</family_options>
 					</debug_interface>
 				</target_debugging_settings>
-				<target_debugging_settings target="Debug" active_interface="J-link">
-					<debug_interface interface_id="J-link" ip_address="localhost" ip_port="2331" path="%Software\SEGGER\J-Link:InstallPath%" executable="JLinkGDBServer.exe" description="" dont_start_server="false" backoff_time="2000" options="2" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
+				<target_debugging_settings target="Release" active_interface="J-link">
+					<debug_interface interface_id="J-link" ip_address="localhost" ip_port="2331" path="%Software\SEGGER\J-Link:InstallPath%" executable="JLinkGDBServer.exe" description="" dont_start_server="false" backoff_time="2000" options="0" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
 						<family_options family_id="STMicroelectronics">
 							<option opt_id="ID_DEVICE" opt_value="STM32F103ZE" />
 							<option opt_id="ID_JTAG_SWD" opt_value="swd" />

@@ -5,9 +5,10 @@
 /* Start screen scroll text. */
 #define     DEMO_START_NOTICE           (\
 "  欢迎来到SimpleGUI演示工程，本工程用于演示SimpleGUI各API的显示效果、\
-使用方法以及运作机理，在演示过程中，您可以通过键盘输入与SimpleGUI演示工\
-程进行交互。\n\
-  按“空格”键开始演示。"\
+使用方法以及运作机理，在演示过程中，您可以通过串口发送特定字节模拟键盘\
+输入与SimpleGUI演示工程进行交互，以实现与模拟器中类似的效果。每字节高\
+四位为控制键码，低四位为主键码。\n\
+  使用串口发送0x02开始演示，串口配置为115200/N/8/1。"\
 )
 
 /* Screen 2: List*/
@@ -44,5 +45,8 @@
 /* Screen 5: Variable box. */
 #define     DEMO_VARIABLE_BOX_TITLE     ("数值/文本编辑演示")
 #define     DEMO_VARIABLE_BOX_HELPER    ("TAB键切换焦点编辑框。\n上下箭头调整数值。\n左右箭头调整焦点字符。\n按空格键继续。")
+
+/* Others */
+#define     DEMO_TEST_TEXT              ("测试文字")
 
 #endif // __INCLUDE_DEMO_RESOURCE_UTF8_H__

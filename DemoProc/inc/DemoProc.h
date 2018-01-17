@@ -58,8 +58,7 @@ extern HMI_SCREEN_OBJECT		g_stHMI_DemoRealtimeGraph;
 extern "C"
 {
 #endif /* __cplusplus */
-void                SimpleGUI_DemoProcessInitialize(void);
-HMI_ENGINE_RESULT   InitializeEngine(HMI_ENGINE_OBJECT* pstHMIEngineObject);
+void                InitializeEngine(void);
 HMI_ENGINE_RESULT	EventProcess(HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent);
 
 #ifdef __cplusplus
