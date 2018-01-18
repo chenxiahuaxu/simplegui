@@ -1,10 +1,9 @@
 #include "Timer.h"
-#include "DemoProc.h"
-#include "SGUI_Basic.h"
+#include "DemoActions.h"
 
-void PostTimerEvent(void);
+static bool            s_bTimerTriggered = false;
 
-void TIM3_Int_Init(TIM_TypeDef* pstTimerBase, uint16_t uiReloadValue, uint16_t uiPrescaler)
+void TIMBase_Int_Init(TIM_TypeDef* pstTimerBase, uint16_t uiReloadValue, uint16_t uiPrescaler)
 {
     TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
 	NVIC_InitTypeDef NVIC_InitStructure;
@@ -28,40 +27,24 @@ void TIM3_Int_Init(TIM_TypeDef* pstTimerBase, uint16_t uiReloadValue, uint16_t u
 	NVIC_Init(&NVIC_InitStructure);  //初始化NVIC寄存器
 
 
-	TIM_Cmd(pstTimerBase, ENABLE);  //使能TIMx
+	TIM_Cmd(pstTimerBase, ENABLE);
 }
-//定时器3中断服务程序
-void TIM3_IRQHandler(void)   //TIM3中断
+
+/* Timer-3 interrupt service interface. */
+void TIM3_IRQHandler(void)
 {
-	if (TIM_GetITStatus(TIM3, TIM_IT_Update) != RESET)  //检查TIM3更新中断发生与否
+	if (TIM_GetITStatus(TIM3, TIM_IT_Update) != RESET)
     {
-		TIM_ClearITPendingBit(TIM3, TIM_IT_Update  );  //清除TIMx更新中断标志
-		// Timer process.
-		PostTimerEvent();
+		TIM_ClearITPendingBit(TIM3, TIM_IT_Update  );
+		s_bTimerTriggered = true;
     }
 }
 
-
-void PostTimerEvent(void)
+bool GetTimerTriggered(void)
 {
-    /*----------------------------------*/
-	/* Variable Declaration				*/
-	/*----------------------------------*/
-	HMI_EVENT				stEvent;
-	SGUI_INT				iRandomNumber;
-
-	/*----------------------------------*/
-	/* Initialize						*/
-	/*----------------------------------*/
-	stEvent.Action =		HMI_ENGINE_ACTION_ON_TIMER;
-	stEvent.Data =			NULL;
-
-	/*----------------------------------*/
-	/* Process							*/
-	/*----------------------------------*/
-	iRandomNumber = 10;
-	stEvent.Data = (SGUI_BYTE*)(&iRandomNumber);
-	// Post timer event.
-	EventProcess(HMI_ENGINE_EVENT_ACTION, &stEvent);
-	SGUI_Basic_RefreshDisplay();
+    return s_bTimerTriggered;
+}
+void ResetTimerTriggered(void)
+{
+    s_bTimerTriggered = false;
 }

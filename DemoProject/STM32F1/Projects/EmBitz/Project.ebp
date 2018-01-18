@@ -117,7 +117,11 @@
 		<Unit filename="..\..\Core\inc\core_cm3.h" />
 		<Unit filename="..\..\Core\inc\core_cmFunc.h" />
 		<Unit filename="..\..\Core\inc\core_cmInstr.h" />
+		<Unit filename="..\..\Demo\inc\DemoActions.h" />
 		<Unit filename="..\..\Demo\inc\DemoResource_GB2312.h" />
+		<Unit filename="..\..\Demo\src\DemoActions.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="..\..\Device\inc\ASCII_Font8Pix.h" />
 		<Unit filename="..\..\Device\inc\OLED.h" />
 		<Unit filename="..\..\Device\inc\SSD1306_SPI.h" />
@@ -238,7 +242,6 @@
 		<Unit filename="..\..\System\inc\Systick.h" />
 		<Unit filename="..\..\System\inc\Timer.h" />
 		<Unit filename="..\..\System\inc\Usart.h" />
-		<Unit filename="..\..\System\inc\UsartKey.h" />
 		<Unit filename="..\..\System\src\Delay.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -272,7 +275,6 @@
 		<Unit filename="..\..\User\inc\stm32f10x.h" />
 		<Unit filename="..\..\User\inc\stm32f10x_conf.h" />
 		<Unit filename="..\..\User\inc\system_stm32f10x.h" />
-		<Unit filename="..\..\User\inc\Typedefine.h" />
 		<Unit filename="..\..\User\inc\usart_io.h" />
 		<Unit filename="..\..\User\src\main.c">
 			<Option compilerVar="CC" />

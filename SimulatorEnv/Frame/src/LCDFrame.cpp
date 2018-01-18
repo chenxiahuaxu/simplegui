@@ -327,7 +327,7 @@ void LCDFrame::OnUpdateUI(wxUpdateUIEvent& clsEventObject)
 		_setStatusText(_T("Initialzied."));
         bInitialized = true;
         _initializeTimer();
-        _startTimer(1);
+        _startTimer(50);
 
         UAIF_OnInitialize();
         m_pclsCtrlPaintPanel->RefreshDisplay();
@@ -482,7 +482,25 @@ uint32_t LCDFrame::GetLCDPixel(uint32_t uiPosX, uint32_t uiPosY)
 
 void LCDFrame::OnTimerEvent(wxTimerEvent& event)
 {
-    UAIF_OnTimerEventProcess();
+    /*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+	static bool                 bInitialized = false;
+
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	if(false == bInitialized)
+	{
+	    // Initialize HMI engine.
+        bInitialized = true;
+        UAIF_OnInitialize();
+        m_pclsCtrlPaintPanel->RefreshDisplay();
+	}
+	else
+    {
+        UAIF_OnTimerEventProcess();
+    }
 }
 
 void LCDFrame::OnRTCUpdate(wxTimerEvent& event)

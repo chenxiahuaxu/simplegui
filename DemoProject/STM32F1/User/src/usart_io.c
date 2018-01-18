@@ -1,8 +1,6 @@
 #include <stdio.h>
 
 #include "stm32f10x.h"
-#include "stm32f10x_usart.h"
-#include "Typedefine.h"
 #include "Usart.h"
 #include "usart_io.h"
 
@@ -32,7 +30,7 @@ void DebugSerialPort_Initialize(uint32_t Baudrate)
 
 	/* Configure USART1 controller */
 	RCC_APB2PeriphClockCmd(DEBUG_IO_DEVICE_CLOCK, ENABLE);	//Enable USART device clock.
-	USART_Config(DEBUG_IO_DEVICE, Baudrate, FALSE);         //Initialize USART and disable USART interrupt.
+	USART_Config(DEBUG_IO_DEVICE, Baudrate, false);         //Initialize USART and disable USART interrupt.
 }
 
 /*****************************************************************************/

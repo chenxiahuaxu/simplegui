@@ -70,7 +70,6 @@ HMI_ENGINE_RESULT HMI_DemoRealGraph_ProcessEvent(HMI_EVENT_TYPE eEventType, cons
 	HMI_ENGINE_RESULT           eProcessResult;
 	SGUI_INT					iNewValue;
 	SGUI_UINT16*				parrKeyValue;
-	static SGUI_UINT			uiTimer = 3;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -101,17 +100,9 @@ HMI_ENGINE_RESULT HMI_DemoRealGraph_ProcessEvent(HMI_EVENT_TYPE eEventType, cons
 				}
 				case HMI_ENGINE_ACTION_ON_TIMER:
 				{
-					if(uiTimer > 0)
-					{
-						uiTimer--;
-					}
-					else
-					{
-						uiTimer = 5;
-						iNewValue = *((SGUI_INT*)pstEvent->Data);
-						SGUI_RealtimeGraph_AppendValue(&s_stRealtimeGraph, iNewValue);
-						HMI_DemoRealGraph_RefreshScreen(NULL);
-					}
+                    iNewValue = *((SGUI_INT*)pstEvent->Data);
+                    SGUI_RealtimeGraph_AppendValue(&s_stRealtimeGraph, iNewValue);
+                    HMI_DemoRealGraph_RefreshScreen(NULL);
                     break;
 				}
 				default:

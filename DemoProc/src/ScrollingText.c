@@ -133,7 +133,6 @@ HMI_ENGINE_RESULT HMI_DemoScrollingText_ProcessEvent(HMI_EVENT_TYPE eEventType, 
 	/* Variable Declaration				*/
 	/*----------------------------------*/
 	HMI_ENGINE_RESULT           eProcessResult;
-	static SGUI_UINT            uiTimer = 1;
 	SGUI_UINT16*				parrKeyValue;
 
 	/*----------------------------------*/
@@ -165,23 +164,15 @@ HMI_ENGINE_RESULT HMI_DemoScrollingText_ProcessEvent(HMI_EVENT_TYPE eEventType, 
 				}
 				case HMI_ENGINE_ACTION_ON_TIMER:
 				{
-					if(uiTimer > 0)
+                    //SGUI_Frame_DrawFullScreenFrame(&s_stTextFrame);
+                    SGUI_Text_DrawMultipleLinesText(s_szDemoText, SGUI_FONT_SIZE_H12, &s_stTextDisplayArea, s_iTextOffset, SGUI_DRAW_NORMAL);
+                    if(s_iTextOffset + s_iTextHeight == 0)
                     {
-                        uiTimer--;
+                        s_iTextOffset = HMI_TEXT_DEMO_FRAME_TEXT_HEIGHT;
                     }
                     else
                     {
-                        SGUI_Frame_DrawFullScreenFrame(&s_stTextFrame);
-                        SGUI_Text_DrawMultipleLinesText(s_szDemoText, SGUI_FONT_SIZE_H12, &s_stTextDisplayArea, s_iTextOffset, SGUI_DRAW_NORMAL);
-                        if(s_iTextOffset + s_iTextHeight == 0)
-                        {
-                            s_iTextOffset = HMI_TEXT_DEMO_FRAME_TEXT_HEIGHT;
-                        }
-                        else
-                        {
-                            s_iTextOffset--;
-                        }
-                        uiTimer = 1;
+                        s_iTextOffset--;
                     }
                     eProcessResult = HMI_RET_NOACTION;
                     break;

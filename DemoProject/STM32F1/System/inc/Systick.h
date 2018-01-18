@@ -1,9 +1,9 @@
-#ifndef _INCLUDE_SYSTEM_SYSTICK_H_
-#define _INCLUDE_SYSTEM_SYSTICK_H_
+#ifndef __INCLUDE_SYSTEM_SYSTICK_H__
+#define __INCLUDE_SYSTEM_SYSTICK_H__
+
+#include <stdbool.h>
 #include "stm32f10x.h"
 #include "core_cm3.h"
-
-#include "Typedefine.h"
 
 #ifndef SYSTICK_MAXCOUNT
 #define SYSTICK_MAXCOUNT  16777216

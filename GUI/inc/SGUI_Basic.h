@@ -9,7 +9,7 @@
 #else
 // Include your device driver interface here.
 #include "OLED.h"
-#include "UsartKey.h"
+#include "DemoActions.h"
 #endif //_SIMPLE_GUI_ENABLE_SIMULATOR_
 
 //=======================================================================//

@@ -32,6 +32,7 @@
 #include <string.h>
 #else
 	// Include MMU interface header file here.
+#include <string.h>
 #endif
 
 //=======================================================================//
@@ -629,7 +630,8 @@ void* SGUI_Common_MemoryCopy(void* pDest, const void* pSrc, SGUI_UINT uiSize)
 #if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
 	pCopiedMemory = memcpy(pDest, pSrc, uiSize);
 #else
-	// Add RTC time process here;
+	// Add memory block copy process here;
+	pCopiedMemory = memcpy(pDest, pSrc, uiSize);
 #endif
 	}
 
@@ -698,6 +700,7 @@ SGUI_SIZE SGUI_Common_StringLength(SGUI_PCSZSTR szString)
 	uiStringLength = strlen(szString);
 #else
 	// Add RTC time process here;
+	uiStringLength = strlen(szString);
 #endif
 	}
 
@@ -734,6 +737,7 @@ SGUI_PSZSTR SGUI_Common_StringCopy(SGUI_PSZSTR szDest, SGUI_PCSZSTR szSrc)
 	szDestPtr = strcpy(szDest, szSrc);
 #else
 	// Add RTC time process here;
+	szDestPtr = strcpy(szDest, szSrc);
 #endif
 	}
 
@@ -771,6 +775,7 @@ SGUI_PSZSTR SGUI_Common_StringLengthCopy(SGUI_PSZSTR szDest, SGUI_PCSZSTR szSrc,
 	szDestPtr = strncpy(szDest, szSrc, uiSize);
 #else
 	// Add RTC time process here;
+	szDestPtr = strncpy(szDest, szSrc, uiSize);
 #endif
 	}
 

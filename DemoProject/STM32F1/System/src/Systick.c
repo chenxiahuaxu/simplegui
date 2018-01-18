@@ -1,6 +1,3 @@
-#include "stm32f10x.h"
-#include "core_cm3.h"
-#include "Typedefine.h"
 #include "Systick.h"
 #include "Delay.h"
 
@@ -24,7 +21,7 @@ ErrorStatus Systick_Initialize(uint32_t ui_Ticks, bool b_EnableInterrupt)
     SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK);	//设置Systick时钟源为HCLK
     Systick_SetReload(ui_Ticks);							//设置Systick重装载值
     Systick_SetValue(0x000000);							//设置Systick初值
-    if(b_EnableInterrupt == TRUE)
+    if(b_EnableInterrupt == true)
     {
         NVIC_SetPriority(SysTick_IRQn, 0);			//配置Systick中断优先级
         SystickInt_Enable();							//使能Systick中断

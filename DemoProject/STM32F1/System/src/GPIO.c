@@ -36,13 +36,10 @@ void GPIO_Initialize(const GPIO_OBJECT_STRUCT* pstGPIODataList, uint16_t uiArray
         {
             GPIO_SetBits(pstGPIODataList[i].Port, pstGPIODataList[i].Pin);
         }
-        // Default to LOW when initialized.
-        /**
         else
         {
             GPIO_ResetBits(pstGPIODataList[i].Port, pstGPIODataList[i].Pin);
         }
-        */
 	}
 }
 

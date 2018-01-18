@@ -21,8 +21,8 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include <stdio.h>
+#include <stdbool.h>
 #include "stm32f10x.h"
-#include "Typedefine.h"
 #include "usart_io.h"
 #include "Initialize.h"
 #include "stm32f10x_gpio.h"
@@ -32,12 +32,11 @@
 
 #include "GPIO.h"
 #include "RTC.h"
+#include "Usart.h"
 #include "ExternalInterrupt.h"
 #include "SSD1306_SPI.h"
 
-#include "SGUI_Basic.h"
-#include "SGUI_Text.h"
-
+#include "DemoActions.h"
 #include "DemoProc.h"
 
 char		szOutputBuffer[64] = {0x00};
@@ -46,16 +45,18 @@ void UpdateRTC(void);
 
 int main(void)
 {
+    uint8_t         cbReceivedByte;
 	HSEClocks_Initialize(RCC_PLLMul_9);
 	NVIC_Initialize(NVIC_PriorityGroup_2);
 	DebugPort_Initialize(DEBUG_SWD);
-	DebugSerialPort_Initialize(115200);
-	printf("Debug output Initialized.\r\n");
+
+    //DebugSerialPort_Initialize(115200);
+    DemoAction_InitializeUsart1();
 
 	RTC_Initialize();
 	printf("RTC Initialized.\r\n");
 
-	Systick_Initialize(72, TRUE);
+	Systick_Initialize(72, true);
 	printf("Systick timer Initialized.\r\n");
 
 	GPIO_Initialize(astGPIOInitData, 2);
@@ -69,14 +70,27 @@ int main(void)
     InitializeEngine();
     printf("HMI engine Initialized.\r\n");
 
-    TIM3_Int_Init(TIM3, 9, 7199);
-	printf("General Timer-3 Initialized.\r\n");
+    TIMBase_Int_Init(TIM3, 9, 719);
+	printf("General Timer3 Initialized.\r\n");
+
 
     printf("System Initialize finished.\r\n");
 
 	while(1)
 	{
+        if(true == GetTimerTriggered())
+        {
+            DemoAction_TimerEvent();
+            ResetTimerTriggered();
+        }
 
+        cbReceivedByte = GetReveivedByte();
+        if(KEY_NONE != cbReceivedByte)
+        {
+            printf("Received virtual key value 0x%02X.\r\n", cbReceivedByte);
+            DemoAction_UsartReceiveEvent(cbReceivedByte);
+            ResetReveivedByte();
+        }
 	}
 }
 
