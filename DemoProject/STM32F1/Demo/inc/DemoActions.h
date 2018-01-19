@@ -22,5 +22,6 @@
 void        DemoAction_InitializeUsart1(void);
 void        DemoAction_TimerEvent(void);
 void        DemoAction_UsartReceiveEvent(uint8_t cbReceiveByte);
+void        DemoAction_RTCUpdateEventProcess(void);
 
 #endif /* __INCLUDE_DEMOACTIONS_H__ */

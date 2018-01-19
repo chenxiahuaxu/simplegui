@@ -61,7 +61,7 @@ HMI_ENGINE_RESULT HMI_DemoTextNotice_Prepare(const void* pstParameters)
 	/*----------------------------------*/
 	if(NULL == pstParameters)
 	{
-		SGUI_Common_StringLengthCopy(s_szDemoNoticeText, "无参数。", NOTICE_TEXT_BUFFER_SIZE);
+		SGUI_Common_StringLengthCopy(s_szDemoNoticeText, "No Parameter.", NOTICE_TEXT_BUFFER_SIZE);
 	}
 	else
 	{

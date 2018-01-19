@@ -33,6 +33,7 @@
 #else
 	// Include MMU interface header file here.
 #include <string.h>
+#include "RTC.h"
 #endif
 
 //=======================================================================//
@@ -654,6 +655,7 @@ void SGUI_Common_MemorySet(void* pMemoryPtr, SGUI_BYTE iSetValue, SGUI_UINT uiSi
 	/*----------------------------------*/
 #if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ == 0)
 	SGUI_UINT                   uiIdx;
+	SGUI_BYTE*					pcbBytePtr;
 #endif
 
 	/*----------------------------------*/
@@ -664,9 +666,10 @@ void SGUI_Common_MemorySet(void* pMemoryPtr, SGUI_BYTE iSetValue, SGUI_UINT uiSi
 #if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
         memset(pMemoryPtr, iSetValue, uiSize);
 #else
+		pcbBytePtr = (SGUI_BYTE*)pMemoryPtr;
         for(uiIdx=0; uiIdx<uiSize; uiIdx++)
         {
-            *(SGUI_BYTE*)(pMemoryPtr+uiIdx) = iSetValue;
+            *(pcbBytePtr+uiIdx) = iSetValue;
         }
 #endif
 	}
@@ -822,6 +825,12 @@ void SGUI_Common_GetNowTime(SGUI_TIME* pstTime)
 		}
 #else
 	// Add RTC Interface call of the platform.
+        pstTime->Year = g_stCleandar.tm_year;
+        pstTime->Month = g_stCleandar.tm_mon;
+        pstTime->Day = g_stCleandar.tm_mday;
+        pstTime->Hour = g_stCleandar.tm_hour;
+        pstTime->Minute = g_stCleandar.tm_min;
+        pstTime->Second = g_stCleandar.tm_sec;
 #endif
 	}
 }

@@ -120,7 +120,7 @@ HMI_ENGINE_RESULT HMI_DemoRTCNotice_ProcessEvent(HMI_EVENT_TYPE eEventType, cons
 				if(NULL != pstRTCTime)
 				{
 					sprintf(s_szRTCNoticeText, DEMO_RTC_NOTICE_TEXT_FMT,
-					pstRTCTime->Year, pstRTCTime->Month+1, pstRTCTime->Day,
+					pstRTCTime->Year, pstRTCTime->Month, pstRTCTime->Day,
 					pstRTCTime->Hour, pstRTCTime->Minute, pstRTCTime->Second);
 					SGUI_Notice_RefreshNotice(s_szRTCNoticeText, 0, SGUI_ICON_INFORMATION);
 					eProcessResult = HMI_RET_NOACTION;

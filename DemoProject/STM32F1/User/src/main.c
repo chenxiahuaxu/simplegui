@@ -91,12 +91,17 @@ int main(void)
             DemoAction_UsartReceiveEvent(cbReceivedByte);
             ResetReveivedByte();
         }
+
+        if(g_eRTCRefreshedFlag == RTC_REFRESHED)
+		{
+			DemoAction_RTCUpdateEventProcess();
+		}
 	}
 }
 
 void UpdateRTC(void)
 {
-    RTC_CALENDAR_STRUCT stCleandarData = {};
+    RTC_CALENDAR_STRUCT stCleandarData = {0x00};
 
     stCleandarData.tm_year = 2018;
 	stCleandarData.tm_mon = 1;

@@ -42,8 +42,8 @@
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
-static inline void			SGUI_LIST_RefreshListItems(SGUI_LIST_STRUCT* pstList);
-static inline void			SGUI_LIST_DrawItem(SGUI_LIST_STRUCT* pstList, SGUI_SIZE uiIndex);
+static __INLINE void		SGUI_LIST_RefreshListItems(SGUI_LIST_STRUCT* pstList);
+static __INLINE void		SGUI_LIST_DrawItem(SGUI_LIST_STRUCT* pstList, SGUI_SIZE uiIndex);
 
 //=======================================================================//
 //= Function define.										            =//

@@ -507,7 +507,7 @@ void LCDFrame::OnRTCUpdate(wxTimerEvent& event)
 {
     wxDateTime clsTime = wxDateTime::Now();
 	UAIF_OnRTCUpdateEventProcess(   clsTime.GetYear(),
-                                    clsTime.GetMonth(),
+                                    clsTime.GetMonth()+1,
                                     clsTime.GetDay(),
                                     clsTime.GetHour(),
                                     clsTime.GetMinute(),

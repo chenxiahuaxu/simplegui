@@ -88,7 +88,7 @@ HMI_ENGINE_RESULT HMI_DemoList_Initialize(void)
     s_stDemoListObject.Data.Title = s_szListTitle;
     s_stDemoListObject.FontSize = SGUI_FONT_SIZE_H12;
     //Initialize list object.
-	SGUI_LIST_InitializeListData(&s_stDemoListObject);
+	//SGUI_LIST_InitializeListData(&s_stDemoListObject);
 #if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0)
     s_stDemoListObject.Data.Items = NULL;
     s_stDemoListObject.Data.Count = 0;
@@ -101,6 +101,10 @@ HMI_ENGINE_RESULT HMI_DemoList_Initialize(void)
     s_stDemoListObject.Data.Items = s_arrstTestListItems;
     s_stDemoListObject.Data.Count = sizeof(s_arrstTestListItems)/sizeof(SGUI_LIST_ITEM);
 #endif
+
+     //Initialize list object.
+	SGUI_LIST_InitializeListData(&s_stDemoListObject);
+
 	return HMI_RET_NORMAL;
 }
 

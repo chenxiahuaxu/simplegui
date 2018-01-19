@@ -22,6 +22,23 @@
 #define		SGUI_TOUPPER(C)					(SGUI_ISUPPER(C)?(C):(C-32))
 #define		SGUI_SWAP(A, B)					{A=A^B; B=A^B; A=A^B;}
 
+#if   defined ( __CC_ARM )
+  #define __ASM            __asm                                      /*!< asm keyword for ARM Compiler          */
+  #define __INLINE         __inline                                   /*!< inline keyword for ARM Compiler       */
+
+#elif defined ( __ICCARM__ )
+  #define __ASM           __asm                                       /*!< asm keyword for IAR Compiler          */
+  #define __INLINE        inline                                      /*!< inline keyword for IAR Compiler. Only available in High optimization mode! */
+
+#elif defined ( __GNUC__ )
+  #define __ASM            __asm                                      /*!< asm keyword for GNU Compiler          */
+  #define __INLINE         inline                                     /*!< inline keyword for GNU Compiler       */
+
+#elif defined ( __TASKING__ )
+  #define __ASM            __asm                                      /*!< asm keyword for TASKING Compiler      */
+  #define __INLINE         inline                                     /*!< inline keyword for TASKING Compiler   */
+#endif
+
 //=======================================================================//
 //= Public variable declaration.									    =//
 //=======================================================================//

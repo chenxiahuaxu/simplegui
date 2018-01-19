@@ -6,6 +6,7 @@
 #include "SGUI_Basic.h"
 #include "GPIO.h"
 #include "Usart.h"
+#include "RTC.h"
 
 SGUI_INT    s_GraphDemoData[72] = {
 //   5,  10,  15,  20,  25,  30,  35,  40,  45,  50,  55,  60,  65,  70,  75,  80,  85,  90,
@@ -94,6 +95,34 @@ void DemoAction_UsartReceiveEvent(uint8_t cbReceiveByte)
 	/*----------------------------------*/
 	// Call demo process.
 	EventProcess(HMI_ENGINE_EVENT_ACTION, &stEvent);
+	SGUI_Basic_RefreshDisplay();
+}
+
+void DemoAction_RTCUpdateEventProcess(void)
+{
+    /*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+	SGUI_TIME               stRTCTime;
+	HMI_EVENT				stEvent;
+
+	/*----------------------------------*/
+	/* Initialize						*/
+	/*----------------------------------*/
+	stRTCTime.Year =		g_stCleandar.tm_year;
+	stRTCTime.Month =		g_stCleandar.tm_mon;
+	stRTCTime.Day =			g_stCleandar.tm_mday;
+	stRTCTime.Hour =		g_stCleandar.tm_hour;
+	stRTCTime.Minute =		g_stCleandar.tm_min;
+	stRTCTime.Second =		g_stCleandar.tm_sec;
+	stEvent.Action =		HMI_ENGINE_ACTION_ON_TIMER_RTC;
+	stEvent.Data = 			(SGUI_BYTE*)(&stRTCTime);
+
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	// Post RTC update message to a screen.
+	EventProcess(HMI_ENGINE_EVENT_DATA, &stEvent);
 	SGUI_Basic_RefreshDisplay();
 }
 
