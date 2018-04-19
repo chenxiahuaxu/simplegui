@@ -12,7 +12,7 @@
 //=======================================================================//
 typedef struct
 {
-	SGUI_FONT_SIZE				EdgeLayers;
+	SGUI_INT					EdgeLayers;
     SGUI_FONT_SIZE				FontSize;
 }SGUI_BOX_FRAME_PARAMETER;
 

@@ -81,6 +81,7 @@
 			<Add directory="..\..\Core\inc" />
 			<Add directory="..\..\SPL\inc" />
 			<Add directory="..\..\User\inc" />
+			<Add directory="..\..\User\inc_gcc" />
 			<Add directory="..\..\Device\inc" />
 			<Add directory="..\..\System\inc" />
 			<Add directory="..\..\Demo\inc" />

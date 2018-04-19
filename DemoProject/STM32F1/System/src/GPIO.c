@@ -65,13 +65,13 @@ GPIO_STATE GPIO_ReadPin(const GPIO_OBJECT_STRUCT* astPinList, uint8_t uiIndex)
 	if(	(astPinList+uiIndex)->Mode == GPIO_Mode_Out_PP ||
 		(astPinList+uiIndex)->Mode == GPIO_Mode_Out_OD)
 	{
-		return GPIO_ReadOutputDataBit((astPinList+uiIndex)->Port, (astPinList+uiIndex)->Pin);
+		return (GPIO_STATE)GPIO_ReadOutputDataBit((astPinList+uiIndex)->Port, (astPinList+uiIndex)->Pin);
 	}
 	else if((astPinList+uiIndex)->Mode == GPIO_Mode_IN_FLOATING ||
 			(astPinList+uiIndex)->Mode == GPIO_Mode_IPD ||
 			(astPinList+uiIndex)->Mode == GPIO_Mode_IPU)
 	{
-		return GPIO_ReadInputDataBit((astPinList+uiIndex)->Port, (astPinList+uiIndex)->Pin);
+		return (GPIO_STATE)GPIO_ReadInputDataBit((astPinList+uiIndex)->Port, (astPinList+uiIndex)->Pin);
 	}
 	else
 	{

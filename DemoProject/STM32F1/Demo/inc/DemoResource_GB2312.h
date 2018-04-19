@@ -1,6 +1,11 @@
 #ifndef __INCLUDE_DEMO_RESOURCE_UTF8_H__
 #define __INCLUDE_DEMO_RESOURCE_UTF8_H__
 
+#if defined ( __CC_ARM )
+	//#pragma	diag_suppress	177							// Disabled "declared but never referenced." warning.
+#endif
+
+
 /* Screen 1: Multiple lines text. */
 /* Start screen scroll text. */
 #define     DEMO_START_NOTICE           (\

@@ -264,7 +264,7 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_ProcessEvent(HMI_EVENT_TYPE eEventType, co
                         }
                         break;
                     }
-                    break;
+                    default:
                     {
                         eProcessResult = HMI_RET_NOACTION;
                         break;
