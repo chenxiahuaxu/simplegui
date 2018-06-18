@@ -1,9 +1,9 @@
 #ifndef _INCLUDE_CLASS_WXEX_PIXEL_PANEL_H__
 #define _INCLUDE_CLASS_WXEX_PIXEL_PANEL_H__
 
-#include <wx/panel.h>
-#include <wx/dcbuffer.h>
-#include <wx/colour.h>
+#include <wx\panel.h>
+#include <wx\dcbuffer.h>
+#include <wx\colour.h>
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class LCD_DisplayPanel

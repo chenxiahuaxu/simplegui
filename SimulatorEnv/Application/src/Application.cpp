@@ -1,4 +1,3 @@
-#include "wx\wx.h"
 #include "Application.h"
 #include "Common.h"
 

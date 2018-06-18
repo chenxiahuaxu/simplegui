@@ -8,7 +8,7 @@
 //=======================================================================//
 //= Include files.													    =//
 //=======================================================================//
-#include <wx/msgdlg.h>
+#include <wx\msgdlg.h>
 #include "LCDFrame.h"
 #include "UserActionInterface.h"
 

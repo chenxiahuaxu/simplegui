@@ -4,6 +4,7 @@
 //= Include files.													    =//
 //=======================================================================//
 #include <stdint.h>
+#include <Common.h>
 
 //=======================================================================//
 //= User definition.												    =//
@@ -39,8 +40,8 @@
 #define		KEY_PRESS_EVENT_VALUE_MAX						(4)
 
 // Parameter
-#define     LCD_SIZE_WIDTH					                (128)
-#define     LCD_SIZE_HEIGHT					                (64)
+#define     LCD_SIZE_WIDTH					                (PARAM_DEFAULT_PIXEL_NUM_H)
+#define     LCD_SIZE_HEIGHT					                (PARAM_DEFAULT_PIXEL_NUM_V)
 
 #if LCD_SIZE_WIDTH < 16
 #error Define width of LCD size must greater then 16.

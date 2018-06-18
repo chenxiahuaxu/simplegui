@@ -10,8 +10,8 @@
 #ifndef __INCLUDE_CLASS_APPLICATION_H__
 #define __INCLUDE_CLASS_APPLICATION_H__
 
-#include <wx/dialog.h>
-#include <wx/app.h>
+#include <wx\dialog.h>
+#include <wx\app.h>
 
 #include "LCDFrame.h"
 

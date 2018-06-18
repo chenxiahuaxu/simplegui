@@ -15,14 +15,14 @@
 				<Option projectLinkerOptionsRelation="2" />
 				<Compiler>
 					<Add option="-g" />
-					<Add directory="$(#wx31)/lib/gcc_dll/mswu" />
+					<Add directory="$(#wx)/lib/gcc_dll/mswu" />
 				</Compiler>
 				<ResourceCompiler>
-					<Add directory="$(#wx31)/lib/gcc_dll/mswu" />
+					<Add directory="$(#wx)/lib/gcc_dll/mswu" />
 				</ResourceCompiler>
 				<Linker>
 					<Add library="libwxmsw31u.a" />
-					<Add directory="$(#wx31)/lib/gcc_dll" />
+					<Add directory="$(#wx)/lib/gcc_dll" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -34,15 +34,15 @@
 				<Option projectLinkerOptionsRelation="2" />
 				<Compiler>
 					<Add option="-O2" />
-					<Add directory="$(#wx31)/lib/gcc_dll/mswu" />
+					<Add directory="$(#wx)/lib/gcc_dll/mswu" />
 				</Compiler>
 				<ResourceCompiler>
-					<Add directory="$(#wx31)/lib/gcc_dll/mswu" />
+					<Add directory="$(#wx)/lib/gcc_dll/mswu" />
 				</ResourceCompiler>
 				<Linker>
 					<Add option="-s" />
 					<Add library="libwxmsw31u.a" />
-					<Add directory="$(#wx31)/lib/gcc_dll" />
+					<Add directory="$(#wx)/lib/gcc_dll" />
 				</Linker>
 			</Target>
 		</Build>
@@ -59,7 +59,7 @@
 			<Add option="-D_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_=1" />
 			<Add option="-D_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_=1" />
 			<Add option="-D_SIMPLE_GUI_ENABLE_BASIC_FONT_=1" />
-			<Add directory="$(#wx31)/include" />
+			<Add directory="$(#wx)/include" />
 			<Add directory="../../Application/inc" />
 			<Add directory="../../Common/inc" />
 			<Add directory="../../Library/inc" />
@@ -72,7 +72,7 @@
 			<Add directory="../../../DemoProc/inc" />
 		</Compiler>
 		<ResourceCompiler>
-			<Add directory="$(#wx31)/include" />
+			<Add directory="$(#wx)/include" />
 		</ResourceCompiler>
 		<Linker>
 			<Add option="-mthreads" />

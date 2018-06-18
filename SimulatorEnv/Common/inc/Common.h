@@ -3,17 +3,6 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#define LCD_COLOR_OBJ_PIX						    	(0xFF168363)
-#define LCD_COLOR_OBJ_BKG						    	(0xFF00F0D7)
-#define LCD_COLOR_OBJ_EDGE						    	(0xFF383834)
-#define LCD_COLOR_OBJ_GRID						    	(0xFF383834)
-
-#define PARAM_DEFAULT_COLUMNS						    (192)
-#define PARAM_DEFAULT_PAGES					    		(8)
-#define PARAM_DEFAULT_PIXEL					    		(3)
-#define PARAM_DEFAULT_EDGE					    		(5)
-#define PARAM_DEFAULT_GRID					    		(false)
-
 #define _TRANS_TEXT(STR)								_(STR)
 
 #define LCD_COLOR_OBJ_PIX						    	(0xFF168363)
@@ -25,7 +14,7 @@
 
 #define PARAM_DEFAULT_PIXEL_NUM_H                       (128)
 #define PARAM_DEFAULT_PIXEL_NUM_V                       (64)
-#define PARAM_DEFAULT_PIXEL_SIZE					    (2)
+#define PARAM_DEFAULT_PIXEL_SIZE					    (4)
 #define PARAM_DEFAULT_EDGE_WIDTH                        (5)
 #define PARAM_DEFAULT_GRID_ENABLE                       (true)
 #define PARAM_DEFAULT_GRID_DISABLE                      (false)
