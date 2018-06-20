@@ -36,6 +36,11 @@ typedef enum
 #define		BASIC_FONT_CHAR_DATA_SIZE		(((BASIC_FONT_HEIGHT-1)/8)+1)*BASIC_FONT_WIDTH
 #define		BASIC_FONT_DATA					(SGUI_BASIC_FONT_H8)
 
+//Bitmap(include font) data bit operation
+#define     SGUI_SET_PAGE_BIT(PAGE, Bit)	((PAGE) = (PAGE) | (0x01 << (Bit)))
+#define     SGUI_CLR_PAGE_BIT(PAGE, Bit)	((PAGE) = (PAGE) & (~(0x01 << (Bit))))
+#define     SGUI_GET_PAGE_BIT(PAGE, Bit)	((((PAGE) & (0x01 << (Bit)))>0)?1:0)
+
 //=======================================================================//
 //= Public variable declaration.									    =//
 //=======================================================================//

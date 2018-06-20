@@ -609,7 +609,7 @@ void SGUI_Basic_DrawBitMap(SGUI_RECT_AREA* pstDisplayArea, SGUI_RECT_AREA* pstDa
 						uiPixIndex = 0;
 						pData += RECTANGLE_WIDTH(*pstDataArea);
 					}
-					if(GET_PAGE_BIT(*pData, uiPixIndex) != eDrawMode)
+					if(SGUI_GET_PAGE_BIT(*pData, uiPixIndex) != eDrawMode)
 					{
 						SGUI_Basic_DrawPoint(iDrawPixX, iDrawPixY, SGUI_COLOR_FRGCLR);
 					}

@@ -50,11 +50,6 @@
 #error Define height of LCD size must greater then 16.
 #endif
 
-//Common operation
-#define SET_PAGE_BIT(PAGE, Bit)		((PAGE) = (PAGE) | (0x01 << (Bit)))
-#define CLR_PAGE_BIT(PAGE, Bit)		((PAGE) = (PAGE) & (~(0x01 << (Bit))))
-#define GET_PAGE_BIT(PAGE, Bit)		((((PAGE) & (0x01 << (Bit)))>0)?1:0)
-
 //=======================================================================//
 //= Public function declaration.									    =//
 //=======================================================================//
