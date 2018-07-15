@@ -286,6 +286,9 @@
 		<Unit filename="..\..\User\src\usart_io.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\User\src\usart_io_gcc.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="..\..\..\..\GUI\inc\SGUI_Basic.h" />
 		<Unit filename="..\..\..\..\GUI\inc\SGUI_Common.h" />
 		<Unit filename="..\..\..\..\GUI\inc\SGUI_Frame.h" />

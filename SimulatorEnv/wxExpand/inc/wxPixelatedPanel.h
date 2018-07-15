@@ -9,7 +9,7 @@
 /// Class LCD_DisplayPanel
 ///////////////////////////////////////////////////////////////////////////////
 
-class wxPixelatedPanel : public wxPanel
+class wxPixelatedPanel : public wxWindow
 {
 private:
 	// Colors
@@ -35,6 +35,7 @@ private:
 private:
     // Event callback function.
 	void				_wxEvent_OnPaint(wxPaintEvent &event)		{OnPaint();event.Skip();}
+	void                _wxEvent_OnEraseBackGround(wxEraseEvent &event){OnEraseBackGround();}
 
 public:
     // Constructor/Destructor
@@ -57,6 +58,7 @@ public:
 	void				SetGridColor(const wxColor& clsColor);
 	wxColor&            GetGridColor(void);
 	void				OnPaint(void);
+	void                OnEraseBackGround(void)                     {/* Do nothing. */}
 	void				SetPixelUnitColor(uint32_t uiPosX, uint32_t uiPosY, const wxColor& clsColor, bool bRefreshNow = false);
 	void                DrawPixel(uint32_t uiPosX, uint32_t uiPosY, wxColor& clsColor);
 	uint32_t			GetPixelUnitColor(uint32_t uiPosX, uint32_t uiPosY);

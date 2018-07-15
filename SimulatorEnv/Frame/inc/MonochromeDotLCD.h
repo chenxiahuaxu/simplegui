@@ -12,6 +12,8 @@
 //=======================================================================//
 class MonochromeDotLCD : public wxPixelatedPanel
 {
+    //DECLARE_DYNAMIC_CLASS(wxFontSelectorCtrl)
+
     private:
         uint32_t			m_uiPageCount;
         uint32_t			m_uiColumnCount;

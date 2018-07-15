@@ -1,12 +1,5 @@
-#include <stdio.h>
-
 #include "stm32f10x.h"
-#include "Usart.h"
 #include "usart_io.h"
-
-/* Debug IO serial */
-#define DEBUG_IO_DEVICE			USART1
-#define DEBUG_IO_DEVICE_CLOCK	RCC_APB2Periph_USART1
 
 GPIO_OBJECT_STRUCT	astDebugSerialPortGPIO[] =
 {
@@ -34,33 +27,14 @@ void DebugSerialPort_Initialize(uint32_t Baudrate)
 }
 
 /*****************************************************************************/
-/** Function Name:	_write							                        **/
-/** Purpose:		Override gnu write function, called by libc stdio       **/
-/**                 fwrite functions.                        		        **/
+/** Function Name:	USART_Putc							                    **/
+/** Purpose:		Send a byte by usart.                     		        **/
 /** Params:																    **/
-/**	@ifd            File ID.                                                **/
-/**	@pcBuffer       Write buffer.   									    **/
-/**	@iSize			Write buffer size.  								    **/
+/**	@iChar          Send byte.                                               **/
 /** Return:			Number of written bytes.							    **/
 /*****************************************************************************/
-int _write(int ifd, char *pcBuffer, int iSize)
-{
-    int i = 0;
-    char*   pcSendData;
-
-    pcSendData = pcBuffer;
-    for (i=0; i<iSize; i++)
-    {
-        USART_Putc(*pcSendData);
-        pcSendData++;
-    }
-    return iSize;
-}
-
 int USART_Putc(int iChar)
 {
     USART_SendByte(DEBUG_IO_DEVICE, iChar);
     return iChar;
 }
-
-

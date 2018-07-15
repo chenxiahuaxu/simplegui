@@ -7,15 +7,16 @@
 //=======================================================================//
 //= Event table.													    =//
 //=======================================================================//
-BEGIN_EVENT_TABLE(wxPixelatedPanel,wxPanel)
-	EVT_PAINT		(wxPixelatedPanel::_wxEvent_OnPaint)
+BEGIN_EVENT_TABLE(wxPixelatedPanel,wxWindow)
+	EVT_PAINT		        (wxPixelatedPanel::_wxEvent_OnPaint)
+	EVT_ERASE_BACKGROUND    (wxPixelatedPanel::_wxEvent_OnEraseBackGround)
 END_EVENT_TABLE()
 
 //=======================================================================//
 //= Function define.										            =//
 //=======================================================================//
 wxPixelatedPanel::wxPixelatedPanel(wxWindow *pclsParent, wxWindowID iWinID, const wxPoint& clsPosition):
-wxPanel(pclsParent, iWinID, clsPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxNO_BORDER, wxPanelNameStr),
+wxWindow(pclsParent, iWinID, clsPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxNO_BORDER, wxPanelNameStr),
 m_clsCDC(this)
 {
 	m_ppuiDisplayBuffer =			NULL;
