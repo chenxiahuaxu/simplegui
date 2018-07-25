@@ -4,6 +4,7 @@
 
 #### 简介
 SimpleGUI是一款针对单色显示屏设计的GUI接口库。
+>![SimpleGUI在SSD1306主控制器的OLED显示屏上的显示效果](https://images.gitee.com/uploads/images/2018/0725/220230_cfc1d5f8_769424.jpeg "SimpleGUI_1.jpg")
 
 #### 设计目标
 在尽可能减小资源消耗的前提下，提供以下功能：
@@ -15,7 +16,8 @@ SimpleGUI是一款针对单色显示屏设计的GUI接口库。
 #### 部署模拟器
 SimpleGUI提供了一个单色显示屏的模拟器以方便开发者进行基于SimpleGUI的开发，模拟器的详细的使用方法请参照Documents文件夹下的“模拟器环境配置.pdf”文件。
 >预览效果
->截图
+>![模拟器预览1](https://images.gitee.com/uploads/images/2018/0725/220159_f29eefb9_769424.jpeg "SimpleGUI_3.jpg")
+>![模拟器预览2](https://images.gitee.com/uploads/images/2018/0725/220220_d506c7bd_769424.jpeg "SimpleGUI_2.jpg")
 
 #### 使用说明
 
