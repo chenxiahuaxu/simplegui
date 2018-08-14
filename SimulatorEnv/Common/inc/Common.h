@@ -14,7 +14,7 @@
 
 #define PARAM_DEFAULT_PIXEL_NUM_H                       (128)
 #define PARAM_DEFAULT_PIXEL_NUM_V                       (64)
-#define PARAM_DEFAULT_PIXEL_SIZE					    (4)
+#define PARAM_DEFAULT_PIXEL_SIZE					    (3)
 #define PARAM_DEFAULT_EDGE_WIDTH                        (5)
 #define PARAM_DEFAULT_GRID_ENABLE                       (true)
 #define PARAM_DEFAULT_GRID_DISABLE                      (false)

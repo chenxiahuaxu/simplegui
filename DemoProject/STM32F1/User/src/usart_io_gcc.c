@@ -57,9 +57,9 @@ int _read(int fd, char *ptr, int len)
         return -1;
     }
 
-    get_buffered_line();
+    //get_buffered_line();
     my_len = 0;
-
+/*
     while ((buf_len > 0) && (len > 0))
     {
         *ptr++ = *(buf +start_ndx);
@@ -67,7 +67,7 @@ int _read(int fd, char *ptr, int len)
         my_len++;
         len--;
     }
-
+*/
     return my_len; /* return the length we got */
 }
 

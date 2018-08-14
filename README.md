@@ -16,6 +16,7 @@ SimpleGUI是一款针对单色显示屏设计的GUI接口库。
 #### 部署模拟器
 SimpleGUI提供了一个单色显示屏的模拟器以方便开发者进行基于SimpleGUI的开发，模拟器的详细的使用方法请参照Documents文件夹下的“模拟器环境配置.pdf”文件。
 >预览效果
+>
 >![模拟器预览1](https://images.gitee.com/uploads/images/2018/0725/220159_f29eefb9_769424.jpeg "SimpleGUI_3.jpg")
 >![模拟器预览2](https://images.gitee.com/uploads/images/2018/0725/220220_d506c7bd_769424.jpeg "SimpleGUI_2.jpg")
 

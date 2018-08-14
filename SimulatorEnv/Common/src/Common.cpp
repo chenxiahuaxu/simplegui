@@ -12,7 +12,7 @@ void SetDefaultParameterData(PixelPanelParameter* pstParameter)
 		pstParameter->VerticalPixelNumber = PARAM_DEFAULT_PIXEL_NUM_V;
 		pstParameter->PixelSize = PARAM_DEFAULT_PIXEL_SIZE;
 		pstParameter->EdgeWidth = PARAM_DEFAULT_EDGE_WIDTH;
-		pstParameter->EnableGrid = PARAM_DEFAULT_GRID_ENABLE;
+		pstParameter->EnableGrid = PARAM_DEFAULT_GRID_DISABLE;
 
 		// ScreenColor
 		pstParameter->PanelColor.RGBA = LCD_COLOR_OBJ_BKG;
