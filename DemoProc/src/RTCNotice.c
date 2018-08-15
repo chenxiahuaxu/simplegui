@@ -73,7 +73,7 @@ HMI_ENGINE_RESULT HMI_DemoRTCNotice_RefreshScreen(const void* pstParameters)
 	sprintf(s_szRTCNoticeText, DEMO_RTC_NOTICE_TEXT_FMT,
 				stRTCTime.Year, stRTCTime.Month, stRTCTime.Day,
 				stRTCTime.Hour, stRTCTime.Minute, stRTCTime.Second);
-	SGUI_Notice_RefreshNotice(s_szRTCNoticeText, 0, SGUI_ICON_INFORMATION);
+	SGUI_Notice_Refresh(s_szRTCNoticeText, 0, SGUI_ICON_INFORMATION);
 	return HMI_RET_NORMAL;
 }
 
@@ -122,7 +122,7 @@ HMI_ENGINE_RESULT HMI_DemoRTCNotice_ProcessEvent(HMI_EVENT_TYPE eEventType, cons
 					sprintf(s_szRTCNoticeText, DEMO_RTC_NOTICE_TEXT_FMT,
 					pstRTCTime->Year, pstRTCTime->Month, pstRTCTime->Day,
 					pstRTCTime->Hour, pstRTCTime->Minute, pstRTCTime->Second);
-					SGUI_Notice_RefreshNotice(s_szRTCNoticeText, 0, SGUI_ICON_INFORMATION);
+					SGUI_Notice_Refresh(s_szRTCNoticeText, 0, SGUI_ICON_INFORMATION);
 					eProcessResult = HMI_RET_NOACTION;
 				}
 			}

@@ -24,7 +24,7 @@
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_RefreshProcessBar(SGUI_PROCBAR_STRUCT *pstProcessBarData)
+void SGUI_ProcessBar_Refresh(SGUI_PROCBAR_STRUCT *pstProcessBarData)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/

@@ -68,13 +68,13 @@ HMI_ENGINE_RESULT HMI_DemoTextNotice_Prepare(const void* pstParameters)
 		SGUI_Common_StringLengthCopy(s_szDemoNoticeText, (SGUI_PSZSTR)pstParameters, NOTICE_TEXT_BUFFER_SIZE);
 		s_szDemoNoticeText[NOTICE_TEXT_BUFFER_SIZE] = '\0';
 	}
-	SGUI_Notice_RefreshNotice(s_szDemoNoticeText, 0, SGUI_ICON_INFORMATION);
+	SGUI_Notice_Refresh(s_szDemoNoticeText, 0, SGUI_ICON_INFORMATION);
 	return HMI_RET_NORMAL;
 }
 
 HMI_ENGINE_RESULT HMI_DemoTextNotice_RefreshScreen(const void* pstParameters)
 {
-	SGUI_Notice_RefreshNotice(s_szDemoNoticeText, 0, SGUI_ICON_INFORMATION);
+	SGUI_Notice_Refresh(s_szDemoNoticeText, 0, SGUI_ICON_INFORMATION);
 	return HMI_RET_NORMAL;
 }
 

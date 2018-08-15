@@ -111,7 +111,7 @@ const uint8_t* g_arrNoticeIcon[] = {
 /** Return:			Remaining text height display.						**/
 /** Notice:			None.												**/
 /*************************************************************************/
-SGUI_SIZE SGUI_Notice_RefreshNotice(SGUI_PCSZSTR szNoticeText, SGUI_INT uiTextOffset, SGUI_NOTICE_ICON eIcon)
+SGUI_SIZE SGUI_Notice_Refresh(SGUI_PCSZSTR szNoticeText, SGUI_INT uiTextOffset, SGUI_NOTICE_ICON eIcon)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/

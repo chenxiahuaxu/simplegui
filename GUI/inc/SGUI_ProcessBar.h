@@ -41,6 +41,6 @@ typedef struct
 //=======================================================================//
 //= Public function declaration.									    =//
 //=======================================================================//
-void SGUI_RefreshProcessBar(SGUI_PROCBAR_STRUCT *pProcessBarData);
+void SGUI_ProcessBar_Refresh(SGUI_PROCBAR_STRUCT *pProcessBarData);
 
 #endif // __INCLUDE_GUI_PROCESSBAR_H__

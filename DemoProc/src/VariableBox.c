@@ -90,7 +90,7 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_Prepare(const void* pstParameters)
 	s_szFrameTitle = s_szDefaultFrameTitle;
 	HMI_DemoVariableBox_DrawFrame((SGUI_PSZSTR)s_szFrameTitle);
 	// Show notice
-	SGUI_Notice_RefreshNotice(s_szHelpNoticeText, 0, SGUI_ICON_INFORMATION);
+	SGUI_Notice_Refresh(s_szHelpNoticeText, 0, SGUI_ICON_INFORMATION);
 	return HMI_RET_NORMAL;
 }
 

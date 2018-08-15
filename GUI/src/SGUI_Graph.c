@@ -116,8 +116,8 @@ void SGUI_Graph_Refresh(SGUI_GRAPH* pstGraph)
 	/*----------------------------------*/
 	SGUI_Frame_DrawFullScreenFrame(&stFrameData);
 	//SGUI_Basic_DrawRectangle(0, 0, LCD_SIZE_WIDTH, LCD_SIZE_HEIGHT, GUI_COLOR_BKGCLR, GUI_COLOR_BKGCLR);
-	SGUI_ScrollBar_RefreshScrollBar(&(pstGraph->SubElement.xScrollBar));
-	SGUI_ScrollBar_RefreshScrollBar(&(pstGraph->SubElement.yScrollBar));
+	SGUI_ScrollBar_Refresh(&(pstGraph->SubElement.xScrollBar));
+	SGUI_ScrollBar_Refresh(&(pstGraph->SubElement.yScrollBar));
 
 	if(pstGraph->Data->Count > 1)
 	{
