@@ -20,12 +20,9 @@ SimpleGUI提供了一个单色显示屏的模拟器以方便开发者进行基�
 >![模拟器预览1](https://images.gitee.com/uploads/images/2018/0725/220159_f29eefb9_769424.jpeg "SimpleGUI_3.jpg")
 >![模拟器预览2](https://images.gitee.com/uploads/images/2018/0725/220220_d506c7bd_769424.jpeg "SimpleGUI_2.jpg")
 
-#### 使用说明
+#### 移植
 
-那个……移植手顺还没有写好，大伙儿可以先看看例程，我会尽快写好文档传上来的。
-1. xxxx
-2. xxxx
-3. xxxx
+SimpleGUI的移植方法，可以参照Documents文件夹下的“移植范例.pdf”文件，里面详细阐述了SimpleGUI在MDK5环境下移植到STM32F1平台下的方法和移植要点，其他平台也可参照。
 
 #### 关于SimpleGUI
 SimpleGUI发布已经有很长时间了，在发布后很多人都来询问一些技术细节以及提出一些宝贵的意见与建议，但是很多建议和SimpleGUI的设计初衷相悖，所以我并没有采纳，关于这一点，还请大家谅解。所以在这里，详细阐述一下SimpleGUI的设计理念和主导思想。
