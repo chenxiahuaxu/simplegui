@@ -570,6 +570,7 @@ bool wxPixelatedPanel::CopyScreenImageToClipBoard(void)
         {
             pclsDCBuffer->Blit(0, 0, uiPictureWidth, uiPictureHeight, &m_clsCDC, 0, 0);
             wxTheClipboard->SetData(new wxBitmapDataObject(*pclsDCBufferBitmap));
+            wxTheClipboard->Flush();
             wxTheClipboard->Close();
         }
         else

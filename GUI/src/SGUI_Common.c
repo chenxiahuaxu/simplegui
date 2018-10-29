@@ -24,6 +24,7 @@
 #include <time.h>
 #else
 	// Include platform RTC interface declare here.
+#include "RTC.h"
 #endif
 
 // Dynamic memory operation switch.
@@ -33,7 +34,6 @@
 #else
 	// Include MMU interface header file here.
 #include <string.h>
-#include "RTC.h"
 #endif
 
 //=======================================================================//

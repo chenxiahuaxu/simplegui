@@ -11,11 +11,11 @@
 //=======================================================================//
 typedef enum
 {
-	SGUI_ICON_NONE =			0,
-	SGUI_ICON_ERROR,
+	SGUI_ICON_ERROR =			0,
 	SGUI_ICON_INFORMATION,
 	SGUI_ICON_QUESTION,
 	SGUI_ICON_WARNING,
+	SGUI_ICON_NONE,
 }SGUI_NOTICE_ICON;
 
 //=======================================================================//

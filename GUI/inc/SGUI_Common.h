@@ -14,6 +14,7 @@
 //=======================================================================//
 //= User Macro definition.											    =//
 //=======================================================================//
+#define		NOTICE_ICON_SIZE				(16)
 #define		SGUI_NUMBER_STR_LENGTH_MAX		(12)
 #define		SGUI_ISDIGIT(C)					(((C>='0')&&(C<='9'))?true:false)
 #define		SGUI_ISALPHA(C)					((((C>='A')&&(C<='Z'))||((C>='a')&&(C<='z')))?true:false)
@@ -23,21 +24,21 @@
 #define		SGUI_SWAP(A, B)					{A=A^B; B=A^B; A=A^B;}
 
 #if   defined ( __CC_ARM )
-	#define __ASM			__asm						// asm keyword for ARM Compiler.
-	#define __INLINE		__inline					// inline keyword for ARM Compiler.
-	#pragma	diag_suppress	870							// Disabled "multibyte character sequence" warning.
+	#define SGUI_ASM			__asm						// asm keyword for ARM Compiler(Keil MDK).
+	#define SGUI_INLINE			__inline					// inline keyword for ARM Compiler.
+	#pragma	diag_suppress		870							// Disabled "multibyte character sequence" warning.
 
 #elif defined ( __ICCARM__ )
-  #define __ASM           __asm							// < asm keyword for IAR Compiler.
-  #define __INLINE        inline						// inline keyword for IAR Compiler. Only available in High optimization mode!
+  #define SGUI_ASM				__asm						// < asm keyword for IAR Compiler.
+  #define SGUI_INLINE			inline						// inline keyword for IAR Compiler. Only available in High optimization mode!
 
 #elif defined ( __GNUC__ )
-  #define __ASM            __asm						// asm keyword for GNU Compiler.
-  #define __INLINE         inline 						// inline keyword for GNU Compiler.
+  #define SGUI_ASM				__asm						// asm keyword for GNU Compiler.
+  #define SGUI_INLINE			inline 						// inline keyword for GNU Compiler.
 
 #elif defined ( __TASKING__ )
-  #define __ASM            __asm 						// asm keyword for TASKING Compiler.
-  #define __INLINE         inline						// inline keyword for TASKING Compiler.
+  #define SGUI_ASM				__asm 						// asm keyword for TASKING Compiler.
+  #define SGUI_INLINE			inline						// inline keyword for TASKING Compiler.
 #endif
 
 //=======================================================================//
@@ -49,6 +50,22 @@ extern SGUI_CBYTE		SGUI_FONT_H12[];
 extern SGUI_CBYTE		SGUI_FONT_H16[];
 extern SGUI_CBYTE		SGUI_FONT_H32[];
 //#endif
+
+// Declare data source flag here.
+typedef enum
+{
+	SGUI_FONT_SRC_NONE	= 0,
+	SGUI_FONT_SRC_H6,
+	SGUI_FONT_SRC_H8,
+	SGUI_FONT_SRC_H12,
+	SGUI_FONT_SRC_H16,
+	//SGUI_FONT_SRC_H24,
+	SGUI_FONT_SRC_H32,
+
+	SGUI_NOTICE_ICON_16PIX,
+	SGUI_NOTICE_ICON_24PIX,
+	SGUI_FONT_SRC_UNKNOWN,
+}SGUI_FLASH_DATA_SOURCE;
 
 //=======================================================================//
 //= Public function declaration.									    =//
@@ -82,5 +99,8 @@ void                    SGUI_Common_GetNowTime(SGUI_TIME* pstTime);
 void                    SGUI_Common_RefreshScreen(void);
 void                    SGUI_Common_ReadFlashROM(SGUI_ROM_ADDRESS uiAddressHead, SGUI_SIZE uiDataLength, SGUI_BYTE* pBuffer);
 void                    SGUI_Common_Delay(SGUI_UINT32 uiTimeMs);
+
+
+SGUI_SIZE SGUI_FlashData_GetFilash(SGUI_FLASH_DATA_SOURCE eDataSource, SGUI_ROM_ADDRESS adStartAddr, SGUI_SIZE sReadSize, SGUI_BYTE* pOutputBuffer);
 
 #endif // __INCLUDE_GUI_COMMON_H__

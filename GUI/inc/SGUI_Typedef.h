@@ -37,10 +37,10 @@ typedef	SGUI_UINT32					SGUI_ROM_ADDRESS;
 
 typedef struct _st_rectangle_
 {
-	SGUI_INT		PosX;
-	SGUI_INT		PosY;
-	SGUI_INT		Width;
-	SGUI_INT		Height;
+	SGUI_INT			PosX;
+	SGUI_INT			PosY;
+	SGUI_INT			Width;
+	SGUI_INT			Height;
 }SGUI_RECT_AREA;
 
 typedef struct

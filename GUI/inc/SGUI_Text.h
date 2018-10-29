@@ -32,6 +32,7 @@ typedef struct
 	const SGUI_UINT16	Size;
 	const SGUI_UINT16	Width;
 	const SGUI_UINT16	Height;
+	const SGUI_UINT16	HalfCharDataSize;
 }SGUI_FONT_SIZE_STRUCT;
 
 typedef enum

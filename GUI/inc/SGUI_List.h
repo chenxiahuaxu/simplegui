@@ -86,6 +86,7 @@ void			SGUI_List_SelectDownItem(SGUI_List_STRUCT* pstList);
 void			SGUI_List_SetListItemValue(SGUI_List_STRUCT* pstList, SGUI_INDEX iItemIndex, SGUI_INT32 iSetValid, SGUI_INT32 iSetDecimal);
 void			SGUI_List_GetListItemValue(SGUI_List_STRUCT* pstList, SGUI_INDEX iItemIndex, SGUI_INT32 *piValid, SGUI_INT32 *piDecimal);
 SGUI_List_ITEM*	SGUI_List_GetListItemPtr(SGUI_List_STRUCT* pstList, SGUI_INDEX iItemIndex);
+void			SGUI_List_BindData(SGUI_List_STRUCT* pstList, SGUI_INDEX iItemIndex, SGUI_INT32* piValid, SGUI_INT32* piDecimal);
 #if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0)
 SGUI_BOOL		SGUI_List_InsertItem(SGUI_List_STRUCT* pstList, SGUI_List_ITEM* pstNewItem, SGUI_INDEX iNewItemIndex);
 SGUI_BOOL		SGUI_List_RemoveItem(SGUI_List_STRUCT* pstList, SGUI_INDEX iItemIndex);
