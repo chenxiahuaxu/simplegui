@@ -6,6 +6,9 @@
 SimpleGUI是一款针对单色显示屏设计的GUI接口库。
 >![SimpleGUI在SSD1306主控制器的OLED显示屏上的显示效果](https://images.gitee.com/uploads/images/2018/0725/220230_cfc1d5f8_769424.jpeg "SimpleGUI_1.jpg")
 
+关于SimpleGUI的故事，请参见：
+>https://gitee.com/Polarix/simplegui/blob/master/Introduction.md
+
 #### 设计目标
 在尽可能减小资源消耗的前提下，提供以下功能：
 
