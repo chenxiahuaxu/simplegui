@@ -48,7 +48,7 @@ static SGUI_FLASH_DATA_SOURCE SGUI_Text_GetFontResource(SGUI_FONT_SIZE eFontSize
 /** Return:			Next character X coordinate in current line.		**/
 /** Limitation:		None.												**/
 /*************************************************************************/
-void SGUI_Text_DrawSingleLineText(SGUI_PCSZSTR szText, SGUI_FONT_SIZE eFontSize, SGUI_RECT_AREA* pstDisplayArea, SGUI_RECT_AREA* pstTextDataArea, SGUI_DRAW_MODE eFontMode)
+void SGUI_Text_DrawSingleLineText(SGUI_IF_OBJ* pstIFObj, SGUI_PCSZSTR szText, SGUI_FONT_SIZE eFontSize, SGUI_RECT_AREA* pstDisplayArea, SGUI_RECT_AREA* pstTextDataArea, SGUI_DRAW_MODE eFontMode)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -94,7 +94,7 @@ void SGUI_Text_DrawSingleLineText(SGUI_PCSZSTR szText, SGUI_FONT_SIZE eFontSize,
 			RECTANGLE_Y_START(*pstDisplayArea) = 0;
 		}
 		// Clear text area.
-        SGUI_Basic_DrawRectangle(RECTANGLE_X_START(*pstDisplayArea), RECTANGLE_Y_START(*pstDisplayArea),
+        SGUI_Basic_DrawRectangle(pstIFObj, RECTANGLE_X_START(*pstDisplayArea), RECTANGLE_Y_START(*pstDisplayArea),
 						RECTANGLE_WIDTH(*pstDisplayArea), RECTANGLE_HEIGHT(*pstDisplayArea),
 						eBackColor, eBackColor);
 		// Initialize drawing area data.
@@ -138,7 +138,7 @@ void SGUI_Text_DrawSingleLineText(SGUI_PCSZSTR szText, SGUI_FONT_SIZE eFontSize,
 			{
 				iFontDataIndex = SGUI_Text_GetCharacterTableIndex(uiCharacterCode);
 				adFontDataAddr = iFontDataIndex * uiCharacterDataSize;
-				SGUI_Basic_DrawBitMap(pstDisplayArea, &stCharacterDataArea, eFontResource, adFontDataAddr, eFontMode);
+				SGUI_Basic_DrawBitMap(pstIFObj, pstDisplayArea, &stCharacterDataArea, eFontResource, adFontDataAddr, eFontMode);
 			}
 			RECTANGLE_X_START(stCharacterDataArea) += uiCharacterWidth;
 		}
@@ -157,7 +157,7 @@ void SGUI_Text_DrawSingleLineText(SGUI_PCSZSTR szText, SGUI_FONT_SIZE eFontSize,
 /** Return:			Next character X coordinate in current line.			**/
 /** Notice:			None.													**/
 /*****************************************************************************/
-SGUI_SIZE SGUI_Text_DrawMultipleLinesText(SGUI_PCSZSTR szText, SGUI_FONT_SIZE eFontSize, SGUI_RECT_AREA* pstDisplayArea, SGUI_INT iTopOffset, SGUI_DRAW_MODE eFontMode)
+SGUI_SIZE SGUI_Text_DrawMultipleLinesText(SGUI_IF_OBJ* pstIFObj, SGUI_PCSZSTR szText, SGUI_FONT_SIZE eFontSize, SGUI_RECT_AREA* pstDisplayArea, SGUI_INT iTopOffset, SGUI_DRAW_MODE eFontMode)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -205,7 +205,8 @@ SGUI_SIZE SGUI_Text_DrawMultipleLinesText(SGUI_PCSZSTR szText, SGUI_FONT_SIZE eF
 			RECTANGLE_Y_START(*pstDisplayArea) = 0;
 		}
 		// Clear text area.
-        SGUI_Basic_DrawRectangle(RECTANGLE_X_START(*pstDisplayArea), RECTANGLE_Y_START(*pstDisplayArea),
+        SGUI_Basic_DrawRectangle(pstIFObj,
+						RECTANGLE_X_START(*pstDisplayArea), RECTANGLE_Y_START(*pstDisplayArea),
 						RECTANGLE_WIDTH(*pstDisplayArea), RECTANGLE_HEIGHT(*pstDisplayArea),
 						eBackColor, eBackColor);
 		// Initialize drawing area data.
@@ -276,7 +277,7 @@ SGUI_SIZE SGUI_Text_DrawMultipleLinesText(SGUI_PCSZSTR szText, SGUI_FONT_SIZE eF
                     // Draw character.
                     iFontDataIndex = SGUI_Text_GetCharacterTableIndex(uiCharacterCode);
 					adFontDataAddr = iFontDataIndex * uiCharacterDataSize;
-					SGUI_Basic_DrawBitMap(pstDisplayArea, &stCharacterDataArea, eFontResource, adFontDataAddr, eFontMode);
+					SGUI_Basic_DrawBitMap(pstIFObj, pstDisplayArea, &stCharacterDataArea, eFontResource, adFontDataAddr, eFontMode);
 
                 }
                 else

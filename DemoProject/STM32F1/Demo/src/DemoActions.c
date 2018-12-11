@@ -71,7 +71,7 @@ void DemoAction_TimerEvent(void)
 	iDemoGraphDataIndex = iDemoGraphDataIndex % 72;
 	// Post timer event.
 	EventProcess(HMI_ENGINE_EVENT_ACTION, &stEvent);
-	SGUI_Basic_RefreshDisplay();
+	// SGUI_Basic_RefreshDisplay();
 }
 
 void DemoAction_UsartReceiveEvent(uint8_t cbReceiveByte)
@@ -95,7 +95,7 @@ void DemoAction_UsartReceiveEvent(uint8_t cbReceiveByte)
 	/*----------------------------------*/
 	// Call demo process.
 	EventProcess(HMI_ENGINE_EVENT_ACTION, &stEvent);
-	SGUI_Basic_RefreshDisplay();
+	// SGUI_Basic_RefreshDisplay();
 }
 
 void DemoAction_RTCUpdateEventProcess(void)
@@ -123,6 +123,6 @@ void DemoAction_RTCUpdateEventProcess(void)
 	/*----------------------------------*/
 	// Post RTC update message to a screen.
 	EventProcess(HMI_ENGINE_EVENT_DATA, &stEvent);
-	SGUI_Basic_RefreshDisplay();
+	// SGUI_Basic_RefreshDisplay();
 }
 

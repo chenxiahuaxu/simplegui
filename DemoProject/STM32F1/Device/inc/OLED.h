@@ -19,8 +19,8 @@ typedef enum
 #define CLR_PAGE_BIT(PAGE, Bit)		((PAGE) = (PAGE) & (~(0x01 << (Bit))))
 #define GET_PAGE_BIT(PAGE, Bit)		((((PAGE) & (0x01 << (Bit)))>0)?1:0)
 
-void        OLED_SetPixel(uint16_t uiPosX, uint16_t uiPosY, OLED_COLOR eColor);
-uint16_t    OLED_GetPixel(uint16_t uiPosX, uint16_t uiPosY);
+void		OLED_SetPixel(int iPosX, int iPosY, int iColor);
+int			OLED_GetPixel(int iPosX, int iPosY);
 void        OLED_Initialize(void);
 void        OLED_ClearDisplay(void);
 void        OLED_RefreshScreen(void);

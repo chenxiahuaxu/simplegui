@@ -31,11 +31,11 @@
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
-static HMI_ENGINE_RESULT    HMI_DemoScrollingText_Initialize(void);
-static HMI_ENGINE_RESULT    HMI_DemoScrollingText_Prepare(const void* pstParameters);
-static HMI_ENGINE_RESULT    HMI_DemoScrollingText_RefreshScreen(const void* pstParameters);
-static HMI_ENGINE_RESULT    HMI_DemoScrollingText_ProcessEvent(HMI_EVENT_TYPE eEvent, const HMI_EVENT* pstEvent);
-static HMI_ENGINE_RESULT    HMI_DemoScrollingText_PostProcess(SGUI_INT iActionResult);
+static HMI_ENGINE_RESULT    HMI_DemoScrollingText_Initialize(SGUI_IF_OBJ* Interface);
+static HMI_ENGINE_RESULT    HMI_DemoScrollingText_Prepare(SGUI_IF_OBJ* Interface, const void* pstParameters);
+static HMI_ENGINE_RESULT    HMI_DemoScrollingText_RefreshScreen(SGUI_IF_OBJ* Interface, const void* pstParameters);
+static HMI_ENGINE_RESULT    HMI_DemoScrollingText_ProcessEvent(SGUI_IF_OBJ* Interface, HMI_EVENT_TYPE eEvent, const HMI_EVENT* pstEvent);
+static HMI_ENGINE_RESULT    HMI_DemoScrollingText_PostProcess(SGUI_IF_OBJ* Interface, SGUI_INT iActionResult);
 
 //=======================================================================//
 //= Static variable declaration.									    =//
@@ -76,7 +76,7 @@ HMI_SCREEN_OBJECT       g_stHMIDemo_ScrollingText =		{
 /** Return:			Initialize process result.								**/
 /** Limitation:		None.													**/
 /*****************************************************************************/
-HMI_ENGINE_RESULT HMI_DemoScrollingText_Initialize(void)
+HMI_ENGINE_RESULT HMI_DemoScrollingText_Initialize(SGUI_IF_OBJ* Interface)
 {
 	s_iTextOffset = HMI_TEXT_DEMO_FRAME_TEXT_HEIGHT;
 	s_iTextHeight = SGUI_Text_GetMultiLineTextLines(s_szDemoText, (HMI_TEXT_DEMO_FRAME_TEXT_WIDTH/g_stFontSize[SGUI_FONT_SIZE_H12].Width))*g_stFontSize[SGUI_FONT_SIZE_H12].Height;
@@ -95,9 +95,9 @@ HMI_ENGINE_RESULT HMI_DemoScrollingText_Initialize(void)
 /** Return:			Preprocess result.										**/
 /** Limitation:		None.													**/
 /*****************************************************************************/
-HMI_ENGINE_RESULT HMI_DemoScrollingText_Prepare(const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoScrollingText_Prepare(SGUI_IF_OBJ* pstIFObj, const void* pstParameters)
 {
-	SGUI_Frame_DrawFullScreenFrame(&s_stTextFrame);
+	SGUI_Frame_DrawFullScreenFrame(pstIFObj, &s_stTextFrame);
 	return HMI_RET_NORMAL;
 }
 
@@ -109,10 +109,10 @@ HMI_ENGINE_RESULT HMI_DemoScrollingText_Prepare(const void* pstParameters)
 /** Return:			Refresh process result.									**/
 /** Limitation:		None.													**/
 /*****************************************************************************/
-HMI_ENGINE_RESULT HMI_DemoScrollingText_RefreshScreen(const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoScrollingText_RefreshScreen(SGUI_IF_OBJ* pstIFObj, const void* pstParameters)
 {
-	SGUI_Frame_DrawFullScreenFrame(&s_stTextFrame);
-	SGUI_Text_DrawMultipleLinesText(s_szDemoText, SGUI_FONT_SIZE_H12, &s_stTextDisplayArea, s_iTextOffset, SGUI_DRAW_NORMAL);
+	SGUI_Frame_DrawFullScreenFrame(pstIFObj, &s_stTextFrame);
+	SGUI_Text_DrawMultipleLinesText(pstIFObj, s_szDemoText, SGUI_FONT_SIZE_H12, &s_stTextDisplayArea, s_iTextOffset, SGUI_DRAW_NORMAL);
 	return HMI_RET_NORMAL;
 }
 
@@ -127,7 +127,7 @@ HMI_ENGINE_RESULT HMI_DemoScrollingText_RefreshScreen(const void* pstParameters)
 /** Limitation:		Parameter pointer is a void type, convert to the 		**/
 /**					appropriate type before use.							**/
 /*****************************************************************************/
-HMI_ENGINE_RESULT HMI_DemoScrollingText_ProcessEvent(HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent)
+HMI_ENGINE_RESULT HMI_DemoScrollingText_ProcessEvent(SGUI_IF_OBJ* pstIFObj, HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -165,7 +165,7 @@ HMI_ENGINE_RESULT HMI_DemoScrollingText_ProcessEvent(HMI_EVENT_TYPE eEventType, 
 				case HMI_ENGINE_ACTION_ON_TIMER:
 				{
                     //SGUI_Frame_DrawFullScreenFrame(&s_stTextFrame);
-                    SGUI_Text_DrawMultipleLinesText(s_szDemoText, SGUI_FONT_SIZE_H12, &s_stTextDisplayArea, s_iTextOffset, SGUI_DRAW_NORMAL);
+                    SGUI_Text_DrawMultipleLinesText(pstIFObj, s_szDemoText, SGUI_FONT_SIZE_H12, &s_stTextDisplayArea, s_iTextOffset, SGUI_DRAW_NORMAL);
                     if(s_iTextOffset + s_iTextHeight == 0)
                     {
                         s_iTextOffset = HMI_TEXT_DEMO_FRAME_TEXT_HEIGHT;
@@ -197,7 +197,7 @@ HMI_ENGINE_RESULT HMI_DemoScrollingText_ProcessEvent(HMI_EVENT_TYPE eEventType, 
 /** Return:			Post process result.									**/
 /** Limitation:		None.													**/
 /*****************************************************************************/
-HMI_ENGINE_RESULT HMI_DemoScrollingText_PostProcess(SGUI_INT iActionResult)
+HMI_ENGINE_RESULT HMI_DemoScrollingText_PostProcess(SGUI_IF_OBJ* pstIFObj, SGUI_INT iActionResult)
 {
 	if(HMI_RET_FOLLOWUP == iActionResult)
 	{

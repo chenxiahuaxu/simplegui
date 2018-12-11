@@ -22,7 +22,7 @@ static char				arrTextBuffer[VARBOX_TEXT_BUFFER_SIZE] = {0x00};	//Used when conv
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
-void					SGUI_TextVariableBox_UpdateCharacter(SGUI_TEXT_VARBOX_STRUCT* pstTextValue, char cNewCharacters, SGUI_DRAW_MODE eMode);
+static void				SGUI_TextVariableBox_UpdateCharacter(SGUI_IF_OBJ* pstIFObj, SGUI_TEXT_VARBOX_STRUCT* pstTextValue, char cNewCharacters, SGUI_DRAW_MODE eMode);
 
 //=======================================================================//
 //= Function define.										            =//
@@ -38,7 +38,7 @@ void					SGUI_TextVariableBox_UpdateCharacter(SGUI_TEXT_VARBOX_STRUCT* pstTextVa
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_IntegerVariableBox_Refresh(SGUI_INT_VARBOX_STRUCT* pstValue, SGUI_VARBOX_ALIG eAlignment, SGUI_DRAW_MODE eMode)
+void SGUI_IntegerVariableBox_Refresh(SGUI_IF_OBJ* pstIFObj, SGUI_INT_VARBOX_STRUCT* pstValue, SGUI_VARBOX_ALIG eAlignment, SGUI_DRAW_MODE eMode)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -54,7 +54,7 @@ void SGUI_IntegerVariableBox_Refresh(SGUI_INT_VARBOX_STRUCT* pstValue, SGUI_VARB
 	/*----------------------------------*/
 	eBackColor =				((eMode==SGUI_DRAW_NORMAL)?SGUI_COLOR_BKGCLR:SGUI_COLOR_FRGCLR);
 	// Draw edge
-	SGUI_Basic_DrawRectangle(pstValue->PosX, pstValue->PosY, pstValue->Width, VARBOX_HEIGHT(pstValue->FontSize), eBackColor, eBackColor);
+	SGUI_Basic_DrawRectangle(pstIFObj, pstValue->PosX, pstValue->PosY, pstValue->Width, VARBOX_HEIGHT(pstValue->FontSize), eBackColor, eBackColor);
 
 	/*----------------------------------*/
 	/* Process							*/
@@ -96,7 +96,7 @@ void SGUI_IntegerVariableBox_Refresh(SGUI_INT_VARBOX_STRUCT* pstValue, SGUI_VARB
 			}
 		}
 		stTextDataArea.PosY = 0;
-		SGUI_Text_DrawSingleLineText(arrTextBuffer, pstValue->FontSize, &stTextDisplayArea, &stTextDataArea, eMode);
+		SGUI_Text_DrawSingleLineText(pstIFObj, arrTextBuffer, pstValue->FontSize, &stTextDisplayArea, &stTextDataArea, eMode);
 	}
 }
 
@@ -110,7 +110,7 @@ void SGUI_IntegerVariableBox_Refresh(SGUI_INT_VARBOX_STRUCT* pstValue, SGUI_VARB
 /** Return:			None.												**/
 /** Notice:			Static function, call by others interface.			**/
 /*************************************************************************/
-void SGUI_TextVariableBox_UpdateCharacter(SGUI_TEXT_VARBOX_STRUCT* pstTextValue, char cNewCharacters, SGUI_DRAW_MODE eMode)
+void SGUI_TextVariableBox_UpdateCharacter(SGUI_IF_OBJ* pstIFObj, SGUI_TEXT_VARBOX_STRUCT* pstTextValue, char cNewCharacters, SGUI_DRAW_MODE eMode)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -129,7 +129,7 @@ void SGUI_TextVariableBox_UpdateCharacter(SGUI_TEXT_VARBOX_STRUCT* pstTextValue,
 	// Clear background.
 	if(NULL != pstTextValue->Value)
 	{
-		SGUI_Basic_DrawRectangle(pstTextValue->PosX, pstTextValue->PosY, pstTextValue->Width, VARBOX_HEIGHT(pstTextValue->FontSize), eBackColor, eBackColor);
+		SGUI_Basic_DrawRectangle(pstIFObj, pstTextValue->PosX, pstTextValue->PosY, pstTextValue->Width, VARBOX_HEIGHT(pstTextValue->FontSize), eBackColor, eBackColor);
 	}
 	// Get font graphics size.
 	uiFontWidth =				g_stFontSize[pstTextValue->FontSize].Width;
@@ -197,9 +197,9 @@ void SGUI_TextVariableBox_UpdateCharacter(SGUI_TEXT_VARBOX_STRUCT* pstTextValue,
 			stFocusArea.PosX = stFocusArea.PosX + stTextDataArea.PosX;
 		}
 		// Display text.
-		SGUI_Text_DrawSingleLineText(pstTextValue->Value, pstTextValue->FontSize, &stTextDisplayArea, &stTextDataArea, eMode);
+		SGUI_Text_DrawSingleLineText(pstIFObj, pstTextValue->Value, pstTextValue->FontSize, &stTextDisplayArea, &stTextDataArea, eMode);
 		// Focus first character.
-        SGUI_Basic_ReverseBlockColor(stFocusArea.PosX, stFocusArea.PosY, stFocusArea.Width, stFocusArea.Height);
+        SGUI_Basic_ReverseBlockColor(pstIFObj, stFocusArea.PosX, stFocusArea.PosY, stFocusArea.Width, stFocusArea.Height);
 	}
 }
 
@@ -212,7 +212,7 @@ void SGUI_TextVariableBox_UpdateCharacter(SGUI_TEXT_VARBOX_STRUCT* pstTextValue,
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_TextVariableBox_Refresh(SGUI_TEXT_VARBOX_STRUCT* pstTextValue, SGUI_DRAW_MODE eMode)
+void SGUI_TextVariableBox_Refresh(SGUI_IF_OBJ* pstIFObj, SGUI_TEXT_VARBOX_STRUCT* pstTextValue, SGUI_DRAW_MODE eMode)
 {
 
 	/*----------------------------------*/
@@ -226,7 +226,7 @@ void SGUI_TextVariableBox_Refresh(SGUI_TEXT_VARBOX_STRUCT* pstTextValue, SGUI_DR
 			{
 				pstTextValue->FocusIndex = pstTextValue->MaxTextLength-1;
 			}
-			SGUI_TextVariableBox_UpdateCharacter(pstTextValue, '\0', eMode);
+			SGUI_TextVariableBox_UpdateCharacter(pstIFObj, pstTextValue, '\0', eMode);
 		}
 	}
 }
@@ -242,7 +242,7 @@ void SGUI_TextVariableBox_Refresh(SGUI_TEXT_VARBOX_STRUCT* pstTextValue, SGUI_DR
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_TextVariableBox_ChangeCharacter(SGUI_TEXT_VARBOX_STRUCT* pstTextValue, SGUI_DRAW_MODE eMode, SGUI_UINT uiCharacterSet, SGUI_TEXT_VARBOX_OPT eOpt)
+void SGUI_TextVariableBox_ChangeCharacter(SGUI_IF_OBJ* pstIFObj, SGUI_TEXT_VARBOX_STRUCT* pstTextValue, SGUI_DRAW_MODE eMode, SGUI_UINT uiCharacterSet, SGUI_TEXT_VARBOX_OPT eOpt)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -296,7 +296,7 @@ void SGUI_TextVariableBox_ChangeCharacter(SGUI_TEXT_VARBOX_STRUCT* pstTextValue,
 					}
 				}
 			}
-			SGUI_TextVariableBox_UpdateCharacter(pstTextValue, cCurChar, eMode);
+			SGUI_TextVariableBox_UpdateCharacter(pstIFObj, pstTextValue, cCurChar, eMode);
 		}
 	}
 }

@@ -42,8 +42,8 @@
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
-static SGUI_INLINE void		SGUI_List_RefreshListItems(SGUI_List_STRUCT* pstList);
-static SGUI_INLINE void		SGUI_List_DrawItem(SGUI_List_STRUCT* pstList, SGUI_SIZE uiIndex);
+static SGUI_INLINE void		SGUI_List_RefreshListItems(SGUI_IF_OBJ* pstIFObj, SGUI_List_STRUCT* pstList);
+static SGUI_INLINE void		SGUI_List_DrawItem(SGUI_IF_OBJ* pstIFObj, SGUI_List_STRUCT* pstList, SGUI_SIZE uiIndex);
 
 //=======================================================================//
 //= Function define.										            =//
@@ -109,11 +109,12 @@ void SGUI_List_InitializeListData(SGUI_List_STRUCT* pstList)
 /** Function Name:	SGUI_List_RefreshListItems							**/
 /** Purpose:		Refresh all visible list item display.				**/
 /** Params:																**/
-/**	@pstList[in]:		Pointer of list data will be refreshed.			**/
+/**	@ pstIFObj[in]:		SimpleGUI object pointer.						**/
+/**	@ pstList[in]:		Pointer of list data will be refreshed.			**/
 /** Return:			None.												**/
 /** Notice:			This only refresh visible items and scrollbar.		**/
 /*************************************************************************/
-void SGUI_List_RefreshListItems(SGUI_List_STRUCT* pstList)
+void SGUI_List_RefreshListItems(SGUI_IF_OBJ* pstIFObj, SGUI_List_STRUCT* pstList)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -152,17 +153,17 @@ void SGUI_List_RefreshListItems(SGUI_List_STRUCT* pstList)
 			pstSubElement->ScrollBar.Parameter.MaxIndex = (pstListData->Count>pstListControl->VisibleIntegralItemsNum)?(pstListData->Count-pstListControl->VisibleIntegralItemsNum-1):0;
 #endif
 			// Clear list item display area.
-			SGUI_Basic_DrawRectangle(LIST_ITEM_RECT_POSX, pstListControl->FirstVisibleItemPosY, LIST_ITEM_RECT_WIDTH, pstListControl->VisibleItemsAreaHeight, SGUI_COLOR_BKGCLR, SGUI_COLOR_BKGCLR);
+			SGUI_Basic_DrawRectangle(pstIFObj, LIST_ITEM_RECT_POSX, pstListControl->FirstVisibleItemPosY, LIST_ITEM_RECT_WIDTH, pstListControl->VisibleItemsAreaHeight, SGUI_COLOR_BKGCLR, SGUI_COLOR_BKGCLR);
 			// Refresh scroll bar
 			pstSubElement->ScrollBar.Data.Index = pstListControl->PageStartIndex;
-			SGUI_ScrollBar_Refresh(&(pstSubElement->ScrollBar));
+			SGUI_ScrollBar_Refresh(pstIFObj, &(pstSubElement->ScrollBar));
 			// Draw all visible items.
 			while((uiCurrentItemIndex < pstListControl->PageStartIndex+pstListControl->VisibleItemsNum) && (uiCurrentItemIndex < pstListData->Count))
 			{
-				SGUI_List_DrawItem(pstList, uiCurrentItemIndex++);
+				SGUI_List_DrawItem(pstIFObj, pstList, uiCurrentItemIndex++);
 			}
 			// High light focused items.
-			SGUI_Basic_ReverseBlockColor(LIST_ITEM_RECT_POSX, pstListControl->FirstVisibleItemPosY+(pstListControl->SelectIndex-pstListControl->PageStartIndex)*pstListControl->ListItemHeight-pstListControl->ItemPosYOffSet,
+			SGUI_Basic_ReverseBlockColor(pstIFObj, LIST_ITEM_RECT_POSX, pstListControl->FirstVisibleItemPosY+(pstListControl->SelectIndex-pstListControl->PageStartIndex)*pstListControl->ListItemHeight-pstListControl->ItemPosYOffSet,
 										LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight);
 		}
 	}
@@ -172,12 +173,13 @@ void SGUI_List_RefreshListItems(SGUI_List_STRUCT* pstList)
 /** Function Name:	SGUI_List_RefreshList								**/
 /** Purpose:		Refresh list display.								**/
 /** Params:																**/
-/**	@pstList[in]:		Pointer of list data will be refreshed.			**/
+/**	@ pstIFObj[in]:		SimpleGUI object pointer.						**/
+/**	@ pstList[in]:		Pointer of list data will be refreshed.			**/
 /** Return:			None.												**/
 /** Notice:			This function will refresh all list display on		**/
 /**					screen, include edge, items, title and scrollbar.	**/
 /*************************************************************************/
-void SGUI_List_Refresh(SGUI_List_STRUCT* pstList)
+void SGUI_List_Refresh(SGUI_IF_OBJ* pstIFObj, SGUI_List_STRUCT* pstList)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -195,9 +197,9 @@ void SGUI_List_Refresh(SGUI_List_STRUCT* pstList)
 		stFrameData.Parameter.EdgeLayers = LIST_EDGE_MULTIPLE;
 		stFrameData.Parameter.FontSize = pstList->FontSize;
 		stFrameData.Data.Title = pstListData->Title;
-		SGUI_Frame_DrawFullScreenFrame(&stFrameData);
+		SGUI_Frame_DrawFullScreenFrame(pstIFObj, &stFrameData);
 		// Draw list items
-		SGUI_List_RefreshListItems(pstList);
+		SGUI_List_RefreshListItems(pstIFObj, pstList);
 	}
 }
 
@@ -205,11 +207,12 @@ void SGUI_List_Refresh(SGUI_List_STRUCT* pstList)
 /** Function Name:	SGUI_List_SelectUpItem								**/
 /** Purpose:		Select previous list item if existed.				**/
 /** Params:																**/
-/**	@pstList[in]:		Pointer of list will be selected.				**/
+/**	@ pstIFObj[in]:		SimpleGUI object pointer.						**/
+/**	@ pstList[in]:		Pointer of list will be selected.				**/
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_List_SelectUpItem(SGUI_List_STRUCT* pstList)
+void SGUI_List_SelectUpItem(SGUI_IF_OBJ* pstIFObj, SGUI_List_STRUCT* pstList)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -232,11 +235,11 @@ void SGUI_List_SelectUpItem(SGUI_List_STRUCT* pstList)
             {
                 // Unfocused current item.
                 uiReverseBlockPosY = pstListControl->FirstVisibleItemPosY+(pstListControl->SelectIndex-pstListControl->PageStartIndex)*pstListControl->ListItemHeight-pstListControl->ItemPosYOffSet;
-                SGUI_Basic_ReverseBlockColor(LIST_ITEM_RECT_POSX, uiReverseBlockPosY, LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight);
+                SGUI_Basic_ReverseBlockColor(pstIFObj, LIST_ITEM_RECT_POSX, uiReverseBlockPosY, LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight);
                 pstListControl->SelectIndex--;
                 // Focused previous item.
                 uiReverseBlockPosY = pstListControl->FirstVisibleItemPosY+(pstListControl->SelectIndex-pstListControl->PageStartIndex)*pstListControl->ListItemHeight-pstListControl->ItemPosYOffSet;
-                SGUI_Basic_ReverseBlockColor(LIST_ITEM_RECT_POSX, uiReverseBlockPosY, LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight);
+                SGUI_Basic_ReverseBlockColor(pstIFObj, LIST_ITEM_RECT_POSX, uiReverseBlockPosY, LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight);
             }
             else
             {
@@ -249,7 +252,7 @@ void SGUI_List_SelectUpItem(SGUI_List_STRUCT* pstList)
                 {
                     pstListControl->PageStartIndex--;
                 }
-                SGUI_List_RefreshListItems(pstList);
+                SGUI_List_RefreshListItems(pstIFObj, pstList);
             }
         }
 	}
@@ -263,7 +266,7 @@ void SGUI_List_SelectUpItem(SGUI_List_STRUCT* pstList)
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_List_SelectDownItem(SGUI_List_STRUCT* pstList)
+void SGUI_List_SelectDownItem(SGUI_IF_OBJ* pstIFObj, SGUI_List_STRUCT* pstList)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -286,11 +289,11 @@ void SGUI_List_SelectDownItem(SGUI_List_STRUCT* pstList)
             {
                 // Unfocused current item.
                 uiReverseBlockPosY = pstListControl->FirstVisibleItemPosY+(pstListControl->SelectIndex-pstListControl->PageStartIndex)*pstListControl->ListItemHeight-pstListControl->ItemPosYOffSet;
-                SGUI_Basic_ReverseBlockColor(LIST_ITEM_RECT_POSX, uiReverseBlockPosY, LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight);
+                SGUI_Basic_ReverseBlockColor(pstIFObj, LIST_ITEM_RECT_POSX, uiReverseBlockPosY, LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight);
                 pstListControl->SelectIndex++;
                 // Focused previous item.
                 uiReverseBlockPosY = pstListControl->FirstVisibleItemPosY+(pstListControl->SelectIndex-pstListControl->PageStartIndex)*pstListControl->ListItemHeight-pstListControl->ItemPosYOffSet;
-                SGUI_Basic_ReverseBlockColor(LIST_ITEM_RECT_POSX, uiReverseBlockPosY, LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight);
+                SGUI_Basic_ReverseBlockColor(pstIFObj, LIST_ITEM_RECT_POSX, uiReverseBlockPosY, LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight);
             }
             else
             {
@@ -303,7 +306,7 @@ void SGUI_List_SelectDownItem(SGUI_List_STRUCT* pstList)
                 {
                     pstListControl->PageStartIndex++;
                 }
-                SGUI_List_RefreshListItems(pstList);
+                SGUI_List_RefreshListItems(pstIFObj, pstList);
             }
         }
 	}
@@ -313,14 +316,15 @@ void SGUI_List_SelectDownItem(SGUI_List_STRUCT* pstList)
 /** Function Name:	SGUI_List_DrawItem									**/
 /** Purpose:		Draw a visible list item.							**/
 /** Params:																**/
-/**	@pstList[in]:		Pointer of list will be selected.				**/
-/**	@uiIndex[in]:		List item index will be draw.					**/
+/**	@ pstIFObj[in]:		SimpleGUI object pointer.						**/
+/**	@ pstList[in]:		Pointer of list will be selected.				**/
+/**	@ uiIndex[in]:		List item index will be draw.					**/
 /** Return:			None.												**/
 /** Notice:			This function only draw visible items, it's			**/
 /**					depending on the first visible item index and count	**/
 /**					of visible items.									**/
 /*************************************************************************/
-void SGUI_List_DrawItem(SGUI_List_STRUCT* pstList, SGUI_SIZE uiIndex)
+void SGUI_List_DrawItem(SGUI_IF_OBJ* pstIFObj, SGUI_List_STRUCT* pstList, SGUI_SIZE uiIndex)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -382,7 +386,8 @@ void SGUI_List_DrawItem(SGUI_List_STRUCT* pstList, SGUI_SIZE uiIndex)
 			}
 
 			// Draw list item text.
-			SGUI_Text_DrawSingleLineText(	pstListItemPointer->Text, pstList->FontSize,
+			SGUI_Text_DrawSingleLineText(	pstIFObj,
+											pstListItemPointer->Text, pstList->FontSize,
 											&stItemTextDisplayArea, &stItemTextDataArea, SGUI_DRAW_NORMAL);
 
 			// Prepare draw parameter text.
@@ -438,7 +443,7 @@ void SGUI_List_DrawItem(SGUI_List_STRUCT* pstList, SGUI_SIZE uiIndex)
 					}
 				}
 				// Draw parameter text.
-				SGUI_Text_DrawSingleLineText(szParameterStringBuffer, pstList->FontSize, &stItemTextDisplayArea, &stItemTextDataArea, SGUI_DRAW_NORMAL);
+				SGUI_Text_DrawSingleLineText(pstIFObj, szParameterStringBuffer, pstList->FontSize, &stItemTextDisplayArea, &stItemTextDataArea, SGUI_DRAW_NORMAL);
 			}
 		}
 	}
@@ -448,14 +453,15 @@ void SGUI_List_DrawItem(SGUI_List_STRUCT* pstList, SGUI_SIZE uiIndex)
 /** Function Name:	SGUI_List_SetListItemValue							**/
 /** Purpose:		Set list parameter value if supported.				**/
 /** Params:																**/
-/**	@pstList[in]:		Pointer of list will be selected.				**/
-/**	@iItemIndex[in]:	Index of list item index will be changed.		**/
-/**	@iSetValid[in]:		Valid value will be set.						**/
-/**	@iSetDecimal[in]:	Decimal value will be set.						**/
+/**	@ pstIFObj[in]:		SimpleGUI object pointer.						**/
+/**	@ pstList[in]:		Pointer of list will be selected.				**/
+/**	@ iItemIndex[in]:	Index of list item index will be changed.		**/
+/**	@ iSetValid[in]:		Valid value will be set.					**/
+/**	@ iSetDecimal[in]:	Decimal value will be set.						**/
 /** Return:			None.												**/
 /** Notice:			The bind value will update if existed.				**/
 /*************************************************************************/
-void SGUI_List_SetListItemValue(SGUI_List_STRUCT* pstList, SGUI_INDEX iItemIndex, int32_t iSetValid, int32_t iSetDecimal)
+void SGUI_List_SetListItemValue(SGUI_IF_OBJ* pstIFObj, SGUI_List_STRUCT* pstList, SGUI_INDEX iItemIndex, int32_t iSetValid, int32_t iSetDecimal)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -518,12 +524,12 @@ void SGUI_List_SetListItemValue(SGUI_List_STRUCT* pstList, SGUI_INDEX iItemIndex
 			*(pstSelectedListItem->Decimal.Bind) = pstSelectedListItem->Decimal.Value;
 		}
 		// Clear list item area.
-		SGUI_Basic_DrawRectangle(LIST_ITEM_RECT_POSX, pstListControl->FirstVisibleItemPosY+(pstListControl->SelectIndex-pstListControl->PageStartIndex)*pstListControl->ListItemHeight-pstListControl->ItemPosYOffSet,
+		SGUI_Basic_DrawRectangle(pstIFObj, LIST_ITEM_RECT_POSX, pstListControl->FirstVisibleItemPosY+(pstListControl->SelectIndex-pstListControl->PageStartIndex)*pstListControl->ListItemHeight-pstListControl->ItemPosYOffSet,
 								LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight, SGUI_COLOR_BKGCLR, SGUI_COLOR_BKGCLR);
 		// refresh list item
-		SGUI_List_DrawItem(pstList, iItemIndex);
+		SGUI_List_DrawItem(pstIFObj, pstList, iItemIndex);
 		// High light selected item.
-		SGUI_Basic_ReverseBlockColor(LIST_ITEM_RECT_POSX, pstListControl->FirstVisibleItemPosY+(pstListControl->SelectIndex-pstListControl->PageStartIndex)*pstListControl->ListItemHeight-pstListControl->ItemPosYOffSet,
+		SGUI_Basic_ReverseBlockColor(pstIFObj, LIST_ITEM_RECT_POSX, pstListControl->FirstVisibleItemPosY+(pstListControl->SelectIndex-pstListControl->PageStartIndex)*pstListControl->ListItemHeight-pstListControl->ItemPosYOffSet,
 		 							LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight);
 	}
 }

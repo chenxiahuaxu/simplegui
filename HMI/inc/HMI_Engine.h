@@ -87,11 +87,11 @@ typedef struct
 // Screen action interface function pointer structure.
 typedef struct
 {
-    HMI_ENGINE_RESULT               (*Initialize)(void); // Initialize screen data and parameter.
-	HMI_ENGINE_RESULT               (*Prepare)(const void* pstParameters); // Do some thing before current screen display.
-	HMI_ENGINE_RESULT               (*Repaint)(const void* pstParameters); // Repaint screen if needed.
-	HMI_ENGINE_RESULT               (*ProcessEvent)(HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent); // Process event.
-	HMI_ENGINE_RESULT               (*PostProcess)(SGUI_INT iActionResult);
+    HMI_ENGINE_RESULT               (*Initialize)(SGUI_IF_OBJ* Interface); // Initialize screen data and parameter.
+	HMI_ENGINE_RESULT               (*Prepare)(SGUI_IF_OBJ* Interface, const void* pstParameters); // Do some thing before current screen display.
+	HMI_ENGINE_RESULT               (*Repaint)(SGUI_IF_OBJ* Interface, const void* pstParameters); // Repaint screen if needed.
+	HMI_ENGINE_RESULT               (*ProcessEvent)(SGUI_IF_OBJ* Interface, HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent); // Process event.
+	HMI_ENGINE_RESULT               (*PostProcess)(SGUI_IF_OBJ* Interface, SGUI_INT iActionResult);
 	//void*                           (*InstanceData)(void); // Get current screen instance data pointer.
 }HMI_SCREEN_ACTION;
 // Screen data structure.
@@ -114,6 +114,7 @@ typedef struct
     HMI_SCREEN_OBJECT*              CurrentScreenObject;
     HMI_HISTORY_STACK               History;
     HMI_ENGINE_STATE                State;
+    SGUI_IF_OBJ*					Interface;
 }HMI_ENGINE_OBJECT;
 
 //=======================================================================//

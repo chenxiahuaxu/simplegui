@@ -11,6 +11,7 @@
 //=======================================================================//
 #include "HMI_Engine.h"
 #include "SGUI_Common.h"
+#include "SGUI_Basic.h"
 
 //=======================================================================//
 //= Static variable declaration.									    =//
@@ -54,7 +55,7 @@ HMI_ENGINE_RESULT HMI_PrepareEngine(HMI_ENGINE_OBJECT* pstHMIEngineObject)
 	if(NULL != pstHMIEngineObject)
     {
         // Clean HMI engine object memory area.
-        SGUI_Common_MemorySet(pstHMIEngineObject, 0x00, sizeof(HMI_ENGINE_OBJECT));
+        // SGUI_Common_MemorySet(pstHMIEngineObject, 0x00, sizeof(HMI_ENGINE_OBJECT));
 
         // Initialize engine object data,
         pstHMIEngineObject->ScreenCount = 0;
@@ -112,7 +113,7 @@ HMI_ENGINE_RESULT HMI_AddScreen(HMI_ENGINE_OBJECT* pstHMIEngineObject, HMI_SCREE
         {
         	if(SGUI_TRUE == bInitializeScreenObject)
 			{
-				pstScreenObject->Actions->Initialize();
+				pstScreenObject->Actions->Initialize(pstHMIEngineObject->Interface);
 			}
             // Add screen object pointer to engine.
             pstHMIEngineObject->Screen[iIndex] = pstScreenObject;
@@ -243,7 +244,8 @@ HMI_ENGINE_RESULT HMI_StartEngine(const void* pstParameters)
                 {
                     if(NULL != pstStartScreen->Actions->Prepare)
                     {
-                        pstStartScreen->Actions->Prepare(pstParameters);
+                        pstStartScreen->Actions->Prepare(g_pstActivedEngineObject->Interface, pstParameters);
+						SGUI_Basic_RefreshDisplay(g_pstActivedEngineObject->Interface);
                     }
                 }
             }
@@ -307,7 +309,8 @@ HMI_ENGINE_RESULT HMI_ProcessEvent(HMI_EVENT_TYPE eEventType, const HMI_EVENT* p
                 {
                     if(NULL != pstCurrentScreen->Actions->ProcessEvent)
                     {
-                         eProcessResult = pstCurrentScreen->Actions->ProcessEvent(eEventType, pstEvent);
+                         eProcessResult = pstCurrentScreen->Actions->ProcessEvent(g_pstActivedEngineObject->Interface, eEventType, pstEvent);
+						SGUI_Basic_RefreshDisplay(g_pstActivedEngineObject->Interface);
                     }
                 }
             }
@@ -356,7 +359,8 @@ HMI_ENGINE_RESULT HMI_PostProcess(SGUI_INT iActionResult)
 			(NULL != g_pstActivedEngineObject->CurrentScreenObject->Actions) &&
 			(NULL != g_pstActivedEngineObject->CurrentScreenObject->Actions->PostProcess))
 		{
-			eProcessResult = g_pstActivedEngineObject->CurrentScreenObject->Actions->PostProcess(iActionResult);
+			eProcessResult = g_pstActivedEngineObject->CurrentScreenObject->Actions->PostProcess(g_pstActivedEngineObject->Interface, iActionResult);
+			SGUI_Basic_RefreshDisplay(g_pstActivedEngineObject->Interface);
 		}
 		else
 		{
@@ -418,7 +422,7 @@ HMI_ENGINE_RESULT HMI_Goto(SGUI_INT iDestScreenID, const void* pstParameters)
                     {
                         if(NULL != pstCurrentScreen->Actions->Prepare)
                         {
-                            eProcessResult = pstCurrentScreen->Actions->Prepare(pstParameters);
+                            eProcessResult = pstCurrentScreen->Actions->Prepare(g_pstActivedEngineObject->Interface, pstParameters);
                         }
                     }
                 }
@@ -485,7 +489,7 @@ HMI_ENGINE_RESULT HMI_GoBack(const void* pstParameters)
                 {
                     if(NULL != pstCurrentScreen->Actions->Prepare)
                     {
-                        eProcessResult = pstCurrentScreen->Actions->Prepare(pstParameters);
+                        eProcessResult = pstCurrentScreen->Actions->Prepare(g_pstActivedEngineObject->Interface, pstParameters);
                     }
                 }
             }

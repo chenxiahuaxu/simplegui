@@ -9,6 +9,7 @@
 //= Include files.													    =//
 //=======================================================================//
 #include "SGUI_Common.h"
+#include "SGUI_FlashData.h"
 
 //======================================================================//
 //= 8 Pix font library.													//
@@ -16607,6 +16608,7 @@ static const uint8_t SGUI_NOTICE_ICON_DATA[] = {
 /** Function Name:	SGUI_FlashData_GetFilash								**/
 /** Purpose:		Read a byte array form ROM(ex. flash).					**/
 /** Params:																	**/
+/**	@ pstIFObj[in]:	SimpleGUI object pointer.							**/
 /**	@ eDataSource[in]:	Data source.										**/
 /**	@ adStartAddr[in]:	Read data array start address in source.			**/
 /**	@ sReadSize[in]:	Number of data want to read.						**/
@@ -16622,7 +16624,7 @@ static const uint8_t SGUI_NOTICE_ICON_DATA[] = {
 /**					This function will be re-write when use in different 	**/
 /**					hardware PF.											**/
 /*****************************************************************************/
-SGUI_SIZE SGUI_FlashData_GetFilash(SGUI_FLASH_DATA_SOURCE eDataSource, SGUI_ROM_ADDRESS adStartAddr, SGUI_SIZE sReadSize, SGUI_BYTE* pOutputBuffer)
+SGUI_SIZE SGUI_FlashData_GetFilash(SGUI_IF_OBJ* pstIFObj, SGUI_FLASH_DATA_SOURCE eDataSource, SGUI_ROM_ADDRESS adStartAddr, SGUI_SIZE sReadSize, SGUI_BYTE* pOutputBuffer)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -16638,6 +16640,7 @@ SGUI_SIZE SGUI_FlashData_GetFilash(SGUI_FLASH_DATA_SOURCE eDataSource, SGUI_ROM_
 	adBaseAddr =				adStartAddr;
 	pOutPutDataPtr =			pOutputBuffer;
 	sReadBytes =				0;
+	pDataSource =				NULL;
 
 	/*----------------------------------*/
 	/* Process							*/

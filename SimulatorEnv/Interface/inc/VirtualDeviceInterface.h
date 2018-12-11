@@ -57,8 +57,8 @@
 extern "C"
 {
 #endif /* __cplusplus */
-void        VDIF_SetPixel(uint32_t uiPosX, uint32_t uiPosY, uint32_t uiPixelValue);
-uint32_t    VDIF_GetPixel(uint32_t uiPosX, uint32_t uiPosY);
+void		VDIF_SetPixel(int uiPosX, int uiPosY, int uiPixelValue);
+int			VDIF_GetPixel(int uiPosX, int uiPosY);
 void        VDIF_RefreshDisplay(void);
 void        VDIF_ClearDisplay(void);
 

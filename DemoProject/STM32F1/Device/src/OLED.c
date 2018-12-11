@@ -97,26 +97,26 @@ void OLED_ClearDisplayBuffer(void)
 /** Resources:		None.												**/
 /** Params:																**/
 /**	@ ui_PosX:			X location of point by pixels.					**/
-/**	@ ui_PosY:			Y location of point by pixels.					**/
-/**	@ ui_Color:			Point color, 0 is white, Nonzero is Black.		**/
+/**	@ iPosY:			Y location of point by pixels.					**/
+/**	@ iColor:			Point color, 0 is white, Nonzero is Black.		**/
 /** Return:			None.												**/
 /** Limitation:		None.												**/
 /*************************************************************************/
-void OLED_SetPixel(uint16_t uiPosX, uint16_t uiPosY, OLED_COLOR eColor)
+void OLED_SetPixel(int iPosX, int iPosY, int iColor)
 {
 	// Operating position check.
-	if((uiPosX < LCD_SIZE_WIDTH) && (uiPosY < LCD_SIZE_HEIGHT))
+	if((iPosX < LCD_SIZE_WIDTH) && (iPosY < LCD_SIZE_HEIGHT))
 	{
 		// Check and set page and column index.
-		OLED_UpdateChangedBufferAreaRecord(uiPosX, uiPosX);
+		OLED_UpdateChangedBufferAreaRecord(iPosX, iPosX);
 		// Set point data.
-		if(OLED_COLOR_FRG == eColor)
+		if(OLED_COLOR_FRG == iColor)
 		{
-			SET_PAGE_BIT(s_stLCDBuffer.auiDisplayCache[uiPosY/8][uiPosX], uiPosY%8);
+			SET_PAGE_BIT(s_stLCDBuffer.auiDisplayCache[iPosY/8][iPosX], iPosY%8);
 		}
 		else
 		{
-			CLR_PAGE_BIT(s_stLCDBuffer.auiDisplayCache[uiPosY/8][uiPosX], uiPosY%8);
+			CLR_PAGE_BIT(s_stLCDBuffer.auiDisplayCache[iPosY/8][iPosX], iPosY%8);
 		}
 	}
 }
@@ -131,12 +131,12 @@ void OLED_SetPixel(uint16_t uiPosX, uint16_t uiPosY, OLED_COLOR eColor)
 /** Return:			None.												**/
 /** Limitation:		None.												**/
 /*************************************************************************/
-uint16_t OLED_GetPixel(uint16_t uiPosX, uint16_t uiPosY)
+int OLED_GetPixel(int iPosX, int iPosY)
 {
 	// Operating position check.
-	if((uiPosX < LCD_SIZE_WIDTH) && (uiPosY < LCD_SIZE_HEIGHT))
+	if((iPosX < LCD_SIZE_WIDTH) && (iPosY < LCD_SIZE_HEIGHT))
 	{
-		return GET_PAGE_BIT(s_stLCDBuffer.auiDisplayCache[uiPosY/8][uiPosX], uiPosY%8);
+		return GET_PAGE_BIT(s_stLCDBuffer.auiDisplayCache[iPosY/8][iPosX], iPosY%8);
 	}
 	else
 	{

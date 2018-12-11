@@ -96,11 +96,12 @@ void SGUI_RealtimeGraph_Initialize(SGUI_RTGRAPH* pstRTGraph)
 /** Purpose:		Refresh graph map display.							**/
 /** Resources:		Graph data.											**/
 /** Params:																**/
-/**	@pstRTGraph[in]:		Graph map data used refreshed.				**/
+/**	@ pstIFObj[in]:		SimpleGUI object pointer.						**/
+/**	@ pstRTGraph[in]:	Graph map data used refreshed.					**/
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_RealtimeGraph_Refresh(SGUI_RTGRAPH* pstRTGraph, SGUI_PCSZSTR szTopText, SGUI_PCSZSTR szBottomText)
+void SGUI_RealtimeGraph_Refresh(SGUI_IF_OBJ* pstIFObj, SGUI_RTGRAPH* pstRTGraph, SGUI_PCSZSTR szTopText, SGUI_PCSZSTR szBottomText)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -116,9 +117,9 @@ void SGUI_RealtimeGraph_Refresh(SGUI_RTGRAPH* pstRTGraph, SGUI_PCSZSTR szTopText
 	/* Process							*/
 	/*----------------------------------*/
 	// Draw frame
-	SGUI_Basic_DrawRectangle(0, 0, LCD_SIZE_WIDTH, LCD_SIZE_HEIGHT, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
-	SGUI_Basic_DrawLine(1, 9, LCD_SIZE_WIDTH-2, 9, SGUI_COLOR_FRGCLR);
-	SGUI_Basic_DrawLine(1, LCD_SIZE_HEIGHT-9, LCD_SIZE_WIDTH-2, LCD_SIZE_HEIGHT-9, SGUI_COLOR_FRGCLR);
+	SGUI_Basic_DrawRectangle(pstIFObj, 0, 0, LCD_SIZE_WIDTH, LCD_SIZE_HEIGHT, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
+	SGUI_Basic_DrawLine(pstIFObj, 1, 9, LCD_SIZE_WIDTH-2, 9, SGUI_COLOR_FRGCLR);
+	SGUI_Basic_DrawLine(pstIFObj, 1, LCD_SIZE_HEIGHT-9, LCD_SIZE_WIDTH-2, LCD_SIZE_HEIGHT-9, SGUI_COLOR_FRGCLR);
 
 	if(NULL != pstRTGraph)
 	{
@@ -129,7 +130,7 @@ void SGUI_RealtimeGraph_Refresh(SGUI_RTGRAPH* pstRTGraph, SGUI_PCSZSTR szTopText
 			if(SGUI_TRUE == pstControl->EnableBaseline)
 			{
 				iBaseLineCoordinateY = SGUI_RealtimeGraph_GetValuePointYCoordinate(pstRTGraph, pstData->ZeroPointValue);
-				SGUI_Basic_DrawLine(1, iBaseLineCoordinateY, LCD_SIZE_WIDTH-2, iBaseLineCoordinateY, SGUI_COLOR_FRGCLR);
+				SGUI_Basic_DrawLine(pstIFObj, 1, iBaseLineCoordinateY, LCD_SIZE_WIDTH-2, iBaseLineCoordinateY, SGUI_COLOR_FRGCLR);
 			}
 
 			if(pstData->ValueCount > 1)
@@ -138,7 +139,7 @@ void SGUI_RealtimeGraph_Refresh(SGUI_RTGRAPH* pstRTGraph, SGUI_PCSZSTR szTopText
 				{
 					iPixelCoordinateStartX = 1 + (iValueIndex-1) * pstControl->xAxisStepPixel;
 					iPixelCoordinateEndX = 1 + iValueIndex * pstControl->xAxisStepPixel;
-					SGUI_Basic_DrawLine(iPixelCoordinateStartX, pstData->PointYCoordinateArray[iValueIndex-1],
+					SGUI_Basic_DrawLine(pstIFObj, iPixelCoordinateStartX, pstData->PointYCoordinateArray[iValueIndex-1],
 											iPixelCoordinateEndX, pstData->PointYCoordinateArray[iValueIndex], SGUI_COLOR_FRGCLR);
 				}
 			}
@@ -146,9 +147,9 @@ void SGUI_RealtimeGraph_Refresh(SGUI_RTGRAPH* pstRTGraph, SGUI_PCSZSTR szTopText
             stTextDataArea.PosX = 0; stTextDataArea.PosY = 0;
             stTextDispArea.PosX = 1; stTextDispArea.PosY = 1;
             stTextDispArea.Width = LCD_SIZE_WIDTH-2, stTextDispArea.Height = 7;
-            SGUI_Text_DrawSingleLineText(szTopText, SGUI_FONT_SIZE_H8, &stTextDispArea, &stTextDataArea, SGUI_DRAW_NORMAL);
+            SGUI_Text_DrawSingleLineText(pstIFObj, szTopText, SGUI_FONT_SIZE_H8, &stTextDispArea, &stTextDataArea, SGUI_DRAW_NORMAL);
             stTextDispArea.PosY = LCD_SIZE_HEIGHT-8;
-            SGUI_Text_DrawSingleLineText(szBottomText, SGUI_FONT_SIZE_H8, &stTextDispArea, &stTextDataArea, SGUI_DRAW_NORMAL);
+            SGUI_Text_DrawSingleLineText(pstIFObj, szBottomText, SGUI_FONT_SIZE_H8, &stTextDispArea, &stTextDataArea, SGUI_DRAW_NORMAL);
 		}
 	}
 }

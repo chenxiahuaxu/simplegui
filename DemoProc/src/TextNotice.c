@@ -20,11 +20,11 @@
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
-static HMI_ENGINE_RESULT	HMI_DemoTextNotice_Initialize(void);
-static HMI_ENGINE_RESULT	HMI_DemoTextNotice_Prepare(const void* pstParameters);
-static HMI_ENGINE_RESULT	HMI_DemoTextNotice_RefreshScreen(const void* pstParameters);
-static HMI_ENGINE_RESULT	HMI_DemoTextNotice_ProcessEvent(HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent);
-static HMI_ENGINE_RESULT	HMI_DemoTextNotice_PostProcess(SGUI_INT iActionResult);
+static HMI_ENGINE_RESULT	HMI_DemoTextNotice_Initialize(SGUI_IF_OBJ* pstIFObj);
+static HMI_ENGINE_RESULT	HMI_DemoTextNotice_Prepare(SGUI_IF_OBJ* pstIFObj, const void* pstParameters);
+static HMI_ENGINE_RESULT	HMI_DemoTextNotice_RefreshScreen(SGUI_IF_OBJ* pstIFObj, const void* pstParameters);
+static HMI_ENGINE_RESULT	HMI_DemoTextNotice_ProcessEvent(SGUI_IF_OBJ* pstIFObj, HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent);
+static HMI_ENGINE_RESULT	HMI_DemoTextNotice_PostProcess(SGUI_IF_OBJ* pstIFObj, SGUI_INT iActionResult);
 
 //=======================================================================//
 //= Static variable declaration.									    =//
@@ -48,13 +48,13 @@ HMI_SCREEN_OBJECT       g_stHMIDemo_TextNotice =		{	HMI_SCREEN_ID_DEMO_TEXT_NOTI
 //=======================================================================//
 //= Function define.										            =//
 //=======================================================================//
-HMI_ENGINE_RESULT HMI_DemoTextNotice_Initialize(void)
+HMI_ENGINE_RESULT HMI_DemoTextNotice_Initialize(SGUI_IF_OBJ* pstIFObj)
 {
 	SGUI_Common_MemorySet(s_szDemoNoticeText, 0x00, sizeof(SGUI_CHAR)*(NOTICE_TEXT_BUFFER_SIZE+1));
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoTextNotice_Prepare(const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoTextNotice_Prepare(SGUI_IF_OBJ* pstIFObj, const void* pstParameters)
 {
 	/*----------------------------------*/
 	/* Process							*/
@@ -68,17 +68,17 @@ HMI_ENGINE_RESULT HMI_DemoTextNotice_Prepare(const void* pstParameters)
 		SGUI_Common_StringLengthCopy(s_szDemoNoticeText, (SGUI_PSZSTR)pstParameters, NOTICE_TEXT_BUFFER_SIZE);
 		s_szDemoNoticeText[NOTICE_TEXT_BUFFER_SIZE] = '\0';
 	}
-	SGUI_Notice_Refresh(s_szDemoNoticeText, 0, SGUI_ICON_INFORMATION);
+	SGUI_Notice_Refresh(pstIFObj, s_szDemoNoticeText, 0, SGUI_ICON_INFORMATION);
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoTextNotice_RefreshScreen(const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoTextNotice_RefreshScreen(SGUI_IF_OBJ* pstIFObj, const void* pstParameters)
 {
-	SGUI_Notice_Refresh(s_szDemoNoticeText, 0, SGUI_ICON_INFORMATION);
+	SGUI_Notice_Refresh(pstIFObj, s_szDemoNoticeText, 0, SGUI_ICON_INFORMATION);
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoTextNotice_ProcessEvent(HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent)
+HMI_ENGINE_RESULT HMI_DemoTextNotice_ProcessEvent(SGUI_IF_OBJ* pstIFObj, HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -117,7 +117,7 @@ HMI_ENGINE_RESULT HMI_DemoTextNotice_ProcessEvent(HMI_EVENT_TYPE eEventType, con
 	return eProcessResult;
 }
 
-HMI_ENGINE_RESULT HMI_DemoTextNotice_PostProcess(SGUI_INT iActionResult)
+HMI_ENGINE_RESULT HMI_DemoTextNotice_PostProcess(SGUI_IF_OBJ* pstIFObj, SGUI_INT iActionResult)
 {
 	/*----------------------------------*/
 	/* Process							*/

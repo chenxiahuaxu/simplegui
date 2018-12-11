@@ -47,13 +47,15 @@
 /** Function Name:	SGUI_Notice_RefreshNotice							**/
 /** Purpose:		Show a notice box.									**/
 /** Params:																**/
-/**	@szNoticeText[in]:	Notice text.									**/
-/**	@uiTextOffset[in]:	Text top offset.								**/
-/**	@eIcon[in]:			Notice icon index.								**/
+/** Params:																**/
+/**	@ pstIFObj[in]:		SimpleGUI object pointer.						**/
+/**	@ szNoticeText[in]:	Notice text.									**/
+/**	@ uiTextOffset[in]:	Text top offset.								**/
+/**	@ eIcon[in]:		Notice icon index.								**/
 /** Return:			Remaining text height display.						**/
 /** Notice:			None.												**/
 /*************************************************************************/
-SGUI_SIZE SGUI_Notice_Refresh(SGUI_PCSZSTR szNoticeText, SGUI_INT uiTextOffset, SGUI_NOTICE_ICON eIcon)
+SGUI_SIZE SGUI_Notice_Refresh(SGUI_IF_OBJ* pstIFObj, SGUI_PCSZSTR szNoticeText, SGUI_INT uiTextOffset, SGUI_NOTICE_ICON eIcon)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -89,7 +91,7 @@ SGUI_SIZE SGUI_Notice_Refresh(SGUI_PCSZSTR szNoticeText, SGUI_INT uiTextOffset, 
 		uiNoticeBoxHeight = NOTICE_BOX_HEIGHT_MAX;
 	}
 	// Draw edge
-    SGUI_Basic_DrawRectangle(NOTICE_BOX_POSX, NOTICE_BOX_POSY(uiNoticeBoxHeight), NOTICE_BOX_WIDTH, uiNoticeBoxHeight, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
+    SGUI_Basic_DrawRectangle(pstIFObj, NOTICE_BOX_POSX, NOTICE_BOX_POSY(uiNoticeBoxHeight), NOTICE_BOX_WIDTH, uiNoticeBoxHeight, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
     // Draw icon if exists.
     if(SGUI_ICON_NONE != eIcon)
 	{
@@ -102,7 +104,7 @@ SGUI_SIZE SGUI_Notice_Refresh(SGUI_PCSZSTR szNoticeText, SGUI_INT uiTextOffset, 
 		stIconDataArea.Width = NOTICE_ICON_SIZE;
 		stIconDataArea.Height = NOTICE_ICON_SIZE;
 		#if NOTICE_ICON_SIZE == 16
-		SGUI_Basic_DrawBitMap(&stIconDisplayArea, &stIconDataArea, SGUI_NOTICE_ICON_16PIX, eIcon*(NOTICE_ICON_SIZE*(NOTICE_ICON_SIZE/8)), SGUI_DRAW_NORMAL);
+		SGUI_Basic_DrawBitMap(pstIFObj, &stIconDisplayArea, &stIconDataArea, SGUI_NOTICE_ICON_16PIX, eIcon*(NOTICE_ICON_SIZE*(NOTICE_ICON_SIZE/8)), SGUI_DRAW_NORMAL);
 		#elif NOTICE_ICON_SIZE == 24
 		SGUI_Basic_DrawBitMap(&stIconDisplayArea, &stIconDataArea, SGUI_NOTICE_ICON_24PIX, eIcon*(NOTICE_ICON_SIZE*(NOTICE_ICON_SIZE/8)), SGUI_DRAW_NORMAL);
 		#endif
@@ -125,7 +127,7 @@ SGUI_SIZE SGUI_Notice_Refresh(SGUI_PCSZSTR szNoticeText, SGUI_INT uiTextOffset, 
 		stTextDisplayArea.Height = NOTICE_TEXT_AREA_HEIGHT_MAX;
 	}
 
-    uiTextLines = SGUI_Text_DrawMultipleLinesText(pszNoticeTextPtr, NOTICE_FONT_SIZE, &stTextDisplayArea, uiTextOffset, SGUI_DRAW_NORMAL);
+    uiTextLines = SGUI_Text_DrawMultipleLinesText(pstIFObj, pszNoticeTextPtr, NOTICE_FONT_SIZE, &stTextDisplayArea, uiTextOffset, SGUI_DRAW_NORMAL);
 
     return uiTextLines;
 }

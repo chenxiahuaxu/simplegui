@@ -22,7 +22,7 @@
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
-static void SGUI_Graph_DrawLine(SGUI_GRAPH* pstGraph, SGUI_UINT32 uiStartPointIndex, SGUI_UINT32 uiEndPointIndex);
+static void SGUI_Graph_DrawLine(SGUI_IF_OBJ* pstIFObj, SGUI_GRAPH* pstGraph, SGUI_UINT32 uiStartPointIndex, SGUI_UINT32 uiEndPointIndex);
 static void SGUI_Praph_GetPointDrawingCoordinate(SGUI_GRAPH_POINT* pstDataPoint, SGUI_GRAPH_CONTROL* pstControlData, SGUI_GRAPH_POINT* pstDrawingPoint);
 
 //=======================================================================//
@@ -96,7 +96,7 @@ void SGUI_Graph_InitializeGraphData(SGUI_GRAPH* pstGraph, SGUI_GRAPH_INIT_DATA* 
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_Graph_Refresh(SGUI_GRAPH* pstGraph)
+void SGUI_Graph_Refresh(SGUI_IF_OBJ* pstIFObj, SGUI_GRAPH* pstGraph)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -114,16 +114,16 @@ void SGUI_Graph_Refresh(SGUI_GRAPH* pstGraph)
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	SGUI_Frame_DrawFullScreenFrame(&stFrameData);
+	SGUI_Frame_DrawFullScreenFrame(pstIFObj, &stFrameData);
 	//SGUI_Basic_DrawRectangle(0, 0, LCD_SIZE_WIDTH, LCD_SIZE_HEIGHT, GUI_COLOR_BKGCLR, GUI_COLOR_BKGCLR);
-	SGUI_ScrollBar_Refresh(&(pstGraph->SubElement.xScrollBar));
-	SGUI_ScrollBar_Refresh(&(pstGraph->SubElement.yScrollBar));
+	SGUI_ScrollBar_Refresh(pstIFObj, &(pstGraph->SubElement.xScrollBar));
+	SGUI_ScrollBar_Refresh(pstIFObj, &(pstGraph->SubElement.yScrollBar));
 
 	if(pstGraph->Data->Count > 1)
 	{
 		for(uiPointIndex=0; uiPointIndex<(pstGraph->Data->Count-1); uiPointIndex++)
 		{
-			SGUI_Graph_DrawLine(pstGraph, uiPointIndex, uiPointIndex+1);
+			SGUI_Graph_DrawLine(pstIFObj, pstGraph, uiPointIndex, uiPointIndex+1);
 		}
 	}
 }
@@ -139,7 +139,7 @@ void SGUI_Graph_Refresh(SGUI_GRAPH* pstGraph)
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_Graph_DrawLine(SGUI_GRAPH* pstGraph, SGUI_UINT32 uiStartPointIndex, SGUI_UINT32 uiEndPointIndex)
+void SGUI_Graph_DrawLine(SGUI_IF_OBJ* pstIFObj, SGUI_GRAPH* pstGraph, SGUI_UINT32 uiStartPointIndex, SGUI_UINT32 uiEndPointIndex)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -163,7 +163,7 @@ void SGUI_Graph_DrawLine(SGUI_GRAPH* pstGraph, SGUI_UINT32 uiStartPointIndex, SG
 		SGUI_Praph_GetPointDrawingCoordinate(pstEndPoint, pstGraph->Control, &stGEndPoint);
 
 		// End point.
-		SGUI_Basic_DrawLine(stGStartPoint.x, stGStartPoint.y, stGEndPoint.x, stGEndPoint.y, SGUI_COLOR_FRGCLR);
+		SGUI_Basic_DrawLine(pstIFObj, stGStartPoint.x, stGStartPoint.y, stGEndPoint.x, stGEndPoint.y, SGUI_COLOR_FRGCLR);
 	}
 }
 

@@ -18,13 +18,13 @@
 /** Function Name:	VDIF_SetPixel                                       **/
 /** Purpose:		Set virtual device pixel register data.             **/
 /** Params:																**/
-/**	@ uiPosX[in]:        Pixel x-coordinate on display panel.           **/
-/**	@ uiPosY[in]:        Pixel y-coordinate on display panel.			**/
-/**	@ uiPixelValue[out]: Pixel value, 0 for clear, 1 for set.           **/
+/**	@ iPosX[in]:		Pixel x-coordinate on display panel.			**/
+/**	@ iPosY[in]:		Pixel y-coordinate on display panel.			**/
+/**	@ iPixelValue[out]:	Pixel value, 0 for clear, 1 for set.			**/
 /** Return:			None.                                               **/
 /** Notice:			None.                                               **/
 /*************************************************************************/
-void VDIF_SetPixel(uint32_t uiPosX, uint32_t uiPosY, uint32_t uiPixelValue)
+void VDIF_SetPixel(int iPosX, int iPosY, int iPixelValue)
 {
     /*----------------------------------*/
 	/* Variable Declaration				*/
@@ -41,7 +41,7 @@ void VDIF_SetPixel(uint32_t uiPosX, uint32_t uiPosY, uint32_t uiPixelValue)
 	/*----------------------------------*/
     if(NULL != pclsMainFrameObjectPtr)
     {
-        pclsMainFrameObjectPtr->SetLCDPixel(uiPosX, uiPosY, uiPixelValue);
+        pclsMainFrameObjectPtr->SetLCDPixel(iPosX, iPosY, iPixelValue);
     }
 }
 
@@ -49,18 +49,18 @@ void VDIF_SetPixel(uint32_t uiPosX, uint32_t uiPosY, uint32_t uiPixelValue)
 /** Function Name:	VDIF_GetPixel                                       **/
 /** Purpose:		Get a pixel value form virtual device register.     **/
 /** Params:																**/
-/**	@ uiPosX[in]:        Pixel x-coordinate on display panel.           **/
-/**	@ uiPosY[in]:        Pixel y-coordinate on display panel.		    **/
+/**	@ iPosX[in]:		Pixel x-coordinate on display panel.			**/
+/**	@ iPosY[in]:		Pixel y-coordinate on display panel.		    **/
 /** Return:			Pixel state, 0 for cleared, 1 for set.              **/
 /** Notice:			None.                                               **/
 /*************************************************************************/
-uint32_t VDIF_GetPixel(uint32_t uiPosX, uint32_t uiPosY)
+int VDIF_GetPixel(int iPosX, int iPosY)
 {
     /*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
     LCDFrame*           pclsMainFrameObjectPtr;
-    uint32_t            uiPixelValue;
+    int					iPixelValue;
 
     /*----------------------------------*/
 	/* Initialize						*/
@@ -72,14 +72,14 @@ uint32_t VDIF_GetPixel(uint32_t uiPosX, uint32_t uiPosY)
 	/*----------------------------------*/
     if(NULL != pclsMainFrameObjectPtr)
     {
-        uiPixelValue = pclsMainFrameObjectPtr->GetLCDPixel(uiPosX, uiPosY);
+        iPixelValue = pclsMainFrameObjectPtr->GetLCDPixel(iPosX, iPosY);
     }
     else
     {
-        uiPixelValue = 0;
+        iPixelValue = 0;
     }
 
-    return uiPixelValue;
+    return iPixelValue;
 }
 
 /*************************************************************************/

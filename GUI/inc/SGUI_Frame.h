@@ -30,6 +30,6 @@ typedef struct
 //=======================================================================//
 //= Public function declaration.									    =//
 //=======================================================================//
-void SGUI_Frame_DrawFullScreenFrame(SGUI_BOX_FRAME_STRUCT* pstFrameStyleData);
+void SGUI_Frame_DrawFullScreenFrame(SGUI_IF_OBJ* pstIFObj, SGUI_BOX_FRAME_STRUCT* pstFrameStyleData);
 
 #endif // __INCLUDE_GUI_FRAME_H__

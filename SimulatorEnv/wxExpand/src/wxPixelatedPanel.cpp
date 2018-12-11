@@ -508,6 +508,7 @@ bool wxPixelatedPanel::SaveScreenImageToFile(const wxString& strFilePath)
 	/* Initialize						*/
 	/*----------------------------------*/
 	bReturn =               false;
+	pclsMemoryDC =			NULL;
 
 	/*----------------------------------*/
 	/* Process							*/

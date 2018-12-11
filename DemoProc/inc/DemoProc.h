@@ -4,6 +4,7 @@
 //= Include files.													    =//
 //=======================================================================//
 #include "SGUI_Typedef.h"
+#include "SGUI_Common.h"
 #include "HMI_Engine.h"
 #if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
 #include "DemoResource_UTF8.h"

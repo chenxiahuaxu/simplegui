@@ -21,11 +21,11 @@
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
-static HMI_ENGINE_RESULT	HMI_DemoList_Initialize(void);
-static HMI_ENGINE_RESULT	HMI_DemoList_Prepare(const void* pstParameters);
-static HMI_ENGINE_RESULT	HMI_DemoList_RefreshScreen(const void* pstParameters);
-static HMI_ENGINE_RESULT	HMI_DemoList_ProcessEvent(HMI_EVENT_TYPE eEvent, const HMI_EVENT* pstEvent);
-static HMI_ENGINE_RESULT	HMI_DemoList_PostProcess(SGUI_INT iActionResult);
+static HMI_ENGINE_RESULT	HMI_DemoList_Initialize(SGUI_IF_OBJ* pstIFObj);
+static HMI_ENGINE_RESULT	HMI_DemoList_Prepare(SGUI_IF_OBJ* pstIFObj, const void* pstParameters);
+static HMI_ENGINE_RESULT	HMI_DemoList_RefreshScreen(SGUI_IF_OBJ* pstIFObj, const void* pstParameters);
+static HMI_ENGINE_RESULT	HMI_DemoList_ProcessEvent(SGUI_IF_OBJ* pstIFObj, HMI_EVENT_TYPE eEvent, const HMI_EVENT* pstEvent);
+static HMI_ENGINE_RESULT	HMI_DemoList_PostProcess(SGUI_IF_OBJ* pstIFObj, SGUI_INT iActionResult);
 
 //=======================================================================//
 //= Static variable declaration.									    =//
@@ -70,7 +70,7 @@ HMI_SCREEN_OBJECT       g_stHMIDemo_List =			{	HMI_SCREEN_ID_DEMO_LIST,
 //=======================================================================//
 //= Function define.										            =//
 //=======================================================================//
-HMI_ENGINE_RESULT HMI_DemoList_Initialize(void)
+HMI_ENGINE_RESULT HMI_DemoList_Initialize(SGUI_IF_OBJ* pstIFObj)
 {
 #if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0)
 	/*----------------------------------*/
@@ -108,25 +108,25 @@ HMI_ENGINE_RESULT HMI_DemoList_Initialize(void)
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoList_Prepare (const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoList_Prepare (SGUI_IF_OBJ* pstIFObj, const void* pstParameters)
 {
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	SGUI_List_Refresh(&s_stDemoListObject);
+	SGUI_List_Refresh(pstIFObj, &s_stDemoListObject);
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoList_RefreshScreen(const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoList_RefreshScreen(SGUI_IF_OBJ* pstIFObj, const void* pstParameters)
 {
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	SGUI_List_Refresh(&s_stDemoListObject);
+	SGUI_List_Refresh(pstIFObj, &s_stDemoListObject);
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoList_ProcessEvent(HMI_EVENT_TYPE eEvent, const HMI_EVENT* pstEvent)
+HMI_ENGINE_RESULT HMI_DemoList_ProcessEvent(SGUI_IF_OBJ* pstIFObj, HMI_EVENT_TYPE eEvent, const HMI_EVENT* pstEvent)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -163,23 +163,23 @@ HMI_ENGINE_RESULT HMI_DemoList_ProcessEvent(HMI_EVENT_TYPE eEvent, const HMI_EVE
 					}
 					case KEY_VALUE_UP:
 					{
-						SGUI_List_SelectUpItem(&s_stDemoListObject);
+						SGUI_List_SelectUpItem(pstIFObj, &s_stDemoListObject);
 						break;
 					}
 					case KEY_VALUE_DOWN:
 					{
-						SGUI_List_SelectDownItem(&s_stDemoListObject);
+						SGUI_List_SelectDownItem(pstIFObj, &s_stDemoListObject);
 						break;
 					}
 					case KEY_VALUE_RIGHT:
 					{
 						if((*(parrKeyValue+0) & KEY_OPTION_SHIFT) != 0)
 						{
-							SGUI_List_SetListItemValue(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex, SGUI_List_GetListItemPtr(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex)->Valid.Value, SGUI_List_GetListItemPtr(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex)->Decimal.Value-1);
+							SGUI_List_SetListItemValue(pstIFObj, &s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex, SGUI_List_GetListItemPtr(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex)->Valid.Value, SGUI_List_GetListItemPtr(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex)->Decimal.Value-1);
 						}
 						else
 						{
-							SGUI_List_SetListItemValue(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex, SGUI_List_GetListItemPtr(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex)->Valid.Value+1, SGUI_List_GetListItemPtr(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex)->Decimal.Value);
+							SGUI_List_SetListItemValue(pstIFObj, &s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex, SGUI_List_GetListItemPtr(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex)->Valid.Value+1, SGUI_List_GetListItemPtr(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex)->Decimal.Value);
 						}
 						break;
 					}
@@ -187,11 +187,11 @@ HMI_ENGINE_RESULT HMI_DemoList_ProcessEvent(HMI_EVENT_TYPE eEvent, const HMI_EVE
 					{
 						if((*(parrKeyValue+0) & KEY_OPTION_SHIFT) != 0)
 						{
-							SGUI_List_SetListItemValue(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex, SGUI_List_GetListItemPtr(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex)->Valid.Value, SGUI_List_GetListItemPtr(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex)->Decimal.Value+1);
+							SGUI_List_SetListItemValue(pstIFObj, &s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex, SGUI_List_GetListItemPtr(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex)->Valid.Value, SGUI_List_GetListItemPtr(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex)->Decimal.Value+1);
 						}
 						else
 						{
-							SGUI_List_SetListItemValue(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex, SGUI_List_GetListItemPtr(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex)->Valid.Value-1, SGUI_List_GetListItemPtr(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex)->Decimal.Value);
+							SGUI_List_SetListItemValue(pstIFObj, &s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex, SGUI_List_GetListItemPtr(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex)->Valid.Value-1, SGUI_List_GetListItemPtr(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex)->Decimal.Value);
 						}
 						break;
 					}
@@ -199,25 +199,25 @@ HMI_ENGINE_RESULT HMI_DemoList_ProcessEvent(HMI_EVENT_TYPE eEvent, const HMI_EVE
 					case KEY_VALUE_F8:
 					{
 						SGUI_List_RemoveItem(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex);
-						SGUI_List_Refresh(&s_stDemoListObject);
+						SGUI_List_Refresh(pstIFObj, &s_stDemoListObject);
 						break;
 					}
 					case KEY_VALUE_F9:	// Insert to head.
 					{
 						SGUI_List_InsertItem(&s_stDemoListObject, &s_arrstAppendListItems[0], 0);
-						SGUI_List_Refresh(&s_stDemoListObject);
+						SGUI_List_Refresh(pstIFObj, &s_stDemoListObject);
 						break;
 					}
 					case KEY_VALUE_F10:	// Insert to intermediate.
 					{
 						SGUI_List_InsertItem(&s_stDemoListObject, &s_arrstAppendListItems[1], 5);
-						SGUI_List_Refresh(&s_stDemoListObject);
+						SGUI_List_Refresh(pstIFObj, &s_stDemoListObject);
 						break;
 					}
 					case KEY_VALUE_F11:	// Insert to end.
 					{
 						SGUI_List_InsertItem(&s_stDemoListObject, &s_arrstAppendListItems[2], s_stDemoListObject.Data.Count);
-						SGUI_List_Refresh(&s_stDemoListObject);
+						SGUI_List_Refresh(pstIFObj, &s_stDemoListObject);
 						break;
 					}
 #endif
@@ -232,7 +232,7 @@ HMI_ENGINE_RESULT HMI_DemoList_ProcessEvent(HMI_EVENT_TYPE eEvent, const HMI_EVE
 	return eProcessResult;
 }
 
-HMI_ENGINE_RESULT HMI_DemoList_PostProcess(SGUI_INT iActionResult)
+HMI_ENGINE_RESULT HMI_DemoList_PostProcess(SGUI_IF_OBJ* pstIFObj, SGUI_INT iActionResult)
 {
 	uint32_t			uiSelectListIndex;
 	SGUI_List_ITEM*		pstSelectedItem;

@@ -20,11 +20,13 @@
 /** Purpose:		Display or update a process bar.					**/
 /** Resources:		Process bar data structure.							**/
 /** Params:																**/
-/**	@pstProcessBarData[in]: Process bar data whitch will update on screen.	**/
+/**	@ pstIFObj[in]:	SimpleGUI object pointer.							**/
+/**	@ pstProcessBarData[in]: Process bar data whitch will update on		**/
+/**					screen.												**/
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_ProcessBar_Refresh(SGUI_PROCBAR_STRUCT *pstProcessBarData)
+void SGUI_ProcessBar_Refresh(SGUI_IF_OBJ* pstIFObj, SGUI_PROCBAR_STRUCT *pstProcessBarData)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -90,9 +92,9 @@ void SGUI_ProcessBar_Refresh(SGUI_PROCBAR_STRUCT *pstProcessBarData)
 				}
 			}
 			// Redraw edge and clean up area.
-			SGUI_Basic_DrawRectangle(pstProcessBarData->Parameter.PosX, pstProcessBarData->Parameter.PosY, pstProcessBarData->Parameter.Width, pstProcessBarData->Parameter.Height, SGUI_COLOR_FRGCLR, eBackColor);
+			SGUI_Basic_DrawRectangle(pstIFObj, pstProcessBarData->Parameter.PosX, pstProcessBarData->Parameter.PosY, pstProcessBarData->Parameter.Width, pstProcessBarData->Parameter.Height, SGUI_COLOR_FRGCLR, eBackColor);
 			// Draw process block.
-			SGUI_Basic_DrawRectangle(uiProcessBlockStartX, uiProcessBlockStartY, uiProcessBlockWidth, uiProcessBlockHeight, eFillColor, eFillColor);
+			SGUI_Basic_DrawRectangle(pstIFObj, uiProcessBlockStartX, uiProcessBlockStartY, uiProcessBlockWidth, uiProcessBlockHeight, eFillColor, eFillColor);
 		}
 	}
 }

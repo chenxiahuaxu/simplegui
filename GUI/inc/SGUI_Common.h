@@ -3,7 +3,6 @@
 //=======================================================================//
 //= Include files.													    =//
 //=======================================================================//
-#include <stdbool.h>
 #include "SGUI_Typedef.h"
 #if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
 #include "VirtualDeviceInterface.h"
@@ -42,32 +41,6 @@
 #endif
 
 //=======================================================================//
-//= Public variable declaration.									    =//
-//=======================================================================//
-//#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
-extern SGUI_CBYTE		SGUI_FONT_H8[];
-extern SGUI_CBYTE		SGUI_FONT_H12[];
-extern SGUI_CBYTE		SGUI_FONT_H16[];
-extern SGUI_CBYTE		SGUI_FONT_H32[];
-//#endif
-
-// Declare data source flag here.
-typedef enum
-{
-	SGUI_FONT_SRC_NONE	= 0,
-	SGUI_FONT_SRC_H6,
-	SGUI_FONT_SRC_H8,
-	SGUI_FONT_SRC_H12,
-	SGUI_FONT_SRC_H16,
-	//SGUI_FONT_SRC_H24,
-	SGUI_FONT_SRC_H32,
-
-	SGUI_NOTICE_ICON_16PIX,
-	SGUI_NOTICE_ICON_24PIX,
-	SGUI_FONT_SRC_UNKNOWN,
-}SGUI_FLASH_DATA_SOURCE;
-
-//=======================================================================//
 //= Public function declaration.									    =//
 //=======================================================================//
 #if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0) && (_SIMPLE_GUI_ENABLE_ICONV_GB2312_ > 0)
@@ -99,8 +72,5 @@ void                    SGUI_Common_GetNowTime(SGUI_TIME* pstTime);
 void                    SGUI_Common_RefreshScreen(void);
 void                    SGUI_Common_ReadFlashROM(SGUI_ROM_ADDRESS uiAddressHead, SGUI_SIZE uiDataLength, SGUI_BYTE* pBuffer);
 void                    SGUI_Common_Delay(SGUI_UINT32 uiTimeMs);
-
-
-SGUI_SIZE SGUI_FlashData_GetFilash(SGUI_FLASH_DATA_SOURCE eDataSource, SGUI_ROM_ADDRESS adStartAddr, SGUI_SIZE sReadSize, SGUI_BYTE* pOutputBuffer);
 
 #endif // __INCLUDE_GUI_COMMON_H__

@@ -80,10 +80,10 @@ typedef struct
 //= Public function declaration.									    =//
 //=======================================================================//
 void			SGUI_List_InitializeListData(SGUI_List_STRUCT* pstList);
-void			SGUI_List_Refresh(SGUI_List_STRUCT* pstList);
-void			SGUI_List_SelectUpItem(SGUI_List_STRUCT* pstList);
-void			SGUI_List_SelectDownItem(SGUI_List_STRUCT* pstList);
-void			SGUI_List_SetListItemValue(SGUI_List_STRUCT* pstList, SGUI_INDEX iItemIndex, SGUI_INT32 iSetValid, SGUI_INT32 iSetDecimal);
+void			SGUI_List_Refresh(SGUI_IF_OBJ* pstIFObj, SGUI_List_STRUCT* pstList);
+void			SGUI_List_SelectUpItem(SGUI_IF_OBJ* pstIFObj, SGUI_List_STRUCT* pstList);
+void			SGUI_List_SelectDownItem(SGUI_IF_OBJ* pstIFObj, SGUI_List_STRUCT* pstList);
+void			SGUI_List_SetListItemValue(SGUI_IF_OBJ* pstIFObj, SGUI_List_STRUCT* pstList, SGUI_INDEX iItemIndex, SGUI_INT32 iSetValid, SGUI_INT32 iSetDecimal);
 void			SGUI_List_GetListItemValue(SGUI_List_STRUCT* pstList, SGUI_INDEX iItemIndex, SGUI_INT32 *piValid, SGUI_INT32 *piDecimal);
 SGUI_List_ITEM*	SGUI_List_GetListItemPtr(SGUI_List_STRUCT* pstList, SGUI_INDEX iItemIndex);
 void			SGUI_List_BindData(SGUI_List_STRUCT* pstList, SGUI_INDEX iItemIndex, SGUI_INT32* piValid, SGUI_INT32* piDecimal);

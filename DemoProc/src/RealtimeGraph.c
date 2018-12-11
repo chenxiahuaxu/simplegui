@@ -14,11 +14,11 @@
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
-static HMI_ENGINE_RESULT	HMI_DemoRealGraph_Initialize(void);
-static HMI_ENGINE_RESULT	HMI_DemoRealGraph_Prepare(const void* pstParameters);
-static HMI_ENGINE_RESULT	HMI_DemoRealGraph_RefreshScreen(const void* pstParameters);
-static HMI_ENGINE_RESULT	HMI_DemoRealGraph_ProcessEvent(HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent);
-static HMI_ENGINE_RESULT	HMI_DemoRealGraph_PostProcess(SGUI_INT iActionResult);
+static HMI_ENGINE_RESULT	HMI_DemoRealGraph_Initialize(SGUI_IF_OBJ* pstIFObj);
+static HMI_ENGINE_RESULT	HMI_DemoRealGraph_Prepare(SGUI_IF_OBJ* pstIFObj, const void* pstParameters);
+static HMI_ENGINE_RESULT	HMI_DemoRealGraph_RefreshScreen(SGUI_IF_OBJ* pstIFObj, const void* pstParameters);
+static HMI_ENGINE_RESULT	HMI_DemoRealGraph_ProcessEvent(SGUI_IF_OBJ* pstIFObj, HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent);
+static HMI_ENGINE_RESULT	HMI_DemoRealGraph_PostProcess(SGUI_IF_OBJ* pstIFObj, SGUI_INT iActionResult);
 
 //=======================================================================//
 //= Static variable declaration.									    =//
@@ -42,27 +42,27 @@ HMI_SCREEN_OBJECT				g_stHMI_DemoRealtimeGraph =		{	HMI_SCREEN_ID_DEMO_REAL_TIME
 //=======================================================================//
 //= Function define.										            =//
 //=======================================================================//
-HMI_ENGINE_RESULT HMI_DemoRealGraph_Initialize(void)
+HMI_ENGINE_RESULT HMI_DemoRealGraph_Initialize(SGUI_IF_OBJ* pstIFObj)
 {
 	//SGUI_RealtimeGraph_Initialize(&s_stRealtimeGraph);
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoRealGraph_Prepare(const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoRealGraph_Prepare(SGUI_IF_OBJ* pstIFObj, const void* pstParameters)
 {
 	SGUI_RealtimeGraph_Initialize(&s_stRealtimeGraph);
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoRealGraph_RefreshScreen(const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoRealGraph_RefreshScreen(SGUI_IF_OBJ* pstIFObj, const void* pstParameters)
 {
 	SGUI_CHAR			szTextBuffer[16];
 	SGUI_Common_IntegerToString(s_stRealtimeGraph.Data->ValueArray[s_stRealtimeGraph.Data->ValueCount-1], szTextBuffer, 10, -15, ' ');
-	SGUI_RealtimeGraph_Refresh(&s_stRealtimeGraph, szTextBuffer, "Real-time graph.");
+	SGUI_RealtimeGraph_Refresh(pstIFObj, &s_stRealtimeGraph, szTextBuffer, "Real-time graph.");
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoRealGraph_ProcessEvent(HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent)
+HMI_ENGINE_RESULT HMI_DemoRealGraph_ProcessEvent(SGUI_IF_OBJ* pstIFObj, HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -102,7 +102,7 @@ HMI_ENGINE_RESULT HMI_DemoRealGraph_ProcessEvent(HMI_EVENT_TYPE eEventType, cons
 				{
                     iNewValue = *((SGUI_INT*)pstEvent->Data);
                     SGUI_RealtimeGraph_AppendValue(&s_stRealtimeGraph, iNewValue);
-                    HMI_DemoRealGraph_RefreshScreen(NULL);
+                    HMI_DemoRealGraph_RefreshScreen(pstIFObj, NULL);
                     break;
 				}
 				default:
@@ -116,7 +116,7 @@ HMI_ENGINE_RESULT HMI_DemoRealGraph_ProcessEvent(HMI_EVENT_TYPE eEventType, cons
 	return eProcessResult;
 }
 
-HMI_ENGINE_RESULT HMI_DemoRealGraph_PostProcess(SGUI_INT iActionResult)
+HMI_ENGINE_RESULT HMI_DemoRealGraph_PostProcess(SGUI_IF_OBJ* pstIFObj, SGUI_INT iActionResult)
 {
 	/*----------------------------------*/
 	/* Process							*/
