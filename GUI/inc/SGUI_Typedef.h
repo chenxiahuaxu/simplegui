@@ -24,48 +24,62 @@
 //=======================================================================//
 //= Data type definition.											    =//
 //=======================================================================//
-typedef char						SGUI_INT8;
-typedef	unsigned char				SGUI_UINT8;
-typedef int16_t						SGUI_INT16;
-typedef uint16_t					SGUI_UINT16;
-typedef int32_t						SGUI_INT32;
-typedef	uint32_t					SGUI_UINT32;
+typedef char							SGUI_INT8;
+typedef	unsigned char					SGUI_UINT8;
+typedef int16_t							SGUI_INT16;
+typedef uint16_t						SGUI_UINT16;
+typedef int32_t							SGUI_INT32;
+typedef	uint32_t						SGUI_UINT32;
 
-typedef	int							SGUI_INT;
-typedef unsigned int				SGUI_UINT;
-typedef unsigned char				SGUI_BYTE;
-typedef const unsigned char			SGUI_CBYTE;
-typedef size_t						SGUI_SIZE;
+typedef	int								SGUI_INT;
+typedef unsigned int					SGUI_UINT;
+typedef unsigned char					SGUI_BYTE;
+typedef const unsigned char				SGUI_CBYTE;
+typedef size_t							SGUI_SIZE;
 
-typedef char*						SGUI_PSZSTR;
-typedef const char*					SGUI_PCSZSTR;
-typedef char						SGUI_CHAR;
-typedef const char					SGUI_CCHAR;
+typedef char*							SGUI_SZSTR;
+typedef const char*						SGUI_CSZSTR;
+typedef char							SGUI_CHAR;
+typedef const char						SGUI_CCHAR;
 
-typedef SGUI_SIZE					SGUI_INDEX;
-#define	SGUI_INVALID_INDEX			(-1)
-typedef	SGUI_UINT32					SGUI_ROM_ADDRESS;
+typedef void*							SGUI_PTR;
 
-#define	SGUI_BOOL					SGUI_INT
-#define SGUI_FALSE					(0)
-#define SGUI_TRUE					(!SGUI_FALSE)
+typedef SGUI_SIZE						SGUI_INDEX;
+#define	SGUI_INVALID_INDEX				(-1)
+typedef	SGUI_UINT32						SGUI_ROM_ADDRESS;
 
-typedef struct _st_rectangle_
+#define	SGUI_BOOL						SGUI_INT
+#define SGUI_FALSE						(0)
+#define SGUI_TRUE						(!SGUI_FALSE)
+
+typedef struct
 {
-	SGUI_INT						PosX;
-	SGUI_INT						PosY;
-	SGUI_INT						Width;
-	SGUI_INT						Height;
+	SGUI_INT							PosX;
+	SGUI_INT							PosY;
+	SGUI_INT							Width;
+	SGUI_INT							Height;
 }SGUI_RECT_AREA;
 
 typedef struct
 {
-	SGUI_UINT16						Year;
-	SGUI_UINT16						Month;
-	SGUI_UINT16						Day;
-	SGUI_UINT16						Hour;
-	SGUI_UINT16						Minute;
-	SGUI_UINT16						Second;
+	SGUI_INT							Width;
+	SGUI_INT							Height;
+}SGUI_AREA_SIZE;
+
+typedef struct
+{
+	SGUI_INT							PosX;
+	SGUI_INT							PosY;
+}SGUI_POINT;
+
+typedef struct
+{
+	SGUI_UINT16							Year;
+	SGUI_UINT16							Month;
+	SGUI_UINT16							Day;
+	SGUI_UINT16							Hour;
+	SGUI_UINT16							Minute;
+	SGUI_UINT16							Second;
 }SGUI_TIME;
 
 typedef enum
@@ -99,17 +113,10 @@ typedef enum
 
 typedef struct
 {
-	SGUI_FLASH_DATA_SOURCE			Source;
-	SGUI_ROM_ADDRESS				StartAddr;
-	SGUI_SIZE						Length;
+	SGUI_FLASH_DATA_SOURCE				Source;
+	SGUI_ROM_ADDRESS					StartAddr;
+	SGUI_SIZE							Length;
 }SGUI_BMP_DATA;
-
-
-// Declare SimpleGUI Object type
-typedef struct
-{
-    SGUI_BOOL		bFullACSII;
-}SGUI_ENGINE_PARRAM;
 
 SGUI_ENGINE_ACTION_DEF(SGUI_INT,	SGUI_ENGINE_ACTION_FN_INITIALIZE,	(void));
 SGUI_ENGINE_ACTION_DEF(void,		SGUI_ENGINE_ACTION_FN_CLEAR,		(void));
@@ -118,6 +125,14 @@ SGUI_ENGINE_ACTION_DEF(SGUI_INT,	SGUI_ENGINE_ACTION_FN_GET_POINT,	(SGUI_INT iX, 
 SGUI_ENGINE_ACTION_DEF(SGUI_INT,	SGUI_ENGINE_ACTION_FN_SET_BYTE,		(SGUI_INT iPage, SGUI_INT iColumn));
 SGUI_ENGINE_ACTION_DEF(SGUI_INT,	SGUI_ENGINE_ACTION_FN_GET_BYTE,		(SGUI_INT iPage, SGUI_INT iColumn));
 SGUI_ENGINE_ACTION_DEF(void,		SGUI_ENGINE_ACTION_FN_REFRESH,		(void));
+SGUI_ENGINE_ACTION_DEF(void,		SGUI_ENGINE_ACTION_FN_GET_RTC,		(SGUI_INT iYear, SGUI_INT iMounth, SGUI_INT iDay, SGUI_INT iWeekDay, SGUI_INT iHour, SGUI_INT iMinute, SGUI_INT iSecond));
+SGUI_ENGINE_ACTION_DEF(SGUI_PTR,	SGUI_ENGINE_ACTION_FN_HEAP_MEM,		(SGUI_SIZE sSize));
+SGUI_ENGINE_ACTION_DEF(void,		SGUI_ENGINE_ACTION_FN_FREE_MEM,		(SGUI_PTR pMemory));
+SGUI_ENGINE_ACTION_DEF(SGUI_PTR,	SGUI_ENGINE_ACTION_FN_SET_MEM,		(SGUI_PTR pHead, SGUI_INT iValue, SGUI_SIZE sSize));
+SGUI_ENGINE_ACTION_DEF(SGUI_PTR,	SGUI_ENGINE_ACTION_FN_COPY_MEM,		(SGUI_PTR pSrc, SGUI_PTR pDest, SGUI_SIZE sSize));
+SGUI_ENGINE_ACTION_DEF(SGUI_SIZE,	SGUI_ENGINE_ACTION_FN_READ_FLASH,	(SGUI_INT iSourceID, SGUI_ROM_ADDRESS adStartAddr, SGUI_SIZE sReadSize, SGUI_BYTE* pOutputBuffer));
+SGUI_ENGINE_ACTION_DEF(SGUI_SZSTR,	SGUI_ENGINE_ACTION_FN_STR_CPY,		(SGUI_SZSTR szDest, SGUI_CSZSTR cszSource));
+SGUI_ENGINE_ACTION_DEF(SGUI_SZSTR,	SGUI_ENGINE_ACTION_FN_STR_N_CPY,	(SGUI_SZSTR szDest, SGUI_CSZSTR cszSource, SGUI_SIZE sLength));
 
 typedef struct
 {
@@ -131,14 +146,35 @@ typedef struct
 	SGUI_ENGINE_ACTION_FN_GET_POINT		fnGetPixel;
 	// Refresh screen display.
 	SGUI_ENGINE_ACTION_FN_REFRESH		fnRefreshScreen;
-}SGUI_ENGINE_ACTIONS;
+}SGUI_ENGINE_DEVICE_IF;
 
 typedef struct
 {
-    //Simple GUI engine parameter.
-	SGUI_ENGINE_PARRAM		stParam;
+#ifdef _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
+	// Allocate heap memory
+	SGUI_ENGINE_ACTION_FN_HEAP_MEM		fnMalloc;
+	// Free heap memory
+	SGUI_ENGINE_ACTION_FN_FREE_MEM		fnFree;
+#endif
+	// Set memory block value.
+	SGUI_ENGINE_ACTION_FN_SET_MEM		fnMemSet;
+	// Copy memory bloc.
+	SGUI_ENGINE_ACTION_FN_COPY_MEM		fnMemCpy;
+	// Copy string.
+	SGUI_ENGINE_ACTION_FN_STR_CPY		fnStrCpy;
+	// Copy specified length string.
+	SGUI_ENGINE_ACTION_FN_STR_N_CPY		fnStrNCpy;
+	// Read data form flash(internal or external)
+	SGUI_ENGINE_ACTION_FN_READ_FLASH	fnReadFlashData;
+
+}SGUI_ENGINE_SYS_IF;
+
+typedef struct
+{
     //Simple GUI extern functions.
-	SGUI_ENGINE_ACTIONS		stActions;
+	SGUI_ENGINE_DEVICE_IF				stActions;
+	// Simple GUI system functions.
+	SGUI_ENGINE_SYS_IF					stSystemFunctions;
 }SGUI_IF_OBJ;
 
 #endif // __INCLUDE_GUI_TYPEDEF_H__

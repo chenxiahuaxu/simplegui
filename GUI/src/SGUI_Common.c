@@ -11,7 +11,7 @@
 //=======================================================================//
 #include "SGUI_Common.h"
 #if (_SIMPLE_GUI_ENABLE_ICONV_GB2312_ > 0)
-#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
+#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
 #include <iconv.h>
 #else
 	// Include encoder convert interface declare here.
@@ -19,7 +19,7 @@
 #endif
 
 // System RTC interface switch.
-#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
+#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
 #include <windows.h>
 #include <time.h>
 #else
@@ -28,9 +28,13 @@
 #endif
 
 // Dynamic memory operation switch.
-#if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0) && (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
+#ifdef _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
+ #ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
 #include <malloc.h>
 #include <string.h>
+ #else
+
+ #endif
 #else
 	// Include MMU interface header file here.
 #include <string.h>
@@ -39,8 +43,12 @@
 //=======================================================================//
 //= Static variable declaration.									    =//
 //=======================================================================//
-#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0) && (_SIMPLE_GUI_ENABLE_ICONV_GB2312_ > 0)
-static SGUI_CHAR g_arrcEncodeBuffer[_SIMPLE_GUI_ENCODE_BUFFER_SIZE];
+#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
+ #ifdef _SIMPLE_GUI_ENABLE_ICONV_GB2312_
+  static SGUI_CHAR g_arrcEncodeBuffer[_SIMPLE_GUI_ENCODE_BUFFER_SIZE];
+ #else
+
+ #endif
 #endif
 
 //=======================================================================//
@@ -61,7 +69,7 @@ static SGUI_CHAR g_arrcEncodeBuffer[_SIMPLE_GUI_ENCODE_BUFFER_SIZE];
 /** Return:			Converted string length(include space).				**/
 /** Notice:			Only applies to decimal numbers.					**/
 /*************************************************************************/
-SGUI_SIZE SGUI_Common_IntegerToStringWithDecimalPoint(SGUI_INT iInteger, SGUI_UINT uiDecimalPlaces, SGUI_PSZSTR pszStringBuffer, SGUI_INT iAlignment, SGUI_CHAR cFillCharacter)
+SGUI_SIZE SGUI_Common_IntegerToStringWithDecimalPoint(SGUI_INT iInteger, SGUI_UINT uiDecimalPlaces, SGUI_SZSTR pszStringBuffer, SGUI_INT iAlignment, SGUI_CHAR cFillCharacter)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -72,8 +80,8 @@ SGUI_SIZE SGUI_Common_IntegerToStringWithDecimalPoint(SGUI_INT iInteger, SGUI_UI
 	SGUI_SIZE					uiNumberStringLength;
 	SGUI_SIZE					uiDecimalLength;
 	SGUI_SIZE					uiOutputLength;
-	SGUI_PSZSTR					pcSrcPtr;
-	SGUI_PSZSTR					pcDestPtr;
+	SGUI_SZSTR					pcSrcPtr;
+	SGUI_SZSTR					pcDestPtr;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -225,7 +233,7 @@ SGUI_SIZE SGUI_Common_IntegerToStringWithDecimalPoint(SGUI_INT iInteger, SGUI_UI
 /** Return:			Converted string length.							**/
 /** Notice:			None.												**/
 /*************************************************************************/
-SGUI_SIZE SGUI_Common_IntegerToString(SGUI_INT iInteger, SGUI_PSZSTR pszStringBuffer, SGUI_UINT uiBase, SGUI_INT iAlignment, SGUI_CHAR cFillCharacter)
+SGUI_SIZE SGUI_Common_IntegerToString(SGUI_INT iInteger, SGUI_SZSTR pszStringBuffer, SGUI_UINT uiBase, SGUI_INT iAlignment, SGUI_CHAR cFillCharacter)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -234,8 +242,8 @@ SGUI_SIZE SGUI_Common_IntegerToString(SGUI_INT iInteger, SGUI_PSZSTR pszStringBu
 	SGUI_UINT					uiSourceNumber;
 	SGUI_UINT					uiSignBit;
 	SGUI_SIZE					uiNumberStringLength;
-    SGUI_PSZSTR					pcSrcPtr;
-    SGUI_PSZSTR					pcDestPtr;
+    SGUI_SZSTR					pcSrcPtr;
+    SGUI_SZSTR					pcDestPtr;
     SGUI_SIZE					uiDigitBit;
 
     /*----------------------------------*/
@@ -381,14 +389,14 @@ SGUI_SIZE SGUI_Common_IntegerToString(SGUI_INT iInteger, SGUI_PSZSTR pszStringBu
 /** Return:			Converted number.									**/
 /** Notice:			None.												**/
 /*************************************************************************/
-SGUI_UINT SGUI_Common_ConvertStringToUnsignedInteger(SGUI_PSZSTR szString, SGUI_CHAR** ppcEndPointer, SGUI_UINT uiBase)
+SGUI_UINT SGUI_Common_ConvertStringToUnsignedInteger(SGUI_SZSTR szString, SGUI_CHAR** ppcEndPointer, SGUI_UINT uiBase)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
     SGUI_UINT32					uiResult;
 	SGUI_UINT					uiBitValue;
-	SGUI_PSZSTR					pcCurPtr;
+	SGUI_SZSTR					pcCurPtr;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -447,14 +455,14 @@ SGUI_UINT SGUI_Common_ConvertStringToUnsignedInteger(SGUI_PSZSTR szString, SGUI_
 /** Return:			Converted number.									**/
 /** Notice:			None.												**/
 /*************************************************************************/
-SGUI_INT SGUI_Common_ConvertStringToInteger(SGUI_PSZSTR szString, SGUI_CHAR** ppcEndPointer, SGUI_UINT uiBase)
+SGUI_INT SGUI_Common_ConvertStringToInteger(SGUI_SZSTR szString, SGUI_CHAR** ppcEndPointer, SGUI_UINT uiBase)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
     SGUI_INT					iResult;
     SGUI_INT					iSign;
-	SGUI_PSZSTR					pcCurPtr;
+	SGUI_SZSTR					pcCurPtr;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -507,12 +515,12 @@ SGUI_INT SGUI_Common_ConvertStringToInteger(SGUI_PSZSTR szString, SGUI_CHAR** pp
 /**	@szSource[in]:		String will converted.							**/
 /** Return:			String after convert.								**/
 /*************************************************************************/
-SGUI_PSZSTR SGUI_Common_EncodeConvert(SGUI_PCSZSTR szSourceEncode, SGUI_PSZSTR szDestinationEncode, SGUI_PSZSTR szSource)
+SGUI_SZSTR SGUI_Common_EncodeConvert(SGUI_CSZSTR szSourceEncode, SGUI_SZSTR szDestinationEncode, SGUI_SZSTR szSource)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	SGUI_PSZSTR					pszResultPtr;
+	SGUI_SZSTR					pszResultPtr;
 	SGUI_SIZE					uiSourceLength, uiOutputBufferSize;
 	SGUI_SIZE					uiEncoderResult;
 	iconv_t						pIconv;
@@ -545,7 +553,7 @@ SGUI_PSZSTR SGUI_Common_EncodeConvert(SGUI_PCSZSTR szSourceEncode, SGUI_PSZSTR s
 }
 #endif
 
-#if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0)
+#ifdef _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
 /*************************************************************************/
 /** Function Name:	SGUI_Common_Allocate								**/
 /** Purpose:		Allocate a memory block.							**/
@@ -570,7 +578,7 @@ void* SGUI_Common_Allocate(SGUI_SIZE uiSize)
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
+#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
 	pAllocatedMemory = malloc(uiSize);
 #else
 	// Add allocate memory function here;
@@ -593,7 +601,7 @@ void SGUI_Common_Free(void* pFreePointer)
 	/*----------------------------------*/
 	if(NULL != pFreePointer)
 	{
-#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
+#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
 		free(pFreePointer);
 #else
 		// Add allocate memory function here;
@@ -628,7 +636,7 @@ void* SGUI_Common_MemoryCopy(void* pDest, const void* pSrc, SGUI_UINT uiSize)
 	/*----------------------------------*/
 	if((NULL != pDest) && (NULL != pSrc))
 	{
-#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
+#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
 	pCopiedMemory = memcpy(pDest, pSrc, uiSize);
 #else
 	// Add memory block copy process here;
@@ -663,7 +671,7 @@ void SGUI_Common_MemorySet(void* pMemoryPtr, SGUI_BYTE iSetValue, SGUI_UINT uiSi
 	/*----------------------------------*/
 	if((NULL != pMemoryPtr) && (0 != uiSize))
 	{
-#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
+#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
         memset(pMemoryPtr, iSetValue, uiSize);
 #else
 		pcbBytePtr = (SGUI_BYTE*)pMemoryPtr;
@@ -683,7 +691,7 @@ void SGUI_Common_MemorySet(void* pMemoryPtr, SGUI_BYTE iSetValue, SGUI_UINT uiSi
 /**	@szString[in]:		String head pointer.							**/
 /** Return:			String length in bytes.								**/
 /*************************************************************************/
-SGUI_SIZE SGUI_Common_StringLength(SGUI_PCSZSTR szString)
+SGUI_SIZE SGUI_Common_StringLength(SGUI_CSZSTR szString)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -699,7 +707,7 @@ SGUI_SIZE SGUI_Common_StringLength(SGUI_PCSZSTR szString)
 	/*----------------------------------*/
 	if(NULL != szString)
 	{
-#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
+#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
 	uiStringLength = strlen(szString);
 #else
 	// Add RTC time process here;
@@ -719,12 +727,12 @@ SGUI_SIZE SGUI_Common_StringLength(SGUI_PCSZSTR szString)
 /**	@szSrc[in]:			Destination string	.							**/
 /** Return:			Destination string pointer.							**/
 /*************************************************************************/
-SGUI_PSZSTR SGUI_Common_StringCopy(SGUI_PSZSTR szDest, SGUI_PCSZSTR szSrc)
+SGUI_SZSTR SGUI_Common_StringCopy(SGUI_SZSTR szDest, SGUI_CSZSTR szSrc)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	SGUI_PSZSTR					szDestPtr;
+	SGUI_SZSTR					szDestPtr;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -736,7 +744,7 @@ SGUI_PSZSTR SGUI_Common_StringCopy(SGUI_PSZSTR szDest, SGUI_PCSZSTR szSrc)
 	/*----------------------------------*/
 	if((NULL != szDest) && (NULL != szSrc))
 	{
-#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
+#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
 	szDestPtr = strcpy(szDest, szSrc);
 #else
 	// Add RTC time process here;
@@ -757,12 +765,12 @@ SGUI_PSZSTR SGUI_Common_StringCopy(SGUI_PSZSTR szDest, SGUI_PCSZSTR szSrc)
 /**	@uiSize[in]:		String length will be copied.					**/
 /** Return:			Destination string pointer.							**/
 /*************************************************************************/
-SGUI_PSZSTR SGUI_Common_StringLengthCopy(SGUI_PSZSTR szDest, SGUI_PCSZSTR szSrc, SGUI_SIZE uiSize)
+SGUI_SZSTR SGUI_Common_StringLengthCopy(SGUI_SZSTR szDest, SGUI_CSZSTR szSrc, SGUI_SIZE uiSize)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	SGUI_PSZSTR					szDestPtr;
+	SGUI_SZSTR					szDestPtr;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -774,7 +782,7 @@ SGUI_PSZSTR SGUI_Common_StringLengthCopy(SGUI_PSZSTR szDest, SGUI_PCSZSTR szSrc,
 	/*----------------------------------*/
 	if((NULL != szDest) && (NULL != szSrc))
 	{
-#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
+#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
 	szDestPtr = strncpy(szDest, szSrc, uiSize);
 #else
 	// Add RTC time process here;
@@ -800,7 +808,7 @@ void SGUI_Common_GetNowTime(SGUI_TIME* pstTime)
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
+#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
 	time_t						rawtime;
 	struct tm*					timeinfo;
 #else
@@ -811,7 +819,7 @@ void SGUI_Common_GetNowTime(SGUI_TIME* pstTime)
 	/*----------------------------------*/
 	if(NULL != pstTime)
 	{
-#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
+#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
 		time(&rawtime);
 		timeinfo = localtime(&rawtime);
 		if(NULL != timeinfo)
@@ -833,56 +841,4 @@ void SGUI_Common_GetNowTime(SGUI_TIME* pstTime)
         pstTime->Second = g_stCleandar.tm_sec;
 #endif
 	}
-}
-
-/*************************************************************************/
-/** Function Name:	SGUI_Common_RefreshScreen							**/
-/** Purpose:		Refresh screen when needed.							**/
-/** Resources:		None.												**/
-/** Params:			None.												**/
-/** Return:			None.												**/
-/** Notice:			Need to be implemented, and call when needed in GUI	**/
-/**					API optimization.									**/
-/*************************************************************************/
-void SGUI_Common_RefreshScreen(void)
-{
-#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ == 0)
-	/* Add screen refresh function or process here. */
-#endif
-}
-
-/*************************************************************************/
-/** Function Name:	SGUI_Common_ReadFlashROM							**/
-/** Purpose:		Read byte or byte array form internal flash or		**/
-/**					external flash.										**/
-/** Resources:		None.												**/
-/** Params:																**/
-/**	@uiAddressHead[in]:	Start address will be read.						**/
-/**	@uiDataLength[in]:	Number of byte will be read.					**/
-/**	@pBuffer[out]:		Read byte buffer.								**/
-/** Return:			None.												**/
-/** Notice:			This function need to override when use external 	**/
-/**					flash ROM data.										**/
-/*************************************************************************/
-void SGUI_Common_ReadFlashROM(SGUI_ROM_ADDRESS uiAddressHead, SGUI_SIZE uiDataLength, SGUI_BYTE* pBuffer)
-{
-	/* Add flash ROM IO process here. */
-}
-
-/*************************************************************************/
-/** Function Name:	SGUI_Common_Delay									**/
-/** Purpose:		Delay some milliseconds.							**/
-/** Resources:		System delay function.								**/
-/** Params:																**/
-/**	@uiTimeMs[in]:		Delay times in milliseconds.					**/
-/** Return:			None.												**/
-/** Notice:			None.												**/
-/*************************************************************************/
-void SGUI_Common_Delay(SGUI_UINT32 uiTimeMs)
-{
-#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
-	Sleep(uiTimeMs);
-#else
-	// Add system platform delay function call here .
-#endif
 }

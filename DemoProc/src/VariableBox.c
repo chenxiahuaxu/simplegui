@@ -30,7 +30,7 @@ static HMI_ENGINE_RESULT	HMI_DemoVariableBox_Prepare(SGUI_IF_OBJ* pstIFObj, cons
 static HMI_ENGINE_RESULT	HMI_DemoVariableBox_RefreshScreen(SGUI_IF_OBJ* pstIFObj, const void* pstParameters);
 static HMI_ENGINE_RESULT    HMI_DemoVariableBox_ProcessEvent(SGUI_IF_OBJ* pstIFObj, HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent);
 static HMI_ENGINE_RESULT	HMI_DemoVariableBox_PostProcess(SGUI_IF_OBJ* pstIFObj, SGUI_INT iActionResult);
-static void				    HMI_DemoVariableBox_DrawFrame(SGUI_IF_OBJ* pstIFObj, SGUI_PSZSTR szTitle);
+static void				    HMI_DemoVariableBox_DrawFrame(SGUI_IF_OBJ* pstIFObj, SGUI_SZSTR szTitle);
 
 //=======================================================================//
 //= Static variable declaration.									    =//
@@ -53,9 +53,9 @@ static SGUI_TEXT_VARBOX_STRUCT	s_stTextVariableBox =		{	VARIABLE_BOX_POSX+2,
 																s_szTextVariableBuffer,
 															};
 static SGUI_CHAR				s_szDefaultFrameTitle[] =	DEMO_VARIABLE_BOX_TITLE;
-static SGUI_PSZSTR				s_szFrameTitle =			s_szDefaultFrameTitle;
+static SGUI_SZSTR				s_szFrameTitle =			s_szDefaultFrameTitle;
 static SGUI_INT					s_uiFocusedFlag;
-static SGUI_PCSZSTR				s_szHelpNoticeText =		DEMO_VARIABLE_BOX_HELPER;
+static SGUI_CSZSTR				s_szHelpNoticeText =		DEMO_VARIABLE_BOX_HELPER;
 static SGUI_INT					s_uiAutoConfirmTimer =		5;
 HMI_SCREEN_ACTION				s_stDemoVariableBoxActions = {
 																HMI_DemoVariableBox_Initialize,
@@ -88,7 +88,7 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_Prepare(SGUI_IF_OBJ* pstIFObj, const void*
 	/*----------------------------------*/
 	// Draw frame
 	s_szFrameTitle = s_szDefaultFrameTitle;
-	HMI_DemoVariableBox_DrawFrame(pstIFObj, (SGUI_PSZSTR)s_szFrameTitle);
+	HMI_DemoVariableBox_DrawFrame(pstIFObj, (SGUI_SZSTR)s_szFrameTitle);
 	// Show notice
 	SGUI_Notice_Refresh(pstIFObj, s_szHelpNoticeText, 0, SGUI_ICON_INFORMATION);
 	return HMI_RET_NORMAL;
@@ -100,7 +100,7 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_RefreshScreen(SGUI_IF_OBJ* pstIFObj, const
 	/* Process							*/
 	/*----------------------------------*/
 	// Draw frame
-    HMI_DemoVariableBox_DrawFrame(pstIFObj, (SGUI_PSZSTR)s_szFrameTitle);
+    HMI_DemoVariableBox_DrawFrame(pstIFObj, (SGUI_SZSTR)s_szFrameTitle);
     // Draw number box
     SGUI_Basic_DrawRectangle(pstIFObj, VARIABLE_BOX_POSX, VARIABLE_BOX_NUMBER_POSY, VARIABLE_BOX_WIDTH+4, g_stFontSize[s_stNumberVariableBox.FontSize].Height+6, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
     SGUI_IntegerVariableBox_Refresh(pstIFObj, &s_stNumberVariableBox, SGUI_CENTER, (0 == s_uiFocusedFlag)?SGUI_DRAW_REVERSE:SGUI_DRAW_NORMAL);
@@ -254,7 +254,7 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_ProcessEvent(SGUI_IF_OBJ* pstIFObj, HMI_EV
                         if(1 == s_uiFocusedFlag)
                         {
                             s_szFrameTitle = s_stTextVariableBox.Value;
-                            HMI_DemoVariableBox_DrawFrame(pstIFObj, (SGUI_PSZSTR)s_szFrameTitle);
+                            HMI_DemoVariableBox_DrawFrame(pstIFObj, (SGUI_SZSTR)s_szFrameTitle);
                             // Draw number box
                             SGUI_Basic_DrawRectangle(pstIFObj, VARIABLE_BOX_POSX, VARIABLE_BOX_NUMBER_POSY, VARIABLE_BOX_WIDTH+4, g_stFontSize[s_stNumberVariableBox.FontSize].Height+6, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
                             SGUI_IntegerVariableBox_Refresh(pstIFObj, &s_stNumberVariableBox, SGUI_CENTER, SGUI_DRAW_NORMAL);
@@ -287,7 +287,7 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_PostProcess(SGUI_IF_OBJ* pstIFObj, SGUI_IN
 	return HMI_RET_NORMAL;
 }
 
-void HMI_DemoVariableBox_DrawFrame(SGUI_IF_OBJ* pstIFObj, SGUI_PSZSTR szTitle)
+void HMI_DemoVariableBox_DrawFrame(SGUI_IF_OBJ* pstIFObj, SGUI_SZSTR szTitle)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/

@@ -65,7 +65,7 @@ HMI_ENGINE_RESULT HMI_DemoTextNotice_Prepare(SGUI_IF_OBJ* pstIFObj, const void* 
 	}
 	else
 	{
-		SGUI_Common_StringLengthCopy(s_szDemoNoticeText, (SGUI_PSZSTR)pstParameters, NOTICE_TEXT_BUFFER_SIZE);
+		SGUI_Common_StringLengthCopy(s_szDemoNoticeText, (SGUI_SZSTR)pstParameters, NOTICE_TEXT_BUFFER_SIZE);
 		s_szDemoNoticeText[NOTICE_TEXT_BUFFER_SIZE] = '\0';
 	}
 	SGUI_Notice_Refresh(pstIFObj, s_szDemoNoticeText, 0, SGUI_ICON_INFORMATION);

@@ -31,13 +31,13 @@ typedef struct
 typedef struct _st_sgui_list_item_
 {
 	SGUI_SIZE					Sign;
-	SGUI_PCSZSTR				Text;
+	SGUI_CSZSTR				Text;
 	SGUI_List_ITEM_TYPE			Type;
 	SGUI_List_PARAMETER_VALUE	Valid;
 	SGUI_List_PARAMETER_VALUE	Decimal;
-    SGUI_PCSZSTR*				EnumerationValues;
+    SGUI_CSZSTR*				EnumerationValues;
     SGUI_SIZE					EnumerationCount;
-#if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0)
+#ifdef _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
 	struct _st_sgui_list_item_	*PrevItem;
     struct _st_sgui_list_item_	*NextItem;
 #endif
@@ -58,7 +58,7 @@ typedef struct
 
 typedef struct
 {
-	SGUI_PCSZSTR				Title;
+	SGUI_CSZSTR				Title;
 	SGUI_SIZE					Count;
 	SGUI_List_ITEM*				Items;
 }SGUI_List_DATA;
@@ -87,7 +87,7 @@ void			SGUI_List_SetListItemValue(SGUI_IF_OBJ* pstIFObj, SGUI_List_STRUCT* pstLi
 void			SGUI_List_GetListItemValue(SGUI_List_STRUCT* pstList, SGUI_INDEX iItemIndex, SGUI_INT32 *piValid, SGUI_INT32 *piDecimal);
 SGUI_List_ITEM*	SGUI_List_GetListItemPtr(SGUI_List_STRUCT* pstList, SGUI_INDEX iItemIndex);
 void			SGUI_List_BindData(SGUI_List_STRUCT* pstList, SGUI_INDEX iItemIndex, SGUI_INT32* piValid, SGUI_INT32* piDecimal);
-#if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0)
+#ifdef _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
 SGUI_BOOL		SGUI_List_InsertItem(SGUI_List_STRUCT* pstList, SGUI_List_ITEM* pstNewItem, SGUI_INDEX iNewItemIndex);
 SGUI_BOOL		SGUI_List_RemoveItem(SGUI_List_STRUCT* pstList, SGUI_INDEX iItemIndex);
 #endif

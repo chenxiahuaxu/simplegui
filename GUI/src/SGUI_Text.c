@@ -48,12 +48,12 @@ static SGUI_FLASH_DATA_SOURCE SGUI_Text_GetFontResource(SGUI_FONT_SIZE eFontSize
 /** Return:			Next character X coordinate in current line.		**/
 /** Limitation:		None.												**/
 /*************************************************************************/
-void SGUI_Text_DrawSingleLineText(SGUI_IF_OBJ* pstIFObj, SGUI_PCSZSTR szText, SGUI_FONT_SIZE eFontSize, SGUI_RECT_AREA* pstDisplayArea, SGUI_RECT_AREA* pstTextDataArea, SGUI_DRAW_MODE eFontMode)
+void SGUI_Text_DrawSingleLineText(SGUI_IF_OBJ* pstIFObj, SGUI_CSZSTR szText, SGUI_FONT_SIZE eFontSize, SGUI_RECT_AREA* pstDisplayArea, SGUI_RECT_AREA* pstTextDataArea, SGUI_DRAW_MODE eFontMode)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	SGUI_PSZSTR					pcTextPointer;										// Text character pointer.
+	SGUI_SZSTR					pcTextPointer;										// Text character pointer.
 	SGUI_UINT16					uiCodeHighByte, uiCodeLowByte, uiCharacterCode;		// Character byte, might be tow bytes.
 	SGUI_UINT16					uiFontWidth, uiFontHeight, uiCharacterWidth;		// Font size and character graphics width.
 	SGUI_UINT32					uiCharacterDataSize;
@@ -67,7 +67,7 @@ void SGUI_Text_DrawSingleLineText(SGUI_IF_OBJ* pstIFObj, SGUI_PCSZSTR szText, SG
 	/* Initialize						*/
 	/*----------------------------------*/
 	// Initialize variable.
-	pcTextPointer =				(SGUI_PSZSTR)ENCODE(szText);
+	pcTextPointer =				(SGUI_SZSTR)ENCODE(szText);
 	uiCharacterCode =			0x0000;
 	eBackColor =				(eFontMode == SGUI_DRAW_NORMAL)?SGUI_COLOR_BKGCLR:SGUI_COLOR_FRGCLR;
 	// Get font graphics size.
@@ -157,12 +157,12 @@ void SGUI_Text_DrawSingleLineText(SGUI_IF_OBJ* pstIFObj, SGUI_PCSZSTR szText, SG
 /** Return:			Next character X coordinate in current line.			**/
 /** Notice:			None.													**/
 /*****************************************************************************/
-SGUI_SIZE SGUI_Text_DrawMultipleLinesText(SGUI_IF_OBJ* pstIFObj, SGUI_PCSZSTR szText, SGUI_FONT_SIZE eFontSize, SGUI_RECT_AREA* pstDisplayArea, SGUI_INT iTopOffset, SGUI_DRAW_MODE eFontMode)
+SGUI_SIZE SGUI_Text_DrawMultipleLinesText(SGUI_IF_OBJ* pstIFObj, SGUI_CSZSTR szText, SGUI_FONT_SIZE eFontSize, SGUI_RECT_AREA* pstDisplayArea, SGUI_INT iTopOffset, SGUI_DRAW_MODE eFontMode)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	SGUI_PSZSTR					pcTextPointer;
+	SGUI_SZSTR					pcTextPointer;
 	SGUI_UINT16					uiCodeHighByte, uiCodeLowByte, uiCharacterCode;
 	SGUI_UINT16					uiFontWidth, uiFontHeight;
 	SGUI_UINT32					uiCharacterDataSize;
@@ -176,7 +176,7 @@ SGUI_SIZE SGUI_Text_DrawMultipleLinesText(SGUI_IF_OBJ* pstIFObj, SGUI_PCSZSTR sz
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	pcTextPointer =				(SGUI_PSZSTR)ENCODE(szText);
+	pcTextPointer =				(SGUI_SZSTR)ENCODE(szText);
 	uiCharacterCode =			0x0000;
 	uiLines =					0;
 	eBackColor =				(eFontMode == SGUI_DRAW_NORMAL)?SGUI_COLOR_BKGCLR:SGUI_COLOR_FRGCLR;
@@ -352,7 +352,7 @@ SGUI_SIZE SGUI_Text_GetCharacterTableIndex(SGUI_UINT16 uiCharacterCode)
 /** Return:			None.													**/
 /** Notice:			Only used with Equal-width characters. 					**/
 /*****************************************************************************/
-SGUI_SIZE SGUI_Text_GetTextGraphicsWidth(SGUI_PCSZSTR szText, SGUI_FONT_SIZE eFontSize)
+SGUI_SIZE SGUI_Text_GetTextGraphicsWidth(SGUI_CSZSTR szText, SGUI_FONT_SIZE eFontSize)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -389,13 +389,13 @@ SGUI_SIZE SGUI_Text_GetTextGraphicsWidth(SGUI_PCSZSTR szText, SGUI_FONT_SIZE eFo
 /** Return:			String lines.											**/
 /** Notice:			None.													**/
 /*****************************************************************************/
-SGUI_SIZE SGUI_Text_GetMultiLineTextLines(SGUI_PCSZSTR szNoticeText, SGUI_SIZE uiHalfWidthCharInLine)
+SGUI_SIZE SGUI_Text_GetMultiLineTextLines(SGUI_CSZSTR szNoticeText, SGUI_SIZE uiHalfWidthCharInLine)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
 	SGUI_SIZE					uiLineCount, uiLineByteCount;
-	SGUI_PCSZSTR				pcCur;
+	SGUI_CSZSTR				pcCur;
 
 	/*----------------------------------*/
 	/* Initialize						*/

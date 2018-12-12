@@ -26,6 +26,6 @@ typedef enum
 //=======================================================================//
 //= Public function declaration.									    =//
 //=======================================================================//
-SGUI_SIZE SGUI_Notice_Refresh(SGUI_IF_OBJ* pstIFObj, SGUI_PCSZSTR szNoticeText, SGUI_INT uiTextOffset, SGUI_NOTICE_ICON eIcon);
+SGUI_SIZE SGUI_Notice_Refresh(SGUI_IF_OBJ* pstIFObj, SGUI_CSZSTR szNoticeText, SGUI_INT uiTextOffset, SGUI_NOTICE_ICON eIcon);
 
 #endif // __INCLUDE_GUI_NOTICE_H__

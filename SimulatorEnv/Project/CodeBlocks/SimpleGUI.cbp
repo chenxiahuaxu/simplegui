@@ -60,9 +60,9 @@
 			<Add option="-D__WXMSW__" />
 			<Add option="-DWXUSINGDLL" />
 			<Add option="-DwxUSE_UNICODE" />
-			<Add option="-D_SIMPLE_GUI_ENABLE_ICONV_GB2312_=1" />
-			<Add option="-D_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_=1" />
-			<Add option="-D_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_=1" />
+			<Add option="-D_SIMPLE_GUI_ENABLE_ICONV_GB2312_" />
+			<Add option="-D_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_" />
+			<Add option="-D_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_" />
 			<Add option="-D_SIMPLE_GUI_ENABLE_BASIC_FONT_=1" />
 			<Add directory="$(#wx)/include" />
 			<Add directory="../../Application/inc" />

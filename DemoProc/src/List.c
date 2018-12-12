@@ -30,9 +30,9 @@ static HMI_ENGINE_RESULT	HMI_DemoList_PostProcess(SGUI_IF_OBJ* pstIFObj, SGUI_IN
 //=======================================================================//
 //= Static variable declaration.									    =//
 //=======================================================================//
-static SGUI_PCSZSTR     s_szListTitle = 			    DEMO_LIST_TITLE;
-static SGUI_PCSZSTR		s_arrszNoticeType[] =		{	DEMO_LIST_ITEM_NOTICE_TEXT, DEMO_LIST_ITEM_NOTICE_TIME};
-static SGUI_PCSZSTR		s_arrszEnumedValue[] =		{	DEMO_LIST_ITEM_ENUM_VALUE1, DEMO_LIST_ITEM_ENUM_VALUE2, DEMO_LIST_ITEM_ENUM_VALUE3};
+static SGUI_CSZSTR     s_szListTitle = 			    DEMO_LIST_TITLE;
+static SGUI_CSZSTR		s_arrszNoticeType[] =		{	DEMO_LIST_ITEM_NOTICE_TEXT, DEMO_LIST_ITEM_NOTICE_TIME};
+static SGUI_CSZSTR		s_arrszEnumedValue[] =		{	DEMO_LIST_ITEM_ENUM_VALUE1, DEMO_LIST_ITEM_ENUM_VALUE2, DEMO_LIST_ITEM_ENUM_VALUE3};
 static SGUI_List_ITEM	s_arrstTestListItems[] =	{	DEMO_LIST_ITEM_0,
 														DEMO_LIST_ITEM_1,
 														DEMO_LIST_ITEM_2,
@@ -42,7 +42,7 @@ static SGUI_List_ITEM	s_arrstTestListItems[] =	{	DEMO_LIST_ITEM_0,
 														DEMO_LIST_ITEM_6,
 													};
 
-#if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0)
+#ifdef _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
 static SGUI_List_ITEM	s_arrstAppendListItems[] =	{	DEMO_LIST_ITEM_7,
 														DEMO_LIST_ITEM_8,
 														DEMO_LIST_ITEM_9
@@ -72,7 +72,7 @@ HMI_SCREEN_OBJECT       g_stHMIDemo_List =			{	HMI_SCREEN_ID_DEMO_LIST,
 //=======================================================================//
 HMI_ENGINE_RESULT HMI_DemoList_Initialize(SGUI_IF_OBJ* pstIFObj)
 {
-#if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0)
+#ifdef _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
@@ -89,7 +89,7 @@ HMI_ENGINE_RESULT HMI_DemoList_Initialize(SGUI_IF_OBJ* pstIFObj)
     s_stDemoListObject.FontSize = SGUI_FONT_SIZE_H12;
     //Initialize list object.
 	//SGUI_List_InitializeListData(&s_stDemoListObject);
-#if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0)
+#ifdef _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
     s_stDemoListObject.Data.Items = NULL;
     s_stDemoListObject.Data.Count = 0;
     // Insert list item.
@@ -195,7 +195,7 @@ HMI_ENGINE_RESULT HMI_DemoList_ProcessEvent(SGUI_IF_OBJ* pstIFObj, HMI_EVENT_TYP
 						}
 						break;
 					}
-#if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0)
+#ifdef _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
 					case KEY_VALUE_F8:
 					{
 						SGUI_List_RemoveItem(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex);

@@ -4,13 +4,6 @@
 //= Include files.													    =//
 //=======================================================================//
 #include "SGUI_Common.h"
-#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
-#include "VirtualDeviceInterface.h"
-#else
-// Include your device driver interface here.
-#include "OLED.h"
-#include "DemoActions.h"
-#endif //_SIMPLE_GUI_ENABLE_SIMULATOR_
 
 //=======================================================================//
 //= Data type definition.											    =//

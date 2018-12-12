@@ -143,7 +143,7 @@ void SGUI_List_RefreshListItems(SGUI_IF_OBJ* pstIFObj, SGUI_List_STRUCT* pstList
 	{
 		if(pstList->Data.Count > 0)
 		{
-#if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0)
+#ifdef _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
 			// Recalculate scroll bar parameter.
 			pstListControl->VisibleIntegralItemsNum = pstListControl->VisibleItemsAreaHeight/(pstListControl->ListItemHeight);
 			if(pstListControl->VisibleIntegralItemsNum > pstList->Data.Count)
@@ -635,7 +635,7 @@ SGUI_List_ITEM* SGUI_List_GetListItemPtr(SGUI_List_STRUCT* pstList, SGUI_INDEX i
 	/* Variable Declaration				*/
 	/*----------------------------------*/
 	SGUI_List_ITEM				*pstSelectedListItem;
-#if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0)
+#ifdef _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
 	SGUI_SIZE					uiItemCounter;
 #endif
 
@@ -643,7 +643,7 @@ SGUI_List_ITEM* SGUI_List_GetListItemPtr(SGUI_List_STRUCT* pstList, SGUI_INDEX i
 	/* Initialize						*/
 	/*----------------------------------*/
 	pstSelectedListItem =		NULL;
-#if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0)
+#ifdef _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
 	uiItemCounter =				0;
 #endif
 
@@ -654,7 +654,7 @@ SGUI_List_ITEM* SGUI_List_GetListItemPtr(SGUI_List_STRUCT* pstList, SGUI_INDEX i
 	{
 		if(iItemIndex < pstList->Data.Count)
 		{
-#if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0)
+#ifdef _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
 			pstSelectedListItem = pstList->Data.Items;
 			if(NULL != pstSelectedListItem)
 			{
@@ -672,7 +672,7 @@ SGUI_List_ITEM* SGUI_List_GetListItemPtr(SGUI_List_STRUCT* pstList, SGUI_INDEX i
 	return pstSelectedListItem;
 }
 
-#if (_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_ > 0)
+#ifdef _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
 /*************************************************************************/
 /** Function Name:	SGUI_List_InsertItem								**/
 /** Purpose:		Insert a new item to list.							**/

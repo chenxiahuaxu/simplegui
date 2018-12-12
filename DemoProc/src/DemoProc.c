@@ -10,7 +10,7 @@
 //=======================================================================//
 #include "DemoProc.h"
 
-#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
+#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
 #include "VirtualDeviceInterface.h"
 #else
 #include "OLED.h"
@@ -49,7 +49,7 @@ void InitializeEngine(void)
 	/* Clear structure. */
 	SGUI_Common_MemorySet(&g_stDeviceInterface, 0x00, sizeof(SGUI_IF_OBJ));
 	SGUI_Common_MemorySet(&g_stDemoEngine, 0x00, sizeof(HMI_ENGINE_OBJECT));
-#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
+#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
 	/* Initialize interface object. */
 	g_stDeviceInterface.stActions.fnSetPixel = VDIF_SetPixel;
 	g_stDeviceInterface.stActions.fnGetPixel = VDIF_GetPixel;

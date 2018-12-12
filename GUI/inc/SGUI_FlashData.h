@@ -13,7 +13,7 @@ SGUI_SIZE				SGUI_FlashData_GetFilash(SGUI_IF_OBJ* pstIFObj, SGUI_FLASH_DATA_SOU
 //=======================================================================//
 //= Public variable declaration.									    =//
 //=======================================================================//
-//#if (_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_ > 0)
+//#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
 extern SGUI_CBYTE		SGUI_FONT_H8[];
 extern SGUI_CBYTE		SGUI_FONT_H12[];
 extern SGUI_CBYTE		SGUI_FONT_H16[];
