@@ -15,11 +15,6 @@
 #include "SGUI_VariableBox.h"
 
 //=======================================================================//
-//= Static variable declaration.									    =//
-//=======================================================================//
-static char				arrTextBuffer[VARBOX_TEXT_BUFFER_SIZE] = {0x00};	//Used when convert a number to text.
-
-//=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
 static void				SGUI_TextVariableBox_UpdateCharacter(SGUI_IF_OBJ* pstIFObj, SGUI_TEXT_VARBOX_STRUCT* pstTextValue, char cNewCharacters, SGUI_DRAW_MODE eMode);
@@ -48,10 +43,12 @@ void SGUI_IntegerVariableBox_Refresh(SGUI_IF_OBJ* pstIFObj, SGUI_INT_VARBOX_STRU
 	SGUI_SIZE					uiTextLength;
 	SGUI_SIZE					uiTextWidth;
 	SGUI_COLOR					eBackColor;
+	SGUI_CHAR					szTextBuffer[VARBOX_TEXT_BUFFER_SIZE];
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
+	SGUI_Common_MemorySet(szTextBuffer, 0x00, VARBOX_TEXT_BUFFER_SIZE);
 	eBackColor =				((eMode==SGUI_DRAW_NORMAL)?SGUI_COLOR_BKGCLR:SGUI_COLOR_FRGCLR);
 	// Draw edge
 	SGUI_Basic_DrawRectangle(pstIFObj, pstValue->PosX, pstValue->PosY, pstValue->Width, VARBOX_HEIGHT(pstValue->FontSize), eBackColor, eBackColor);
@@ -72,7 +69,7 @@ void SGUI_IntegerVariableBox_Refresh(SGUI_IF_OBJ* pstIFObj, SGUI_INT_VARBOX_STRU
 			pstValue->Value = pstValue->Min;
 		}
 		// Convert number to string
-		uiTextLength = SGUI_Common_IntegerToString(pstValue->Value, arrTextBuffer, 10, -1, ' ');
+		uiTextLength = SGUI_Common_IntegerToString(pstValue->Value, szTextBuffer, 10, -1, ' ');
 		uiTextWidth = VARBOX_TEXT_WIDTH(pstValue->FontSize, uiTextLength);
 		stTextDisplayArea.PosX = pstValue->PosX+1;
 		stTextDisplayArea.PosY = pstValue->PosY+1;
@@ -96,7 +93,7 @@ void SGUI_IntegerVariableBox_Refresh(SGUI_IF_OBJ* pstIFObj, SGUI_INT_VARBOX_STRU
 			}
 		}
 		stTextDataArea.PosY = 0;
-		SGUI_Text_DrawSingleLineText(pstIFObj, arrTextBuffer, pstValue->FontSize, &stTextDisplayArea, &stTextDataArea, eMode);
+		SGUI_Text_DrawSingleLineText(pstIFObj, szTextBuffer, pstValue->FontSize, &stTextDisplayArea, &stTextDataArea, eMode);
 	}
 }
 

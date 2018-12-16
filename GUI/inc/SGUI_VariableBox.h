@@ -63,7 +63,7 @@ typedef enum
 #define VARBOX_TEXT_AREA_WIDTH(W)		((W>2)?(W-2):0)
 #define VARBOX_TEXT_AREA_HEIGHT(FONT_SIZE) (g_stFontSize[FONT_SIZE].Height)
 
-#define VARBOX_TEXT_LENGTH_MAX			(32)
+#define VARBOX_TEXT_LENGTH_MAX			(11)
 #define VARBOX_TEXT_BUFFER_SIZE			(VARBOX_TEXT_LENGTH_MAX+1)
 #define VARBOX_TEXT_WIDTH(FONT_SIZE, L)	(L*(g_stFontSize[FONT_SIZE].Width))
 
