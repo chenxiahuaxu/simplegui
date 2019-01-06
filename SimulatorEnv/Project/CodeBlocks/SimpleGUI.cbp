@@ -70,7 +70,7 @@
 			<Add directory="../../Library/inc" />
 			<Add directory="../../Frame/inc" />
 			<Add directory="../../Interface/inc" />
-			<Add directory="../../wxExpand/inc" />
+			<Add directory="../../Controls/inc" />
 			<Add directory="../../Demo/inc" />
 			<Add directory="../../../GUI/inc" />
 			<Add directory="../../../HMI/inc" />
@@ -161,11 +161,13 @@
 		<Unit filename="../../Application/src/Application.cpp" />
 		<Unit filename="../../Common/inc/Common.h" />
 		<Unit filename="../../Common/src/Common.cpp" />
+		<Unit filename="../../Controls/inc/wxLCD.h" />
+		<Unit filename="../../Controls/inc/wxLCDBase.h" />
+		<Unit filename="../../Controls/src/wxLCD.cpp" />
+		<Unit filename="../../Controls/src/wxLCDBase.cpp" />
 		<Unit filename="../../Demo/inc/DemoResource_UTF8.h" />
 		<Unit filename="../../Frame/inc/LCDFrame.h" />
-		<Unit filename="../../Frame/inc/MonochromeDotLCD.h" />
 		<Unit filename="../../Frame/src/LCDFrame.cpp" />
-		<Unit filename="../../Frame/src/MonochromeDotLCD.cpp" />
 		<Unit filename="../../Interface/inc/UserActionInterface.h" />
 		<Unit filename="../../Interface/inc/VirtualDeviceInterface.h">
 			<Option target="&lt;{~None~}&gt;" />
@@ -180,8 +182,6 @@
 		<Unit filename="../../Resource/Resource.rc">
 			<Option compilerVar="WINDRES" />
 		</Unit>
-		<Unit filename="../../wxExpand/inc/wxPixelatedPanel.h" />
-		<Unit filename="../../wxExpand/src/wxPixelatedPanel.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

@@ -59,10 +59,9 @@ wxFrame(pclsParent, iID, strTitle, wxDefaultPosition, wxDefaultSize, wxSYSTEM_ME
     // Create status bar.
     m_pclsCtrlStatusBar = CreateStatusBar(1, wxST_SIZEGRIP, wxID_STATUSBAR);
     // Create LCD screen panel.
-	m_pclsCtrlPaintPanel = new MonochromeDotLCD(this, wxID_PANEL);
+	m_pclsCtrlPaintPanel = new wxLCD(this, wxID_PANEL);
 	m_pclsCtrlPaintPanel->SetParameter(&g_stParameters);
-	m_pclsCtrlPaintPanel->ResizeParent();
-
+	SetClientSize(m_pclsCtrlPaintPanel->GetBestSize());
     // Set frame object position on monitor.
 	Centre( wxBOTH );
 	// Update frame object UI.
@@ -72,6 +71,8 @@ wxFrame(pclsParent, iID, strTitle, wxDefaultPosition, wxDefaultSize, wxSYSTEM_ME
 	{
         wxMkdir(SCREENSHOTS_FOLDER);
 	}
+
+	this->SetFocus();
 }
 
 /*************************************************************************/
@@ -232,6 +233,8 @@ void LCDFrame::OnKeyDown(wxKeyEvent& clsEventObject)
 	/*----------------------------------*/
 	//wxMessageBox(wxString::Format("Key value: %d.", iKeyCode));
 	UAIF_OnKeyPress(clsEventObject.ShiftDown(), clsEventObject.ControlDown(), clsEventObject.AltDown(), iKeyCode);
+
+	clsEventObject.Skip();
 }
 
 /*************************************************************************/
@@ -463,14 +466,7 @@ LCDFrame* LCDFrame::GetInstance(void)
 /*************************************************************************/
 void LCDFrame::SetLCDPixel(uint32_t uiPosX, uint32_t uiPosY, uint32_t uiPixelValue)
 {
-    if(0 == uiPixelValue)
-    {
-        m_pclsCtrlPaintPanel->SetPixel(uiPosX, uiPosY, MonochromeDotLCD::LCD_PIXEL_COLOR_L);
-    }
-    else
-    {
-        m_pclsCtrlPaintPanel->SetPixel(uiPosX, uiPosY, MonochromeDotLCD::LCD_PIXEL_COLOR_H);
-    }
+    m_pclsCtrlPaintPanel->SetPixel(uiPosX, uiPosY, uiPixelValue);
 }
 
 uint32_t LCDFrame::GetLCDPixel(uint32_t uiPosX, uint32_t uiPosY)

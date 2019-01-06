@@ -13,7 +13,7 @@
 #include <wx/filefn.h>
 #include <wx/timer.h>
 
-#include "MonochromeDotLCD.h"
+#include "wxLCD.h"
 
 //=======================================================================//
 //= User Macro definition.											    =//
@@ -53,7 +53,7 @@ class LCDFrame : public wxFrame
 	    // Controlers
 		wxStatusBar*            m_pclsCtrlStatusBar;
 		wxToolBar*              m_pclsCtrlToolBar;
-		MonochromeDotLCD*         m_pclsCtrlPaintPanel;
+		wxLCD*					m_pclsCtrlPaintPanel;
 		wxTimer*                m_pclsMilliSecondTimer;
 		wxTimer*                m_pclsRTCTimer;
 		static LCDFrame*        m_pclsInstance;

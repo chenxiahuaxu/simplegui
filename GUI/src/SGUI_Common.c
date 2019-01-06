@@ -10,7 +10,7 @@
 //= Include files.													    =//
 //=======================================================================//
 #include "SGUI_Common.h"
-#if (_SIMPLE_GUI_ENABLE_ICONV_GB2312_ > 0)
+#ifdef _SIMPLE_GUI_ENABLE_ICONV_GB2312_
 #ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
 #include <iconv.h>
 #else
