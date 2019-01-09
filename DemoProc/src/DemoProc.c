@@ -2,7 +2,6 @@
 /** Copyright.															**/
 /** FileName: DemoProc.c												**/
 /** Author: Polarix														**/
-/** Version: 1.0.0.0													**/
 /** Description: User operation interface.								**/
 /*************************************************************************/
 //=======================================================================//
@@ -11,7 +10,7 @@
 #include "DemoProc.h"
 
 #ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
-#include "VirtualDeviceInterface.h"
+#include "SDKInterface.h"
 #else
 #include "OLED.h"
 #include "DemoActions.h"
@@ -51,10 +50,10 @@ void InitializeEngine(void)
 	SGUI_Common_MemorySet(&g_stDemoEngine, 0x00, sizeof(HMI_ENGINE_OBJECT));
 #ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
 	/* Initialize interface object. */
-	g_stDeviceInterface.stActions.fnSetPixel = VDIF_SetPixel;
-	g_stDeviceInterface.stActions.fnGetPixel = VDIF_GetPixel;
-	g_stDeviceInterface.stActions.fnClearScreen = VDIF_ClearDisplay;
-	g_stDeviceInterface.stActions.fnRefreshScreen = VDIF_RefreshDisplay;
+	g_stDeviceInterface.stActions.fnSetPixel = SGUI_SDK_SetPixel;
+	g_stDeviceInterface.stActions.fnGetPixel = SGUI_SDK_GetPixel;
+	g_stDeviceInterface.stActions.fnClearScreen = SGUI_SDK_ClearDisplay;
+	g_stDeviceInterface.stActions.fnRefreshScreen = SGUI_SDK_RefreshDisplay;
 #else
 	g_stDeviceInterface.stActions.fnSetPixel = OLED_SetPixel;
 	g_stDeviceInterface.stActions.fnGetPixel = OLED_GetPixel;

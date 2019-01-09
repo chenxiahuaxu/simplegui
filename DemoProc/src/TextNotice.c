@@ -84,7 +84,8 @@ HMI_ENGINE_RESULT HMI_DemoTextNotice_ProcessEvent(SGUI_IF_OBJ* pstIFObj, HMI_EVE
 	/* Variable Declaration				*/
 	/*----------------------------------*/
 	HMI_ENGINE_RESULT           eProcessResult;
-	SGUI_UINT16*				parrKeyValue;
+	SGUI_UINT16					uiKeyCode;
+	SGUI_UINT16					uiKeyValue;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -96,19 +97,17 @@ HMI_ENGINE_RESULT HMI_DemoTextNotice_ProcessEvent(SGUI_IF_OBJ* pstIFObj, HMI_EVE
 	/*----------------------------------*/
 	if(eEventType == HMI_ENGINE_EVENT_ACTION)
 	{
-		if(NULL != pstEvent)
+		if(HMI_ENGINE_ACTION_KEY_PRESS == pstEvent->Action)
 		{
-			parrKeyValue = (SGUI_UINT16*)pstEvent->Data;
-			if(NULL != parrKeyValue)
+			uiKeyCode = *((SGUI_UINT16*)pstEvent->Data);
+			uiKeyValue = KEY_CODE_VALUE(uiKeyCode);
+			switch(uiKeyValue)
 			{
-				switch(*(parrKeyValue+1))
+				case KEY_VALUE_ENTER:
+				case KEY_VALUE_ESC:
 				{
-					case KEY_VALUE_ENTER:
-					case KEY_VALUE_ESC:
-					{
-						eProcessResult = HMI_RET_CANCEL;
-						break;
-					}
+					eProcessResult = HMI_RET_CANCEL;
+					break;
 				}
 			}
 		}

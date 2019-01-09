@@ -8,7 +8,7 @@
 #include "HMI_Engine.h"
 #ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
 #include "DemoResource_UTF8.h"
-#include "VirtualDeviceInterface.h"
+#include "SDKInterface.h"
 #else
 #include "DemoResource_GB2312.h"
 #endif

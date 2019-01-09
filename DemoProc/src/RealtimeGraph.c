@@ -69,7 +69,8 @@ HMI_ENGINE_RESULT HMI_DemoRealGraph_ProcessEvent(SGUI_IF_OBJ* pstIFObj, HMI_EVEN
 	/*----------------------------------*/
 	HMI_ENGINE_RESULT           eProcessResult;
 	SGUI_INT					iNewValue;
-	SGUI_UINT16*				parrKeyValue;
+	SGUI_UINT16					uiKeyCode;
+	SGUI_UINT16					uiKeyValue;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -81,35 +82,34 @@ HMI_ENGINE_RESULT HMI_DemoRealGraph_ProcessEvent(SGUI_IF_OBJ* pstIFObj, HMI_EVEN
 	/*----------------------------------*/
 	if(HMI_ENGINE_EVENT_ACTION == eEventType)
 	{
-		if(NULL != pstEvent)
+		switch(pstEvent->Action)
 		{
-			switch(pstEvent->Action)
+			case HMI_ENGINE_ACTION_KEY_PRESS:
 			{
-				case HMI_ENGINE_ACTION_KEY_PRESS:
+				uiKeyCode = *((SGUI_UINT16*)pstEvent->Data);
+				uiKeyValue = KEY_CODE_VALUE(uiKeyCode);
+
+				if(KEY_VALUE_ESC == uiKeyValue)
 				{
-					parrKeyValue = (SGUI_UINT16*)pstEvent->Data;
-                    if(KEY_VALUE_ESC == *(parrKeyValue+1))
-                    {
-                        eProcessResult = HMI_RET_CANCEL;
-                    }
-                    else
-                    {
-                        eProcessResult = HMI_RET_NOACTION;
-                    }
-                    break;
+					eProcessResult = HMI_RET_CANCEL;
 				}
-				case HMI_ENGINE_ACTION_ON_TIMER:
+				else
 				{
-                    iNewValue = *((SGUI_INT*)pstEvent->Data);
-                    SGUI_RealtimeGraph_AppendValue(&s_stRealtimeGraph, iNewValue);
-                    HMI_DemoRealGraph_RefreshScreen(pstIFObj, NULL);
-                    break;
+					eProcessResult = HMI_RET_NOACTION;
 				}
-				default:
-                {
-                    eProcessResult = HMI_RET_NOACTION;
-                    break;
-                }
+				break;
+			}
+			case HMI_ENGINE_ACTION_ON_TIMER:
+			{
+				iNewValue = *((SGUI_INT*)pstEvent->Data);
+				SGUI_RealtimeGraph_AppendValue(&s_stRealtimeGraph, iNewValue);
+				HMI_DemoRealGraph_RefreshScreen(pstIFObj, NULL);
+				break;
+			}
+			default:
+			{
+				eProcessResult = HMI_RET_NOACTION;
+				break;
 			}
 		}
 	}

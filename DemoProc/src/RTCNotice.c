@@ -83,8 +83,8 @@ HMI_ENGINE_RESULT HMI_DemoRTCNotice_ProcessEvent(SGUI_IF_OBJ* pstIFObj, HMI_EVEN
 	/* Variable Declaration				*/
 	/*----------------------------------*/
 	HMI_ENGINE_RESULT           eProcessResult;
-	SGUI_UINT16*				parrKeyValue;
-	SGUI_TIME*					pstRTCTime;
+	SGUI_TIME					stRTCTime;
+	SGUI_UINT16					uiKeyValue;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -96,12 +96,12 @@ HMI_ENGINE_RESULT HMI_DemoRTCNotice_ProcessEvent(SGUI_IF_OBJ* pstIFObj, HMI_EVEN
 	/*----------------------------------*/
 	if(NULL != pstEvent)
 	{
-		if(eEventType == HMI_ENGINE_EVENT_ACTION)
+		if(HMI_ENGINE_EVENT_ACTION == eEventType)
 		{
-			parrKeyValue = (SGUI_UINT16*)pstEvent->Data;
-			if(NULL != parrKeyValue)
+			if(HMI_ENGINE_ACTION_KEY_PRESS == pstEvent->Action)
 			{
-				switch(*(parrKeyValue+1))
+				uiKeyValue =				KEY_CODE_VALUE(*((SGUI_UINT16*)pstEvent->Data));
+				switch(uiKeyValue)
 				{
 					case KEY_VALUE_ENTER:
 					case KEY_VALUE_ESC:
@@ -111,20 +111,16 @@ HMI_ENGINE_RESULT HMI_DemoRTCNotice_ProcessEvent(SGUI_IF_OBJ* pstIFObj, HMI_EVEN
 					}
 				}
 			}
-		}
-		else if(eEventType == HMI_ENGINE_EVENT_DATA)
-		{
+
 			if(HMI_ENGINE_ACTION_ON_TIMER_RTC == pstEvent->Action)
 			{
-				pstRTCTime = (SGUI_TIME*)pstEvent->Data;
-				if(NULL != pstRTCTime)
-				{
-					sprintf(s_szRTCNoticeText, DEMO_RTC_NOTICE_TEXT_FMT,
-					pstRTCTime->Year, pstRTCTime->Month, pstRTCTime->Day,
-					pstRTCTime->Hour, pstRTCTime->Minute, pstRTCTime->Second);
-					SGUI_Notice_Refresh(pstIFObj, s_szRTCNoticeText, 0, SGUI_ICON_INFORMATION);
-					eProcessResult = HMI_RET_NOACTION;
-				}
+				SGUI_Common_GetNowTime(&stRTCTime);
+				sprintf(s_szRTCNoticeText, DEMO_RTC_NOTICE_TEXT_FMT,
+					stRTCTime.Year, stRTCTime.Month, stRTCTime.Day,
+					stRTCTime.Hour, stRTCTime.Minute, stRTCTime.Second);
+				SGUI_Notice_Refresh(pstIFObj, s_szRTCNoticeText, 0, SGUI_ICON_INFORMATION);
+				eProcessResult = HMI_RET_NOACTION;
+
 			}
 		}
 	}

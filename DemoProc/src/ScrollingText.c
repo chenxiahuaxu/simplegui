@@ -133,7 +133,8 @@ HMI_ENGINE_RESULT HMI_DemoScrollingText_ProcessEvent(SGUI_IF_OBJ* pstIFObj, HMI_
 	/* Variable Declaration				*/
 	/*----------------------------------*/
 	HMI_ENGINE_RESULT           eProcessResult;
-	SGUI_UINT16*				parrKeyValue;
+	SGUI_UINT16					uiKeyCode;
+	SGUI_UINT16					uiKeyValue;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -145,43 +146,42 @@ HMI_ENGINE_RESULT HMI_DemoScrollingText_ProcessEvent(SGUI_IF_OBJ* pstIFObj, HMI_
 	/*----------------------------------*/
 	if(HMI_ENGINE_EVENT_ACTION == eEventType)
 	{
-		if(NULL != pstEvent)
+		switch(pstEvent->Action)
 		{
-			switch(pstEvent->Action)
+			case HMI_ENGINE_ACTION_KEY_PRESS:
 			{
-				case HMI_ENGINE_ACTION_KEY_PRESS:
+				uiKeyCode = *((SGUI_UINT16*)pstEvent->Data);
+				uiKeyValue = KEY_CODE_VALUE(uiKeyCode);
+
+				if(KEY_VALUE_SPACE == uiKeyValue)
 				{
-					parrKeyValue = (SGUI_UINT16*)pstEvent->Data;
-                    if(KEY_VALUE_SPACE == *(parrKeyValue+1))
-                    {
-                        eProcessResult = HMI_RET_FOLLOWUP;
-                    }
-                    else
-                    {
-                        eProcessResult = HMI_RET_NOACTION;
-                    }
-                    break;
+					eProcessResult = HMI_RET_FOLLOWUP;
 				}
-				case HMI_ENGINE_ACTION_ON_TIMER:
+				else
 				{
-                    //SGUI_Frame_DrawFullScreenFrame(&s_stTextFrame);
-                    SGUI_Text_DrawMultipleLinesText(pstIFObj, s_szDemoText, SGUI_FONT_SIZE_H12, &s_stTextDisplayArea, s_iTextOffset, SGUI_DRAW_NORMAL);
-                    if(s_iTextOffset + s_iTextHeight == 0)
-                    {
-                        s_iTextOffset = HMI_TEXT_DEMO_FRAME_TEXT_HEIGHT;
-                    }
-                    else
-                    {
-                        s_iTextOffset--;
-                    }
-                    eProcessResult = HMI_RET_NOACTION;
-                    break;
+					eProcessResult = HMI_RET_NOACTION;
 				}
-				default:
-                {
-                    eProcessResult = HMI_RET_NOACTION;
-                    break;
-                }
+				break;
+			}
+			case HMI_ENGINE_ACTION_ON_TIMER:
+			{
+				//SGUI_Frame_DrawFullScreenFrame(pstIFObj, &s_stTextFrame);
+				SGUI_Text_DrawMultipleLinesText(pstIFObj, s_szDemoText, SGUI_FONT_SIZE_H12, &s_stTextDisplayArea, s_iTextOffset, SGUI_DRAW_NORMAL);
+				if(s_iTextOffset + s_iTextHeight == 0)
+				{
+					s_iTextOffset = HMI_TEXT_DEMO_FRAME_TEXT_HEIGHT;
+				}
+				else
+				{
+					s_iTextOffset--;
+				}
+				eProcessResult = HMI_RET_NOACTION;
+				break;
+			}
+			default:
+			{
+				eProcessResult = HMI_RET_NOACTION;
+				break;
 			}
 		}
 	}

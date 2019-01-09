@@ -132,7 +132,9 @@ HMI_ENGINE_RESULT HMI_DemoList_ProcessEvent(SGUI_IF_OBJ* pstIFObj, HMI_EVENT_TYP
 	/* Variable Declaration				*/
 	/*----------------------------------*/
 	HMI_ENGINE_RESULT           eProcessResult;
-	SGUI_UINT16*				parrKeyValue;
+	SGUI_UINT16					uiKeyCode;
+	SGUI_UINT16					uiKeyValue;
+	SGUI_UINT16					uiOptionCode;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -144,87 +146,86 @@ HMI_ENGINE_RESULT HMI_DemoList_ProcessEvent(SGUI_IF_OBJ* pstIFObj, HMI_EVENT_TYP
 	/*----------------------------------*/
 	if(eEvent == HMI_ENGINE_EVENT_ACTION)
 	{
-		if(NULL != pstEvent)
+		if(HMI_ENGINE_ACTION_KEY_PRESS == pstEvent->Action)
 		{
-			parrKeyValue = (SGUI_UINT16*)pstEvent->Data;
-			if(NULL != parrKeyValue)
+			uiKeyCode = *((SGUI_UINT16*)pstEvent->Data);
+			uiKeyValue = KEY_CODE_VALUE(uiKeyCode);
+			uiOptionCode = KEY_CODE_OPT(uiKeyCode);
+			switch(uiKeyValue)
 			{
-				switch(*(parrKeyValue+1))
+				case KEY_VALUE_ENTER:
 				{
-					case KEY_VALUE_ENTER:
+					eProcessResult = HMI_RET_CONFIRM;
+					break;
+				}
+				case KEY_VALUE_ESC:
+				{
+					eProcessResult = HMI_RET_CANCEL;
+					break;
+				}
+				case KEY_VALUE_UP:
+				{
+					SGUI_List_SelectUpItem(pstIFObj, &s_stDemoListObject);
+					break;
+				}
+				case KEY_VALUE_DOWN:
+				{
+					SGUI_List_SelectDownItem(pstIFObj, &s_stDemoListObject);
+					break;
+				}
+				case KEY_VALUE_RIGHT:
+				{
+					if((uiOptionCode & KEY_OPTION_SHIFT) != 0)
 					{
-						eProcessResult = HMI_RET_CONFIRM;
-						break;
+						SGUI_List_SetListItemValue(pstIFObj, &s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex, SGUI_List_GetListItemPtr(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex)->Valid.Value, SGUI_List_GetListItemPtr(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex)->Decimal.Value-1);
 					}
-					case KEY_VALUE_ESC:
+					else
 					{
-						eProcessResult = HMI_RET_CANCEL;
-						break;
+						SGUI_List_SetListItemValue(pstIFObj, &s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex, SGUI_List_GetListItemPtr(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex)->Valid.Value+1, SGUI_List_GetListItemPtr(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex)->Decimal.Value);
 					}
-					case KEY_VALUE_UP:
+					break;
+				}
+				case KEY_VALUE_LEFT:
+				{
+					if((uiOptionCode & KEY_OPTION_SHIFT) != 0)
 					{
-						SGUI_List_SelectUpItem(pstIFObj, &s_stDemoListObject);
-						break;
+						SGUI_List_SetListItemValue(pstIFObj, &s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex, SGUI_List_GetListItemPtr(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex)->Valid.Value, SGUI_List_GetListItemPtr(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex)->Decimal.Value+1);
 					}
-					case KEY_VALUE_DOWN:
+					else
 					{
-						SGUI_List_SelectDownItem(pstIFObj, &s_stDemoListObject);
-						break;
+						SGUI_List_SetListItemValue(pstIFObj, &s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex, SGUI_List_GetListItemPtr(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex)->Valid.Value-1, SGUI_List_GetListItemPtr(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex)->Decimal.Value);
 					}
-					case KEY_VALUE_RIGHT:
-					{
-						if((*(parrKeyValue+0) & KEY_OPTION_SHIFT) != 0)
-						{
-							SGUI_List_SetListItemValue(pstIFObj, &s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex, SGUI_List_GetListItemPtr(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex)->Valid.Value, SGUI_List_GetListItemPtr(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex)->Decimal.Value-1);
-						}
-						else
-						{
-							SGUI_List_SetListItemValue(pstIFObj, &s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex, SGUI_List_GetListItemPtr(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex)->Valid.Value+1, SGUI_List_GetListItemPtr(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex)->Decimal.Value);
-						}
-						break;
-					}
-					case KEY_VALUE_LEFT:
-					{
-						if((*(parrKeyValue+0) & KEY_OPTION_SHIFT) != 0)
-						{
-							SGUI_List_SetListItemValue(pstIFObj, &s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex, SGUI_List_GetListItemPtr(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex)->Valid.Value, SGUI_List_GetListItemPtr(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex)->Decimal.Value+1);
-						}
-						else
-						{
-							SGUI_List_SetListItemValue(pstIFObj, &s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex, SGUI_List_GetListItemPtr(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex)->Valid.Value-1, SGUI_List_GetListItemPtr(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex)->Decimal.Value);
-						}
-						break;
-					}
+					break;
+				}
 #ifdef _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
-					case KEY_VALUE_F8:
-					{
-						SGUI_List_RemoveItem(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex);
-						SGUI_List_Refresh(pstIFObj, &s_stDemoListObject);
-						break;
-					}
-					case KEY_VALUE_F9:	// Insert to head.
-					{
-						SGUI_List_InsertItem(&s_stDemoListObject, &s_arrstAppendListItems[0], 0);
-						SGUI_List_Refresh(pstIFObj, &s_stDemoListObject);
-						break;
-					}
-					case KEY_VALUE_F10:	// Insert to intermediate.
-					{
-						SGUI_List_InsertItem(&s_stDemoListObject, &s_arrstAppendListItems[1], 5);
-						SGUI_List_Refresh(pstIFObj, &s_stDemoListObject);
-						break;
-					}
-					case KEY_VALUE_F11:	// Insert to end.
-					{
-						SGUI_List_InsertItem(&s_stDemoListObject, &s_arrstAppendListItems[2], s_stDemoListObject.Data.Count);
-						SGUI_List_Refresh(pstIFObj, &s_stDemoListObject);
-						break;
-					}
+				case KEY_VALUE_F8:
+				{
+					SGUI_List_RemoveItem(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex);
+					SGUI_List_Refresh(pstIFObj, &s_stDemoListObject);
+					break;
+				}
+				case KEY_VALUE_F9:	// Insert to head.
+				{
+					SGUI_List_InsertItem(&s_stDemoListObject, &s_arrstAppendListItems[0], 0);
+					SGUI_List_Refresh(pstIFObj, &s_stDemoListObject);
+					break;
+				}
+				case KEY_VALUE_F10:	// Insert to intermediate.
+				{
+					SGUI_List_InsertItem(&s_stDemoListObject, &s_arrstAppendListItems[1], 5);
+					SGUI_List_Refresh(pstIFObj, &s_stDemoListObject);
+					break;
+				}
+				case KEY_VALUE_F11:	// Insert to end.
+				{
+					SGUI_List_InsertItem(&s_stDemoListObject, &s_arrstAppendListItems[2], s_stDemoListObject.Data.Count);
+					SGUI_List_Refresh(pstIFObj, &s_stDemoListObject);
+					break;
+				}
 #endif
-					default:
-					{
-						break;
-					}
+				default:
+				{
+					break;
 				}
 			}
 		}
