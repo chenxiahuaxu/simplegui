@@ -67,7 +67,6 @@ class LCDFrame
 		// Members.
 		void					    _setStatusText(const wxString& strString);
 		void					    _wxEvent_OnClose(wxCloseEvent& clsEvent)				{OnClose();}
-		void						_wxEvent_OnKeyDown(wxKeyEvent& clsEvent)				{OnKeyDown(clsEvent);}
 		void						_wxEvent_OnPaint(wxPaintEvent& clsEvent)				{OnPaint(clsEvent);clsEvent.Skip();}
 		void					    _wxEvent_OnScreenshots(wxCommandEvent& clsEvent)		{Screenshots();}
 		void					    _wxEvent_OnToolCopy(wxCommandEvent& clsEvent)			{Copy();}
@@ -79,6 +78,7 @@ class LCDFrame
 	protected:
 		virtual void		    	OnClose(void);
 		virtual void				OnKeyDown(wxKeyEvent& clsEvent);
+		virtual void				OnMouseEvent(wxMouseEvent& clsEvent);
 		virtual void				OnPaint(wxPaintEvent &clsEvent);
 		virtual void				Screenshots(void);
 		virtual void				Copy(void);

@@ -40,6 +40,9 @@
 #define		KEY_CODE_VALUE(CODE)							(CODE & 0x0FFF)
 #define		KEY_CODE_OPT(CODE)								(CODE & 0xF000)
 
+#define 	SDK_DEFAULT_HEART_BEAT_INTERVAL_MS				(20)
+#define 	SDK_DEFAULT_EVENT_SYNC_TIMEOUT_MS				(500)
+
 //=======================================================================//
 //= Data type definition.											    =//
 //=======================================================================//
@@ -62,20 +65,21 @@ typedef enum
 extern "C"
 {
 #endif /* __cplusplus */
-void		SGUI_SDK_SetEvnetSyncFlag(ENV_FLAG_INDEX eIndex, bool bValue);
-void		SGUI_SDK_SyncKeyEventData(unsigned int uiKeyCode);
-bool		SGUI_SDK_GetEventSyncFlag(ENV_FLAG_INDEX eIndex);
-bool		SGUI_SDK_Initialize(void);
-bool		SGUI_SDK_ConfigHearBeatTimer(unsigned int uiIntervalMs);
-bool		SGUI_SDK_EnableRTCInterrupt(bool bEnabled);
-int			SGUI_SDK_DummyMainProc(void);
-void		SGUI_SDK_KeyPressInterruptEvent(unsigned int uiKeyCode);
-void		SGUI_SDK_HeartBeatTimerTagEvent(void);
-void		SGUI_SDK_RTCInterruptTagEvent(void);
-void		SGUI_SDK_SetPixel(int uiPosX, int uiPosY, int uiPixelValue);
-int			SGUI_SDK_GetPixel(int uiPosX, int uiPosY);
-void		SGUI_SDK_RefreshDisplay(void);
-void		SGUI_SDK_ClearDisplay(void);
+void			SGUI_SDK_SetEvnetSyncFlag(ENV_FLAG_INDEX eIndex, bool bValue);
+void			SGUI_SDK_SyncKeyEventData(unsigned int uiKeyCode);
+unsigned int	SGUI_SDK_GetKeyEventData(void);
+bool			SGUI_SDK_GetEventSyncFlag(ENV_FLAG_INDEX eIndex);
+bool			SGUI_SDK_Initialize(void);
+bool			SGUI_SDK_ConfigHearBeatTimer(unsigned int uiIntervalMs);
+bool			SGUI_SDK_EnableRTCInterrupt(bool bEnabled);
+int				SGUI_SDK_DummyMainProc(void);
+void			SGUI_SDK_KeyPressInterruptEvent(unsigned int uiKeyCode);
+void			SGUI_SDK_HeartBeatTimerTagEvent(void);
+void			SGUI_SDK_RTCInterruptTagEvent(void);
+void			SGUI_SDK_SetPixel(int uiPosX, int uiPosY, int uiPixelValue);
+int				SGUI_SDK_GetPixel(int uiPosX, int uiPosY);
+void			SGUI_SDK_RefreshDisplay(void);
+void			SGUI_SDK_ClearDisplay(void);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

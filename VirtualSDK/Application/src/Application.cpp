@@ -14,6 +14,10 @@
 //= Class member function define.							            =//
 //=======================================================================//
 IMPLEMENT_APP(Application);
+
+BEGIN_EVENT_TABLE(Application, wxApp)
+    EVT_KEY_DOWN (Application::OnKeyDown)
+END_EVENT_TABLE()
 bool Application::OnInit(void)
 {
     /*----------------------------------*/

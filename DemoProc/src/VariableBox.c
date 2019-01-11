@@ -25,12 +25,12 @@
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
-static HMI_ENGINE_RESULT    HMI_DemoVariableBox_Initialize(SGUI_IF_OBJ* pstIFObj);
-static HMI_ENGINE_RESULT	HMI_DemoVariableBox_Prepare(SGUI_IF_OBJ* pstIFObj, const void* pstParameters);
-static HMI_ENGINE_RESULT	HMI_DemoVariableBox_RefreshScreen(SGUI_IF_OBJ* pstIFObj, const void* pstParameters);
-static HMI_ENGINE_RESULT    HMI_DemoVariableBox_ProcessEvent(SGUI_IF_OBJ* pstIFObj, HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent);
-static HMI_ENGINE_RESULT	HMI_DemoVariableBox_PostProcess(SGUI_IF_OBJ* pstIFObj, SGUI_INT iActionResult);
-static void				    HMI_DemoVariableBox_DrawFrame(SGUI_IF_OBJ* pstIFObj, SGUI_SZSTR szTitle);
+static HMI_ENGINE_RESULT    HMI_DemoVariableBox_Initialize(SGUI_SCR_DEV* pstIFObj);
+static HMI_ENGINE_RESULT	HMI_DemoVariableBox_Prepare(SGUI_SCR_DEV* pstIFObj, const void* pstParameters);
+static HMI_ENGINE_RESULT	HMI_DemoVariableBox_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const void* pstParameters);
+static HMI_ENGINE_RESULT    HMI_DemoVariableBox_ProcessEvent(SGUI_SCR_DEV* pstIFObj, HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent);
+static HMI_ENGINE_RESULT	HMI_DemoVariableBox_PostProcess(SGUI_SCR_DEV* pstIFObj, SGUI_INT iActionResult);
+static void				    HMI_DemoVariableBox_DrawFrame(SGUI_SCR_DEV* pstIFObj, SGUI_SZSTR szTitle);
 
 //=======================================================================//
 //= Static variable declaration.									    =//
@@ -75,13 +75,13 @@ HMI_SCREEN_OBJECT       		g_stHMIDemo_VariableBox =	{	HMI_SCREEN_ID_DEMO_VARIABL
 //=======================================================================//
 //= Function define.										            =//
 //=======================================================================//
-HMI_ENGINE_RESULT HMI_DemoVariableBox_Initialize(SGUI_IF_OBJ* pstIFObj)
+HMI_ENGINE_RESULT HMI_DemoVariableBox_Initialize(SGUI_SCR_DEV* pstIFObj)
 {
 	s_uiFocusedFlag = 0;
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoVariableBox_Prepare(SGUI_IF_OBJ* pstIFObj, const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoVariableBox_Prepare(SGUI_SCR_DEV* pstIFObj, const void* pstParameters)
 {
 	/*----------------------------------*/
 	/* Process							*/
@@ -94,7 +94,7 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_Prepare(SGUI_IF_OBJ* pstIFObj, const void*
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoVariableBox_RefreshScreen(SGUI_IF_OBJ* pstIFObj, const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoVariableBox_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const void* pstParameters)
 {
     /*----------------------------------*/
 	/* Process							*/
@@ -111,7 +111,7 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_RefreshScreen(SGUI_IF_OBJ* pstIFObj, const
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoVariableBox_ProcessEvent(SGUI_IF_OBJ* pstIFObj, HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent)
+HMI_ENGINE_RESULT HMI_DemoVariableBox_ProcessEvent(SGUI_SCR_DEV* pstIFObj, HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -269,7 +269,7 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_ProcessEvent(SGUI_IF_OBJ* pstIFObj, HMI_EV
 	return eProcessResult;
 }
 
-HMI_ENGINE_RESULT HMI_DemoVariableBox_PostProcess(SGUI_IF_OBJ* pstIFObj, SGUI_INT iActionResult)
+HMI_ENGINE_RESULT HMI_DemoVariableBox_PostProcess(SGUI_SCR_DEV* pstIFObj, SGUI_INT iActionResult)
 {
 	if(HMI_RET_CANCEL == iActionResult)
 	{
@@ -280,7 +280,7 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_PostProcess(SGUI_IF_OBJ* pstIFObj, SGUI_IN
 	return HMI_RET_NORMAL;
 }
 
-void HMI_DemoVariableBox_DrawFrame(SGUI_IF_OBJ* pstIFObj, SGUI_SZSTR szTitle)
+void HMI_DemoVariableBox_DrawFrame(SGUI_SCR_DEV* pstIFObj, SGUI_SZSTR szTitle)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/

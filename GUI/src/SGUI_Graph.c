@@ -22,7 +22,7 @@
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
-static void SGUI_Graph_DrawLine(SGUI_IF_OBJ* pstIFObj, SGUI_GRAPH* pstGraph, SGUI_UINT32 uiStartPointIndex, SGUI_UINT32 uiEndPointIndex);
+static void SGUI_Graph_DrawLine(SGUI_SCR_DEV* pstIFObj, SGUI_GRAPH* pstGraph, SGUI_UINT32 uiStartPointIndex, SGUI_UINT32 uiEndPointIndex);
 static void SGUI_Praph_GetPointDrawingCoordinate(SGUI_GRAPH_POINT* pstDataPoint, SGUI_GRAPH_CONTROL* pstControlData, SGUI_GRAPH_POINT* pstDrawingPoint);
 
 //=======================================================================//
@@ -96,7 +96,7 @@ void SGUI_Graph_InitializeGraphData(SGUI_GRAPH* pstGraph, SGUI_GRAPH_INIT_DATA* 
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_Graph_Refresh(SGUI_IF_OBJ* pstIFObj, SGUI_GRAPH* pstGraph)
+void SGUI_Graph_Refresh(SGUI_SCR_DEV* pstIFObj, SGUI_GRAPH* pstGraph)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -139,7 +139,7 @@ void SGUI_Graph_Refresh(SGUI_IF_OBJ* pstIFObj, SGUI_GRAPH* pstGraph)
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_Graph_DrawLine(SGUI_IF_OBJ* pstIFObj, SGUI_GRAPH* pstGraph, SGUI_UINT32 uiStartPointIndex, SGUI_UINT32 uiEndPointIndex)
+void SGUI_Graph_DrawLine(SGUI_SCR_DEV* pstIFObj, SGUI_GRAPH* pstGraph, SGUI_UINT32 uiStartPointIndex, SGUI_UINT32 uiEndPointIndex)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/

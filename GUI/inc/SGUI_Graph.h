@@ -1,5 +1,5 @@
-#ifndef __INCLUDE_GUI_GRAPH_H__
-#define __INCLUDE_GUI_GRAPH_H__
+#ifndef __INCLUDE_SGUI_GRAPH_H__
+#define __INCLUDE_SGUI_GRAPH_H__
 //=======================================================================//
 //= Include files.													    =//
 //=======================================================================//
@@ -62,5 +62,5 @@ typedef struct
 //= Public function declaration.									    =//
 //=======================================================================//
 void			SGUI_Graph_InitializeGraphData(SGUI_GRAPH* pstGraph, SGUI_GRAPH_INIT_DATA* pstInitializeData);
-void			SGUI_Graph_Refresh(SGUI_IF_OBJ* pstIFObj, SGUI_GRAPH* pstGraph);
-#endif // __INCLUDE_GUI_GRAPH_H__
+void			SGUI_Graph_Refresh(SGUI_SCR_DEV* pstIFObj, SGUI_GRAPH* pstGraph);
+#endif // __INCLUDE_SGUI_GRAPH_H__

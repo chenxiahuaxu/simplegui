@@ -2,7 +2,7 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="SimpleGUI" />
+		<Option title="SimpleGUI VirtualSDK" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
@@ -14,15 +14,19 @@
 				<Option compiler="gcc" />
 				<Option projectLinkerOptionsRelation="2" />
 				<Compiler>
-					<Add directory="$(#wx)/lib/gcc_dll/mswu" />
+					<Add directory="$(#wxBin)/lib/gcc_dll/mswu" />
 				</Compiler>
 				<ResourceCompiler>
-					<Add directory="$(#wx)/lib/gcc_dll/mswu" />
+					<Add directory="$(#wxBin)/lib/gcc_dll/mswu" />
 				</ResourceCompiler>
 				<Linker>
-					<Add library="libwxmsw31u.a" />
+					<Add library="libwxmsw30u_core.a" />
+					<Add library="libwxbase30u.a" />
+					<Add library="libwxpng.a" />
+					<Add library="libwxzlib.a" />
+					<Add library="libwxjpeg.a" />
+					<Add library="libwxtiff.a" />
 					<Add library="libiconv.a" />
-					<Add directory="$(#wx)/lib/gcc_dll" />
 					<Add directory="../../Library/lib32" />
 				</Linker>
 			</Target>
@@ -34,16 +38,20 @@
 				<Option compiler="gcc" />
 				<Option projectLinkerOptionsRelation="2" />
 				<Compiler>
-					<Add directory="$(#wx)/lib/gcc_dll/mswu" />
+					<Add directory="$(#wxBin)/lib/gcc_dll/mswu" />
 				</Compiler>
 				<ResourceCompiler>
-					<Add directory="$(#wx)/lib/gcc_dll/mswu" />
+					<Add directory="$(#wxBin)/lib/gcc_dll/mswu" />
 				</ResourceCompiler>
 				<Linker>
-					<Add library="libwxmsw31u.a" />
+					<Add library="libwxmsw30u_core.a" />
+					<Add library="libwxbase30u.a" />
+					<Add library="libwxpng.a" />
+					<Add library="libwxzlib.a" />
+					<Add library="libwxjpeg.a" />
+					<Add library="libwxtiff.a" />
 					<Add library="libiconv64.a" />
-					<Add directory="$(#wx)/lib/gcc_dll" />
-					<Add directory="../../Library/lib32" />
+					<Add directory="../../Library/lib64" />
 				</Linker>
 			</Target>
 		</Build>
@@ -53,6 +61,7 @@
 			<Add option="-g" />
 			<Add option="-pipe" />
 			<Add option="-mthreads" />
+			<Add option="-Wno-deprecated-declarations" />
 			<Add option="-D__GNUWIN32__" />
 			<Add option="-D__WXMSW__" />
 			<Add option="-DWXUSINGDLL" />
@@ -61,7 +70,8 @@
 			<Add option="-D_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_" />
 			<Add option="-D_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_" />
 			<Add option="-D_SIMPLE_GUI_ENABLE_BASIC_FONT_=1" />
-			<Add directory="$(#wx)/include" />
+			<Add directory="$(#wxBin)/include" />
+			<Add directory="$(#wxBin)/lib/gcc_dll/mswu" />
 			<Add directory="../../Application/inc" />
 			<Add directory="../../Common/inc" />
 			<Add directory="../../Library/inc" />
@@ -76,11 +86,12 @@
 			<Add directory="../../../DemoProc/inc" />
 		</Compiler>
 		<ResourceCompiler>
-			<Add directory="$(#wx)/include" />
+			<Add directory="$(#wxBin)/include" />
 		</ResourceCompiler>
 		<Linker>
 			<Add option="-O3" />
 			<Add option="-mthreads" />
+			<Add directory="$(#wxBin)/lib/gcc_dll" />
 		</Linker>
 		<Unit filename="../../../DemoProc/inc/DemoProc.h" />
 		<Unit filename="../../../DemoProc/src/DemoProc.c">

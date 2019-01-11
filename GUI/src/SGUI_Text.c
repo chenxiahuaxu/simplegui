@@ -12,9 +12,6 @@
 #include "SGUI_Common.h"
 #include "SGUI_Text.h"
 #include "SGUI_Basic.h"
-#include <stddef.h>
-#include <stdint.h>
-#include <string.h>
 
 //=======================================================================//
 //= Static variable declaration.									    =//
@@ -48,7 +45,7 @@ static SGUI_FLASH_DATA_SOURCE SGUI_Text_GetFontResource(SGUI_FONT_SIZE eFontSize
 /** Return:			Next character X coordinate in current line.		**/
 /** Limitation:		None.												**/
 /*************************************************************************/
-void SGUI_Text_DrawSingleLineText(SGUI_IF_OBJ* pstIFObj, SGUI_CSZSTR szText, SGUI_FONT_SIZE eFontSize, SGUI_RECT_AREA* pstDisplayArea, SGUI_RECT_AREA* pstTextDataArea, SGUI_DRAW_MODE eFontMode)
+void SGUI_Text_DrawSingleLineText(SGUI_SCR_DEV* pstIFObj, SGUI_CSZSTR szText, SGUI_FONT_SIZE eFontSize, SGUI_RECT_AREA* pstDisplayArea, SGUI_RECT_AREA* pstTextDataArea, SGUI_DRAW_MODE eFontMode)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -78,31 +75,31 @@ void SGUI_Text_DrawSingleLineText(SGUI_IF_OBJ* pstIFObj, SGUI_CSZSTR szText, SGU
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if((szText != NULL) && (RECTANGLE_X_START(*pstDisplayArea) < LCD_SIZE_WIDTH) && (SGUI_FONT_SRC_UNKNOWN != eFontResource))
+	if((szText != NULL) && (RECT_X_START(*pstDisplayArea) < LCD_SIZE_WIDTH) && (SGUI_FONT_SRC_UNKNOWN != eFontResource))
 	{
 		// Recalculate text display area and data area.
-        if(RECTANGLE_X_START(*pstDisplayArea) < 0)
+        if(RECT_X_START(*pstDisplayArea) < 0)
 		{
-			RECTANGLE_X_START(*pstTextDataArea) += RECTANGLE_X_START(*pstDisplayArea);
-			RECTANGLE_WIDTH(*pstDisplayArea) += RECTANGLE_X_START(*pstDisplayArea);
-			RECTANGLE_X_START(*pstDisplayArea) = 0;
+			RECT_X_START(*pstTextDataArea) += RECT_X_START(*pstDisplayArea);
+			RECT_WIDTH(*pstDisplayArea) += RECT_X_START(*pstDisplayArea);
+			RECT_X_START(*pstDisplayArea) = 0;
 		}
-		if(RECTANGLE_Y_START(*pstDisplayArea) < 0)
+		if(RECT_Y_START(*pstDisplayArea) < 0)
 		{
-			RECTANGLE_Y_START(*pstTextDataArea) += RECTANGLE_Y_START(*pstDisplayArea);
-			RECTANGLE_HEIGHT(*pstDisplayArea) += RECTANGLE_Y_START(*pstDisplayArea);
-			RECTANGLE_Y_START(*pstDisplayArea) = 0;
+			RECT_Y_START(*pstTextDataArea) += RECT_Y_START(*pstDisplayArea);
+			RECT_HEIGHT(*pstDisplayArea) += RECT_Y_START(*pstDisplayArea);
+			RECT_Y_START(*pstDisplayArea) = 0;
 		}
 		// Clear text area.
-        SGUI_Basic_DrawRectangle(pstIFObj, RECTANGLE_X_START(*pstDisplayArea), RECTANGLE_Y_START(*pstDisplayArea),
-						RECTANGLE_WIDTH(*pstDisplayArea), RECTANGLE_HEIGHT(*pstDisplayArea),
+        SGUI_Basic_DrawRectangle(pstIFObj, RECT_X_START(*pstDisplayArea), RECT_Y_START(*pstDisplayArea),
+						RECT_WIDTH(*pstDisplayArea), RECT_HEIGHT(*pstDisplayArea),
 						eBackColor, eBackColor);
 		// Initialize drawing area data.
-		RECTANGLE_X_START(stCharacterDataArea) = RECTANGLE_X_START(*pstTextDataArea);
-		RECTANGLE_Y_START(stCharacterDataArea) = RECTANGLE_Y_START(*pstTextDataArea);
-		RECTANGLE_HEIGHT(stCharacterDataArea) = uiFontHeight;
+		RECT_X_START(stCharacterDataArea) = RECT_X_START(*pstTextDataArea);
+		RECT_Y_START(stCharacterDataArea) = RECT_Y_START(*pstTextDataArea);
+		RECT_HEIGHT(stCharacterDataArea) = uiFontHeight;
 		// Loop for Each char.
-		while((*pcTextPointer != '\0') && (RECTANGLE_X_START(stCharacterDataArea) < RECTANGLE_WIDTH(*pstDisplayArea)))
+		while((*pcTextPointer != '\0') && (RECT_X_START(stCharacterDataArea) < RECT_WIDTH(*pstDisplayArea)))
 		{
 			// Get character.
 			uiCodeHighByte = 0x00;
@@ -132,15 +129,15 @@ void SGUI_Text_DrawSingleLineText(SGUI_IF_OBJ* pstIFObj, SGUI_CSZSTR szText, SGU
 			uiCharacterCode = uiCharacterCode << 8;
 			uiCharacterCode = uiCharacterCode | uiCodeLowByte;
 
-			RECTANGLE_WIDTH(stCharacterDataArea) = uiCharacterWidth;
+			RECT_WIDTH(stCharacterDataArea) = uiCharacterWidth;
 
-			if(RECTANGLE_X_END(stCharacterDataArea) >= 0)
+			if(RECT_X_END(stCharacterDataArea) >= 0)
 			{
 				iFontDataIndex = SGUI_Text_GetCharacterTableIndex(uiCharacterCode);
 				adFontDataAddr = iFontDataIndex * uiCharacterDataSize;
 				SGUI_Basic_DrawBitMap(pstIFObj, pstDisplayArea, &stCharacterDataArea, eFontResource, adFontDataAddr, eFontMode);
 			}
-			RECTANGLE_X_START(stCharacterDataArea) += uiCharacterWidth;
+			RECT_X_START(stCharacterDataArea) += uiCharacterWidth;
 		}
 	}
 }
@@ -157,7 +154,7 @@ void SGUI_Text_DrawSingleLineText(SGUI_IF_OBJ* pstIFObj, SGUI_CSZSTR szText, SGU
 /** Return:			Next character X coordinate in current line.			**/
 /** Notice:			None.													**/
 /*****************************************************************************/
-SGUI_SIZE SGUI_Text_DrawMultipleLinesText(SGUI_IF_OBJ* pstIFObj, SGUI_CSZSTR szText, SGUI_FONT_SIZE eFontSize, SGUI_RECT_AREA* pstDisplayArea, SGUI_INT iTopOffset, SGUI_DRAW_MODE eFontMode)
+SGUI_SIZE SGUI_Text_DrawMultipleLinesText(SGUI_SCR_DEV* pstIFObj, SGUI_CSZSTR szText, SGUI_FONT_SIZE eFontSize, SGUI_RECT_AREA* pstDisplayArea, SGUI_INT iTopOffset, SGUI_DRAW_MODE eFontMode)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -189,30 +186,30 @@ SGUI_SIZE SGUI_Text_DrawMultipleLinesText(SGUI_IF_OBJ* pstIFObj, SGUI_CSZSTR szT
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if((szText != NULL) && (RECTANGLE_X_START(*pstDisplayArea) < LCD_SIZE_WIDTH))
+	if((szText != NULL) && (RECT_X_START(*pstDisplayArea) < LCD_SIZE_WIDTH))
 	{
 		// Recalculate text display area and data area.
-		if(RECTANGLE_X_START(*pstDisplayArea) < 0)
+		if(RECT_X_START(*pstDisplayArea) < 0)
 		{
-			RECTANGLE_X_START(stCharacterDataArea) += RECTANGLE_X_START(*pstDisplayArea);
-			RECTANGLE_WIDTH(*pstDisplayArea) += RECTANGLE_X_START(*pstDisplayArea);
-			RECTANGLE_X_START(*pstDisplayArea) = 0;
+			RECT_X_START(stCharacterDataArea) += RECT_X_START(*pstDisplayArea);
+			RECT_WIDTH(*pstDisplayArea) += RECT_X_START(*pstDisplayArea);
+			RECT_X_START(*pstDisplayArea) = 0;
 		}
-		if(RECTANGLE_Y_START(*pstDisplayArea) < 0)
+		if(RECT_Y_START(*pstDisplayArea) < 0)
 		{
-			RECTANGLE_Y_START(stCharacterDataArea) += RECTANGLE_Y_START(*pstDisplayArea);
-			RECTANGLE_HEIGHT(*pstDisplayArea) += RECTANGLE_Y_START(*pstDisplayArea);
-			RECTANGLE_Y_START(*pstDisplayArea) = 0;
+			RECT_Y_START(stCharacterDataArea) += RECT_Y_START(*pstDisplayArea);
+			RECT_HEIGHT(*pstDisplayArea) += RECT_Y_START(*pstDisplayArea);
+			RECT_Y_START(*pstDisplayArea) = 0;
 		}
 		// Clear text area.
         SGUI_Basic_DrawRectangle(pstIFObj,
-						RECTANGLE_X_START(*pstDisplayArea), RECTANGLE_Y_START(*pstDisplayArea),
-						RECTANGLE_WIDTH(*pstDisplayArea), RECTANGLE_HEIGHT(*pstDisplayArea),
+						RECT_X_START(*pstDisplayArea), RECT_Y_START(*pstDisplayArea),
+						RECT_WIDTH(*pstDisplayArea), RECT_HEIGHT(*pstDisplayArea),
 						eBackColor, eBackColor);
 		// Initialize drawing area data.
-		RECTANGLE_X_START(stCharacterDataArea)		= 0;
-		RECTANGLE_Y_START(stCharacterDataArea)		= iTopOffset;
-		RECTANGLE_HEIGHT(stCharacterDataArea)		= uiFontHeight;
+		RECT_X_START(stCharacterDataArea)		= 0;
+		RECT_Y_START(stCharacterDataArea)		= iTopOffset;
+		RECT_HEIGHT(stCharacterDataArea)		= uiFontHeight;
 		uiLines										= 1;
 
 		// Loop for each word in display area.
@@ -225,15 +222,15 @@ SGUI_SIZE SGUI_Text_DrawMultipleLinesText(SGUI_IF_OBJ* pstIFObj, SGUI_CSZSTR szT
                 // Judge change line symbol.
                 if(*pcTextPointer == '\n')
                 {
-                    if(RECTANGLE_X_START(stCharacterDataArea) == 0)
+                    if(RECT_X_START(stCharacterDataArea) == 0)
                     {
                         // Ignore change lines in line start.
                     }
                     else
                     {
                         // Change lines.
-                        RECTANGLE_X_START(stCharacterDataArea) = 0;
-                        RECTANGLE_Y_START(stCharacterDataArea) += uiFontHeight;
+                        RECT_X_START(stCharacterDataArea) = 0;
+                        RECT_Y_START(stCharacterDataArea) += uiFontHeight;
                         uiLines ++;
                     }
                     pcTextPointer++;
@@ -243,20 +240,20 @@ SGUI_SIZE SGUI_Text_DrawMultipleLinesText(SGUI_IF_OBJ* pstIFObj, SGUI_CSZSTR szT
                 if(((SGUI_BYTE)(*pcTextPointer) < 0x7F) && ((SGUI_BYTE)(*pcTextPointer) >= 0x20))
                 {
                     uiCodeLowByte = (SGUI_BYTE)*pcTextPointer++;
-                    RECTANGLE_WIDTH(stCharacterDataArea) = uiFontWidth;
+                    RECT_WIDTH(stCharacterDataArea) = uiFontWidth;
                 }
                 // Process with GB2312.
                 else if(((SGUI_BYTE)(*pcTextPointer) >= 0xA1) && ((SGUI_BYTE)(*pcTextPointer) <= 0xF7))
                 {
                     uiCodeHighByte = (SGUI_BYTE)*pcTextPointer++;
                     uiCodeLowByte = (SGUI_BYTE)*pcTextPointer++;
-                    RECTANGLE_WIDTH(stCharacterDataArea) = uiFontWidth << 1;
+                    RECT_WIDTH(stCharacterDataArea) = uiFontWidth << 1;
                 }
                 // Invalid character
                 else
                 {
                     pcTextPointer++;
-                    RECTANGLE_WIDTH(stCharacterDataArea) = 0;
+                    RECT_WIDTH(stCharacterDataArea) = 0;
                     continue;
                 }
                 uiCharacterCode = uiCodeHighByte;
@@ -264,15 +261,15 @@ SGUI_SIZE SGUI_Text_DrawMultipleLinesText(SGUI_IF_OBJ* pstIFObj, SGUI_CSZSTR szT
                 uiCharacterCode = uiCharacterCode | uiCodeLowByte;
 
                 // Judge change line
-                if(RECTANGLE_X_END(stCharacterDataArea) >= RECTANGLE_WIDTH(*pstDisplayArea))
+                if(RECT_X_END(stCharacterDataArea) >= RECT_WIDTH(*pstDisplayArea))
                 {
                     // Change lines.
-                    RECTANGLE_X_START(stCharacterDataArea) = 0;
-                    RECTANGLE_Y_START(stCharacterDataArea) += uiFontHeight;
+                    RECT_X_START(stCharacterDataArea) = 0;
+                    RECT_Y_START(stCharacterDataArea) += uiFontHeight;
                     uiLines ++;
                 }
                 // Draw characters.
-                if((RECTANGLE_Y_END(stCharacterDataArea) >= 0) && (RECTANGLE_Y_START(stCharacterDataArea) < RECTANGLE_HEIGHT(*pstDisplayArea)))
+                if((RECT_Y_END(stCharacterDataArea) >= 0) && (RECT_Y_START(stCharacterDataArea) < RECT_HEIGHT(*pstDisplayArea)))
                 {
                     // Draw character.
                     iFontDataIndex = SGUI_Text_GetCharacterTableIndex(uiCharacterCode);
@@ -284,7 +281,7 @@ SGUI_SIZE SGUI_Text_DrawMultipleLinesText(SGUI_IF_OBJ* pstIFObj, SGUI_CSZSTR szT
                 {
                     // character is not in visible area, ignore.
                 }
-                RECTANGLE_X_START(stCharacterDataArea) += RECTANGLE_WIDTH(stCharacterDataArea);
+                RECT_X_START(stCharacterDataArea) += RECT_WIDTH(stCharacterDataArea);
             }
         }
 	}
@@ -370,7 +367,7 @@ SGUI_SIZE SGUI_Text_GetTextGraphicsWidth(SGUI_CSZSTR szText, SGUI_FONT_SIZE eFon
 	/*----------------------------------*/
 	if(NULL != szText)
 	{
-		uiTextHalfCharLength = SGUI_Common_StringLength(ENCODE(szText));
+		uiTextHalfCharLength = SGUI_SystemIF_StringLength(ENCODE(szText));
 		uiHalfFontWidth = g_stFontSize[eFontSize].Width;
 		uiTextGraphicsWidth = uiHalfFontWidth * uiTextHalfCharLength;
 	}
@@ -507,11 +504,6 @@ SGUI_FLASH_DATA_SOURCE SGUI_Text_GetFontResource(SGUI_FONT_SIZE eFontSize)
 		case SGUI_FONT_SIZE_H16:
 		{
 			eResourceID = SGUI_FONT_SRC_H16;
-			break;
-		}
-		case SGUI_FONT_SIZE_H32:
-		{
-			eResourceID = SGUI_FONT_SRC_H32;
 			break;
 		}
 		default:

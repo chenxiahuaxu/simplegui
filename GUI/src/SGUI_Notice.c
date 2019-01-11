@@ -55,7 +55,7 @@
 /** Return:			Remaining text height display.						**/
 /** Notice:			None.												**/
 /*************************************************************************/
-SGUI_SIZE SGUI_Notice_Refresh(SGUI_IF_OBJ* pstIFObj, SGUI_CSZSTR szNoticeText, SGUI_INT uiTextOffset, SGUI_NOTICE_ICON eIcon)
+SGUI_SIZE SGUI_Notice_Refresh(SGUI_SCR_DEV* pstIFObj, SGUI_CSZSTR szNoticeText, SGUI_INT uiTextOffset, SGUI_NOTICE_ICON_IDX eIcon)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -103,11 +103,7 @@ SGUI_SIZE SGUI_Notice_Refresh(SGUI_IF_OBJ* pstIFObj, SGUI_CSZSTR szNoticeText, S
 		stIconDataArea.PosY = 0;
 		stIconDataArea.Width = NOTICE_ICON_SIZE;
 		stIconDataArea.Height = NOTICE_ICON_SIZE;
-		#if NOTICE_ICON_SIZE == 16
-		SGUI_Basic_DrawBitMap(pstIFObj, &stIconDisplayArea, &stIconDataArea, SGUI_NOTICE_ICON_16PIX, eIcon*(NOTICE_ICON_SIZE*(NOTICE_ICON_SIZE/8)), SGUI_DRAW_NORMAL);
-		#elif NOTICE_ICON_SIZE == 24
-		SGUI_Basic_DrawBitMap(&stIconDisplayArea, &stIconDataArea, SGUI_NOTICE_ICON_24PIX, eIcon*(NOTICE_ICON_SIZE*(NOTICE_ICON_SIZE/8)), SGUI_DRAW_NORMAL);
-		#endif
+		SGUI_Basic_DrawBitMap(pstIFObj, &stIconDisplayArea, &stIconDataArea, SGUI_NOTICE_ICON, eIcon*(NOTICE_ICON_SIZE*(NOTICE_ICON_SIZE/8)), SGUI_DRAW_NORMAL);
 	}
     // Draw text;
     if(SGUI_ICON_NONE != eIcon)

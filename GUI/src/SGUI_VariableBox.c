@@ -17,7 +17,7 @@
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
-static void				SGUI_TextVariableBox_UpdateCharacter(SGUI_IF_OBJ* pstIFObj, SGUI_TEXT_VARBOX_STRUCT* pstTextValue, char cNewCharacters, SGUI_DRAW_MODE eMode);
+static void				SGUI_TextVariableBox_UpdateCharacter(SGUI_SCR_DEV* pstIFObj, SGUI_TEXT_VARBOX_STRUCT* pstTextValue, char cNewCharacters, SGUI_DRAW_MODE eMode);
 
 //=======================================================================//
 //= Function define.										            =//
@@ -33,7 +33,7 @@ static void				SGUI_TextVariableBox_UpdateCharacter(SGUI_IF_OBJ* pstIFObj, SGUI_
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_IntegerVariableBox_Refresh(SGUI_IF_OBJ* pstIFObj, SGUI_INT_VARBOX_STRUCT* pstValue, SGUI_VARBOX_ALIG eAlignment, SGUI_DRAW_MODE eMode)
+void SGUI_IntegerVariableBox_Refresh(SGUI_SCR_DEV* pstIFObj, SGUI_INT_VARBOX_STRUCT* pstValue, SGUI_VARBOX_ALIG eAlignment, SGUI_DRAW_MODE eMode)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -48,7 +48,7 @@ void SGUI_IntegerVariableBox_Refresh(SGUI_IF_OBJ* pstIFObj, SGUI_INT_VARBOX_STRU
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	SGUI_Common_MemorySet(szTextBuffer, 0x00, VARBOX_TEXT_BUFFER_SIZE);
+	SGUI_SystemIF_MemorySet(szTextBuffer, 0x00, VARBOX_TEXT_BUFFER_SIZE);
 	eBackColor =				((eMode==SGUI_DRAW_NORMAL)?SGUI_COLOR_BKGCLR:SGUI_COLOR_FRGCLR);
 	// Draw edge
 	SGUI_Basic_DrawRectangle(pstIFObj, pstValue->PosX, pstValue->PosY, pstValue->Width, VARBOX_HEIGHT(pstValue->FontSize), eBackColor, eBackColor);
@@ -107,7 +107,7 @@ void SGUI_IntegerVariableBox_Refresh(SGUI_IF_OBJ* pstIFObj, SGUI_INT_VARBOX_STRU
 /** Return:			None.												**/
 /** Notice:			Static function, call by others interface.			**/
 /*************************************************************************/
-void SGUI_TextVariableBox_UpdateCharacter(SGUI_IF_OBJ* pstIFObj, SGUI_TEXT_VARBOX_STRUCT* pstTextValue, char cNewCharacters, SGUI_DRAW_MODE eMode)
+void SGUI_TextVariableBox_UpdateCharacter(SGUI_SCR_DEV* pstIFObj, SGUI_TEXT_VARBOX_STRUCT* pstTextValue, char cNewCharacters, SGUI_DRAW_MODE eMode)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -145,7 +145,7 @@ void SGUI_TextVariableBox_UpdateCharacter(SGUI_IF_OBJ* pstIFObj, SGUI_TEXT_VARBO
 		}
 		uiFocusIndexMax = pstTextValue->MaxTextLength-1;
 		// Ignore too long text string.
-		uiTextLength = SGUI_Common_StringLength(pstTextValue->Value);
+		uiTextLength = SGUI_SystemIF_StringLength(pstTextValue->Value);
 		if(uiTextLength > pstTextValue->MaxTextLength)
 		{
 			uiTextLength = pstTextValue->MaxTextLength;
@@ -188,9 +188,9 @@ void SGUI_TextVariableBox_UpdateCharacter(SGUI_IF_OBJ* pstIFObj, SGUI_TEXT_VARBO
 		stFocusArea.PosY = stTextDisplayArea.PosY;
 		stFocusArea.Width = uiFontWidth;
 		stFocusArea.Height = uiFontHeight;
-		if(RECTANGLE_X_END(stFocusArea) > RECTANGLE_X_END(stTextDisplayArea))
+		if(RECT_X_END(stFocusArea) > RECT_X_END(stTextDisplayArea))
 		{
-			stTextDataArea.PosX = RECTANGLE_X_END(stTextDisplayArea) - RECTANGLE_X_END(stFocusArea);
+			stTextDataArea.PosX = RECT_X_END(stTextDisplayArea) - RECT_X_END(stFocusArea);
 			stFocusArea.PosX = stFocusArea.PosX + stTextDataArea.PosX;
 		}
 		// Display text.
@@ -209,7 +209,7 @@ void SGUI_TextVariableBox_UpdateCharacter(SGUI_IF_OBJ* pstIFObj, SGUI_TEXT_VARBO
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_TextVariableBox_Refresh(SGUI_IF_OBJ* pstIFObj, SGUI_TEXT_VARBOX_STRUCT* pstTextValue, SGUI_DRAW_MODE eMode)
+void SGUI_TextVariableBox_Refresh(SGUI_SCR_DEV* pstIFObj, SGUI_TEXT_VARBOX_STRUCT* pstTextValue, SGUI_DRAW_MODE eMode)
 {
 
 	/*----------------------------------*/
@@ -239,7 +239,7 @@ void SGUI_TextVariableBox_Refresh(SGUI_IF_OBJ* pstIFObj, SGUI_TEXT_VARBOX_STRUCT
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_TextVariableBox_ChangeCharacter(SGUI_IF_OBJ* pstIFObj, SGUI_TEXT_VARBOX_STRUCT* pstTextValue, SGUI_DRAW_MODE eMode, SGUI_UINT uiCharacterSet, SGUI_TEXT_VARBOX_OPT eOpt)
+void SGUI_TextVariableBox_ChangeCharacter(SGUI_SCR_DEV* pstIFObj, SGUI_TEXT_VARBOX_STRUCT* pstTextValue, SGUI_DRAW_MODE eMode, SGUI_UINT uiCharacterSet, SGUI_TEXT_VARBOX_OPT eOpt)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/

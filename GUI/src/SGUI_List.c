@@ -19,31 +19,31 @@
 //= User Macro definition.											    =//
 //=======================================================================//
 // User settings
-#define						LIST_EDGE_MULTIPLE					(1)
-#define						LIST_ITEM_TEXT_BLANK_EDGEX			(2)
-#define						LIST_ITEM_TEXT_BLANK_EDGEY			(1)
-#define						LIST_ITEM_PARAMETER_SPLIT_WIDTH		(4)
-#define						LIST_ITEM_PARAMETER_TEXT_LENGTH_MAX	(16)
-#define						LIST_SCROLLBAR_WIDTH				(5)
+#define		LIST_EDGE_MULTIPLE							(1)
+#define		LIST_ITEM_TEXT_BLANK_EDGEX					(2)
+#define		LIST_ITEM_TEXT_BLANK_EDGEY					(1)
+#define		LIST_ITEM_PARAMETER_SPLIT_WIDTH				(4)
+#define		LIST_ITEM_PARAMETER_TEXT_LENGTH_MAX			(16)
+#define		LIST_SCROLLBAR_WIDTH						(5)
 // Automatic calculation
 #if(LIST_EDGE_MULTIPLE == 0)
-	#define 				LIST_EDGE_SIZE						(0)
+ #define	LIST_EDGE_SIZE								(0)
 #else
-	#define					LIST_EDGE_SIZE						(LIST_EDGE_MULTIPLE*2-1)
+ #define	LIST_EDGE_SIZE								(LIST_EDGE_MULTIPLE*2-1)
 #endif
-#define						LIST_TITLE_HEIGHT(FONT)             (g_stFontSize[FONT].Height+2)
-#define						LIST_SCROLLBAR_POSX					(LCD_SIZE_WIDTH-LIST_EDGE_SIZE-LIST_SCROLLBAR_WIDTH)
-#define						LIST_ITEM_RECT_POSX					(LIST_EDGE_SIZE+2)
-#define						LIST_ITEM_RECT_WIDTH				(LCD_SIZE_WIDTH-(LIST_ITEM_RECT_POSX*2)-LIST_SCROLLBAR_WIDTH)
-#define						LIST_ITEM_TEXT_AREA_WIDTH			(LIST_ITEM_RECT_WIDTH-(LIST_ITEM_TEXT_BLANK_EDGEX*2))
-#define						LIST_ITEM_PARAMETER_AREA_WIDTH		((LIST_ITEM_TEXT_AREA_WIDTH/2)-LIST_ITEM_PARAMETER_SPLIT_WIDTH)
-#define						LIST_ITEM_PARAMETER_STARTX			(LIST_ITEM_RECT_POSX+LIST_ITEM_TEXT_BLANK_EDGEX+(LIST_ITEM_TEXT_AREA_WIDTH-LIST_ITEM_PARAMETER_AREA_WIDTH))
+#define		LIST_TITLE_HEIGHT(FONT)             		(g_stFontSize[FONT].Height+2)
+#define		LIST_SCROLLBAR_POSX(LIST_WIDTH)				(LIST_WIDTH-LIST_EDGE_SIZE-LIST_SCROLLBAR_WIDTH)
+#define		LIST_ITEM_RECT_POSX							(LIST_EDGE_SIZE+2)
+#define		LIST_ITEM_RECT_WIDTH(LIST_WIDTH)			(LIST_WIDTH-(LIST_ITEM_RECT_POSX*2)-LIST_SCROLLBAR_WIDTH)
+#define		LIST_ITEM_TEXT_AREA_WIDTH(LIST_WIDTH)		(LIST_ITEM_RECT_WIDTH(LIST_WIDTH)-(LIST_ITEM_TEXT_BLANK_EDGEX*2))
+#define		LIST_ITEM_PARAMETER_AREA_WIDTH(LIST_WIDTH)	((LIST_ITEM_TEXT_AREA_WIDTH(LIST_WIDTH)/2)-LIST_ITEM_PARAMETER_SPLIT_WIDTH)
+#define		LIST_ITEM_PARAMETER_STARTX(LIST_WIDTH)		(LIST_ITEM_RECT_POSX+LIST_ITEM_TEXT_BLANK_EDGEX+(LIST_ITEM_TEXT_AREA_WIDTH(LIST_WIDTH)-LIST_ITEM_PARAMETER_AREA_WIDTH(LIST_WIDTH)))
 
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
-static SGUI_INLINE void		SGUI_List_RefreshListItems(SGUI_IF_OBJ* pstIFObj, SGUI_List_STRUCT* pstList);
-static SGUI_INLINE void		SGUI_List_DrawItem(SGUI_IF_OBJ* pstIFObj, SGUI_List_STRUCT* pstList, SGUI_SIZE uiIndex);
+static void		SGUI_List_RefreshListItems(SGUI_SCR_DEV* pstIFObj, SGUI_List_STRUCT* pstList);
+static void		SGUI_List_DrawItem(SGUI_SCR_DEV* pstIFObj, SGUI_List_STRUCT* pstList, SGUI_SIZE uiIndex);
 
 //=======================================================================//
 //= Function define.										            =//
@@ -96,7 +96,7 @@ void SGUI_List_InitializeListData(SGUI_List_STRUCT* pstList)
 
 		// Initialize scroll bar.
 		pstSubElement->ScrollBar.Parameter.eDirection = SGUI_SCROLLBAR_VERTICAL;
-		pstSubElement->ScrollBar.Parameter.PosX = LIST_SCROLLBAR_POSX;
+		pstSubElement->ScrollBar.Parameter.PosX = LIST_SCROLLBAR_POSX(LCD_SIZE_WIDTH);
 		pstSubElement->ScrollBar.Parameter.PosY = pstListControl->FirstVisibleItemPosY;
 		pstSubElement->ScrollBar.Parameter.Width = LIST_SCROLLBAR_WIDTH;
 		pstSubElement->ScrollBar.Parameter.Height = pstListControl->VisibleItemsAreaHeight;
@@ -114,7 +114,7 @@ void SGUI_List_InitializeListData(SGUI_List_STRUCT* pstList)
 /** Return:			None.												**/
 /** Notice:			This only refresh visible items and scrollbar.		**/
 /*************************************************************************/
-void SGUI_List_RefreshListItems(SGUI_IF_OBJ* pstIFObj, SGUI_List_STRUCT* pstList)
+void SGUI_List_RefreshListItems(SGUI_SCR_DEV* pstIFObj, SGUI_List_STRUCT* pstList)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -153,7 +153,7 @@ void SGUI_List_RefreshListItems(SGUI_IF_OBJ* pstIFObj, SGUI_List_STRUCT* pstList
 			pstSubElement->ScrollBar.Parameter.MaxIndex = (pstListData->Count>pstListControl->VisibleIntegralItemsNum)?(pstListData->Count-pstListControl->VisibleIntegralItemsNum-1):0;
 #endif
 			// Clear list item display area.
-			SGUI_Basic_DrawRectangle(pstIFObj, LIST_ITEM_RECT_POSX, pstListControl->FirstVisibleItemPosY, LIST_ITEM_RECT_WIDTH, pstListControl->VisibleItemsAreaHeight, SGUI_COLOR_BKGCLR, SGUI_COLOR_BKGCLR);
+			SGUI_Basic_DrawRectangle(pstIFObj, LIST_ITEM_RECT_POSX, pstListControl->FirstVisibleItemPosY, LIST_ITEM_RECT_WIDTH(LCD_SIZE_WIDTH), pstListControl->VisibleItemsAreaHeight, SGUI_COLOR_BKGCLR, SGUI_COLOR_BKGCLR);
 			// Refresh scroll bar
 			pstSubElement->ScrollBar.Data.Index = pstListControl->PageStartIndex;
 			SGUI_ScrollBar_Refresh(pstIFObj, &(pstSubElement->ScrollBar));
@@ -164,7 +164,7 @@ void SGUI_List_RefreshListItems(SGUI_IF_OBJ* pstIFObj, SGUI_List_STRUCT* pstList
 			}
 			// High light focused items.
 			SGUI_Basic_ReverseBlockColor(pstIFObj, LIST_ITEM_RECT_POSX, pstListControl->FirstVisibleItemPosY+(pstListControl->SelectIndex-pstListControl->PageStartIndex)*pstListControl->ListItemHeight-pstListControl->ItemPosYOffSet,
-										LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight);
+										LIST_ITEM_RECT_WIDTH(LCD_SIZE_WIDTH), pstListControl->ListItemHeight);
 		}
 	}
 }
@@ -179,7 +179,7 @@ void SGUI_List_RefreshListItems(SGUI_IF_OBJ* pstIFObj, SGUI_List_STRUCT* pstList
 /** Notice:			This function will refresh all list display on		**/
 /**					screen, include edge, items, title and scrollbar.	**/
 /*************************************************************************/
-void SGUI_List_Refresh(SGUI_IF_OBJ* pstIFObj, SGUI_List_STRUCT* pstList)
+void SGUI_List_Refresh(SGUI_SCR_DEV* pstIFObj, SGUI_List_STRUCT* pstList)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -212,7 +212,7 @@ void SGUI_List_Refresh(SGUI_IF_OBJ* pstIFObj, SGUI_List_STRUCT* pstList)
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_List_SelectUpItem(SGUI_IF_OBJ* pstIFObj, SGUI_List_STRUCT* pstList)
+void SGUI_List_SelectUpItem(SGUI_SCR_DEV* pstIFObj, SGUI_List_STRUCT* pstList)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -235,11 +235,11 @@ void SGUI_List_SelectUpItem(SGUI_IF_OBJ* pstIFObj, SGUI_List_STRUCT* pstList)
             {
                 // Unfocused current item.
                 uiReverseBlockPosY = pstListControl->FirstVisibleItemPosY+(pstListControl->SelectIndex-pstListControl->PageStartIndex)*pstListControl->ListItemHeight-pstListControl->ItemPosYOffSet;
-                SGUI_Basic_ReverseBlockColor(pstIFObj, LIST_ITEM_RECT_POSX, uiReverseBlockPosY, LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight);
+                SGUI_Basic_ReverseBlockColor(pstIFObj, LIST_ITEM_RECT_POSX, uiReverseBlockPosY, LIST_ITEM_RECT_WIDTH(LCD_SIZE_WIDTH), pstListControl->ListItemHeight);
                 pstListControl->SelectIndex--;
                 // Focused previous item.
                 uiReverseBlockPosY = pstListControl->FirstVisibleItemPosY+(pstListControl->SelectIndex-pstListControl->PageStartIndex)*pstListControl->ListItemHeight-pstListControl->ItemPosYOffSet;
-                SGUI_Basic_ReverseBlockColor(pstIFObj, LIST_ITEM_RECT_POSX, uiReverseBlockPosY, LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight);
+                SGUI_Basic_ReverseBlockColor(pstIFObj, LIST_ITEM_RECT_POSX, uiReverseBlockPosY, LIST_ITEM_RECT_WIDTH(LCD_SIZE_WIDTH), pstListControl->ListItemHeight);
             }
             else
             {
@@ -266,7 +266,7 @@ void SGUI_List_SelectUpItem(SGUI_IF_OBJ* pstIFObj, SGUI_List_STRUCT* pstList)
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_List_SelectDownItem(SGUI_IF_OBJ* pstIFObj, SGUI_List_STRUCT* pstList)
+void SGUI_List_SelectDownItem(SGUI_SCR_DEV* pstIFObj, SGUI_List_STRUCT* pstList)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -289,11 +289,11 @@ void SGUI_List_SelectDownItem(SGUI_IF_OBJ* pstIFObj, SGUI_List_STRUCT* pstList)
             {
                 // Unfocused current item.
                 uiReverseBlockPosY = pstListControl->FirstVisibleItemPosY+(pstListControl->SelectIndex-pstListControl->PageStartIndex)*pstListControl->ListItemHeight-pstListControl->ItemPosYOffSet;
-                SGUI_Basic_ReverseBlockColor(pstIFObj, LIST_ITEM_RECT_POSX, uiReverseBlockPosY, LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight);
+                SGUI_Basic_ReverseBlockColor(pstIFObj, LIST_ITEM_RECT_POSX, uiReverseBlockPosY, LIST_ITEM_RECT_WIDTH(LCD_SIZE_WIDTH), pstListControl->ListItemHeight);
                 pstListControl->SelectIndex++;
                 // Focused previous item.
                 uiReverseBlockPosY = pstListControl->FirstVisibleItemPosY+(pstListControl->SelectIndex-pstListControl->PageStartIndex)*pstListControl->ListItemHeight-pstListControl->ItemPosYOffSet;
-                SGUI_Basic_ReverseBlockColor(pstIFObj, LIST_ITEM_RECT_POSX, uiReverseBlockPosY, LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight);
+                SGUI_Basic_ReverseBlockColor(pstIFObj, LIST_ITEM_RECT_POSX, uiReverseBlockPosY, LIST_ITEM_RECT_WIDTH(LCD_SIZE_WIDTH), pstListControl->ListItemHeight);
             }
             else
             {
@@ -324,7 +324,7 @@ void SGUI_List_SelectDownItem(SGUI_IF_OBJ* pstIFObj, SGUI_List_STRUCT* pstList)
 /**					depending on the first visible item index and count	**/
 /**					of visible items.									**/
 /*************************************************************************/
-void SGUI_List_DrawItem(SGUI_IF_OBJ* pstIFObj, SGUI_List_STRUCT* pstList, SGUI_SIZE uiIndex)
+void SGUI_List_DrawItem(SGUI_SCR_DEV* pstIFObj, SGUI_List_STRUCT* pstList, SGUI_SIZE uiIndex)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -357,7 +357,7 @@ void SGUI_List_DrawItem(SGUI_IF_OBJ* pstIFObj, SGUI_List_STRUCT* pstList, SGUI_S
 			stItemTextDataArea.PosX = 0;
 			stItemTextDataArea.PosY = LIST_ITEM_TEXT_BLANK_EDGEY;
 			stItemTextDisplayArea.PosX = LIST_ITEM_RECT_POSX + LIST_ITEM_TEXT_BLANK_EDGEX;
-			stItemTextDisplayArea.Width = LIST_ITEM_TEXT_AREA_WIDTH;
+			stItemTextDisplayArea.Width = LIST_ITEM_TEXT_AREA_WIDTH(LCD_SIZE_WIDTH);
 
 			if(uiIndex == pstListControl->PageStartIndex)
 			{
@@ -392,8 +392,8 @@ void SGUI_List_DrawItem(SGUI_IF_OBJ* pstIFObj, SGUI_List_STRUCT* pstList, SGUI_S
 
 			// Prepare draw parameter text.
 			stItemTextDataArea.PosX = LIST_ITEM_PARAMETER_SPLIT_WIDTH+1;
-			stItemTextDisplayArea.PosX = LIST_ITEM_PARAMETER_STARTX;
-			stItemTextDisplayArea.Width = LIST_ITEM_PARAMETER_AREA_WIDTH;
+			stItemTextDisplayArea.PosX = LIST_ITEM_PARAMETER_STARTX(LCD_SIZE_WIDTH);
+			stItemTextDisplayArea.Width = LIST_ITEM_PARAMETER_AREA_WIDTH(LCD_SIZE_WIDTH);
 			if(LIST_ITEM_NORMAL != pstListItemPointer->Type)
 			{
 				if(pstListItemPointer->Valid.Value > pstListItemPointer->Valid.Max)
@@ -417,12 +417,12 @@ void SGUI_List_DrawItem(SGUI_IF_OBJ* pstIFObj, SGUI_List_STRUCT* pstList, SGUI_S
 				{
 					case LIST_ITEM_ENUM:
 					{
-						SGUI_Common_StringLengthCopy(szParameterStringBuffer, pstListItemPointer->EnumerationValues[pstListItemPointer->Valid.Value], LIST_ITEM_PARAMETER_TEXT_LENGTH_MAX-1);
+						SGUI_SystemIF_StringLengthCopy(szParameterStringBuffer, pstListItemPointer->EnumerationValues[pstListItemPointer->Valid.Value], LIST_ITEM_PARAMETER_TEXT_LENGTH_MAX-1);
 						szParameterStringBuffer[LIST_ITEM_PARAMETER_TEXT_LENGTH_MAX-1] = '\0';
 						uiParameterTextWidth = SGUI_Text_GetTextGraphicsWidth(szParameterStringBuffer, pstList->FontSize);
-						if(uiParameterTextWidth < LIST_ITEM_PARAMETER_AREA_WIDTH)
+						if(uiParameterTextWidth < LIST_ITEM_PARAMETER_AREA_WIDTH(LCD_SIZE_WIDTH))
 						{
-							stItemTextDataArea.PosX += (LIST_ITEM_PARAMETER_AREA_WIDTH-LIST_ITEM_PARAMETER_SPLIT_WIDTH)-uiParameterTextWidth;
+							stItemTextDataArea.PosX += (LIST_ITEM_PARAMETER_AREA_WIDTH(LCD_SIZE_WIDTH)-LIST_ITEM_PARAMETER_SPLIT_WIDTH)-uiParameterTextWidth;
 						}
 						break;
 					}
@@ -430,9 +430,9 @@ void SGUI_List_DrawItem(SGUI_IF_OBJ* pstIFObj, SGUI_List_STRUCT* pstList, SGUI_S
 					{
 						SGUI_Common_IntegerToStringWithDecimalPoint(pstListItemPointer->Valid.Value, pstListItemPointer->Decimal.Value, szParameterStringBuffer, 0, ' ');
 						uiParameterTextWidth = SGUI_Text_GetTextGraphicsWidth(szParameterStringBuffer, pstList->FontSize);
-						if(uiParameterTextWidth < LIST_ITEM_PARAMETER_AREA_WIDTH)
+						if(uiParameterTextWidth < LIST_ITEM_PARAMETER_AREA_WIDTH(LCD_SIZE_WIDTH))
 						{
-							stItemTextDataArea.PosX += (LIST_ITEM_PARAMETER_AREA_WIDTH-LIST_ITEM_PARAMETER_SPLIT_WIDTH)-uiParameterTextWidth;
+							stItemTextDataArea.PosX += (LIST_ITEM_PARAMETER_AREA_WIDTH(LCD_SIZE_WIDTH)-LIST_ITEM_PARAMETER_SPLIT_WIDTH)-uiParameterTextWidth;
 						}
 						break;
 					}
@@ -461,7 +461,7 @@ void SGUI_List_DrawItem(SGUI_IF_OBJ* pstIFObj, SGUI_List_STRUCT* pstList, SGUI_S
 /** Return:			None.												**/
 /** Notice:			The bind value will update if existed.				**/
 /*************************************************************************/
-void SGUI_List_SetListItemValue(SGUI_IF_OBJ* pstIFObj, SGUI_List_STRUCT* pstList, SGUI_INDEX iItemIndex, int32_t iSetValid, int32_t iSetDecimal)
+void SGUI_List_SetListItemValue(SGUI_SCR_DEV* pstIFObj, SGUI_List_STRUCT* pstList, SGUI_INDEX iItemIndex, int32_t iSetValid, int32_t iSetDecimal)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -525,12 +525,12 @@ void SGUI_List_SetListItemValue(SGUI_IF_OBJ* pstIFObj, SGUI_List_STRUCT* pstList
 		}
 		// Clear list item area.
 		SGUI_Basic_DrawRectangle(pstIFObj, LIST_ITEM_RECT_POSX, pstListControl->FirstVisibleItemPosY+(pstListControl->SelectIndex-pstListControl->PageStartIndex)*pstListControl->ListItemHeight-pstListControl->ItemPosYOffSet,
-								LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight, SGUI_COLOR_BKGCLR, SGUI_COLOR_BKGCLR);
+								LIST_ITEM_RECT_WIDTH(LCD_SIZE_WIDTH), pstListControl->ListItemHeight, SGUI_COLOR_BKGCLR, SGUI_COLOR_BKGCLR);
 		// refresh list item
 		SGUI_List_DrawItem(pstIFObj, pstList, iItemIndex);
 		// High light selected item.
 		SGUI_Basic_ReverseBlockColor(pstIFObj, LIST_ITEM_RECT_POSX, pstListControl->FirstVisibleItemPosY+(pstListControl->SelectIndex-pstListControl->PageStartIndex)*pstListControl->ListItemHeight-pstListControl->ItemPosYOffSet,
-		 							LIST_ITEM_RECT_WIDTH, pstListControl->ListItemHeight);
+		 							LIST_ITEM_RECT_WIDTH(LCD_SIZE_WIDTH), pstListControl->ListItemHeight);
 	}
 }
 
@@ -715,10 +715,10 @@ SGUI_BOOL SGUI_List_InsertItem(SGUI_List_STRUCT* pstList, SGUI_List_ITEM* pstNew
 	}
 	else
 	{
-		pstNewListItem = (SGUI_List_ITEM*)SGUI_Common_Allocate(sizeof(SGUI_List_ITEM));
+		pstNewListItem = (SGUI_List_ITEM*)SGUI_SystemIF_Allocate(sizeof(SGUI_List_ITEM));
 		if(NULL != pstNewListItem)
 		{
-			SGUI_Common_MemoryCopy(pstNewListItem, pstListItemDataSource, sizeof(SGUI_List_ITEM));
+			SGUI_SystemIF_MemoryCopy(pstNewListItem, pstListItemDataSource, sizeof(SGUI_List_ITEM));
 
 			if(0 == pstList->Data.Count)
 			{
@@ -799,7 +799,7 @@ SGUI_BOOL SGUI_List_RemoveItem(SGUI_List_STRUCT* pstList, SGUI_INDEX iItemIndex)
 		{
 			pstList->Data.Items = pstRemoveListItem->NextItem;
 		}
-		SGUI_Common_Free(pstRemoveListItem);
+		SGUI_SystemIF_Free(pstRemoveListItem);
 		pstList->Data.Count--;
 	}
 	return bResult;

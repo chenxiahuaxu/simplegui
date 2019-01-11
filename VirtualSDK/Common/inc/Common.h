@@ -15,9 +15,9 @@
 #define LCD_COLOR_OBJ_BKG						    	(0xFF00F0D7)
 #define LCD_COLOR_OBJ_GRID						    	(0xFF383834)
 
-#define PARAM_DEFAULT_PIXEL_NUM_H                       (128)
+#define PARAM_DEFAULT_PIXEL_NUM_H                       (192)
 #define PARAM_DEFAULT_PIXEL_NUM_V                       (64)
-#define PARAM_DEFAULT_PIXEL_SIZE					    (1)
+#define PARAM_DEFAULT_PIXEL_SIZE					    (3)
 #define PARAM_DEFAULT_GRID_ENABLE                       (true)
 #define PARAM_DEFAULT_GRID_DISABLE                      (false)
 

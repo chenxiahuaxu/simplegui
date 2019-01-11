@@ -21,11 +21,11 @@ typedef enum
 	SGUI_ICON_QUESTION,
 	SGUI_ICON_WARNING,
 	SGUI_ICON_NONE,
-}SGUI_NOTICE_ICON;
+}SGUI_NOTICE_ICON_IDX;
 
 //=======================================================================//
 //= Public function declaration.									    =//
 //=======================================================================//
-SGUI_SIZE SGUI_Notice_Refresh(SGUI_IF_OBJ* pstIFObj, SGUI_CSZSTR szNoticeText, SGUI_INT uiTextOffset, SGUI_NOTICE_ICON eIcon);
+SGUI_SIZE SGUI_Notice_Refresh(SGUI_SCR_DEV* pstIFObj, SGUI_CSZSTR szNoticeText, SGUI_INT uiTextOffset, SGUI_NOTICE_ICON_IDX eIcon);
 
 #endif // __INCLUDE_GUI_NOTICE_H__

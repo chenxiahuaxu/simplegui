@@ -31,11 +31,11 @@
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
-static HMI_ENGINE_RESULT    HMI_DemoScrollingText_Initialize(SGUI_IF_OBJ* Interface);
-static HMI_ENGINE_RESULT    HMI_DemoScrollingText_Prepare(SGUI_IF_OBJ* Interface, const void* pstParameters);
-static HMI_ENGINE_RESULT    HMI_DemoScrollingText_RefreshScreen(SGUI_IF_OBJ* Interface, const void* pstParameters);
-static HMI_ENGINE_RESULT    HMI_DemoScrollingText_ProcessEvent(SGUI_IF_OBJ* Interface, HMI_EVENT_TYPE eEvent, const HMI_EVENT* pstEvent);
-static HMI_ENGINE_RESULT    HMI_DemoScrollingText_PostProcess(SGUI_IF_OBJ* Interface, SGUI_INT iActionResult);
+static HMI_ENGINE_RESULT    HMI_DemoScrollingText_Initialize(SGUI_SCR_DEV* Interface);
+static HMI_ENGINE_RESULT    HMI_DemoScrollingText_Prepare(SGUI_SCR_DEV* Interface, const void* pstParameters);
+static HMI_ENGINE_RESULT    HMI_DemoScrollingText_RefreshScreen(SGUI_SCR_DEV* Interface, const void* pstParameters);
+static HMI_ENGINE_RESULT    HMI_DemoScrollingText_ProcessEvent(SGUI_SCR_DEV* Interface, HMI_EVENT_TYPE eEvent, const HMI_EVENT* pstEvent);
+static HMI_ENGINE_RESULT    HMI_DemoScrollingText_PostProcess(SGUI_SCR_DEV* Interface, SGUI_INT iActionResult);
 
 //=======================================================================//
 //= Static variable declaration.									    =//
@@ -76,7 +76,7 @@ HMI_SCREEN_OBJECT       g_stHMIDemo_ScrollingText =		{
 /** Return:			Initialize process result.								**/
 /** Limitation:		None.													**/
 /*****************************************************************************/
-HMI_ENGINE_RESULT HMI_DemoScrollingText_Initialize(SGUI_IF_OBJ* Interface)
+HMI_ENGINE_RESULT HMI_DemoScrollingText_Initialize(SGUI_SCR_DEV* Interface)
 {
 	s_iTextOffset = HMI_TEXT_DEMO_FRAME_TEXT_HEIGHT;
 	s_iTextHeight = SGUI_Text_GetMultiLineTextLines(s_szDemoText, (HMI_TEXT_DEMO_FRAME_TEXT_WIDTH/g_stFontSize[SGUI_FONT_SIZE_H12].Width))*g_stFontSize[SGUI_FONT_SIZE_H12].Height;
@@ -95,9 +95,12 @@ HMI_ENGINE_RESULT HMI_DemoScrollingText_Initialize(SGUI_IF_OBJ* Interface)
 /** Return:			Preprocess result.										**/
 /** Limitation:		None.													**/
 /*****************************************************************************/
-HMI_ENGINE_RESULT HMI_DemoScrollingText_Prepare(SGUI_IF_OBJ* pstIFObj, const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoScrollingText_Prepare(SGUI_SCR_DEV* pstIFObj, const void* pstParameters)
 {
+	// Paint frame edge.
 	SGUI_Frame_DrawFullScreenFrame(pstIFObj, &s_stTextFrame);
+	// Start dummy heart-beat timer.
+	SGUI_SDK_ConfigHearBeatTimer(SDK_DEFAULT_HEART_BEAT_INTERVAL_MS);
 	return HMI_RET_NORMAL;
 }
 
@@ -109,7 +112,7 @@ HMI_ENGINE_RESULT HMI_DemoScrollingText_Prepare(SGUI_IF_OBJ* pstIFObj, const voi
 /** Return:			Refresh process result.									**/
 /** Limitation:		None.													**/
 /*****************************************************************************/
-HMI_ENGINE_RESULT HMI_DemoScrollingText_RefreshScreen(SGUI_IF_OBJ* pstIFObj, const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoScrollingText_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const void* pstParameters)
 {
 	SGUI_Frame_DrawFullScreenFrame(pstIFObj, &s_stTextFrame);
 	SGUI_Text_DrawMultipleLinesText(pstIFObj, s_szDemoText, SGUI_FONT_SIZE_H12, &s_stTextDisplayArea, s_iTextOffset, SGUI_DRAW_NORMAL);
@@ -127,7 +130,7 @@ HMI_ENGINE_RESULT HMI_DemoScrollingText_RefreshScreen(SGUI_IF_OBJ* pstIFObj, con
 /** Limitation:		Parameter pointer is a void type, convert to the 		**/
 /**					appropriate type before use.							**/
 /*****************************************************************************/
-HMI_ENGINE_RESULT HMI_DemoScrollingText_ProcessEvent(SGUI_IF_OBJ* pstIFObj, HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent)
+HMI_ENGINE_RESULT HMI_DemoScrollingText_ProcessEvent(SGUI_SCR_DEV* pstIFObj, HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -197,10 +200,12 @@ HMI_ENGINE_RESULT HMI_DemoScrollingText_ProcessEvent(SGUI_IF_OBJ* pstIFObj, HMI_
 /** Return:			Post process result.									**/
 /** Limitation:		None.													**/
 /*****************************************************************************/
-HMI_ENGINE_RESULT HMI_DemoScrollingText_PostProcess(SGUI_IF_OBJ* pstIFObj, SGUI_INT iActionResult)
+HMI_ENGINE_RESULT HMI_DemoScrollingText_PostProcess(SGUI_SCR_DEV* pstIFObj, SGUI_INT iActionResult)
 {
 	if(HMI_RET_FOLLOWUP == iActionResult)
 	{
+		// Stop heart-beat timer.
+		SGUI_SDK_ConfigHearBeatTimer(0);
 		// Go to main list.
 		HMI_Goto(HMI_SCREEN_ID_DEMO_LIST, NULL);
 	}

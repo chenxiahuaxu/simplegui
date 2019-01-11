@@ -24,7 +24,7 @@
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_ScrollBar_Refresh(SGUI_IF_OBJ* pstIFObj, SGUI_SCROLLBAR_STRUCT* pstScrollBar)
+void SGUI_ScrollBar_Refresh(SGUI_SCR_DEV* pstIFObj, SGUI_SCROLLBAR_STRUCT* pstScrollBar)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/

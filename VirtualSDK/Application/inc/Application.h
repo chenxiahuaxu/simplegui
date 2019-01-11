@@ -29,6 +29,8 @@ enum
 //=======================================================================//
 class Application : public wxApp
 {
+	DECLARE_EVENT_TABLE();
+
     private:
         LCDFrame*					m_pclsMainFrame;
 

@@ -19,9 +19,6 @@
 #define EventSyncLock()							{s_clsEventSyncCS.Enter();}
 #define EventSyncUnlock()						{s_clsEventSyncCS.Leave();}
 
-#define SDK_DEFAULT_HEART_BEAT_INTERVAL_MS		(50)
-#define SDK_EVENT_SYNC_TIMEOUT_MS				(500)
-
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
@@ -324,7 +321,7 @@ void SGUI_SDK_SetEvnetSyncFlag(ENV_FLAG_INDEX eIndex, bool bValue)
 }
 
 /*************************************************************************/
-/** Function Name:	SetKeyEventData.									**/
+/** Function Name:	SGUI_SDK_SyncKeyEventData.							**/
 /** Purpose:		Set key code value when key press event targets.	**/
 /** Params:																**/
 /**	@ uiKeyCode[in]:	Key code.										**/
@@ -340,6 +337,19 @@ void SGUI_SDK_SyncKeyEventData(unsigned int uiKeyCode)
     EventSyncLock();
     s_uiKeyCode = uiKeyCode;
     EventSyncUnlock();
+}
+
+/*************************************************************************/
+/** Function Name:	SGUI_SDK_GetKeyEventData.							**/
+/** Purpose:		Set key code value when key press event targets.	**/
+/** Params:			none.												**/
+/** Return:			Last targeted key event value.						**/
+/** Notice:			This function used to save and keep pressed key 	**/
+/**					code value, must be called before SetEvnetFlag.		**/
+/*************************************************************************/
+unsigned int SGUI_SDK_GetKeyEventData(void)
+{
+	return s_uiKeyCode;
 }
 
 /*************************************************************************/
@@ -404,7 +414,7 @@ bool SGUI_SDK_ConfigHearBeatTimer(unsigned int uiIntervalMs)
     clsEventObject.SetInterval(uiIntervalMs);
 
     // Post event.
-    bReturn = SGUI_SDK_SyncMainFrameEvent(clsEventObject, ENV_FLAG_IDX_SDK_TIM_SET, SDK_EVENT_SYNC_TIMEOUT_MS);
+    bReturn = SGUI_SDK_SyncMainFrameEvent(clsEventObject, ENV_FLAG_IDX_SDK_TIM_SET, SDK_DEFAULT_EVENT_SYNC_TIMEOUT_MS);
 
     return bReturn;
 }
@@ -442,7 +452,7 @@ bool SGUI_SDK_EnableRTCInterrupt(bool bEnabled)
     clsEventObject.SetReqState(bEnabled);
 
     // Post event.
-    bReturn = SGUI_SDK_SyncMainFrameEvent(clsEventObject, ENV_FLAG_IDX_SDK_RTC_EN, SDK_EVENT_SYNC_TIMEOUT_MS);
+    bReturn = SGUI_SDK_SyncMainFrameEvent(clsEventObject, ENV_FLAG_IDX_SDK_RTC_EN, SDK_DEFAULT_EVENT_SYNC_TIMEOUT_MS);
 
     return bReturn;
 }
@@ -495,7 +505,7 @@ bool SGUI_SDK_Initialize(void)
     // Prepare event object.
     clsEventObject.SetEventType(wxEVT_SDK_INIT);
 
-    bReturn = SGUI_SDK_SyncMainFrameEvent(clsEventObject, ENV_FLAG_IDX_SDK_INIT, SDK_EVENT_SYNC_TIMEOUT_MS);
+    bReturn = SGUI_SDK_SyncMainFrameEvent(clsEventObject, ENV_FLAG_IDX_SDK_INIT, SDK_DEFAULT_EVENT_SYNC_TIMEOUT_MS);
 
     return bReturn;
 }
@@ -511,44 +521,10 @@ bool SGUI_SDK_Initialize(void)
 /*************************************************************************/
 int SGUI_SDK_DummyMainProc(void)
 {
-	bool		bRet;
     // Initialize SDK.
     SGUI_SDK_PrepareSDK();
     // Initialize main frame.
-    bRet = SGUI_SDK_Initialize();
-    if(false == bRet)
-	{
-		wxMessageBox("Initialize error.");
-	}
-    // Start heart-beat timer.
-    SGUI_SDK_ConfigHearBeatTimer(SDK_DEFAULT_HEART_BEAT_INTERVAL_MS);
-	// Start RTC timer.
-    SGUI_SDK_EnableRTCInterrupt(true);
-
-    // Initialize Engine.
-    InitializeEngine();
-
-    while(1)
-    {
-        // Check and process heart-beat timer event.
-        if(true == SGUI_SDK_GetEventSyncFlag(ENV_FLAG_IDX_SDK_TIM_EVENT))
-        {
-            SGUI_SDK_HeartBeatTimerTagEvent();
-            SGUI_SDK_SetEvnetSyncFlag(ENV_FLAG_IDX_SDK_TIM_EVENT, false);
-        }
-        // Check and process key press event.
-        if(true == SGUI_SDK_GetEventSyncFlag(ENV_FLAG_IDX_SDK_KEY_EVENT))
-        {
-            SGUI_SDK_KeyPressInterruptEvent(s_uiKeyCode);
-            SGUI_SDK_SetEvnetSyncFlag(ENV_FLAG_IDX_SDK_KEY_EVENT, false);
-        }
-        // Check and process RTC event.
-        if(true == SGUI_SDK_GetEventSyncFlag(ENV_FLAG_IDX_SDK_RTC_EVENT))
-        {
-            SGUI_SDK_RTCInterruptTagEvent();
-            SGUI_SDK_SetEvnetSyncFlag(ENV_FLAG_IDX_SDK_RTC_EVENT, false);
-        }
-    }
-
-    return 0;
+    SGUI_SDK_Initialize();
+    // Call main process.
+    return DemoMainProcess();
 }

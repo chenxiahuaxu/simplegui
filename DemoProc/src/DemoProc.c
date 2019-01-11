@@ -23,13 +23,13 @@
 //=======================================================================//
 //= Static function declare											    =//
 //=======================================================================//
-static HMI_ENGINE_RESULT   InitializeEngine_Internal(HMI_ENGINE_OBJECT* pstHMIEngineObject);
+static HMI_ENGINE_RESULT	InitializeEngine_Internal(HMI_ENGINE_OBJECT* pstHMIEngineObject);
 
 //=======================================================================//
 //= Static variable declaration.									    =//
 //=======================================================================//
-HMI_ENGINE_OBJECT       g_stDemoEngine;
-SGUI_IF_OBJ				g_stDeviceInterface;
+HMI_ENGINE_OBJECT			g_stDemoEngine;
+SGUI_SCR_DEV				g_stDeviceInterface;
 
 //=======================================================================//
 //= Function define.										            =//
@@ -46,14 +46,14 @@ SGUI_IF_OBJ				g_stDeviceInterface;
 void InitializeEngine(void)
 {
 	/* Clear structure. */
-	SGUI_Common_MemorySet(&g_stDeviceInterface, 0x00, sizeof(SGUI_IF_OBJ));
-	SGUI_Common_MemorySet(&g_stDemoEngine, 0x00, sizeof(HMI_ENGINE_OBJECT));
+	SGUI_SystemIF_MemorySet(&g_stDeviceInterface, 0x00, sizeof(SGUI_SCR_DEV));
+	SGUI_SystemIF_MemorySet(&g_stDemoEngine, 0x00, sizeof(HMI_ENGINE_OBJECT));
 #ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
 	/* Initialize interface object. */
-	g_stDeviceInterface.stActions.fnSetPixel = SGUI_SDK_SetPixel;
-	g_stDeviceInterface.stActions.fnGetPixel = SGUI_SDK_GetPixel;
-	g_stDeviceInterface.stActions.fnClearScreen = SGUI_SDK_ClearDisplay;
-	g_stDeviceInterface.stActions.fnRefreshScreen = SGUI_SDK_RefreshDisplay;
+	g_stDeviceInterface.fnSetPixel = SGUI_SDK_SetPixel;
+	g_stDeviceInterface.fnGetPixel = SGUI_SDK_GetPixel;
+	g_stDeviceInterface.fnClearScreen = SGUI_SDK_ClearDisplay;
+	g_stDeviceInterface.fnRefreshScreen = SGUI_SDK_RefreshDisplay;
 #else
 	g_stDeviceInterface.stActions.fnSetPixel = OLED_SetPixel;
 	g_stDeviceInterface.stActions.fnGetPixel = OLED_GetPixel;
@@ -172,4 +172,39 @@ HMI_ENGINE_RESULT EventProcess(HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEv
 	}
 
 	return eProcessResult;
+}
+
+int DemoMainProcess(void)
+{
+    // Start heart-beat timer.
+    //SGUI_SDK_ConfigHearBeatTimer(SDK_DEFAULT_HEART_BEAT_INTERVAL_MS);
+	// Start RTC timer.
+    //SGUI_SDK_EnableRTCInterrupt(true);
+
+    // Initialize Engine.
+    InitializeEngine();
+
+    while(1)
+    {
+        // Check and process heart-beat timer event.
+        if(true == SGUI_SDK_GetEventSyncFlag(ENV_FLAG_IDX_SDK_TIM_EVENT))
+        {
+            SGUI_SDK_HeartBeatTimerTagEvent();
+            SGUI_SDK_SetEvnetSyncFlag(ENV_FLAG_IDX_SDK_TIM_EVENT, false);
+        }
+        // Check and process key press event.
+        if(true == SGUI_SDK_GetEventSyncFlag(ENV_FLAG_IDX_SDK_KEY_EVENT))
+        {
+            SGUI_SDK_KeyPressInterruptEvent(SGUI_SDK_GetKeyEventData());
+            SGUI_SDK_SetEvnetSyncFlag(ENV_FLAG_IDX_SDK_KEY_EVENT, false);
+        }
+        // Check and process RTC event.
+        if(true == SGUI_SDK_GetEventSyncFlag(ENV_FLAG_IDX_SDK_RTC_EVENT))
+        {
+            SGUI_SDK_RTCInterruptTagEvent();
+            SGUI_SDK_SetEvnetSyncFlag(ENV_FLAG_IDX_SDK_RTC_EVENT, false);
+        }
+    }
+
+	return 0;
 }

@@ -62,6 +62,7 @@ extern "C"
 #endif /* __cplusplus */
 void                InitializeEngine(void);
 HMI_ENGINE_RESULT	EventProcess(HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent);
+int					DemoMainProcess(void);
 
 #ifdef __cplusplus
 }

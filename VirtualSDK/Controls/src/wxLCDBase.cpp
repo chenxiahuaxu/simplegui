@@ -14,8 +14,10 @@
 //=======================================================================//
 //= Marco declare.                                                      =//
 //=======================================================================//
-#define	wxLCD_ERROR_STOP_PROC_P(P, R, V)		{if(NULL == P){R=V; break;}}
 
+//=======================================================================//
+//= Global variable define.											    =//
+//=======================================================================//
 const wxSize	wxDefaultSizeInPixel(128, 64);
 
 //=======================================================================//
@@ -74,17 +76,20 @@ bool wxLCDBase::_initialize(void)
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-    do
+	// Create display buffer.
+	m_ppuiDisplayBuffer = _createNewDisplayBuffer(m_clsSizeInPixel.GetWidth(), m_clsSizeInPixel.GetHeight());
+	if(NULL == m_ppuiDisplayBuffer)
 	{
-		// Create display buffer.
-		m_ppuiDisplayBuffer = _createNewDisplayBuffer(m_clsSizeInPixel.GetWidth(), m_clsSizeInPixel.GetHeight());
-		wxLCD_ERROR_STOP_PROC_P(m_ppuiDisplayBuffer, bReturn, false);
+		// Display buffer create failed.
+		bReturn = false;
+	}
+	else
+	{
 		// Set pixel size.
 		SetPixelSize(WX_LCD_DEFAULT_PIX_SIZE);
 		// Set grid visible.
 		SetGridVisibled(WX_LCD_DEFAULT_GRID_VISIBLE);
-	}while(0);
-
+	}
 	return bReturn;
 }
 
@@ -272,22 +277,7 @@ void wxLCDBase::_cleanDisplayBuffer(void)
     }
 	RefreshDisplay();
 }
-/*
-void wxLCDBase::_enterPaintCriticalSection(void)
-{
-	m_clsDisplayBufferCS.Enter();
-	m_iLockLevel++
-}
 
-void wxLCDBase::_leavePaintCriticalSection(void)
-{
-	m_iLockLevel--;
-	if(0 == m_iLockLevel)
-	{
-		m_clsDisplayBufferCS.Leave();
-	}
-}
-*/
 void wxLCDBase::SetDisplayBuffer(wxColour& clsPanelColour)
 {
 	/*----------------------------------*/
@@ -567,6 +557,40 @@ void wxLCDBase::RefreshDisplay(void)
 }
 
 /*************************************************************************/
+/** Function Name:	_getLCDPanelImage									**/
+/** Class:			wxLCDBase											**/
+/** Accessibility:	Private.											**/
+/** Purpose:		Copy LCD panel image to bitmap object.				**/
+/** Resources:		None.												**/
+/** Params:																**/
+/** @ clsBitmap[in/out]: Out put bitmap object.							**/
+/** Return:																**/
+/** @ true:				Copy image successfully.						**/
+/**	@ false:			Operation failed.								**/
+/** Notice:			Size and depth of Bitmap object must set before		**/
+/**					this function called.								**/
+/*************************************************************************/
+bool wxLCDBase::_getLCDPanelImage(wxBitmap& clsBitmap)
+{
+	/*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+	wxMemoryDC				clsMemoryDC(clsBitmap);
+	bool                    bReturn;
+
+	/*----------------------------------*/
+	/* Initialize						*/
+	/*----------------------------------*/
+	bReturn =               false;
+
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	bReturn = clsMemoryDC.Blit(wxPoint(0, 0), GetSize(), &m_clsCDC, wxPoint(0, 0));
+	return bReturn;
+}
+
+/*************************************************************************/
 /** Function Name:	SaveScreenImageToFile                               **/
 /** Class:			wxLCDBase											**/
 /** Accessibility:	Public.												**/
@@ -581,41 +605,27 @@ void wxLCDBase::RefreshDisplay(void)
 /**                 the wxApp Object.                                   **/
 /**                 wxImage::AddHandler(new wxJPEGHandler)              **/
 /*************************************************************************/
-bool wxLCDBase::SaveScreenImageToFile(const wxString& strFilePath)
+bool wxLCDBase::SaveImage(const wxString& strFilePath)
 {
     /*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	wxBitmap*               pclsBitMap;
-	wxMemoryDC*             pclsMemoryDC;
+	wxBitmap				clsBitMap(GetSize(), wxBITMAP_SCREEN_DEPTH);
 	bool                    bReturn;
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
 	bReturn =               false;
-	pclsMemoryDC =			nullptr;
 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	// Create bitmap buffer.
-	pclsBitMap = new wxBitmap(GetSize(), wxBITMAP_SCREEN_DEPTH);
-	if(nullptr != pclsBitMap)
-    {
-        pclsMemoryDC = new wxMemoryDC(*pclsBitMap);
-        if(nullptr != pclsMemoryDC)
-        {
-            bReturn = pclsMemoryDC->Blit(wxPoint(0, 0), GetSize(), &m_clsCDC, wxPoint(0, 0));
-            if(true == bReturn)
-            {
-                bReturn = pclsBitMap->SaveFile(strFilePath, wxBITMAP_TYPE_JPEG);
-            }
-        }
-    }
-    //
-    delete pclsBitMap;
-    delete pclsMemoryDC;
+	bReturn = _getLCDPanelImage(clsBitMap);
+	if(true == bReturn)
+	{
+		bReturn = clsBitMap.SaveFile(strFilePath, wxBITMAP_TYPE_JPEG);
+	}
 
 	return bReturn;
 }
@@ -631,46 +641,47 @@ bool wxLCDBase::SaveScreenImageToFile(const wxString& strFilePath)
 /** @ false:            Copy failed.                                    **/
 /** Notice:			None.                                               **/
 /*************************************************************************/
-bool wxLCDBase::CopyScreenImageToClipBoard(void)
+bool wxLCDBase::CopyImage(void)
 {
     /*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	uint32_t                uiPictureWidth, uiPictureHeight;
-	wxBitmap*               pclsDCBufferBitmap;
-	wxMemoryDC*             pclsDCBuffer;
+	wxBitmap				clsBitMap(GetSize(), wxBITMAP_SCREEN_DEPTH);
 	bool                    bReturn;
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	uiPictureWidth =        GetSize().GetX();
-	uiPictureHeight =       GetSize().GetY();
-	pclsDCBufferBitmap =    new wxBitmap(uiPictureWidth, uiPictureHeight, wxBITMAP_SCREEN_DEPTH);
-	pclsDCBuffer =          new wxMemoryDC(*pclsDCBufferBitmap);
 	bReturn =               true;
 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if((nullptr != pclsDCBufferBitmap) && (nullptr != pclsDCBuffer))
-    {
-        if(true == wxTheClipboard->Open())
-        {
-            pclsDCBuffer->Blit(0, 0, uiPictureWidth, uiPictureHeight, &m_clsCDC, 0, 0);
-            wxTheClipboard->SetData(new wxBitmapDataObject(*pclsDCBufferBitmap));
-            wxTheClipboard->Flush();
-            wxTheClipboard->Close();
-        }
-        else
-        {
-            bReturn = false;
-        }
-    }
+	if(true == wxTheClipboard->Open())
+	{
+		do
+		{
+			bReturn = _getLCDPanelImage(clsBitMap);
+			if(false == bReturn)
+			{
+                // Ger LCD panel image failed.
+                break;
+			}
 
-    delete pclsDCBufferBitmap;
-    delete pclsDCBuffer;
-
+			bReturn = wxClipboard::Get()->SetData(new wxBitmapDataObject(clsBitMap));
+			if(false == bReturn)
+			{
+                // Set data to clipboard failed.
+                break;
+			}
+			wxTheClipboard->Flush();
+		}while(0);
+		wxTheClipboard->Close();
+	}
+	else
+	{
+		bReturn = false;
+	}
 	return bReturn;
 }
 

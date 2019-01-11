@@ -16,7 +16,11 @@
 #define WX_LCD_PIX_SIZE_MIN_WITH_GRID				(4)
 #define WX_LCD_PIX_RGB(RGBA)						((0x00FFFFFF) & (RGBA))
 
+//=======================================================================//
+//= Global variable declare.										    =//
+//=======================================================================//
 extern const wxSize	wxDefaultSizeInPixel;
+
 //=======================================================================//
 //= Class declare.                                                      =//
 //=======================================================================//
@@ -53,6 +57,7 @@ class wxLCDBase
 		void         			_freeDisplayBuffer(unsigned int** ppuiDisplayBuffer);
 		unsigned int**			_createNewDisplayBuffer(int iHorizontalPixelNumber, int iVerticalPixelNumber);
 		void					_cleanDisplayBuffer(void);
+		bool					_getLCDPanelImage(wxBitmap& clsBitmap);
 		void					_enterPaintCriticalSection(void)						{m_clsDisplayBufferCS.Enter();}
 		void					_leavePaintCriticalSection(void)						{m_clsDisplayBufferCS.Leave();}
 
@@ -82,8 +87,8 @@ class wxLCDBase
 		void					RefreshDisplay(void);
 		void					SetDisplayBuffer(wxColour& clsNewColour);
 		void					ReplaceColour(const wxColour& clsOldColour, const wxColour& clsNewColour);
-		bool					SaveScreenImageToFile(const wxString& strFilePath);
-		bool					CopyScreenImageToClipBoard(void);
+		bool					SaveImage(const wxString& strFilePath);
+		bool					CopyImage(void);
 		bool					Create(wxWindow *pclsParent, wxWindowID iWinID, const wxPoint& clsPosition);
 
 		bool					IsOK(void)									{return m_bIsOK;}

@@ -21,16 +21,16 @@
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
-static HMI_ENGINE_RESULT	HMI_DemoList_Initialize(SGUI_IF_OBJ* pstIFObj);
-static HMI_ENGINE_RESULT	HMI_DemoList_Prepare(SGUI_IF_OBJ* pstIFObj, const void* pstParameters);
-static HMI_ENGINE_RESULT	HMI_DemoList_RefreshScreen(SGUI_IF_OBJ* pstIFObj, const void* pstParameters);
-static HMI_ENGINE_RESULT	HMI_DemoList_ProcessEvent(SGUI_IF_OBJ* pstIFObj, HMI_EVENT_TYPE eEvent, const HMI_EVENT* pstEvent);
-static HMI_ENGINE_RESULT	HMI_DemoList_PostProcess(SGUI_IF_OBJ* pstIFObj, SGUI_INT iActionResult);
+static HMI_ENGINE_RESULT	HMI_DemoList_Initialize(SGUI_SCR_DEV* pstIFObj);
+static HMI_ENGINE_RESULT	HMI_DemoList_Prepare(SGUI_SCR_DEV* pstIFObj, const void* pstParameters);
+static HMI_ENGINE_RESULT	HMI_DemoList_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const void* pstParameters);
+static HMI_ENGINE_RESULT	HMI_DemoList_ProcessEvent(SGUI_SCR_DEV* pstIFObj, HMI_EVENT_TYPE eEvent, const HMI_EVENT* pstEvent);
+static HMI_ENGINE_RESULT	HMI_DemoList_PostProcess(SGUI_SCR_DEV* pstIFObj, SGUI_INT iActionResult);
 
 //=======================================================================//
 //= Static variable declaration.									    =//
 //=======================================================================//
-static SGUI_CSZSTR     s_szListTitle = 			    DEMO_LIST_TITLE;
+static SGUI_CSZSTR		s_szListTitle = 			    DEMO_LIST_TITLE;
 static SGUI_CSZSTR		s_arrszNoticeType[] =		{	DEMO_LIST_ITEM_NOTICE_TEXT, DEMO_LIST_ITEM_NOTICE_TIME};
 static SGUI_CSZSTR		s_arrszEnumedValue[] =		{	DEMO_LIST_ITEM_ENUM_VALUE1, DEMO_LIST_ITEM_ENUM_VALUE2, DEMO_LIST_ITEM_ENUM_VALUE3};
 static SGUI_List_ITEM	s_arrstTestListItems[] =	{	DEMO_LIST_ITEM_0,
@@ -70,7 +70,7 @@ HMI_SCREEN_OBJECT       g_stHMIDemo_List =			{	HMI_SCREEN_ID_DEMO_LIST,
 //=======================================================================//
 //= Function define.										            =//
 //=======================================================================//
-HMI_ENGINE_RESULT HMI_DemoList_Initialize(SGUI_IF_OBJ* pstIFObj)
+HMI_ENGINE_RESULT HMI_DemoList_Initialize(SGUI_SCR_DEV* pstIFObj)
 {
 #ifdef _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
 	/*----------------------------------*/
@@ -83,7 +83,7 @@ HMI_ENGINE_RESULT HMI_DemoList_Initialize(SGUI_IF_OBJ* pstIFObj)
 	/* Process							*/
 	/*----------------------------------*/
     // Initialize list data.
-    SGUI_Common_MemorySet(&s_stDemoListObject, 0x00, sizeof(SGUI_List_STRUCT));
+    SGUI_SystemIF_MemorySet(&s_stDemoListObject, 0x00, sizeof(SGUI_List_STRUCT));
     // Title and font size must set before initialize list object.
     s_stDemoListObject.Data.Title = s_szListTitle;
     s_stDemoListObject.FontSize = SGUI_FONT_SIZE_H12;
@@ -108,7 +108,7 @@ HMI_ENGINE_RESULT HMI_DemoList_Initialize(SGUI_IF_OBJ* pstIFObj)
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoList_Prepare (SGUI_IF_OBJ* pstIFObj, const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoList_Prepare (SGUI_SCR_DEV* pstIFObj, const void* pstParameters)
 {
 	/*----------------------------------*/
 	/* Process							*/
@@ -117,7 +117,7 @@ HMI_ENGINE_RESULT HMI_DemoList_Prepare (SGUI_IF_OBJ* pstIFObj, const void* pstPa
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoList_RefreshScreen(SGUI_IF_OBJ* pstIFObj, const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoList_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const void* pstParameters)
 {
 	/*----------------------------------*/
 	/* Process							*/
@@ -126,7 +126,7 @@ HMI_ENGINE_RESULT HMI_DemoList_RefreshScreen(SGUI_IF_OBJ* pstIFObj, const void* 
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoList_ProcessEvent(SGUI_IF_OBJ* pstIFObj, HMI_EVENT_TYPE eEvent, const HMI_EVENT* pstEvent)
+HMI_ENGINE_RESULT HMI_DemoList_ProcessEvent(SGUI_SCR_DEV* pstIFObj, HMI_EVENT_TYPE eEvent, const HMI_EVENT* pstEvent)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -233,7 +233,7 @@ HMI_ENGINE_RESULT HMI_DemoList_ProcessEvent(SGUI_IF_OBJ* pstIFObj, HMI_EVENT_TYP
 	return eProcessResult;
 }
 
-HMI_ENGINE_RESULT HMI_DemoList_PostProcess(SGUI_IF_OBJ* pstIFObj, SGUI_INT iActionResult)
+HMI_ENGINE_RESULT HMI_DemoList_PostProcess(SGUI_SCR_DEV* pstIFObj, SGUI_INT iActionResult)
 {
 	uint32_t			uiSelectListIndex;
 	SGUI_List_ITEM*		pstSelectedItem;

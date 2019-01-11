@@ -22,7 +22,7 @@
 /** Return:			None.												**/
 /** Notice:			none.												**/
 /*************************************************************************/
-void SGUI_Frame_DrawFullScreenFrame(SGUI_IF_OBJ* pstIFObj, SGUI_BOX_FRAME_STRUCT* pstFrameData)
+void SGUI_Frame_DrawFullScreenFrame(SGUI_SCR_DEV* pstIFObj, SGUI_BOX_FRAME_STRUCT* pstFrameData)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/

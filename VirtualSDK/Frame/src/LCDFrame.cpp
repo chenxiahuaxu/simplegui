@@ -15,7 +15,10 @@
 //=======================================================================//
 //= User Macro definition.											    =//
 //=======================================================================//
-#define DUMMY_MAIN_START_DELAY_MS				(500)
+#define DUMMY_MAIN_START_DELAY_MS				(100)
+#define MOUSE_WHELL_DELTA						(100)
+#define MOUSE_WHELL_UP_DELTA					(MOUSE_WHELL_DELTA)
+#define MOUSE_WHELL_DOWN_DELTA					(-MOUSE_WHELL_DELTA)
 
 //=======================================================================//
 //= Static class member define.			    						    =//
@@ -27,7 +30,8 @@ LCDFrame* LCDFrame::m_pclsInstance = NULL;
 //=======================================================================//
 BEGIN_EVENT_TABLE(LCDFrame,wxFrame)
     EVT_CLOSE			(LCDFrame::_wxEvent_OnClose)
-    EVT_KEY_DOWN		(LCDFrame::_wxEvent_OnKeyDown)
+    EVT_KEY_DOWN		(LCDFrame::OnKeyDown)
+    EVT_MOUSE_EVENTS	(LCDFrame::OnMouseEvent)
     EVT_PAINT			(LCDFrame::_wxEvent_OnPaint)
     EVT_TOOL			(wxID_TOOLBAR_QUICKSHOTS, LCDFrame::_wxEvent_OnScreenshots)
     EVT_TOOL			(wxID_TOOLBAR_COPY, LCDFrame::_wxEvent_OnToolCopy)
@@ -220,6 +224,53 @@ void LCDFrame::OnKeyDown(wxKeyEvent& clsEvent)
 }
 
 /*************************************************************************/
+/** Function Name:	OnMouseEvent										**/
+/** Purpose:		Mouse event process.								**/
+/** Params:																**/
+/**	@ clsEvent[in]:		Event data object.								**/
+/** Return:			None.                                               **/
+/** Notice:			Used to process mouse wheel scroll event, process	**/
+/**					same as up/down key pressed.						**/
+/*************************************************************************/
+void LCDFrame::OnMouseEvent(wxMouseEvent& clsEvent)
+{
+	/*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+    unsigned int				uiKeyCode;
+    int							iMouseWhellDelta;
+
+    /*----------------------------------*/
+	/* Initialize						*/
+	/*----------------------------------*/
+    uiKeyCode = 				KEY_VALUE_NONE;
+
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	// Process wheel scroll event as Up/Down key press.
+	iMouseWhellDelta = clsEvent.GetWheelRotation();
+	if(0 != iMouseWhellDelta)
+	{
+		// Same as Down key pressed.
+		if(iMouseWhellDelta < MOUSE_WHELL_DOWN_DELTA)
+		{
+			uiKeyCode = KEY_VALUE_DOWN;
+		}
+		// Same as Up key pressed.
+		if(iMouseWhellDelta > MOUSE_WHELL_UP_DELTA)
+		{
+			uiKeyCode = KEY_VALUE_UP;
+		}
+		if(KEY_VALUE_NONE != uiKeyCode)
+		{
+			SGUI_SDK_SyncKeyEventData(uiKeyCode);
+			SGUI_SDK_SetEvnetSyncFlag(ENV_FLAG_IDX_SDK_KEY_EVENT, true);
+		}
+	}
+}
+
+/*************************************************************************/
 /** Function Name:	Copy                                                **/
 /** Purpose:		Copy screen image to clipboard.                     **/
 /** Params:			None.                                               **/
@@ -236,7 +287,7 @@ void LCDFrame::Copy(void)
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	bResult = m_pclsCtrlPaintPanel->CopyScreenImageToClipBoard();
+	bResult = m_pclsCtrlPaintPanel->CopyImage();
 	if(true == bResult)
 	{
 		_setStatusText(_TRANS_TEXT("Copied to clipboard."));
@@ -276,7 +327,7 @@ void LCDFrame::Screenshots(void)
 		uiFileCounter++;
 	}
     // Try to save image file.
-	if(true == m_pclsCtrlPaintPanel->SaveScreenImageToFile(SCREENSHOTS_FILE_FULLNAME(uiFileCounter)))
+	if(true == m_pclsCtrlPaintPanel->SaveImage(SCREENSHOTS_FILE_FULLNAME(uiFileCounter)))
 	{
 		_setStatusText(wxString::Format(_TRANS_TEXT("Save screen to %s."), SCREENSHOTS_FILE_NAME(uiFileCounter)));
 	}
@@ -484,21 +535,17 @@ void LCDFrame::OnRTCUpdate(wxTimerEvent& event)
 /*************************************************************************/
 void LCDFrame::OnSDKInitialize(InitEvent& clsEvent)
 {
-	// Initialize LCD panel display.
-	{
-		// Set LCD panel parameter.
-		m_pclsCtrlPaintPanel->SetParameter(&g_stParameters);
-		// Resize frame.
-		SetClientSize(m_pclsCtrlPaintPanel->GetBestSize());
-		// Clear display panel.
-		m_pclsCtrlPaintPanel->CleanScreen();
-	}
-
-	Layout();
+	// Set LCD panel parameter.
+	m_pclsCtrlPaintPanel->SetParameter(&g_stParameters);
+	// Clear display panel.
+	m_pclsCtrlPaintPanel->CleanScreen();
+	// Resize frame.
+	SetClientSize(m_pclsCtrlPaintPanel->GetBestSize());
+	// Reset frame position.
+	Center(wxBOTH);
 	// Create timer objects.
 	m_pclsMilliSecondTimer = new wxTimer(this, WXID_MILLISECOND_TIMER);
 	m_pclsRTCTimer = new wxTimer(this, WXID_RTC_TIMER);
-
 	// Set event process flag.
 	SGUI_SDK_SetEvnetSyncFlag(ENV_FLAG_IDX_SDK_INIT, true);
 	// Set status bar text.
@@ -601,8 +648,10 @@ wxThread::ExitCode LCDFrame::Entry(void)
 	if(NULL != pclsThread)
 	{
 		bExit = false;
+#if 0
 		// Wait for frame UI update done.
 		wxMilliSleep(DUMMY_MAIN_START_DELAY_MS);
+#endif
 		// Enable event receive.
 		SetEvtHandlerEnabled(true);
         // Start dummy main process.
