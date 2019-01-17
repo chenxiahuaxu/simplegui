@@ -11,13 +11,13 @@ SimpleGUI Virtual SDK 使用说明
 
 &emsp;&emsp;请访问[Code::Blocks下载页面](http://www.codeblocks.org/downloads/binaries)下载Code::Blocks集成开发环境，截至本文档最后一次编辑，Code::Blocks集成开发环境的最新版本为17.12。  
 &emsp;&emsp;由于Code::Blocks开发环境本身可以适配多种编译器，所以可下载选项有很多，如果对编译器并不了解，可以选择下载“codeblocks-17.12mingw”，此版本自带TDM-GCC 5.1.0版本编译器，后续讲解也以此编译器为例。
->![01-Codeblocks下载页面](http://FileTree)  
+>![01-Codeblocks下载页面](https://images.gitee.com/uploads/images/2019/0117/131725_1b7479df_769424.png)  
 
 #### 2.2. 部署wxWidgets
 
 &emsp;&emsp;请访问[wxWidgets下载页面](http://www.wxwidgets.org/downloads/)，选择页面中“Latest Development Release: 3.1.2”或者“Latest Stable Release: 3.0.4”标题下“Binaries”中的“Download windows binaries”链接，下载对应的编译器使用的库，推荐使用。本例中使用的是Codeblocks17.12版本自带的TDM-GCC 5.1.0版本编译器。所以选择下载“MinGW-TDM5.10”下的头文件（Header Files）和开发用库文件（Development Files）。  
 
->![02-wxWidgets下载页面](http://FileTree)   
+>![02-wxWidgets下载页面](https://images.gitee.com/uploads/images/2019/0117/131820_a6ed6bf6_769424.png)   
 > 由于2018年12月10日wxWidgets
 > 3.1.2版本更新后，面向GCC编译器的Makefile无法在Windows环境下直接使用，所以从本次更新开始，仅讲解wxWidgets库文件的使用方法，不再详述wxWidgets库的编译过程，如果有这方面具体需求，请参考本人的博文[《wxWidgets3.1.2在Windows+TDM-GCC环境下编译错误的处理》](https://my.oschina.net/Polarix/blog/2996189)了解详细信息。
 >3.1.1及更早版本的源代码仍然可以直接在Windows下使用TDM-GCC编译。
@@ -26,15 +26,15 @@ SimpleGUI Virtual SDK 使用说明
 
 &emsp;&emsp;启动Code::Blocks，然后选择选择“Settings”（设置）菜单下的“Global variables”（全局变量）项目。  
 
->![03-Global variables选项](http://FileTree)  
+>![03-Global variables选项](https://images.gitee.com/uploads/images/2019/0117/131842_f2e41830_769424.png)  
 
 &emsp;&emsp;在打开的全局变量编辑窗口中，点击“New”按钮，新建一个全局变量。  
 
->![04-新建全局变量](http://FileTree)  
+>![04-新建全局变量](https://images.gitee.com/uploads/images/2019/0117/131855_7f4e7ade_769424.png)  
 
 &emsp;&emsp;然后将全局变量的根路径、包含路径和库路经分别设置为wxWidgets的根路径include路径和lib路径，其他留空即可，参考下图。
 >全局变量配置  
->![05-全局变量配置](http://FileTree)  
+>![05-全局变量配置](https://images.gitee.com/uploads/images/2019/0117/131910_3e81ae8b_769424.png)  
 
 &emsp;&emsp;然后点击“Close”关闭环境变量编辑窗口，至此，SimpleGUI模拟环境开发需要使用的Codeblocks+wxWidgets环境搭建完成。  
 
@@ -56,9 +56,9 @@ SimpleGUI Virtual SDK 使用说明
 &emsp;&emsp;进入VirtualSDK\Project\CodeBlocks目录下，SimpleGUI.cbp文件夹即为模拟环境的工程文件，使用Code::Blocks打开。如果用户下载的是nosetup（绿色版）的Code::Blocks，需要手动建立关联才能直接用双击的方式打开cbp文件，否则，用户只能先打开Code::Blocks，然后从Code::Blocks中执行打开操作以打开工程文件。  
 &emsp;&emsp;点击工具栏上的编译按钮或按快捷键Ctrl+F9，开始编译模拟环境演示工程。  
 &emsp;&emsp;编译完成，显示无错误和警告，现在点击工具栏上的运行按钮或按快捷键Ctrl+F10就可以看到模拟环境的运行效果了。  
->![06-编译工程](http://FileTree)  
+>![06-编译工程](https://images.gitee.com/uploads/images/2019/0117/131925_defb4a75_769424.png)  
 
->![07-运行效果](http://FileTree) 
+>![07-运行效果](https://images.gitee.com/uploads/images/2019/0117/131942_a01e12c5_769424.png) 
 
 #### 3.3. 配置Virtual SDK
 &emsp;&emsp;默认情况下，SimpleGUI的Virtual SDK中虚拟显示屏幕的配色方案为黄底黑字的LCD点阵显示屏，为最大程度上模拟真实情况下的视觉效果，方便创建和调试GUI元素，模拟环境的虚拟LCD面板可以通过修改配置定义修改颜色和尺寸。
@@ -80,7 +80,7 @@ SimpleGUI Virtual SDK 使用说明
 > - 重新编译工程。  
 
 &emsp;&emsp;重新编译后，即可看到效果，此时已经模拟为黑底蓝字的OLED显示屏。
->![08-Virtual SDK模拟OLED显示屏](http://FileTree)  
+>![09-Virtual SDK模拟OLED显示屏](https://images.gitee.com/uploads/images/2019/0117/132051_954fd5c7_769424.png)  
 &emsp;&emsp;上述的宏用于VirtualSDK\Common\src\Common.c（对应工程路径/SimpleGUI/Sources/VirtualSDK/Common/src/Common.c）文件中，载入设定参数的操作中。
 
     void SetDefaultParameterData(PixelPanelParameter* pstParameter)
@@ -114,7 +114,7 @@ SimpleGUI Virtual SDK 使用说明
             pstParameter->PixelSize = 4;
     
 重新编译后，效果如下：  
->![09-Virtual SDK模拟OLED显示屏（带网格）](http://FileTree)   
+>![10-Virtual SDK模拟OLED显示屏（带网格）](https://images.gitee.com/uploads/images/2019/0117/132125_7336e715_769424.png)   
 
 &emsp;&emsp;需要注意的是，由于网格线显示时占用1像素，为了避免画面显示失调，SimpleGUI的Virtual  SDK仅在LCD像素点尺寸（也就是宏定义PARAM_DEFAULT_PIXEL_SIZE）的值大于4时，网格设定才会有效，在像素点尺寸小于4时，网格线将被强制关闭。  
 
@@ -154,4 +154,3 @@ SimpleGUI Virtual SDK 使用说明
 
 &emsp;&emsp;本人并不是全职的开源开发者，依然有工作及家庭的琐碎事务要处理，所以对于大家的需求和疑问反馈的可能并不及时，多有怠慢，敬请谅解。
 &emsp;&emsp;最后，再次感谢您的支持。  
-
