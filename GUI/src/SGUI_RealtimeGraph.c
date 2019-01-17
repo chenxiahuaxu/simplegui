@@ -17,8 +17,8 @@
 //= User Macro definition.											    =//
 //=======================================================================//
 #define	GUI_GRAPH_SCROLLBAR_WIDTH					(3)
-#define GUI_GRAPH_GRAPH_AREA_WIDTH					(LCD_SIZE_WIDTH-GUI_GRAPH_SCROLLBAR_WIDTH-1)
-#define GUI_GRAPH_GRAPH_AREA_HEIGHT					(LCD_SIZE_HEIGHT- GUI_GRAPH_SCROLLBAR_WIDTH-1)
+#define GUI_GRAPH_GRAPH_AREA_WIDTH					(SGUI_LCD_SIZE_WIDTH-GUI_GRAPH_SCROLLBAR_WIDTH-1)
+#define GUI_GRAPH_GRAPH_AREA_HEIGHT					(SGUI_LCD_SIZE_HEIGHT- GUI_GRAPH_SCROLLBAR_WIDTH-1)
 
 //=======================================================================//
 //= Static function declaration.									    =//
@@ -80,7 +80,7 @@ void SGUI_RealtimeGraph_Initialize(SGUI_RTGRAPH* pstRTGraph)
 				pstData->ZeroPointValue = pstControl->yAxisMin;
 			}
             // Calculate the number of value points that can be used.
-			pstData->ValueCount = (LCD_SIZE_WIDTH-2)/pstControl->xAxisStepPixel;
+			pstData->ValueCount = (SGUI_LCD_SIZE_WIDTH-2)/pstControl->xAxisStepPixel;
             for(iValueIndex=0; iValueIndex<pstData->ValueCount; iValueIndex++)
 			{
 				pstData->ValueArray[iValueIndex] = pstData->ZeroPointValue;
@@ -117,9 +117,9 @@ void SGUI_RealtimeGraph_Refresh(SGUI_SCR_DEV* pstIFObj, SGUI_RTGRAPH* pstRTGraph
 	/* Process							*/
 	/*----------------------------------*/
 	// Draw frame
-	SGUI_Basic_DrawRectangle(pstIFObj, 0, 0, LCD_SIZE_WIDTH, LCD_SIZE_HEIGHT, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
-	SGUI_Basic_DrawLine(pstIFObj, 1, 9, LCD_SIZE_WIDTH-2, 9, SGUI_COLOR_FRGCLR);
-	SGUI_Basic_DrawLine(pstIFObj, 1, LCD_SIZE_HEIGHT-9, LCD_SIZE_WIDTH-2, LCD_SIZE_HEIGHT-9, SGUI_COLOR_FRGCLR);
+	SGUI_Basic_DrawRectangle(pstIFObj, 0, 0, SGUI_LCD_SIZE_WIDTH, SGUI_LCD_SIZE_HEIGHT, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
+	SGUI_Basic_DrawLine(pstIFObj, 1, 9, SGUI_LCD_SIZE_WIDTH-2, 9, SGUI_COLOR_FRGCLR);
+	SGUI_Basic_DrawLine(pstIFObj, 1, SGUI_LCD_SIZE_HEIGHT-9, SGUI_LCD_SIZE_WIDTH-2, SGUI_LCD_SIZE_HEIGHT-9, SGUI_COLOR_FRGCLR);
 
 	if(NULL != pstRTGraph)
 	{
@@ -130,7 +130,7 @@ void SGUI_RealtimeGraph_Refresh(SGUI_SCR_DEV* pstIFObj, SGUI_RTGRAPH* pstRTGraph
 			if(SGUI_TRUE == pstControl->EnableBaseline)
 			{
 				iBaseLineCoordinateY = SGUI_RealtimeGraph_GetValuePointYCoordinate(pstRTGraph, pstData->ZeroPointValue);
-				SGUI_Basic_DrawLine(pstIFObj, 1, iBaseLineCoordinateY, LCD_SIZE_WIDTH-2, iBaseLineCoordinateY, SGUI_COLOR_FRGCLR);
+				SGUI_Basic_DrawLine(pstIFObj, 1, iBaseLineCoordinateY, SGUI_LCD_SIZE_WIDTH-2, iBaseLineCoordinateY, SGUI_COLOR_FRGCLR);
 			}
 
 			if(pstData->ValueCount > 1)
@@ -146,9 +146,9 @@ void SGUI_RealtimeGraph_Refresh(SGUI_SCR_DEV* pstIFObj, SGUI_RTGRAPH* pstRTGraph
 			//SGUI_Common_IntegerToString(pstData->ValueArray[pstData->ValueCount-1], szValueBuffer, 10, 10, ' ');
             stTextDataArea.PosX = 0; stTextDataArea.PosY = 0;
             stTextDispArea.PosX = 1; stTextDispArea.PosY = 1;
-            stTextDispArea.Width = LCD_SIZE_WIDTH-2, stTextDispArea.Height = 7;
+            stTextDispArea.Width = SGUI_LCD_SIZE_WIDTH-2, stTextDispArea.Height = 7;
             SGUI_Text_DrawSingleLineText(pstIFObj, szTopText, SGUI_FONT_SIZE_H8, &stTextDispArea, &stTextDataArea, SGUI_DRAW_NORMAL);
-            stTextDispArea.PosY = LCD_SIZE_HEIGHT-8;
+            stTextDispArea.PosY = SGUI_LCD_SIZE_HEIGHT-8;
             SGUI_Text_DrawSingleLineText(pstIFObj, szBottomText, SGUI_FONT_SIZE_H8, &stTextDispArea, &stTextDataArea, SGUI_DRAW_NORMAL);
 		}
 	}
@@ -230,7 +230,7 @@ SGUI_INT SGUI_RealtimeGraph_GetValuePointYCoordinate(SGUI_RTGRAPH* pstRTGraph, S
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	iDisplayValuePointAreaHeight = LCD_SIZE_HEIGHT-9*2;
+	iDisplayValuePointAreaHeight = SGUI_LCD_SIZE_HEIGHT-9*2;
 	iValuePointCoordinate =     -1;
 
 	/*----------------------------------*/

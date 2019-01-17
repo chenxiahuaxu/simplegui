@@ -20,9 +20,9 @@ typedef struct
 
 typedef struct
 {
-	SGUI_INT				ValueArray[LCD_SIZE_WIDTH];
-	SGUI_INT				LimitedValueArray[LCD_SIZE_WIDTH];
-	SGUI_INT				PointYCoordinateArray[LCD_SIZE_WIDTH];
+	SGUI_INT				ValueArray[SGUI_LCD_SIZE_WIDTH];
+	SGUI_INT				LimitedValueArray[SGUI_LCD_SIZE_WIDTH];
+	SGUI_INT				PointYCoordinateArray[SGUI_LCD_SIZE_WIDTH];
 	SGUI_INT				ZeroPointValue;
 	SGUI_INT				ValueCount;
 }SGUI_RTGRAPH_DATA;

@@ -16,8 +16,8 @@
 //= User Macro definition.											    =//
 //=======================================================================//
 #define	GUI_GRAPH_SCROLLBAR_WIDTH					(3)
-#define GUI_GRAPH_GRAPH_AREA_WIDTH					(LCD_SIZE_WIDTH-GUI_GRAPH_SCROLLBAR_WIDTH-1)
-#define GUI_GRAPH_GRAPH_AREA_HEIGHT					(LCD_SIZE_HEIGHT- GUI_GRAPH_SCROLLBAR_WIDTH-1)
+#define GUI_GRAPH_GRAPH_AREA_WIDTH					(SGUI_LCD_SIZE_WIDTH-GUI_GRAPH_SCROLLBAR_WIDTH-1)
+#define GUI_GRAPH_GRAPH_AREA_HEIGHT					(SGUI_LCD_SIZE_HEIGHT- GUI_GRAPH_SCROLLBAR_WIDTH-1)
 
 //=======================================================================//
 //= Static function declaration.									    =//
@@ -73,7 +73,7 @@ void SGUI_Graph_InitializeGraphData(SGUI_GRAPH* pstGraph, SGUI_GRAPH_INIT_DATA* 
  		pstGraph->SubElement.xScrollBar.Parameter.MaxIndex = pstGraph->Control->PointRangeX;
 		pstGraph->SubElement.xScrollBar.Parameter.PosX = GUI_GRAPH_SCROLLBAR_WIDTH;
 		pstGraph->SubElement.xScrollBar.Parameter.PosY = 0;
-		pstGraph->SubElement.xScrollBar.Parameter.Width = LCD_SIZE_WIDTH - GUI_GRAPH_SCROLLBAR_WIDTH;
+		pstGraph->SubElement.xScrollBar.Parameter.Width = SGUI_LCD_SIZE_WIDTH - GUI_GRAPH_SCROLLBAR_WIDTH;
 		pstGraph->SubElement.xScrollBar.Parameter.Height = GUI_GRAPH_SCROLLBAR_WIDTH;
 
 		pstGraph->SubElement.yScrollBar.Parameter.eDirection = SGUI_SCROLLBAR_VERTICAL;
@@ -81,7 +81,7 @@ void SGUI_Graph_InitializeGraphData(SGUI_GRAPH* pstGraph, SGUI_GRAPH_INIT_DATA* 
 		pstGraph->SubElement.yScrollBar.Parameter.PosX = 0;
 		pstGraph->SubElement.yScrollBar.Parameter.PosY = GUI_GRAPH_SCROLLBAR_WIDTH;
 		pstGraph->SubElement.yScrollBar.Parameter.Width = GUI_GRAPH_SCROLLBAR_WIDTH;
-		pstGraph->SubElement.yScrollBar.Parameter.Height = LCD_SIZE_HEIGHT - GUI_GRAPH_SCROLLBAR_WIDTH;
+		pstGraph->SubElement.yScrollBar.Parameter.Height = SGUI_LCD_SIZE_HEIGHT - GUI_GRAPH_SCROLLBAR_WIDTH;
 
 		pstGraph->Control->FocusIndex = pstInitializeData->FocusIndex;
 	}

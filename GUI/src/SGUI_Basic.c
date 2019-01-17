@@ -68,7 +68,7 @@ void SGUI_Basic_DrawPoint(SGUI_SCR_DEV* pstIFObj, SGUI_UINT uiCoordinateX, SGUI_
     /*----------------------------------*/
     /* Process							*/
     /*----------------------------------*/
-    if((uiCoordinateX < LCD_SIZE_WIDTH) && (uiCoordinateY < LCD_SIZE_HEIGHT) && (NULL != pstIFObj))
+    if((uiCoordinateX < SGUI_LCD_SIZE_WIDTH) && (uiCoordinateY < SGUI_LCD_SIZE_HEIGHT) && (NULL != pstIFObj))
     {
     	if(NULL == pstIFObj->fnSetPixel)
 		{
@@ -112,7 +112,7 @@ SGUI_COLOR SGUI_Basic_GetPoint(SGUI_SCR_DEV* pstIFObj, SGUI_UINT uiCoordinateX, 
     /*----------------------------------*/
     /* Process							*/
     /*----------------------------------*/
-    if((uiCoordinateX < LCD_SIZE_WIDTH) && (uiCoordinateY < LCD_SIZE_HEIGHT)&& (NULL != pstIFObj))
+    if((uiCoordinateX < SGUI_LCD_SIZE_WIDTH) && (uiCoordinateY < SGUI_LCD_SIZE_HEIGHT)&& (NULL != pstIFObj))
     {
     	if(NULL == pstIFObj->fnSetPixel)
 		{
@@ -158,7 +158,7 @@ void SGUI_Basic_ClearScreen(SGUI_SCR_DEV* pstIFObj)
 		}
 		else
 		{
-			SGUI_Basic_DrawRectangle(pstIFObj, 0, 0, LCD_SIZE_HEIGHT, LCD_SIZE_HEIGHT, SGUI_COLOR_BKGCLR, SGUI_COLOR_BKGCLR);
+			SGUI_Basic_DrawRectangle(pstIFObj, 0, 0, SGUI_LCD_SIZE_HEIGHT, SGUI_LCD_SIZE_HEIGHT, SGUI_COLOR_BKGCLR, SGUI_COLOR_BKGCLR);
 			SGUI_Basic_RefreshDisplay(pstIFObj);
 		}
 	}
@@ -473,7 +473,7 @@ void SGUI_Basic_DrawBitMap(SGUI_SCR_DEV* pstIFObj, SGUI_RECT_AREA* pstDisplayAre
 	/* Process							*/
 	/*----------------------------------*/
 	// Only draw in visible area of screen.
-	if(	(RECT_X_START(*pstDisplayArea) < LCD_SIZE_WIDTH) && (RECT_Y_START(*pstDisplayArea) < LCD_SIZE_HEIGHT) &&
+	if(	(RECT_X_START(*pstDisplayArea) < SGUI_LCD_SIZE_WIDTH) && (RECT_Y_START(*pstDisplayArea) < SGUI_LCD_SIZE_HEIGHT) &&
 		(RECT_X_END(*pstDisplayArea) > 0) && (RECT_Y_END(*pstDisplayArea) > 0))
 	{
 		// Recalculate display area and data area.
@@ -509,7 +509,7 @@ void SGUI_Basic_DrawBitMap(SGUI_SCR_DEV* pstIFObj, SGUI_RECT_AREA* pstDisplayAre
 			}
 			uiDrawnWidthIndex = iBmpPixX;
 			// Loop for x coordinate;
-			while((uiDrawnWidthIndex<RECT_WIDTH(*pstDataArea)) && (iDrawPixX<=RECT_X_END(*pstDisplayArea)) && (iDrawPixX<LCD_SIZE_WIDTH))
+			while((uiDrawnWidthIndex<RECT_WIDTH(*pstDataArea)) && (iDrawPixX<=RECT_X_END(*pstDisplayArea)) && (iDrawPixX<SGUI_LCD_SIZE_WIDTH))
 			{
 				// Redirect to data array for column.
 				pData = auiBitmapDataBuffer + iBmpPixX;
@@ -528,7 +528,7 @@ void SGUI_Basic_DrawBitMap(SGUI_SCR_DEV* pstIFObj, SGUI_RECT_AREA* pstDisplayAre
 				uiPixIndex = iBmpPixY % 8;
 				pData += (iBmpPixY / 8) * RECT_WIDTH(*pstDataArea);
 				// Loop for y coordinate;
-				while((uiDrawnHeightIndex<RECT_HEIGHT(*pstDataArea)) && (iDrawPixY<=RECT_Y_END(*pstDisplayArea)) && (iDrawPixY<LCD_SIZE_HEIGHT))
+				while((uiDrawnHeightIndex<RECT_HEIGHT(*pstDataArea)) && (iDrawPixY<=RECT_Y_END(*pstDisplayArea)) && (iDrawPixY<SGUI_LCD_SIZE_HEIGHT))
 				{
 					if(uiPixIndex == 8)
 					{

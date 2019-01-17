@@ -21,8 +21,8 @@
 //=======================================================================//
 //= Public function declaration.									    =//
 //=======================================================================//
-#define     LCD_SIZE_WIDTH						(192)
-#define     LCD_SIZE_HEIGHT						(64)
+#define     SGUI_LCD_SIZE_WIDTH				(192)
+#define     SGUI_LCD_SIZE_HEIGHT			(64)
 
 //=======================================================================//
 //= Public function declaration.									    =//
