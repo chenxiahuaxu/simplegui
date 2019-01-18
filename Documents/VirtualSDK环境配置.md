@@ -90,15 +90,16 @@ SimpleGUI Virtual SDK 使用说明
 |PARAM_DEFAULT_PIXEL_SIZE|屏幕像素大小|  
 
 &emsp;&emsp;Virtual SDK默认状态下模拟的是黄底黑字的LCD显示屏，不显示像素网格。接下来以模拟黑底蓝字的OLED19264显示屏效果，简要介绍一下各个宏定义的使用方法：  
-> - 使用一张目标屏幕的照片，使用取色工具获取屏幕背景、像素以及边框颜色的RGB值，比如淘宝上的照片，就可以直接使用。
+> - 使用一张目标屏幕的照片，使用取色工具获取屏幕背景、像素以及边框颜色的RGB值，比如淘宝上的照片，就可以直接使用。  
 >![09-实物照片](https://images.gitee.com/uploads/images/2019/0117/233447_91a32ff3_769424.png) 
 > - 将颜色的RGBA值分别更新入三个宏定义中，颜色使用32位无符号整数表示，从高至低四字节的意义分别为A、B、G、R。例如上图中屏幕背景色、像素色和边框色分别设定为0xFF070707、0xFFF1FA4F和0xFFC9652F，由于不需要显示网格，所以不需要修改网格颜色。
 > - 分别修改PARAM_DEFAULT_PIXEL_NUM_H和PARAM_DEFAULT_PIXEL_NUM_V的值为192和64。
 > - 修改\GUI\inc\SGUI_Common.h（对应工程路径/SimpleGUI/Headers/GUI/inc/SGUI_Common.h）文件中的SGUI_LCD_SIZE_WIDTH和SGUI_LCD_SIZE_HEIGHT的值为192和64。
 > - 重新编译工程。  
 
-&emsp;&emsp;重新编译后，即可看到效果，此时已经模拟为黑底蓝字的OLED显示屏。
+&emsp;&emsp;重新编译后，即可看到效果，此时已经模拟为黑底蓝字的OLED显示屏。  
 >![10-Virtual SDK模拟OLED显示屏](https://images.gitee.com/uploads/images/2019/0117/132051_954fd5c7_769424.png)  
+
 &emsp;&emsp;上述的宏用于VirtualSDK\Common\src\Common.c（对应工程路径/SimpleGUI/Sources/VirtualSDK/Common/src/Common.c）文件中，载入设定参数的操作中。
 
     void SetDefaultParameterData(PixelPanelParameter* pstParameter)
