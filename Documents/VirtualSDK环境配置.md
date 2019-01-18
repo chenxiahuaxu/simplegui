@@ -142,10 +142,10 @@ SimpleGUI Virtual SDK 使用说明
 &emsp;&emsp;Virtual SDK在VirtualSDK\Interface\src\SDKInterface.c（对应工程路径/SimpleGUI/Sources/VirtualSDK/Common/src/Common.c）文件中提供了以下接口。  
 |接口函数|功能概要|    
 |:--|:- |  
-|SGUI_SDK_DummyMainProc|Virtual SDK的虚拟主入口函数，模拟Main函数。| 
+|SGUI_SDK_DummyMainProc|Virtual SDK的虚拟主入口函数，模拟Main函数。|   
 |SGUI_SDK_SetEvnetSyncFlag|设定事件信号标记，通常由Virtual SDK自身调用，用于在模拟心跳定时器、RTC定时器或按键事件触发时设定标记用。|  
-|SGUI_SDK_SyncKeyEventData|同步按键事件，用于保存消息触发时的键值。| 
-|SGUI_SDK_GetEventSyncFlag|获取事件信号标记，通常由用户程序调用，用于读取和查询模拟心跳定时器、RTC定时器或按键是否触发。| 
+|SGUI_SDK_SyncKeyEventData|同步按键事件，用于保存消息触发时的键值。|   
+|SGUI_SDK_GetEventSyncFlag|获取事件信号标记，通常由用户程序调用，用于读取和查询模拟心跳定时器、RTC定时器或按键是否触发。|   
 |SGUI_SDK_GetKeyEventData|获取按键事件触发的键值，通常由用户程序调用。|  
 |SGUI_SDK_Initialize|初始化Virtual SDK虚拟设备，通常由用户程序调用。|  
 |SGUI_SDK_ConfigHearBeatTimer|配置虚拟心跳定时器，通常由用户程序调用，单位毫秒，参数为0时定时器停止。|  
@@ -165,7 +165,7 @@ SimpleGUI Virtual SDK 使用说明
 
 &emsp;&emsp;各函数的详细使用方法请参照演示历程。
 
-###3. 联系开发者
+### 4. 联系开发者
 &emsp;&emsp;首先，感谢您对SimpleGUI的赏识与支持。
 &emsp;&emsp;虽然最早仅仅作为一套GUI接口库使用，但我最终希望SimpleGUI能够为您提供一套完整的单色屏GUI及交互设计解决方案，如果您有新的需求、提议亦或想法，欢迎在以下地址留言，或加入[QQ交流群799501887](https://jq.qq.com/?_wv=1027&k=5ahGPvK)留言交流。  
 >SimpleGUI@开源中国：https://www.oschina.net/p/simplegui  
