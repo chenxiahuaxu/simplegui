@@ -86,7 +86,7 @@ void Application::OnKeyDown(wxKeyEvent& clsEvent)
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	clsEvent.ResumePropagation(1);
-	clsEvent.Skip();
+	//clsEvent.ResumePropagation(1);
+	//clsEvent.Skip();
 }
 

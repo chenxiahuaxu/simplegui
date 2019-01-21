@@ -11,11 +11,11 @@
 //=======================================================================//
 typedef struct
 {
-	SGUI_INT				yAxisMax;
-	SGUI_INT				yAxisMin;
-	SGUI_BOOL				EnableBaseline;
+	SGUI_INT				yAxisMax; // Max value on screen display.
+	SGUI_INT				yAxisMin; // Min value on screen display.
+	SGUI_BOOL				EnableBaseline; // Enable to show zero-point line.
 	SGUI_INT				xAxisStepPixel;
-	SGUI_INT				ValueArea;
+	SGUI_INT				ValueArea; // Display value range, auto calculate when initialize.
 }SGUI_RTGRAPH_CONTROL;
 
 typedef struct
@@ -23,8 +23,8 @@ typedef struct
 	SGUI_INT				ValueArray[SGUI_LCD_SIZE_WIDTH];
 	SGUI_INT				LimitedValueArray[SGUI_LCD_SIZE_WIDTH];
 	SGUI_INT				PointYCoordinateArray[SGUI_LCD_SIZE_WIDTH];
-	SGUI_INT				ZeroPointValue;
-	SGUI_INT				ValueCount;
+	SGUI_INT				BaseLineValue; // Base line value on graph map.
+	SGUI_INT				ValueCount; // Display value point number, auto calculate when initialize.
 }SGUI_RTGRAPH_DATA;
 
 typedef struct

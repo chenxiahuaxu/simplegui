@@ -220,6 +220,7 @@ void LCDFrame::OnKeyDown(wxKeyEvent& clsEvent)
 	SGUI_SDK_SyncKeyEventData(uiKeyCode);
 	SGUI_SDK_SetEvnetSyncFlag(ENV_FLAG_IDX_SDK_KEY_EVENT, true);
 
+	clsEvent.ResumePropagation(1);
 	clsEvent.Skip();
 }
 

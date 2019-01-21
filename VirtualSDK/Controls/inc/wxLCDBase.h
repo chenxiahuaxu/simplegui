@@ -66,6 +66,7 @@ class wxLCDBase
 		virtual void			OnPaint(wxPaintEvent &clsEvent);
 		virtual void			OnEraseBackGround(wxEraseEvent &clsEvent)	{/* Do nothing. */}
 		virtual void			OnKeyDown(wxKeyEvent& clsEvent);
+		virtual void			OnSetFocus(wxFocusEvent& clsEvent);
 		virtual wxSize			DoGetBestClientSize(void) const;
 
 	public:

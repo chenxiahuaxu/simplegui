@@ -27,6 +27,7 @@ BEGIN_EVENT_TABLE(wxLCDBase,wxWindow)
 	EVT_PAINT		        (wxLCDBase::OnPaint)
 	EVT_ERASE_BACKGROUND    (wxLCDBase::OnEraseBackGround)
 	EVT_KEY_DOWN			(wxLCDBase::OnKeyDown)
+	EVT_SET_FOCUS			(wxLCDBase::OnSetFocus)
 END_EVENT_TABLE()
 
 //=======================================================================//
@@ -358,6 +359,14 @@ void wxLCDBase::OnKeyDown(wxKeyEvent& clsEvent)
 	clsEvent.Skip();
 }
 
+void wxLCDBase::OnSetFocus(wxFocusEvent& clsEvent)
+{
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	GetParent()->SetFocus();
+	clsEvent.Skip();
+}
 void wxLCDBase::_drawPointSinglePixel(wxDC& clsDCObject, int iPosX, int iPosY, int iPixelSize)
 {
     /*----------------------------------*/

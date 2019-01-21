@@ -71,20 +71,20 @@ void SGUI_RealtimeGraph_Initialize(SGUI_RTGRAPH* pstRTGraph)
 			// Initialize graph data.
             //SGUI_Common_MemorySet(pstData, 0x00, sizeof(SGUI_RTGRAPH_DATA));
             // Zero point value must NOT greater then yAxisMax and NOT less then yAxisMin.
-			if(pstData->ZeroPointValue > pstControl->yAxisMax)
+			if(pstData->BaseLineValue > pstControl->yAxisMax)
 			{
-				pstData->ZeroPointValue = pstControl->yAxisMax;
+				pstData->BaseLineValue = pstControl->yAxisMax;
 			}
-			if(pstData->ZeroPointValue < pstControl->yAxisMin)
+			if(pstData->BaseLineValue < pstControl->yAxisMin)
 			{
-				pstData->ZeroPointValue = pstControl->yAxisMin;
+				pstData->BaseLineValue = pstControl->yAxisMin;
 			}
             // Calculate the number of value points that can be used.
 			pstData->ValueCount = (SGUI_LCD_SIZE_WIDTH-2)/pstControl->xAxisStepPixel;
             for(iValueIndex=0; iValueIndex<pstData->ValueCount; iValueIndex++)
 			{
-				pstData->ValueArray[iValueIndex] = pstData->ZeroPointValue;
-				pstData->LimitedValueArray[iValueIndex] = pstData->ZeroPointValue;
+				pstData->ValueArray[iValueIndex] = pstData->BaseLineValue;
+				pstData->LimitedValueArray[iValueIndex] = pstData->BaseLineValue;
 				pstData->PointYCoordinateArray[iValueIndex] = SGUI_RealtimeGraph_GetValuePointYCoordinate(pstRTGraph, pstData->LimitedValueArray[iValueIndex]);
 			}
 		}
@@ -129,7 +129,7 @@ void SGUI_RealtimeGraph_Refresh(SGUI_SCR_DEV* pstIFObj, SGUI_RTGRAPH* pstRTGraph
 		{
 			if(SGUI_TRUE == pstControl->EnableBaseline)
 			{
-				iBaseLineCoordinateY = SGUI_RealtimeGraph_GetValuePointYCoordinate(pstRTGraph, pstData->ZeroPointValue);
+				iBaseLineCoordinateY = SGUI_RealtimeGraph_GetValuePointYCoordinate(pstRTGraph, pstData->BaseLineValue);
 				SGUI_Basic_DrawLine(pstIFObj, 1, iBaseLineCoordinateY, SGUI_LCD_SIZE_WIDTH-2, iBaseLineCoordinateY, SGUI_COLOR_FRGCLR);
 			}
 
