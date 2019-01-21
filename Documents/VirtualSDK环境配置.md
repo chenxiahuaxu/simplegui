@@ -21,20 +21,23 @@ SimpleGUI Virtual SDK 使用说明
 
 &emsp;&emsp;在弹出的列表中下载对应的编译器使用的库，本例中使用Codeblocks自带的TDM-GCC 5.1.0本编译器。所以选择下载“MinGW-TDM5.10”下的头文件（Header Files）和开发用库文件（Development Files）。  
 
->![03-wxWidgets库的选择]()   
+>![03-wxWidgets库的选择](https://images.gitee.com/uploads/images/2019/0117/232547_839319af_769424.png)   
 > &emsp;&emsp;由于2018年12月10日wxWidgets3.1.2版本更新后，面向GCC编译器的Makefile无法在Windows环境下直接使用，所以从本次更新开始，仅讲解wxWidgets库文件的使用方法，不再详述wxWidgets库的编译过程，如果有这方面具体需求，请参考本人的博文[《wxWidgets3.1.2在Windows+TDM-GCC环境下编译错误的处理》](https://my.oschina.net/Polarix/blog/2996189)了解详细信息。  
 > &emsp;&emsp;3.1.1及更早版本的源代码仍然可以直接在Windows下使用TDM-GCC编译。
 
-&emsp;&emsp;下载后，请将下载的头文件和库文件解压在同一个文件夹中，加压的路径不宜太长，文件夹名中不要出现括号、下划线、空格等特殊字符，否则将可能导致程序编译时引用文件异常。本范例中部署路径为“E:\Workspace\Librarys\wxWidgets\ForTDM510”。解压后，请将库文件的目录名从“gccXXXXXX\_dll”修改为“gcc\_dll”。  
+&emsp;&emsp;下载后，请将下载的头文件和库文件解压在同一个文件夹中，解压的路径不宜太长，文件夹名中不要出现括号、下划线、空格等特殊字符，否则将可能导致程序编译时引用文件异常。本范例中部署路径为“E:\Workspace\Librarys\wxWidgets\ForTDM510”。解压后，请将库文件的目录名从“gccXXXXXX\_dll”修改为“gcc\_dll”。  
 &emsp;&emsp;部署后的目录结构应为：  
-    &emsp;&emsp;&emsp;&emsp;wxWidgets库目录  
-    &emsp;&emsp;&emsp;&emsp;&emsp;├─ include  
-    &emsp;&emsp;&emsp;&emsp;&emsp;│&emsp;├─ msvc  
-    &emsp;&emsp;&emsp;&emsp;&emsp;│&emsp;└─ wx  
-    &emsp;&emsp;&emsp;&emsp;&emsp;└─ lib  
-    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;├─ gcc_dll  
-    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;├─ mswu  
-    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;└─ *.a(库文件)  
+```
+    wxWidgets库目录  
+      ├─ include  
+      │  ├─ msvc  
+      │  └─ wx  
+      └─ lib  
+         ├─ gcc_dll  
+         ├─ mswu  
+         └─ *.a(库文件) 
+```
+ 
 
 #### 2.3. 配置Code::Blocks下的wxWidgets开发环境
 
@@ -44,11 +47,11 @@ SimpleGUI Virtual SDK 使用说明
 
 &emsp;&emsp;在打开的全局变量编辑窗口中，点击“New”按钮，新建一个全局变量“wxbin”。  
 
->![05-新建全局变量](https://images.gitee.com/uploads/images/2019/0117/131855_7f4e7ade_769424.png)  
+>![05-新建全局变量](https://images.gitee.com/uploads/images/2019/0117/232846_b419f48d_769424.png)  
 
 &emsp;&emsp;然后将全局变量的根路径、包含路径和库路经分别设置为wxWidgets的根路径include路径和lib路径，其他留空即可，参考下图。
 >全局变量配置  
->![06-全局变量配置](https://images.gitee.com/uploads/images/2019/0117/131910_3e81ae8b_769424.png)  
+>![06-全局变量配置](https://images.gitee.com/uploads/images/2019/0117/232905_babc192c_769424.png)  
 
 &emsp;&emsp;然后点击“Close”关闭环境变量编辑窗口，至此，SimpleGUI模拟环境开发需要使用的Codeblocks+wxWidgets环境搭建完成。  
 
@@ -87,15 +90,16 @@ SimpleGUI Virtual SDK 使用说明
 |PARAM_DEFAULT_PIXEL_SIZE|屏幕像素大小|  
 
 &emsp;&emsp;Virtual SDK默认状态下模拟的是黄底黑字的LCD显示屏，不显示像素网格。接下来以模拟黑底蓝字的OLED19264显示屏效果，简要介绍一下各个宏定义的使用方法：  
-> - 使用一张目标屏幕的照片，使用取色工具获取屏幕背景、像素以及边框颜色的RGB值，比如淘宝上的照片，就可以直接使用。
->![09-实物照片](http://FileTree) 
-> - 将颜色的RGBA值分别更新入三个宏定义中，颜色使用32位无符号整数表示，从高至低四字节的意义分别为A、B、G、R，例如上图中屏幕背景色、像素色和边框色分别设定为0xFF070707、0xFFF1FA4F和0xFFC9652F，由于不需要显示网格，所以不需要修改网格颜色。
+> - 使用一张目标屏幕的照片，使用取色工具获取屏幕背景、像素以及边框颜色的RGB值，比如淘宝上的照片，就可以直接使用。  
+>![09-实物照片](https://images.gitee.com/uploads/images/2019/0117/233447_91a32ff3_769424.png) 
+> - 将颜色的RGBA值分别更新入三个宏定义中，颜色使用32位无符号整数表示，从高至低四字节的意义分别为A、B、G、R。例如上图中屏幕背景色、像素色和边框色分别设定为0xFF070707、0xFFF1FA4F和0xFFC9652F，由于不需要显示网格，所以不需要修改网格颜色。
 > - 分别修改PARAM_DEFAULT_PIXEL_NUM_H和PARAM_DEFAULT_PIXEL_NUM_V的值为192和64。
 > - 修改\GUI\inc\SGUI_Common.h（对应工程路径/SimpleGUI/Headers/GUI/inc/SGUI_Common.h）文件中的SGUI_LCD_SIZE_WIDTH和SGUI_LCD_SIZE_HEIGHT的值为192和64。
 > - 重新编译工程。  
 
-&emsp;&emsp;重新编译后，即可看到效果，此时已经模拟为黑底蓝字的OLED显示屏。
+&emsp;&emsp;重新编译后，即可看到效果，此时已经模拟为黑底蓝字的OLED显示屏。  
 >![10-Virtual SDK模拟OLED显示屏](https://images.gitee.com/uploads/images/2019/0117/132051_954fd5c7_769424.png)  
+
 &emsp;&emsp;上述的宏用于VirtualSDK\Common\src\Common.c（对应工程路径/SimpleGUI/Sources/VirtualSDK/Common/src/Common.c）文件中，载入设定参数的操作中。
 
     void SetDefaultParameterData(PixelPanelParameter* pstParameter)
@@ -138,10 +142,10 @@ SimpleGUI Virtual SDK 使用说明
 &emsp;&emsp;Virtual SDK在VirtualSDK\Interface\src\SDKInterface.c（对应工程路径/SimpleGUI/Sources/VirtualSDK/Common/src/Common.c）文件中提供了以下接口。  
 |接口函数|功能概要|    
 |:--|:- |  
-|SGUI_SDK_DummyMainProc|Virtual SDK的虚拟主入口函数，模拟Main函数。| 
+|SGUI_SDK_DummyMainProc|Virtual SDK的虚拟主入口函数，模拟Main函数。|   
 |SGUI_SDK_SetEvnetSyncFlag|设定事件信号标记，通常由Virtual SDK自身调用，用于在模拟心跳定时器、RTC定时器或按键事件触发时设定标记用。|  
-|SGUI_SDK_SyncKeyEventData|同步按键事件，用于保存消息触发时的键值。| 
-|SGUI_SDK_GetEventSyncFlag|获取事件信号标记，通常由用户程序调用，用于读取和查询模拟心跳定时器、RTC定时器或按键是否触发。| 
+|SGUI_SDK_SyncKeyEventData|同步按键事件，用于保存消息触发时的键值。|   
+|SGUI_SDK_GetEventSyncFlag|获取事件信号标记，通常由用户程序调用，用于读取和查询模拟心跳定时器、RTC定时器或按键是否触发。|   
 |SGUI_SDK_GetKeyEventData|获取按键事件触发的键值，通常由用户程序调用。|  
 |SGUI_SDK_Initialize|初始化Virtual SDK虚拟设备，通常由用户程序调用。|  
 |SGUI_SDK_ConfigHearBeatTimer|配置虚拟心跳定时器，通常由用户程序调用，单位毫秒，参数为0时定时器停止。|  
@@ -161,7 +165,7 @@ SimpleGUI Virtual SDK 使用说明
 
 &emsp;&emsp;各函数的详细使用方法请参照演示历程。
 
-###3. 联系开发者
+### 4. 联系开发者
 &emsp;&emsp;首先，感谢您对SimpleGUI的赏识与支持。
 &emsp;&emsp;虽然最早仅仅作为一套GUI接口库使用，但我最终希望SimpleGUI能够为您提供一套完整的单色屏GUI及交互设计解决方案，如果您有新的需求、提议亦或想法，欢迎在以下地址留言，或加入[QQ交流群799501887](https://jq.qq.com/?_wv=1027&k=5ahGPvK)留言交流。  
 >SimpleGUI@开源中国：https://www.oschina.net/p/simplegui  
