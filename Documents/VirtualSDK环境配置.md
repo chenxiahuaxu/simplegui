@@ -79,7 +79,8 @@ SimpleGUI Virtual SDK 使用说明
 
 #### 3.3. 配置Virtual SDK
 &emsp;&emsp;默认情况下，SimpleGUI的Virtual SDK中虚拟显示屏幕的配色方案为黄底黑字的LCD点阵显示屏，为最大程度上模拟真实情况下的视觉效果，方便创建和调试GUI元素，模拟环境的虚拟LCD面板可以通过修改配置定义修改颜色和尺寸。
-&emsp;&emsp;打开Virtual SDK工程，进入VirtualSDK\Common\inc文件夹（对应工程路径/SimpleGUI/Headers/VirtualSDK/Common/inc），打开Common.h文件，找到以下宏定义：    
+&emsp;&emsp;打开Virtual SDK工程，进入VirtualSDK\Common\inc文件夹（对应工程路径/SimpleGUI/Headers/VirtualSDK/Common/inc），打开Common.h文件，找到以下宏定义：  
+
 |宏定义名|功能|    
 |:- |:- |   
 |LCD_COLOR_OBJ_PIX|逻辑有效像素点颜色（前景颜色）|  
@@ -93,7 +94,7 @@ SimpleGUI Virtual SDK 使用说明
 > - 使用一张目标屏幕的照片，使用取色工具获取屏幕背景、像素以及边框颜色的RGB值，比如淘宝上的照片，就可以直接使用。  
 >![09-实物照片](https://images.gitee.com/uploads/images/2019/0117/233447_91a32ff3_769424.png) 
 > - 将颜色的RGBA值分别更新入三个宏定义中，颜色使用32位无符号整数表示，从高至低四字节的意义分别为A、B、G、R。例如上图中屏幕背景色、像素色和边框色分别设定为0xFF070707、0xFFF1FA4F和0xFFC9652F，由于不需要显示网格，所以不需要修改网格颜色。
-> - 分别修改PARAM_DEFAULT_PIXEL_NUM_H和PARAM_DEFAULT_PIXEL_NUM_V的值为192和64。
+> - 分别修改PARAM\_DEFAULT\_PIXEL\_NUM\_H和PARAM\_DEFAULT\_PIXEL\_NUM\_V的值为192和64。
 > - 修改\GUI\inc\SGUI_Common.h（对应工程路径/SimpleGUI/Headers/GUI/inc/SGUI_Common.h）文件中的SGUI_LCD_SIZE_WIDTH和SGUI_LCD_SIZE_HEIGHT的值为192和64。
 > - 重新编译工程。  
 
@@ -140,6 +141,7 @@ SimpleGUI Virtual SDK 使用说明
 #### 3.4. 使用Virtual SDK  
 &emsp;&emsp;SimpleGUI提供了一个虚拟入口，用于模拟SimpleGUI在目标平台下的简易动作。  
 &emsp;&emsp;Virtual SDK在VirtualSDK\Interface\src\SDKInterface.c（对应工程路径/SimpleGUI/Sources/VirtualSDK/Common/src/Common.c）文件中提供了以下接口。  
+
 |接口函数|功能概要|    
 |:--|:- |  
 |SGUI_SDK_DummyMainProc|Virtual SDK的虚拟主入口函数，模拟Main函数。|   
