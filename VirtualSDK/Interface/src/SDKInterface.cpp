@@ -15,7 +15,6 @@
 //=======================================================================//
 //= User definition.												    =//
 //=======================================================================//
-//#define	SDK_THREAD_LOCK()					wxCriticalSectionLocker clsCSLock(s_clsEventSyncCS)
 #define EventSyncLock()							{s_clsEventSyncCS.Enter();}
 #define EventSyncUnlock()						{s_clsEventSyncCS.Leave();}
 
@@ -35,88 +34,8 @@ static wxCriticalSection	s_clsEventSyncCS;
 //=======================================================================//
 //= Function define.										            =//
 //=======================================================================//
-
 /*************************************************************************/
-/** Function Name:	USR_ACT_OnKeyPress									**/
-/** Purpose:		Recive and process key press event.					**/
-/** Resources:		None.												**/
-/** Params:																**/
-/** @ uiKeyCode:        Key code.										**/
-/** Return:			None.												**/
-/** Notice:			None.												**/
-/*************************************************************************/
-void SGUI_SDK_KeyPressInterruptEvent(unsigned int uiKeyCode)
-{
-    /*----------------------------------*/
-    /* Variable Declaration				*/
-    /*----------------------------------*/
-    SGUI_UINT16				uiEventKeyCode;
-    HMI_EVENT				stEvent;
-
-    /*----------------------------------*/
-    /* Initialize						*/
-    /*----------------------------------*/
-    uiEventKeyCode =		uiKeyCode;
-    stEvent.Action =		HMI_ENGINE_ACTION_KEY_PRESS;
-    stEvent.Data =			(SGUI_BYTE*)&uiEventKeyCode;
-
-    /*----------------------------------*/
-    /* Process							*/
-    /*----------------------------------*/
-    // Call demo process.
-    EventProcess(HMI_ENGINE_EVENT_ACTION, &stEvent);
-    SGUI_SDK_RefreshDisplay();
-}
-
-void SGUI_SDK_HeartBeatTimerTagEvent(void)
-{
-    /*----------------------------------*/
-    /* Variable Declaration				*/
-    /*----------------------------------*/
-    HMI_EVENT				stEvent;
-    SGUI_INT				iRandomNumber;
-
-    /*----------------------------------*/
-    /* Initialize						*/
-    /*----------------------------------*/
-    stEvent.Action =		HMI_ENGINE_ACTION_ON_TIMER;
-    stEvent.Data =			NULL;
-
-    /*----------------------------------*/
-    /* Process							*/
-    /*----------------------------------*/
-    iRandomNumber = rand();
-
-    iRandomNumber = (iRandomNumber % 200)-100;
-    stEvent.Data = (SGUI_BYTE*)(&iRandomNumber);
-    // Post timer event.
-    EventProcess(HMI_ENGINE_EVENT_ACTION, &stEvent);
-    SGUI_SDK_RefreshDisplay();
-}
-
-void SGUI_SDK_RTCInterruptTagEvent(void)
-{
-    /*----------------------------------*/
-    /* Variable Declaration				*/
-    /*----------------------------------*/
-    HMI_EVENT				stEvent;
-
-    /*----------------------------------*/
-    /* Initialize						*/
-    /*----------------------------------*/
-    stEvent.Action =		HMI_ENGINE_ACTION_ON_TIMER_RTC;
-    stEvent.Data = 			NULL;
-
-    /*----------------------------------*/
-    /* Process							*/
-    /*----------------------------------*/
-    // Post RTC update message to a screen.
-    EventProcess(HMI_ENGINE_EVENT_ACTION, &stEvent);
-    SGUI_SDK_RefreshDisplay();
-}
-
-/*************************************************************************/
-/** Function Name:	VDIF_SetPixel                                       **/
+/** Function Name:	SGUI_SDK_SetPixel                                     **/
 /** Purpose:		Set virtual device pixel register data.             **/
 /** Params:																**/
 /**	@ iPosX[in]:		Pixel x-coordinate on display panel.			**/
@@ -147,7 +66,7 @@ void SGUI_SDK_SetPixel(int iPosX, int iPosY, int iPixelValue)
 }
 
 /*************************************************************************/
-/** Function Name:	VDIF_GetPixel                                       **/
+/** Function Name:	SGUI_SDK_GetPixel									**/
 /** Purpose:		Get a pixel value form virtual device register.     **/
 /** Params:																**/
 /**	@ iPosX[in]:		Pixel x-coordinate on display panel.			**/
@@ -184,7 +103,7 @@ int SGUI_SDK_GetPixel(int iPosX, int iPosY)
 }
 
 /*************************************************************************/
-/** Function Name:	VDIF_RefreshDisplay.                                **/
+/** Function Name:	SGUI_SDK_RefreshDisplay								**/
 /** Purpose:		Refresh virtual device display.                     **/
 /** Params:			None.                                               **/
 /** Return:			None.                                               **/
@@ -212,7 +131,7 @@ void SGUI_SDK_RefreshDisplay(void)
 }
 
 /*************************************************************************/
-/** Function Name:	VDIF_ClearDisplay.                                  **/
+/** Function Name:	SGUI_SDK_ClearDisplay								**/
 /** Purpose:		Clear screen display.                               **/
 /** Params:			None.                                               **/
 /** Return:			None.                                               **/
@@ -240,16 +159,20 @@ void SGUI_SDK_ClearDisplay(void)
     }
 }
 
-void EnterCriticalSection(void)
-{
-	s_clsEventSyncCS.Enter();
-}
-
-void LeaveCriticalSection(void)
-{
-	s_clsEventSyncCS.Leave();
-}
-
+/*************************************************************************/
+/** Function Name:	SGUI_SDK_SyncMainFrameEvent							**/
+/** Purpose:		Send a event to main frame and wait for process		**/
+/**					complete.											**/
+/** Params:																**/
+/**	@ clsEvent[in]:		Event class object.								**/
+/** @ eSyncFlag[in]:	Sync process flag.								**/
+/** @ iTimeOutMs[in]:	Waiting time in millisecond.					**/
+/** Return:																**/
+/** @ true:				Process successfully.							**/
+/**	@ false:			Waiting process timeout.						**/
+/** Notice:			If iTimeOutMs parameter value is 0, then process	**/
+/**					return immediately.									**/
+/*************************************************************************/
 bool SGUI_SDK_SyncMainFrameEvent(wxEvent& clsEvent, ENV_FLAG_INDEX eSyncFlag, int iTimeOutMs)
 {
     /*----------------------------------*/
@@ -381,7 +304,7 @@ bool SGUI_SDK_GetEventSyncFlag(ENV_FLAG_INDEX eIndex)
 }
 
 /*************************************************************************/
-/** Function Name:	SetSDKHeartBeatTimer.								**/
+/** Function Name:	SetSDKSysTickTimer.									**/
 /** Purpose:		Post SDK heart-beat timer set event to main frame.	**/
 /** Params:																**/
 /**	@ uiIntervalMs[in]:	Timer interval in ms, 0 to stop timer.			**/
@@ -527,4 +450,30 @@ int SGUI_SDK_DummyMainProc(void)
     SGUI_SDK_Initialize();
     // Call main process.
     return DemoMainProcess();
+}
+
+/*************************************************************************/
+/** Function Name:	SGUI_SDK_SysTickTimerInterrput						**/
+/** Purpose:		SDK Dummy SysTick timer interrupt service function.	**/
+/** Params:			None.                                               **/
+/** Return:			none.												**/
+/** Notice:			This function simulates the SysTick timer interrupt	**/
+/**					service, add custom processing here if needed.		**/
+/*************************************************************************/
+void SGUI_SDK_SysTickTimerInterrput(void)
+{
+	// Add your process here.
+}
+
+/*************************************************************************/
+/** Function Name:	SGUI_SDK_RTCInterrput								**/
+/** Purpose:		SDK Dummy RTC interrupt service function.			**/
+/** Params:			None.                                               **/
+/** Return:			none.												**/
+/** Notice:			This function simulates the RTC interrupt service,	**/
+/**					add custom processing here if needed.				**/
+/*************************************************************************/
+void SGUI_SDK_RTCInterrput(void)
+{
+    // Add your process here.
 }

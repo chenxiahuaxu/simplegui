@@ -19,8 +19,9 @@ void SetDefaultParameterData(PixelPanelParameter* pstParameter)
 		// Appearance
 		pstParameter->HorizontalPixelNumber = PARAM_DEFAULT_PIXEL_NUM_H;
 		pstParameter->VerticalPixelNumber = PARAM_DEFAULT_PIXEL_NUM_V;
-		pstParameter->PixelSize = PARAM_DEFAULT_PIXEL_SIZE;
-		pstParameter->EnableGrid = PARAM_DEFAULT_GRID_ENABLE;
+		pstParameter->PixelUnitWidth = PARAM_DEFAULT_PIXEL_WIDTH;
+		pstParameter->PixelUnitHeight = PARAM_DEFAULT_PIXEL_HEIGHT;
+		pstParameter->EnableGrid = PARAM_DEFAULT_GRID_DISABLE;
 
 		// ScreenColor
 		pstParameter->PanelColor = LCD_COLOR_OBJ_BKG;

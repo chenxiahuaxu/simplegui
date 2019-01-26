@@ -11,13 +11,14 @@
 //=======================================================================//
 #define _TRANS_TEXT(STR)								_(STR)
 
-#define LCD_COLOR_OBJ_PIX						    	(0xFF168363)
-#define LCD_COLOR_OBJ_BKG						    	(0xFF00F0D7)
+#define LCD_COLOR_OBJ_PIX						    	(0xFF5B805A)
+#define LCD_COLOR_OBJ_BKG						    	(0xFFF9ECE4)
 #define LCD_COLOR_OBJ_GRID						    	(0xFF383834)
 
-#define PARAM_DEFAULT_PIXEL_NUM_H                       (192)
+#define PARAM_DEFAULT_PIXEL_NUM_H                       (128)
 #define PARAM_DEFAULT_PIXEL_NUM_V                       (64)
-#define PARAM_DEFAULT_PIXEL_SIZE					    (3)
+#define PARAM_DEFAULT_PIXEL_WIDTH					    (3)
+#define PARAM_DEFAULT_PIXEL_HEIGHT					    (3)
 #define PARAM_DEFAULT_GRID_ENABLE                       (true)
 #define PARAM_DEFAULT_GRID_DISABLE                      (false)
 
@@ -28,7 +29,8 @@ typedef struct
 {
 	size_t					HorizontalPixelNumber;
     size_t					VerticalPixelNumber;
-    size_t					PixelSize;
+    size_t					PixelUnitWidth;
+    size_t					PixelUnitHeight;
     bool					EnableGrid;
 	unsigned int			PanelColor;
 	unsigned int			PixelColor;

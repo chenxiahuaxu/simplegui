@@ -24,7 +24,7 @@
 static HMI_ENGINE_RESULT	HMI_DemoList_Initialize(SGUI_SCR_DEV* pstIFObj);
 static HMI_ENGINE_RESULT	HMI_DemoList_Prepare(SGUI_SCR_DEV* pstIFObj, const void* pstParameters);
 static HMI_ENGINE_RESULT	HMI_DemoList_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const void* pstParameters);
-static HMI_ENGINE_RESULT	HMI_DemoList_ProcessEvent(SGUI_SCR_DEV* pstIFObj, HMI_EVENT_TYPE eEvent, const HMI_EVENT* pstEvent);
+static HMI_ENGINE_RESULT	HMI_DemoList_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent);
 static HMI_ENGINE_RESULT	HMI_DemoList_PostProcess(SGUI_SCR_DEV* pstIFObj, SGUI_INT iActionResult);
 
 //=======================================================================//
@@ -126,7 +126,7 @@ HMI_ENGINE_RESULT HMI_DemoList_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const void*
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoList_ProcessEvent(SGUI_SCR_DEV* pstIFObj, HMI_EVENT_TYPE eEvent, const HMI_EVENT* pstEvent)
+HMI_ENGINE_RESULT HMI_DemoList_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -135,20 +135,28 @@ HMI_ENGINE_RESULT HMI_DemoList_ProcessEvent(SGUI_SCR_DEV* pstIFObj, HMI_EVENT_TY
 	SGUI_UINT16					uiKeyCode;
 	SGUI_UINT16					uiKeyValue;
 	SGUI_UINT16					uiOptionCode;
+	KEY_PRESS_EVENT*					pstKeyEvent;
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
 	eProcessResult =			HMI_RET_NORMAL;
+	pstKeyEvent =				(KEY_PRESS_EVENT*)pstEvent;
 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if(eEvent == HMI_ENGINE_EVENT_ACTION)
+	if(pstEvent->eType == HMI_ENGINE_EVENT_ACTION)
 	{
-		if(HMI_ENGINE_ACTION_KEY_PRESS == pstEvent->Action)
+		// Check event is valid.
+		if(SGUI_FALSE == HMI_EVENT_SIZE_CHK(*pstKeyEvent, KEY_PRESS_EVENT))
 		{
-			uiKeyCode = *((SGUI_UINT16*)pstEvent->Data);
+			// Event data is invalid.
+			eProcessResult = HMI_RET_INVALID_DATA;
+		}
+		else if(EVENT_ID_KEY_PRESS == pstEvent->iID)
+		{
+			uiKeyCode = pstKeyEvent->Data.uiKeyValue;
 			uiKeyValue = KEY_CODE_VALUE(uiKeyCode);
 			uiOptionCode = KEY_CODE_OPT(uiKeyCode);
 			switch(uiKeyValue)

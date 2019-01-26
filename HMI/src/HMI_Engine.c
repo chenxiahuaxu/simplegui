@@ -202,9 +202,9 @@ HMI_ENGINE_RESULT HMI_ActiveEngine(HMI_ENGINE_OBJECT* pstHMIEngineObject, SGUI_I
 /** Purpose:		Start HMI engine and show screen display.               **/
 /** Params:			None.                       							**/
 /** Return:			HMI_ENGINE_RESULT										**/
-/** @HMI_RET_NORMAL:    Engine activated.	    							**/
-/** @HMI_RET_ERROR_STATE: Current engine object is in processing.           **/
-/** @HMI_RET_INVALID_DATA: Specified screen ID is invalid or not add to     **/
+/** @ HMI_RET_NORMAL:    Engine activated.	    							**/
+/** @ HMI_RET_ERROR_STATE: Current engine object is in processing.			**/
+/** @ HMI_RET_INVALID_DATA: Specified screen ID is invalid or not add to	**/
 /**                     this engine.                                        **/
 /** Notice:			The process event will post to the activated engine.	**/
 /** Notice:			Screen will only refresh when pstPreProcessData is NULL	**/
@@ -265,12 +265,11 @@ HMI_ENGINE_RESULT HMI_StartEngine(const void* pstParameters)
 /** Function Name:	HMI_ProcessEvent                                        **/
 /** Purpose:		Receive posted event and post to screen object.         **/
 /** Params:																	**/
-/**	@eEventType[in]:	Event type, see also declare of HMI_EVENT_TYPE.		**/
-/**	@pstEvent[in]:		Event data, include action type and parameter data.	**/
+/**	@ pstEvent[in]:		Event data, include action type and parameter data.	**/
 /** Return:			HMI_ENGINE_RESULT.										**/
 /** Notice:			None.													**/
 /*****************************************************************************/
-HMI_ENGINE_RESULT HMI_ProcessEvent(HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent)
+HMI_ENGINE_RESULT HMI_ProcessEvent(const HMI_EVENT_BASE* pstEvent)
 {
     /*----------------------------------*/
 	/* Variable Declaration				*/
@@ -309,7 +308,7 @@ HMI_ENGINE_RESULT HMI_ProcessEvent(HMI_EVENT_TYPE eEventType, const HMI_EVENT* p
                 {
                     if(NULL != pstCurrentScreen->Actions->ProcessEvent)
                     {
-                         eProcessResult = pstCurrentScreen->Actions->ProcessEvent(g_pstActivedEngineObject->Interface, eEventType, pstEvent);
+                         eProcessResult = pstCurrentScreen->Actions->ProcessEvent(g_pstActivedEngineObject->Interface, pstEvent);
 						SGUI_Basic_RefreshDisplay(g_pstActivedEngineObject->Interface);
                     }
                 }

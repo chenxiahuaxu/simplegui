@@ -34,7 +34,7 @@
 static HMI_ENGINE_RESULT    HMI_DemoScrollingText_Initialize(SGUI_SCR_DEV* Interface);
 static HMI_ENGINE_RESULT    HMI_DemoScrollingText_Prepare(SGUI_SCR_DEV* Interface, const void* pstParameters);
 static HMI_ENGINE_RESULT    HMI_DemoScrollingText_RefreshScreen(SGUI_SCR_DEV* Interface, const void* pstParameters);
-static HMI_ENGINE_RESULT    HMI_DemoScrollingText_ProcessEvent(SGUI_SCR_DEV* Interface, HMI_EVENT_TYPE eEvent, const HMI_EVENT* pstEvent);
+static HMI_ENGINE_RESULT    HMI_DemoScrollingText_ProcessEvent(SGUI_SCR_DEV* Interface, const HMI_EVENT_BASE* pstEvent);
 static HMI_ENGINE_RESULT    HMI_DemoScrollingText_PostProcess(SGUI_SCR_DEV* Interface, SGUI_INT iActionResult);
 
 //=======================================================================//
@@ -124,20 +124,20 @@ HMI_ENGINE_RESULT HMI_DemoScrollingText_RefreshScreen(SGUI_SCR_DEV* pstIFObj, co
 /** Purpose:		Process with user actions.								**/
 /** Resources:		List data structure and bind data if existed.			**/
 /** Parameters:																**/
-/** @uiScreenID[in]: 	Matched screen ID.									**/
-/** @pstEvent[in]:		User event data pointer.							**/
+/** @ pstIFObj [in]: 	Screen device operation interface structure.		**/
+/** @ pstEvent[in]:		User event data pointer.							**/
 /** Return:			User event process result.								**/
 /** Limitation:		Parameter pointer is a void type, convert to the 		**/
 /**					appropriate type before use.							**/
 /*****************************************************************************/
-HMI_ENGINE_RESULT HMI_DemoScrollingText_ProcessEvent(SGUI_SCR_DEV* pstIFObj, HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent)
+HMI_ENGINE_RESULT HMI_DemoScrollingText_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
 	HMI_ENGINE_RESULT           eProcessResult;
-	SGUI_UINT16					uiKeyCode;
 	SGUI_UINT16					uiKeyValue;
+	KEY_PRESS_EVENT*					pstKeyEvent;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -147,45 +147,42 @@ HMI_ENGINE_RESULT HMI_DemoScrollingText_ProcessEvent(SGUI_SCR_DEV* pstIFObj, HMI
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if(HMI_ENGINE_EVENT_ACTION == eEventType)
+	switch(pstEvent->iID)
 	{
-		switch(pstEvent->Action)
+		case EVENT_ID_KEY_PRESS:
 		{
-			case HMI_ENGINE_ACTION_KEY_PRESS:
-			{
-				uiKeyCode = *((SGUI_UINT16*)pstEvent->Data);
-				uiKeyValue = KEY_CODE_VALUE(uiKeyCode);
+			pstKeyEvent = (KEY_PRESS_EVENT*)pstEvent;
+			uiKeyValue = KEY_CODE_VALUE(pstKeyEvent->Data.uiKeyValue);
 
-				if(KEY_VALUE_SPACE == uiKeyValue)
-				{
-					eProcessResult = HMI_RET_FOLLOWUP;
-				}
-				else
-				{
-					eProcessResult = HMI_RET_NOACTION;
-				}
-				break;
-			}
-			case HMI_ENGINE_ACTION_ON_TIMER:
+			if(KEY_VALUE_SPACE == uiKeyValue)
 			{
-				//SGUI_Frame_DrawFullScreenFrame(pstIFObj, &s_stTextFrame);
-				SGUI_Text_DrawMultipleLinesText(pstIFObj, s_szDemoText, SGUI_FONT_SIZE_H12, &s_stTextDisplayArea, s_iTextOffset, SGUI_DRAW_NORMAL);
-				if(s_iTextOffset + s_iTextHeight == 0)
-				{
-					s_iTextOffset = HMI_TEXT_DEMO_FRAME_TEXT_HEIGHT;
-				}
-				else
-				{
-					s_iTextOffset--;
-				}
-				eProcessResult = HMI_RET_NOACTION;
-				break;
+				eProcessResult = HMI_RET_FOLLOWUP;
 			}
-			default:
+			else
 			{
 				eProcessResult = HMI_RET_NOACTION;
-				break;
 			}
+			break;
+		}
+		case EVENT_ID_TIMER:
+		{
+			//SGUI_Frame_DrawFullScreenFrame(pstIFObj, &s_stTextFrame);
+			SGUI_Text_DrawMultipleLinesText(pstIFObj, s_szDemoText, SGUI_FONT_SIZE_H12, &s_stTextDisplayArea, s_iTextOffset, SGUI_DRAW_NORMAL);
+			if(s_iTextOffset + s_iTextHeight == 0)
+			{
+				s_iTextOffset = HMI_TEXT_DEMO_FRAME_TEXT_HEIGHT;
+			}
+			else
+			{
+				s_iTextOffset--;
+			}
+			eProcessResult = HMI_RET_NOACTION;
+			break;
+		}
+		default:
+		{
+			eProcessResult = HMI_RET_NOACTION;
+			break;
 		}
 	}
 	return eProcessResult;

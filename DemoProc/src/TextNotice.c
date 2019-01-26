@@ -23,7 +23,7 @@
 static HMI_ENGINE_RESULT	HMI_DemoTextNotice_Initialize(SGUI_SCR_DEV* pstIFObj);
 static HMI_ENGINE_RESULT	HMI_DemoTextNotice_Prepare(SGUI_SCR_DEV* pstIFObj, const void* pstParameters);
 static HMI_ENGINE_RESULT	HMI_DemoTextNotice_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const void* pstParameters);
-static HMI_ENGINE_RESULT	HMI_DemoTextNotice_ProcessEvent(SGUI_SCR_DEV* pstIFObj, HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent);
+static HMI_ENGINE_RESULT	HMI_DemoTextNotice_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent);
 static HMI_ENGINE_RESULT	HMI_DemoTextNotice_PostProcess(SGUI_SCR_DEV* pstIFObj, SGUI_INT iActionResult);
 
 //=======================================================================//
@@ -78,14 +78,14 @@ HMI_ENGINE_RESULT HMI_DemoTextNotice_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoTextNotice_ProcessEvent(SGUI_SCR_DEV* pstIFObj, HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent)
+HMI_ENGINE_RESULT HMI_DemoTextNotice_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
 	HMI_ENGINE_RESULT           eProcessResult;
-	SGUI_UINT16					uiKeyCode;
 	SGUI_UINT16					uiKeyValue;
+	KEY_PRESS_EVENT*					pstKeyEvent;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -95,12 +95,13 @@ HMI_ENGINE_RESULT HMI_DemoTextNotice_ProcessEvent(SGUI_SCR_DEV* pstIFObj, HMI_EV
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if(eEventType == HMI_ENGINE_EVENT_ACTION)
+	if(HMI_ENGINE_EVENT_ACTION == pstEvent->eType)
 	{
-		if(HMI_ENGINE_ACTION_KEY_PRESS == pstEvent->Action)
+		if(EVENT_ID_KEY_PRESS == pstEvent->iID)
 		{
-			uiKeyCode = *((SGUI_UINT16*)pstEvent->Data);
-			uiKeyValue = KEY_CODE_VALUE(uiKeyCode);
+			pstKeyEvent = (KEY_PRESS_EVENT*)pstEvent;
+			uiKeyValue = KEY_CODE_VALUE(pstKeyEvent->Data.uiKeyValue);
+
 			switch(uiKeyValue)
 			{
 				case KEY_VALUE_ENTER:

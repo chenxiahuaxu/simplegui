@@ -87,7 +87,7 @@ bool wxLCDBase::_initialize(void)
 	else
 	{
 		// Set pixel size.
-		SetPixelSize(WX_LCD_DEFAULT_PIX_SIZE);
+		SetPixelUnitSize(wxDefaultLCDPixelUnitSize);
 		// Set grid visible.
 		SetGridVisibled(WX_LCD_DEFAULT_GRID_VISIBLE);
 	}
@@ -110,8 +110,8 @@ void wxLCDBase::_getBestSize(wxSize& clsBestSize) const
 	/* Process							*/
 	/*----------------------------------*/
 	// Set size object value.
-	clsBestSize.SetWidth(m_clsSizeInPixel.GetWidth()*m_iPixelSize+(bGridIsVisible?1:0));
-	clsBestSize.SetHeight(m_clsSizeInPixel.GetHeight()*m_iPixelSize+(bGridIsVisible?1:0));
+	clsBestSize.SetWidth(m_clsSizeInPixel.GetWidth()*m_clsPixelUnitSize.GetWidth()+(bGridIsVisible?1:0));
+	clsBestSize.SetHeight(m_clsSizeInPixel.GetHeight()*m_clsPixelUnitSize.GetHeight()+(bGridIsVisible?1:0));
 }
 
 void wxLCDBase::SetPixelNumber(int iHorizontalPixelNumber, int iVerticalPixelNumber)
@@ -172,27 +172,29 @@ void wxLCDBase::GetPixelNumber(int* piHorizontalPixelNumber, int* piVerticalPixe
 	}
 }
 
-void wxLCDBase::SetPixelSize(int iPixelSize)
+void wxLCDBase::SetPixelUnitSize(const wxSize clsPixelUnitSize)
 {
     /*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
 	// Save the pixel size value.
-    m_iPixelSize = iPixelSize;
+    m_clsPixelUnitSize = clsPixelUnitSize;
 
     _enterPaintCriticalSection();
     // If pixel size is 0, the pixel drawing function will set to invalid.
-	if(0 == m_iPixelSize)
+	if((0 == m_clsPixelUnitSize.GetWidth()) || (0 == m_clsPixelUnitSize.GetHeight()))
 	{
 		m_pfDrawPoint = NULL;
 		m_bIsOK = false;
 	}
 	// If pixel size is 1, the pixel drawing function will set to draw pixel unit by point.
+	/*
 	else if(1 == m_iPixelSize)
 	{
 		m_pfDrawPoint = &_drawPointSinglePixel;
 	}
 	else
+		*/
 	{
 		if(true == GetGridVisibled())
 		{
@@ -212,7 +214,7 @@ void wxLCDBase::SetGridVisibled(bool bGridVisible, bool bRefreshNow)
 	/* Process							*/
 	/*----------------------------------*/
 	// Save the grid visible value set.
-    if(m_iPixelSize < WX_LCD_PIX_SIZE_MIN_WITH_GRID)
+    if((m_clsPixelUnitSize.GetWidth() < WX_LCD_PIX_SIZE_MIN_WITH_GRID) || (m_clsPixelUnitSize.GetHeight() < WX_LCD_PIX_SIZE_MIN_WITH_GRID))
 	{
 		m_bGridVisible = false;
 	}
@@ -229,7 +231,7 @@ void wxLCDBase::SetGridVisibled(bool bGridVisible, bool bRefreshNow)
 	}
 	else
 	{
-		if(1 == m_iPixelSize)
+		if((1 == m_clsPixelUnitSize.GetWidth()) && (1 == m_clsPixelUnitSize.GetHeight()))
 		{
 			m_pfDrawPoint = &_drawPointSinglePixel;
 		}
@@ -255,7 +257,7 @@ bool wxLCDBase::GetGridVisibled(void) const
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if(m_iPixelSize < WX_LCD_PIX_SIZE_MIN_WITH_GRID)
+	if((m_clsPixelUnitSize.GetWidth() < WX_LCD_PIX_SIZE_MIN_WITH_GRID) || (m_clsPixelUnitSize.GetHeight() < WX_LCD_PIX_SIZE_MIN_WITH_GRID))
 	{
 		bGridVisible = false;
 	}
@@ -284,7 +286,7 @@ void wxLCDBase::SetDisplayBuffer(wxColour& clsPanelColour)
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if((NULL != m_pfDrawPoint) && (m_iPixelSize > 0))
+	if((NULL != m_pfDrawPoint) && (m_clsPixelUnitSize.GetWidth() > 0) && (m_clsPixelUnitSize.GetHeight()))
 	{
 		_enterPaintCriticalSection();
 
@@ -306,7 +308,7 @@ void wxLCDBase::ReplaceColour(const wxColour& clsOldColour, const wxColour& clsN
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if((NULL != m_pfDrawPoint) && (m_iPixelSize > 0))
+	if((NULL != m_pfDrawPoint) && (m_clsPixelUnitSize.GetWidth() > 0) && (m_clsPixelUnitSize.GetHeight()))
 	{
 		_enterPaintCriticalSection();
 
@@ -367,7 +369,7 @@ void wxLCDBase::OnSetFocus(wxFocusEvent& clsEvent)
 	GetParent()->SetFocus();
 	clsEvent.Skip();
 }
-void wxLCDBase::_drawPointSinglePixel(wxDC& clsDCObject, int iPosX, int iPosY, int iPixelSize)
+void wxLCDBase::_drawPointSinglePixel(wxDC& clsDCObject, int iPosX, int iPosY, const wxSize& clsPixelSize)
 {
     /*----------------------------------*/
 	/* Process							*/
@@ -375,20 +377,20 @@ void wxLCDBase::_drawPointSinglePixel(wxDC& clsDCObject, int iPosX, int iPosY, i
 	clsDCObject.DrawPoint(wxPoint(iPosX, iPosY));
 }
 
-void wxLCDBase::_drawPointMultiplePixel(wxDC& clsDCObject, int iPosX, int iPosY, int iPixelSize)
+void wxLCDBase::_drawPointMultiplePixel(wxDC& clsDCObject, int iPosX, int iPosY, const wxSize& clsPixelSize)
 {
     /*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	clsDCObject.DrawRectangle(wxPoint(iPosX*iPixelSize, iPosY*iPixelSize), wxSize(iPixelSize, iPixelSize));
+	clsDCObject.DrawRectangle(wxPoint(iPosX*m_clsPixelUnitSize.GetWidth(), iPosY*m_clsPixelUnitSize.GetHeight()), clsPixelSize);
 }
 
-void wxLCDBase::_drawPointMultiplePixelWithGrid(wxDC& clsDCObject, int iPosX, int iPosY, int iPixelSize)
+void wxLCDBase::_drawPointMultiplePixelWithGrid(wxDC& clsDCObject, int iPosX, int iPosY, const wxSize& clsPixelSize)
 {
     /*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	clsDCObject.DrawRectangle(wxPoint(iPosX*iPixelSize+1, iPosY*iPixelSize+1), wxSize(iPixelSize-1, iPixelSize-1));
+	clsDCObject.DrawRectangle(wxPoint(iPosX*m_clsPixelUnitSize.GetWidth()+1, iPosY*m_clsPixelUnitSize.GetHeight()+1), wxSize(clsPixelSize.GetWidth()-1, clsPixelSize.GetHeight()-1));
 }
 
 /*************************************************************************/
@@ -476,7 +478,7 @@ void wxLCDBase::DrawPixel(int iPosX, int iPosY, wxColor& clsColor)
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if((iPosX < m_clsSizeInPixel.GetWidth()) && (iPosY < m_clsSizeInPixel.GetHeight()) && (m_iPixelSize != 0))
+	if((iPosX < m_clsSizeInPixel.GetWidth()) && (iPosY < m_clsSizeInPixel.GetHeight()) && (m_clsPixelUnitSize.GetWidth() != 0) && (m_clsPixelUnitSize.GetHeight() != 0))
 	{
 		_enterPaintCriticalSection();
 
@@ -484,7 +486,7 @@ void wxLCDBase::DrawPixel(int iPosX, int iPosY, wxColor& clsColor)
 		_prepareDC(m_clsCDC);
 		if(nullptr != m_pfDrawPoint)
 		{
-			(this->*m_pfDrawPoint)(m_clsCDC, iPosX, iPosY, m_iPixelSize);
+			(this->*m_pfDrawPoint)(m_clsCDC, iPosX, iPosY, m_clsPixelUnitSize);
 		}
 		if(nullptr != m_ppuiDisplayBuffer)
         {
@@ -520,8 +522,8 @@ void wxLCDBase::RefreshDisplay(void)
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	iPaintSizeWidth =	m_clsSizeInPixel.GetWidth()*m_iPixelSize;
-	iPaintSizeHeight =	m_clsSizeInPixel.GetHeight()*m_iPixelSize;
+	iPaintSizeWidth =	m_clsSizeInPixel.GetWidth()*m_clsPixelUnitSize.GetWidth();
+	iPaintSizeHeight =	m_clsSizeInPixel.GetHeight()*m_clsPixelUnitSize.GetHeight();
 	bGridVisible = GetGridVisibled();
 
 	// Set buffer size.
@@ -542,8 +544,8 @@ void wxLCDBase::RefreshDisplay(void)
 		_setDCColor(m_clsGridColor);
 		_prepareDC(clsBufferedDC);
 		clsBufferedDC.DrawRectangle(wxPoint(0, 0),
-							wxSize(	m_clsSizeInPixel.GetWidth()*m_iPixelSize+1,
-									m_clsSizeInPixel.GetHeight()*m_iPixelSize+1));
+							wxSize(	m_clsSizeInPixel.GetWidth()*m_clsPixelUnitSize.GetWidth()+1,
+									m_clsSizeInPixel.GetHeight()*m_clsPixelUnitSize.GetHeight()+1));
 	}
 
 	// Paint pixel.
@@ -557,7 +559,7 @@ void wxLCDBase::RefreshDisplay(void)
 				uiColorRGBA = *(*(m_ppuiDisplayBuffer+i_H)+i_W);
 				_setDCColor(wxColor(uiColorRGBA));
 				_prepareDC(clsBufferedDC);
-				(this->*m_pfDrawPoint)(clsBufferedDC, i_W, i_H, m_iPixelSize);
+				(this->*m_pfDrawPoint)(clsBufferedDC, i_W, i_H, m_clsPixelUnitSize);
 			}
 		}
 	}

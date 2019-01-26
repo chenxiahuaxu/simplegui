@@ -10,11 +10,11 @@
 //=======================================================================//
 #define WX_LCD_DEFAULT_WIDTH_PIX					(128)
 #define WX_LCD_DEFAULT_HEIGHT_PIX					(64)
-#define WX_LCD_DEFAULT_PIX_SIZE						(4)
 #define WX_LCD_DEFAULT_GRID_VISIBLE					(true)
 #define WX_LCD_PIX_SIZE_MIN							(3)
 #define WX_LCD_PIX_SIZE_MIN_WITH_GRID				(4)
 #define WX_LCD_PIX_RGB(RGBA)						((0x00FFFFFF) & (RGBA))
+#define wxDefaultLCDPixelUnitSize					(wxSize(2, 2))
 
 //=======================================================================//
 //= Global variable declare.										    =//
@@ -36,19 +36,20 @@ class wxLCDBase
 		wxBrush					m_clsBrush;
 		wxColour				m_clsGridColor;
 		wxSize					m_clsSizeInPixel;
-		int						m_iPixelSize;
+		//int						m_iPixelSize;
+		wxSize					m_clsPixelUnitSize;
 		bool					m_bGridVisible;
 		unsigned int**			m_ppuiDisplayBuffer;
 		wxCriticalSection		m_clsDisplayBufferCS;
-		void					(wxLCDBase::*m_pfDrawPoint)(wxDC& clsDCObject, int iPosX, int iPosY, int iPixelSize);
+		void					(wxLCDBase::*m_pfDrawPoint)(wxDC& clsDCObject, int iPosX, int iPosY, const wxSize& clsPixelSize);
 		bool					m_bIsOK;
 		int						m_iLockLevel;
 
 		bool					_initialize(void);
 		void					_getBestSize(wxSize& clsBestSize) const;
-		inline void				_drawPointSinglePixel(wxDC& clsDCObject, int iPosX, int iPosY, int iPixelSize);
-		inline void				_drawPointMultiplePixel(wxDC& clsDCObject, int iPosX, int iPosY, int iPixelSize);
-		inline void				_drawPointMultiplePixelWithGrid(wxDC& clsDCObject, int iPosX, int uiPosY, int iPixelSize);
+		inline void				_drawPointSinglePixel(wxDC& clsDCObject, int iPosX, int iPosY, const wxSize& clsPixelSize);
+		inline void				_drawPointMultiplePixel(wxDC& clsDCObject, int iPosX, int iPosY, const wxSize& clsPixelSize);
+		inline void				_drawPointMultiplePixelWithGrid(wxDC& clsDCObject, int iPosX, int uiPosY, const wxSize& clsPixelSize);
 		inline void				_releaseDC(wxMemoryDC& clsCDCObject)		{clsCDCObject.SetBrush(wxNullBrush); clsCDCObject.SetPen(wxNullPen);}
 		inline void				_prepareDC(wxMemoryDC& clsCDCObject)		{clsCDCObject.SetBrush(m_clsBrush); clsCDCObject.SetPen(m_clsPen);}
 		inline void				_releaseDC(wxClientDC& clsCDCObject)		{clsCDCObject.SetBrush(wxNullBrush); clsCDCObject.SetPen(wxNullPen);}
@@ -76,8 +77,8 @@ class wxLCDBase
 		// Public interface
 		void					SetPixelNumber(int iHorizontalPixelNumber, int iVerticalPixelNumber);
 		void					GetPixelNumber(int* piHorizontalPixelNumber, int* piVerticalPixelNumber);
-		void					SetPixelSize(int iPixelSize);
-		int						GetPixelSize(void)							{return m_iPixelSize;}
+		void					SetPixelUnitSize(const wxSize clsPixelUnitSize);
+		wxSize&					GetPixelUnitSize(void)						{return m_clsPixelUnitSize;}
 		void					SetGridVisibled(bool bGridVisible, bool bRefreshNow = true);
 		bool					GetGridVisibled(void) const;
 		void					SetGridColor(const wxColor& clsColor);

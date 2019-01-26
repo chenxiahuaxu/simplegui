@@ -70,16 +70,16 @@ void			SGUI_SDK_SyncKeyEventData(unsigned int uiKeyCode);
 unsigned int	SGUI_SDK_GetKeyEventData(void);
 bool			SGUI_SDK_GetEventSyncFlag(ENV_FLAG_INDEX eIndex);
 bool			SGUI_SDK_Initialize(void);
-bool			SGUI_SDK_ConfigHearBeatTimer(unsigned int uiIntervalMs);
-bool			SGUI_SDK_EnableRTCInterrupt(bool bEnabled);
-int				SGUI_SDK_DummyMainProc(void);
-void			SGUI_SDK_KeyPressInterruptEvent(unsigned int uiKeyCode);
-void			SGUI_SDK_HeartBeatTimerTagEvent(void);
-void			SGUI_SDK_RTCInterruptTagEvent(void);
 void			SGUI_SDK_SetPixel(int uiPosX, int uiPosY, int uiPixelValue);
 int				SGUI_SDK_GetPixel(int uiPosX, int uiPosY);
 void			SGUI_SDK_RefreshDisplay(void);
 void			SGUI_SDK_ClearDisplay(void);
+bool			SGUI_SDK_ConfigHearBeatTimer(unsigned int uiIntervalMs);
+bool			SGUI_SDK_EnableRTCInterrupt(bool bEnabled);
+void			SGUI_SDK_SysTickTimerInterrput(void);
+void			SGUI_SDK_RTCInterrput(void);
+int				SGUI_SDK_DummyMainProc(void);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

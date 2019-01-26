@@ -12,26 +12,35 @@
 #else
 #include "DemoResource_GB2312.h"
 #endif
+#include <stdlib.h>
 #include <stdio.h>
-
 //=======================================================================//
 //= Data type definition.											    =//
 //=======================================================================//
+// HMI action type
 typedef enum
 {
-    HMI_INT_UNKNOW,
-    HMI_INT_EXINT,
-    HMI_INT_KEY,
-    HMI_INT_DATA,
-    HMI_INT_TIMER,
-    HMI_INT_RTC,
-}HMI_INTERRUPT_SOURCE;
+	EVENT_ID_UNKNOW				= 0,
+	// User defined action type.
+	EVENT_ID_KEY_PRESS,
+	EVENT_ID_TIMER,
+	EVENT_ID_RTC,
+	// User defined action above.
+	EVENT_ID_MAX
+}EVENT_ID;
 
 typedef struct
 {
-    HMI_INTERRUPT_SOURCE    Source;
-    void*                   Data;
-}HMI_INTERRUPT_PARAMETER;
+	SGUI_UINT16		uiKeyValue;
+}KEY_EVENT_DATA;
+
+typedef struct
+{
+	SGUI_INT		iValue;
+}DUMMY_DATA_EVENT_DATA;
+
+HMI_EVENT_TYPE_DECLARE(KEY_PRESS_EVENT, KEY_EVENT_DATA)
+HMI_EVENT_TYPE_DECLARE(DATA_EVENT, DUMMY_DATA_EVENT_DATA);
 
 //=======================================================================//
 //= User Macro definition.											    =//
@@ -60,8 +69,8 @@ extern HMI_SCREEN_OBJECT		g_stHMI_DemoRealtimeGraph;
 extern "C"
 {
 #endif /* __cplusplus */
-void                InitializeEngine(void);
-HMI_ENGINE_RESULT	EventProcess(HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent);
+HMI_ENGINE_RESULT	InitializeEngine(void);
+HMI_ENGINE_RESULT	EventProcess(const HMI_EVENT_BASE* pstEvent);
 int					DemoMainProcess(void);
 
 #ifdef __cplusplus

@@ -31,7 +31,7 @@
 #define wxID_TOOLBAR_EXIT				2104
 #define wxID_STATUSBAR					3000
 #define wxID_PANEL						4000
-#define WXID_MILLISECOND_TIMER          5001
+#define WXID_SYSTICK_TIMER          	5001
 #define WXID_RTC_TIMER                  5002
 
 #define SCREENSHOTS_FOLDER_T			"ScreenShots"
@@ -83,8 +83,8 @@ class LCDFrame
 		virtual void				Screenshots(void);
 		virtual void				Copy(void);
 		virtual void				OpenScreenshotsFolder(void);
-		virtual void				OnTimerEvent(wxTimerEvent& clsEvent);
-		virtual void				OnRTCUpdate(wxTimerEvent& clsEvent);
+		virtual void				OnSysTickTimerEvent(wxTimerEvent& clsEvent);
+		virtual void				OnRTCEvent(wxTimerEvent& clsEvent);
 		virtual void				OnSDKInitialize(InitEvent& clsEvent);
 		virtual void				OnSDKTimerSet(TimerSetEvent& clsEvent);
 		virtual void				OnRTCTimerEnabled(RTCSwitchEvent& clsEvent);

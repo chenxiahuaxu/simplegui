@@ -93,7 +93,7 @@ void wxLCD::SetParameter(PixelPanelParameter* pstPanelParameter)
 {
 	if(NULL != pstPanelParameter)
 	{
-		SetPixelSize(pstPanelParameter->PixelSize);
+		SetPixelUnitSize(wxSize(pstPanelParameter->PixelUnitWidth, pstPanelParameter->PixelUnitHeight));
 	    SetGridVisibled(pstPanelParameter->EnableGrid);
 		SetPixelNumber(pstPanelParameter->HorizontalPixelNumber, pstPanelParameter->VerticalPixelNumber);
 

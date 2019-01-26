@@ -28,7 +28,7 @@
 static HMI_ENGINE_RESULT    HMI_DemoVariableBox_Initialize(SGUI_SCR_DEV* pstIFObj);
 static HMI_ENGINE_RESULT	HMI_DemoVariableBox_Prepare(SGUI_SCR_DEV* pstIFObj, const void* pstParameters);
 static HMI_ENGINE_RESULT	HMI_DemoVariableBox_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const void* pstParameters);
-static HMI_ENGINE_RESULT    HMI_DemoVariableBox_ProcessEvent(SGUI_SCR_DEV* pstIFObj, HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent);
+static HMI_ENGINE_RESULT    HMI_DemoVariableBox_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent);
 static HMI_ENGINE_RESULT	HMI_DemoVariableBox_PostProcess(SGUI_SCR_DEV* pstIFObj, SGUI_INT iActionResult);
 static void				    HMI_DemoVariableBox_DrawFrame(SGUI_SCR_DEV* pstIFObj, SGUI_SZSTR szTitle);
 
@@ -91,6 +91,8 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_Prepare(SGUI_SCR_DEV* pstIFObj, const void
 	HMI_DemoVariableBox_DrawFrame(pstIFObj, (SGUI_SZSTR)s_szFrameTitle);
 	// Show notice
 	SGUI_Notice_Refresh(pstIFObj, s_szHelpNoticeText, 0, SGUI_ICON_INFORMATION);
+	// Start RTC
+	SGUI_SDK_EnableRTCInterrupt(true);
 	return HMI_RET_NORMAL;
 }
 
@@ -111,14 +113,14 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_RefreshScreen(SGUI_SCR_DEV* pstIFObj, cons
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoVariableBox_ProcessEvent(SGUI_SCR_DEV* pstIFObj, HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent)
+HMI_ENGINE_RESULT HMI_DemoVariableBox_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
 	HMI_ENGINE_RESULT           eProcessResult;
-	SGUI_UINT16					uiKeyCode;
 	SGUI_UINT16					uiKeyValue;
+	KEY_PRESS_EVENT*					pstKeyEvent;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -130,12 +132,12 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_ProcessEvent(SGUI_SCR_DEV* pstIFObj, HMI_E
 	/*----------------------------------*/
 	if(s_uiAutoConfirmTimer > 0)
     {
-		if(eEventType == HMI_ENGINE_EVENT_ACTION)
+		if(HMI_ENGINE_EVENT_ACTION == pstEvent->eType)
 		{
-			if(HMI_ENGINE_ACTION_KEY_PRESS == pstEvent->Action)
+			if(EVENT_ID_KEY_PRESS == pstEvent->iID)
 			{
-				uiKeyCode = *((SGUI_UINT16*)pstEvent->Data);
-				uiKeyValue = KEY_CODE_VALUE(uiKeyCode);
+				pstKeyEvent = (KEY_PRESS_EVENT*)pstEvent;
+				uiKeyValue = KEY_CODE_VALUE(pstKeyEvent->Data.uiKeyValue);
 
 				if(KEY_VALUE_SPACE == uiKeyValue)
 				{
@@ -143,7 +145,10 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_ProcessEvent(SGUI_SCR_DEV* pstIFObj, HMI_E
 					s_uiAutoConfirmTimer = 0;
 				}
 			}
-			if(HMI_ENGINE_ACTION_ON_TIMER_RTC == pstEvent->Action)
+		}
+		else if(HMI_ENGINE_EVENT_DATA == pstEvent->eType)
+		{
+			if(EVENT_ID_RTC == pstEvent->iID)
 			{
 				//Count down five seconds
 				s_uiAutoConfirmTimer--;
@@ -154,16 +159,17 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_ProcessEvent(SGUI_SCR_DEV* pstIFObj, HMI_E
         if(0 == s_uiAutoConfirmTimer)
         {
             eProcessResult = HMI_DemoVariableBox_RefreshScreen(pstIFObj, NULL);
+            SGUI_SDK_EnableRTCInterrupt(false);
         }
 
         eProcessResult = HMI_RET_NOACTION;
     }
     else
     {
-        if(HMI_ENGINE_ACTION_KEY_PRESS == pstEvent->Action)
+        if(EVENT_ID_KEY_PRESS == pstEvent->iID)
         {
-        	uiKeyCode = *((SGUI_UINT16*)pstEvent->Data);
-			uiKeyValue = KEY_CODE_VALUE(uiKeyCode);
+        	pstKeyEvent = (KEY_PRESS_EVENT*)pstEvent;
+			uiKeyValue = KEY_CODE_VALUE(pstKeyEvent->Data.uiKeyValue);
 
 			switch(uiKeyValue)
 			{

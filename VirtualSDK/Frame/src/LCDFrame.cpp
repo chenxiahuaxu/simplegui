@@ -37,8 +37,8 @@ BEGIN_EVENT_TABLE(LCDFrame,wxFrame)
     EVT_TOOL			(wxID_TOOLBAR_COPY, LCDFrame::_wxEvent_OnToolCopy)
     EVT_TOOL			(wxID_TOOLBAR_SCREENSHOTS_FOLDER, LCDFrame::_wxEvent_OnOpenScreenshotsFolder)
     EVT_TOOL			(wxID_TOOLBAR_EXIT, LCDFrame::_wxEvent_OnExit)
-    EVT_TIMER			(WXID_MILLISECOND_TIMER, LCDFrame::OnTimerEvent)
-    EVT_TIMER			(WXID_RTC_TIMER, LCDFrame::OnRTCUpdate)
+    EVT_TIMER			(WXID_SYSTICK_TIMER, LCDFrame::OnSysTickTimerEvent)
+    EVT_TIMER			(WXID_RTC_TIMER, LCDFrame::OnRTCEvent)
     EVT_SDK_INIT		(LCDFrame::OnSDKInitialize)
     EVT_SDK_TIMER_SET	(LCDFrame::OnSDKTimerSet)
     EVT_SDK_RTC_EN		(LCDFrame::OnRTCTimerEnabled)
@@ -494,35 +494,37 @@ uint32_t LCDFrame::GetLCDPixel(uint32_t uiPosX, uint32_t uiPosY)
 }
 
 /*************************************************************************/
-/** Function Name:	OnTimerEvent										**/
+/** Function Name:	OnSysTickTimerEvent									**/
 /** Purpose:		Dummy heart-bear timer event process.				**/
 /** Params:																**/
 /**	@ clsEvent[in]:		Event data object.								**/
 /** Return:			None.                                               **/
 /** Notice:			Target for drive dummy actions.						**/
 /*************************************************************************/
-void LCDFrame::OnTimerEvent(wxTimerEvent& event)
+void LCDFrame::OnSysTickTimerEvent(wxTimerEvent& event)
 {
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
 	SGUI_SDK_SetEvnetSyncFlag(ENV_FLAG_IDX_SDK_TIM_EVENT, true);
+	SGUI_SDK_SysTickTimerInterrput();
 }
 
 /*************************************************************************/
-/** Function Name:	OnRTCUpdate											**/
+/** Function Name:	OnRTCEvent											**/
 /** Purpose:		RTC timer event process.							**/
 /** Params:																**/
 /**	@ clsEvent[in]:		Event data object.								**/
 /** Return:			None.                                               **/
 /** Notice:			Target per-second for get now time.					**/
 /*************************************************************************/
-void LCDFrame::OnRTCUpdate(wxTimerEvent& event)
+void LCDFrame::OnRTCEvent(wxTimerEvent& event)
 {
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
 	SGUI_SDK_SetEvnetSyncFlag(ENV_FLAG_IDX_SDK_RTC_EVENT, true);
+	SGUI_SDK_RTCInterrput();
 }
 
 /*************************************************************************/
@@ -545,7 +547,7 @@ void LCDFrame::OnSDKInitialize(InitEvent& clsEvent)
 	// Reset frame position.
 	Center(wxBOTH);
 	// Create timer objects.
-	m_pclsMilliSecondTimer = new wxTimer(this, WXID_MILLISECOND_TIMER);
+	m_pclsMilliSecondTimer = new wxTimer(this, WXID_SYSTICK_TIMER);
 	m_pclsRTCTimer = new wxTimer(this, WXID_RTC_TIMER);
 	// Set event process flag.
 	SGUI_SDK_SetEvnetSyncFlag(ENV_FLAG_IDX_SDK_INIT, true);
