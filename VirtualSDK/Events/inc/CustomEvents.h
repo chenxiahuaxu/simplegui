@@ -26,7 +26,7 @@ END_DECLARE_EVENT_TYPES()
 #define EVT_SDK_RTC_EN(fn) \
     DECLARE_EVENT_TABLE_ENTRY(wxEVT_RTC_SWITCH, wxID_ANY, -1, (wxObjectEventFunction)(wxEventFunction)(RTCSwitchEventFunc)&fn, (wxObject*)NULL),
 
-#define EVT_SDK_TIMER_SET(fn) \
+#define EVT_SDK_SYSTICK_SET(fn) \
     DECLARE_EVENT_TABLE_ENTRY(wxEVT_TIMER_SET, wxID_ANY, -1, (wxObjectEventFunction)(wxEventFunction)(TimerSwitchEventFunc)&fn, (wxObject*)NULL),
 
 //-----------------------------------------------------------------------//

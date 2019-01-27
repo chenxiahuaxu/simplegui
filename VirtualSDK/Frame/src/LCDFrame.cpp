@@ -29,18 +29,17 @@ LCDFrame* LCDFrame::m_pclsInstance = NULL;
 //= Event table.													    =//
 //=======================================================================//
 BEGIN_EVENT_TABLE(LCDFrame,wxFrame)
-    EVT_CLOSE			(LCDFrame::_wxEvent_OnClose)
+    EVT_CLOSE			(LCDFrame::OnClose)
     EVT_KEY_DOWN		(LCDFrame::OnKeyDown)
     EVT_MOUSE_EVENTS	(LCDFrame::OnMouseEvent)
-    EVT_PAINT			(LCDFrame::_wxEvent_OnPaint)
-    EVT_TOOL			(wxID_TOOLBAR_QUICKSHOTS, LCDFrame::_wxEvent_OnScreenshots)
-    EVT_TOOL			(wxID_TOOLBAR_COPY, LCDFrame::_wxEvent_OnToolCopy)
-    EVT_TOOL			(wxID_TOOLBAR_SCREENSHOTS_FOLDER, LCDFrame::_wxEvent_OnOpenScreenshotsFolder)
-    EVT_TOOL			(wxID_TOOLBAR_EXIT, LCDFrame::_wxEvent_OnExit)
+    EVT_TOOL			(wxID_TOOLBAR_QUICKSHOTS, LCDFrame::OnScreenshots)
+    EVT_TOOL			(wxID_TOOLBAR_COPY, LCDFrame::OnToolCopy)
+    EVT_TOOL			(wxID_TOOLBAR_SCREENSHOTS_FOLDER, LCDFrame::OnOpenScreenshotsFolder)
+    EVT_TOOL			(wxID_TOOLBAR_EXIT, LCDFrame::OnToolClose)
     EVT_TIMER			(WXID_SYSTICK_TIMER, LCDFrame::OnSysTickTimerEvent)
     EVT_TIMER			(WXID_RTC_TIMER, LCDFrame::OnRTCEvent)
     EVT_SDK_INIT		(LCDFrame::OnSDKInitialize)
-    EVT_SDK_TIMER_SET	(LCDFrame::OnSDKTimerSet)
+    EVT_SDK_SYSTICK_SET	(LCDFrame::OnSDKSysTickSet)
     EVT_SDK_RTC_EN		(LCDFrame::OnRTCTimerEnabled)
 END_EVENT_TABLE()
 
@@ -339,22 +338,6 @@ void LCDFrame::Screenshots(void)
 }
 
 /*************************************************************************/
-/** Function Name:	OnPaint                                             **/
-/** Purpose:		Paint or repaint UI event process.                  **/
-/** Params:																**/
-/**	@ clsEventObject[in]: Event data object.                            **/
-/** Return:			None.                                               **/
-/** Notice:			None.                                               **/
-/*************************************************************************/
-void LCDFrame::OnPaint(wxPaintEvent &clsEventObject)
-{
-    /*----------------------------------*/
-	/* Process							*/
-	/*----------------------------------*/
-	m_pclsCtrlPaintPanel->RefreshDisplay();
-}
-
-/*************************************************************************/
 /** Function Name:	OpenScreenshotsFolder                               **/
 /** Purpose:		Open screen shots image file folder.                **/
 /** Params:			None.                                               **/
@@ -538,6 +521,9 @@ void LCDFrame::OnRTCEvent(wxTimerEvent& event)
 /*************************************************************************/
 void LCDFrame::OnSDKInitialize(InitEvent& clsEvent)
 {
+	/*----------------------------------*/
+	/* Initialize						*/
+	/*----------------------------------*/
 	// Set LCD panel parameter.
 	m_pclsCtrlPaintPanel->SetParameter(&g_stParameters);
 	// Clear display panel.
@@ -557,7 +543,7 @@ void LCDFrame::OnSDKInitialize(InitEvent& clsEvent)
 	clsEvent.Skip();
 }
 
-void LCDFrame::OnSDKTimerSet(TimerSetEvent& clsEvent)
+void LCDFrame::OnSDKSysTickSet(TimerSetEvent& clsEvent)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/

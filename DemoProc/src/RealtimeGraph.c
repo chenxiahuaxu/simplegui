@@ -17,7 +17,7 @@
 static HMI_ENGINE_RESULT	HMI_DemoRealGraph_Initialize(SGUI_SCR_DEV* pstIFObj);
 static HMI_ENGINE_RESULT	HMI_DemoRealGraph_Prepare(SGUI_SCR_DEV* pstIFObj, const void* pstParameters);
 static HMI_ENGINE_RESULT	HMI_DemoRealGraph_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const void* pstParameters);
-static HMI_ENGINE_RESULT	HMI_DemoRealGraph_ProcessEvent(SGUI_SCR_DEV* pstIFObj, HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent);
+static HMI_ENGINE_RESULT	HMI_DemoRealGraph_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent);
 static HMI_ENGINE_RESULT	HMI_DemoRealGraph_PostProcess(SGUI_SCR_DEV* pstIFObj, SGUI_INT iActionResult);
 
 //=======================================================================//
@@ -68,7 +68,7 @@ HMI_ENGINE_RESULT HMI_DemoRealGraph_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const 
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoRealGraph_ProcessEvent(SGUI_SCR_DEV* pstIFObj, HMI_EVENT_TYPE eEventType, const HMI_EVENT* pstEvent)
+HMI_ENGINE_RESULT HMI_DemoRealGraph_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -77,6 +77,8 @@ HMI_ENGINE_RESULT HMI_DemoRealGraph_ProcessEvent(SGUI_SCR_DEV* pstIFObj, HMI_EVE
 	SGUI_INT					iNewValue;
 	SGUI_UINT16					uiKeyCode;
 	SGUI_UINT16					uiKeyValue;
+	KEY_PRESS_EVENT*			pstKeyEvent;
+	DATA_EVENT*					pstDataEvent;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -86,13 +88,19 @@ HMI_ENGINE_RESULT HMI_DemoRealGraph_ProcessEvent(SGUI_SCR_DEV* pstIFObj, HMI_EVE
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if(HMI_ENGINE_EVENT_ACTION == eEventType)
+	switch(pstEvent->iID)
 	{
-		switch(pstEvent->Action)
+		case EVENT_ID_KEY_PRESS:
 		{
-			case HMI_ENGINE_ACTION_KEY_PRESS:
+			pstKeyEvent = (KEY_PRESS_EVENT*)pstEvent;
+			if(SGUI_FALSE == HMI_EVENT_SIZE_CHK(*pstKeyEvent, KEY_PRESS_EVENT))
 			{
-				uiKeyCode = *((SGUI_UINT16*)pstEvent->Data);
+				// Event data is invalid.
+				eProcessResult = HMI_RET_INVALID_DATA;
+			}
+			else
+			{
+				uiKeyCode = pstKeyEvent->Data.uiKeyValue;
 				uiKeyValue = KEY_CODE_VALUE(uiKeyCode);
 
 				if(KEY_VALUE_ESC == uiKeyValue)
@@ -103,22 +111,32 @@ HMI_ENGINE_RESULT HMI_DemoRealGraph_ProcessEvent(SGUI_SCR_DEV* pstIFObj, HMI_EVE
 				{
 					eProcessResult = HMI_RET_NOACTION;
 				}
-				break;
 			}
-			case HMI_ENGINE_ACTION_ON_TIMER:
+			break;
+		}
+		case EVENT_ID_TIMER:
+		{
+			pstDataEvent = (DATA_EVENT*)pstEvent;
+			if(SGUI_FALSE == HMI_EVENT_SIZE_CHK(*pstDataEvent, DATA_EVENT))
 			{
-				iNewValue = *((SGUI_INT*)pstEvent->Data);
+				// Event data is invalid.
+				eProcessResult = HMI_RET_INVALID_DATA;
+			}
+			else
+			{
+				iNewValue = pstDataEvent->Data.iValue;
 				SGUI_RealtimeGraph_AppendValue(&s_stRealtimeGraph, iNewValue);
 				HMI_DemoRealGraph_RefreshScreen(pstIFObj, NULL);
-				break;
 			}
-			default:
-			{
-				eProcessResult = HMI_RET_NOACTION;
-				break;
-			}
+			break;
+		}
+		default:
+		{
+			eProcessResult = HMI_RET_NOACTION;
+			break;
 		}
 	}
+
 	return eProcessResult;
 }
 

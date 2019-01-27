@@ -31,7 +31,11 @@ SimpleGUI Virtual SDK 使用说明
     wxWidgets库目录  
       ├─ include  
       │  ├─ msvc  
+      │  │  └─ wx  
+      │  │     └─ *.h
       │  └─ wx  
+      │     ├─ [DIR]
+      │     └─ *.h
       └─ lib  
          ├─ gcc_dll  
          ├─ mswu  
@@ -59,15 +63,16 @@ SimpleGUI Virtual SDK 使用说明
 #### 3.1. 工程环境结构
 
 &emsp;&emsp;您可以通过Git工具，从码云（Gitee）上将SimpleGUI的全部代码和资料同步到本地，如果您不想使用Git工具，也可以在[SimpleGUI工程页面](https://gitee.com/Polarix/simplegui)中点击“克隆/下载”按钮，在弹出的窗口中点击“下载ZIP”按钮下载整个工程的压缩包文件。
-&emsp;&emsp;同步或下载解压SimpleGUI后，就可以使用SimpleGUI的Virtual SDK了，SimpleGUI的主目录结构和说明如下：
+&emsp;&emsp;同步或下载解压SimpleGUI后，就可以使用SimpleGUI的Virtual SDK了，SimpleGUI的主目录结构和说明如下：  
+
 |目录名|功能|  
-|:- |:- | 
+|:- |:- |  
 |DemoProc|SimpGUI的演示代码|  
 |DemoProject|SimpleGUI的演示工程|  
 |Documents|关于SimpleGUI的一些简要说明文档|  
 |GUI|SimpleGUI的代码实现部分|  
-|HMI|SimpleGUI的HMI模型实现部分| 
-|VirtualSDK|Virtual SDK的工程及源码|    
+|HMI|SimpleGUI的HMI模型实现部分|  
+|VirtualSDK|Virtual SDK的工程及源码|  
 
 #### 3.2. 编译Virtual SDK工程
 &emsp;&emsp;进入VirtualSDK\Project\CodeBlocks目录下，SimpleGUI.cbp文件夹即为模拟环境的工程文件，使用Code::Blocks打开。如果用户下载的是nosetup（绿色版）的Code::Blocks，需要手动建立关联才能直接用双击的方式打开cbp文件，否则，用户只能先打开Code::Blocks，然后从Code::Blocks中执行打开操作以打开工程文件。  
@@ -88,7 +93,8 @@ SimpleGUI Virtual SDK 使用说明
 |LCD_COLOR_OBJ_GRID|网格颜色|  
 |PARAM_DEFAULT_PIXEL_NUM_H|横向像素点数量|  
 |PARAM_DEFAULT_PIXEL_NUM_V|纵向像素点数量|  
-|PARAM_DEFAULT_PIXEL_SIZE|屏幕像素大小|  
+|PARAM_DEFAULT_PIXEL_WIDTH|屏幕像素单元宽度|  
+|PARAM_DEFAULT_PIXEL_HEIGHT|屏幕像素单元高度|  
 
 &emsp;&emsp;Virtual SDK默认状态下模拟的是黄底黑字的LCD显示屏，不显示像素网格。接下来以模拟黑底蓝字的OLED19264显示屏效果，简要介绍一下各个宏定义的使用方法：  
 > - 使用一张目标屏幕的照片，使用取色工具获取屏幕背景、像素以及边框颜色的RGB值，比如淘宝上的照片，就可以直接使用。  
@@ -110,7 +116,8 @@ SimpleGUI Virtual SDK 使用说明
             // Appearance
             pstParameter->HorizontalPixelNumber = PARAM_DEFAULT_PIXEL_NUM_H;
             pstParameter->VerticalPixelNumber = PARAM_DEFAULT_PIXEL_NUM_V;
-            pstParameter->PixelSize = PARAM_DEFAULT_PIXEL_SIZE;
+            pstParameter->PixelUnitWidth = PARAM_DEFAULT_PIXEL_WIDTH;
+		    pstParameter->PixelUnitHeight = PARAM_DEFAULT_PIXEL_HEIGHT;
             pstParameter->EdgeWidth = PARAM_DEFAULT_EDGE_WIDTH;
             pstParameter->EnableGrid = PARAM_DEFAULT_GRID_DISABLE;
             

@@ -65,28 +65,26 @@ class LCDFrame
 		static LCDFrame*        	m_pclsInstance;
 
 		// Members.
-		void					    _setStatusText(const wxString& strString);
-		void					    _wxEvent_OnClose(wxCloseEvent& clsEvent)				{OnClose();}
-		void						_wxEvent_OnPaint(wxPaintEvent& clsEvent)				{OnPaint(clsEvent);clsEvent.Skip();}
-		void					    _wxEvent_OnScreenshots(wxCommandEvent& clsEvent)		{Screenshots();}
-		void					    _wxEvent_OnToolCopy(wxCommandEvent& clsEvent)			{Copy();}
-		void						_wxEvent_OnOpenScreenshotsFolder(wxCommandEvent &clsEvent){OpenScreenshotsFolder();}
-		void						_wxEvent_OnAbout(wxCommandEvent& clsEvent)				{;}
-		void				    	_wxEvent_OnExit(wxCommandEvent& clsEvent)				{OnClose();}
 		void						_createToolbar(void);
+		void					    _setStatusText(const wxString& strString);
+		void					    OnClose(wxCloseEvent& clsEvent)							{OnClose();}
+		void					    OnScreenshots(wxCommandEvent& clsEvent)					{Screenshots();}
+		void					    OnToolCopy(wxCommandEvent& clsEvent)					{Copy();}
+		void						OnOpenScreenshotsFolder(wxCommandEvent &clsEvent)		{OpenScreenshotsFolder();}
+		void						OnAbout(wxCommandEvent& clsEvent)						{/* Do noting */;}
+		void				    	OnToolClose(wxCommandEvent& clsEvent)					{OnClose();}
 
 	protected:
 		virtual void		    	OnClose(void);
 		virtual void				OnKeyDown(wxKeyEvent& clsEvent);
 		virtual void				OnMouseEvent(wxMouseEvent& clsEvent);
-		virtual void				OnPaint(wxPaintEvent &clsEvent);
 		virtual void				Screenshots(void);
 		virtual void				Copy(void);
 		virtual void				OpenScreenshotsFolder(void);
 		virtual void				OnSysTickTimerEvent(wxTimerEvent& clsEvent);
 		virtual void				OnRTCEvent(wxTimerEvent& clsEvent);
 		virtual void				OnSDKInitialize(InitEvent& clsEvent);
-		virtual void				OnSDKTimerSet(TimerSetEvent& clsEvent);
+		virtual void				OnSDKSysTickSet(TimerSetEvent& clsEvent);
 		virtual void				OnRTCTimerEnabled(RTCSwitchEvent& clsEvent);
 		virtual	wxThread::ExitCode	Entry(void);
 	public:
