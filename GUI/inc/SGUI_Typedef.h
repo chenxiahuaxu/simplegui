@@ -125,51 +125,23 @@ SGUI_DEVPF_IF_DEFINE(void,				SGUI_ENGINE_ACTION_FN_REFRESH,		(void));
 
 // System function interface type declare.
 SGUI_DEVPF_IF_DEFINE(void,				SGUI_SYS_FN_GET_RTC,				(SGUI_INT iYear, SGUI_INT iMounth, SGUI_INT iDay, SGUI_INT iWeekDay, SGUI_INT iHour, SGUI_INT iMinute, SGUI_INT iSecond));
-SGUI_DEVPF_IF_DEFINE(SGUI_PTR,			SGUI_SYS_FN_HEAP_MEM,				(SGUI_SIZE sSize));
-SGUI_DEVPF_IF_DEFINE(void,				SGUI_SYS_FN_FREE_MEM,				(SGUI_PTR pMemory));
-SGUI_DEVPF_IF_DEFINE(SGUI_PTR,			SGUI_SYS_FN_SET_MEM,				(SGUI_PTR pHead, SGUI_INT iValue, SGUI_SIZE sSize));
-SGUI_DEVPF_IF_DEFINE(SGUI_PTR,			SGUI_SYS_FN_COPY_MEM,				(SGUI_PTR pSrc, const SGUI_PTR pDest, SGUI_SIZE sSize));
 SGUI_DEVPF_IF_DEFINE(SGUI_SIZE,			SGUI_SYS_FN_READ_FLASH,				(SGUI_INT iSourceID, SGUI_ROM_ADDRESS adStartAddr, SGUI_SIZE sReadSize, SGUI_BYTE* pOutputBuffer));
-SGUI_DEVPF_IF_DEFINE(SGUI_SIZE,			SGUI_SYS_FN_STR_LEN,				(SGUI_CSZSTR cszStr));
-SGUI_DEVPF_IF_DEFINE(SGUI_SZSTR,		SGUI_SYS_FN_STR_CPY,				(SGUI_SZSTR szDest, SGUI_CSZSTR cszSource));
-SGUI_DEVPF_IF_DEFINE(SGUI_SZSTR,		SGUI_SYS_FN_STR_LEN_CPY,			(SGUI_SZSTR szDest, SGUI_CSZSTR cszSource, SGUI_SIZE sLength));
 SGUI_DEVPF_IF_DEFINE(SGUI_INT,			SGUI_SYS_FN_GET_CHAR_INDEX,			(SGUI_CSZSTR cszSrc));
 
 typedef struct
 {
+	//Screen display area size in pixel.
+	SGUI_AREA_SIZE						stSize;
     //Engine & device initialize function.
-	SGUI_ENGINE_ACTION_FN_INITIALIZE	fnInitialize;
+    SGUI_ENGINE_ACTION_FN_INITIALIZE	fnInitialize;
     //Clear screen function.
-	SGUI_ENGINE_ACTION_FN_CLEAR			fnClearScreen;
+    SGUI_ENGINE_ACTION_FN_CLEAR			fnClearScreen;
     //Set pixel value function.
     SGUI_ENGINE_ACTION_FN_SET_POINT		fnSetPixel;
     //Get pixel value function.
-	SGUI_ENGINE_ACTION_FN_GET_POINT		fnGetPixel;
-	// Refresh screen display.
-	SGUI_ENGINE_ACTION_FN_REFRESH		fnRefreshScreen;
+    SGUI_ENGINE_ACTION_FN_GET_POINT		fnGetPixel;
+    // Refresh screen display.
+    SGUI_ENGINE_ACTION_FN_REFRESH		fnRefreshScreen;
 }SGUI_SCR_DEV;
-
-typedef struct
-{
-#ifdef _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
-	// Allocate heap memory
-	SGUI_SYS_FN_HEAP_MEM				fnMalloc;
-	// Free heap memory
-	SGUI_SYS_FN_FREE_MEM				fnFree;
-#endif
-	// Set memory block value.
-	SGUI_SYS_FN_SET_MEM					fnMemSet;
-	// Copy memory bloc.
-	SGUI_SYS_FN_COPY_MEM				fnMemCpy;
-	// Get string length.
-	SGUI_SYS_FN_STR_LEN					fnStrlen;
-	// Copy string.
-	SGUI_SYS_FN_STR_CPY					fnStrCpy;
-	// Copy specified length string.
-	SGUI_SYS_FN_STR_LEN_CPY				fnStrNCpy;
-	// Read data form flash(internal or external)
-	SGUI_SYS_FN_READ_FLASH				fnReadFlashData;
-
-}SGUI_SYS_IF;
 
 #endif // __INCLUDE_GUI_TYPEDEF_H__

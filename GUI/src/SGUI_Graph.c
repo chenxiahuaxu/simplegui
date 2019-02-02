@@ -168,7 +168,7 @@ void SGUI_Graph_DrawLine(SGUI_SCR_DEV* pstIFObj, SGUI_GRAPH* pstGraph, SGUI_UINT
 }
 
 /*************************************************************************/
-/** Function Name:	SGUI_Praph_GetPointDrawingCoordinate					**/
+/** Function Name:	SGUI_Praph_GetPointDrawingCoordinate				**/
 /** Purpose:		Convert data point to a drawing point in visible 	**/
 /**					graph area.											**/
 /** Resources:		None.												**/

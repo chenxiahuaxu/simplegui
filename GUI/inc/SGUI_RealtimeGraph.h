@@ -7,6 +7,11 @@
 #include "SGUI_Basic.h"
 
 //=======================================================================//
+//= User Macro definition.											    =//
+//=======================================================================//
+#define		SGUI_RTGRAPH_VALUE_ARRAY_SIZE		(128)
+
+//=======================================================================//
 //= Data type definition.											    =//
 //=======================================================================//
 typedef struct
@@ -20,9 +25,9 @@ typedef struct
 
 typedef struct
 {
-	SGUI_INT				ValueArray[SGUI_LCD_SIZE_WIDTH];
-	SGUI_INT				LimitedValueArray[SGUI_LCD_SIZE_WIDTH];
-	SGUI_INT				PointYCoordinateArray[SGUI_LCD_SIZE_WIDTH];
+	SGUI_INT				ValueArray[SGUI_RTGRAPH_VALUE_ARRAY_SIZE];
+	SGUI_INT				LimitedValueArray[SGUI_RTGRAPH_VALUE_ARRAY_SIZE];
+	SGUI_INT				PointYCoordinateArray[SGUI_RTGRAPH_VALUE_ARRAY_SIZE];
 	SGUI_INT				BaseLineValue; // Base line value on graph map.
 	SGUI_INT				ValueCount; // Display value point number, auto calculate when initialize.
 }SGUI_RTGRAPH_DATA;

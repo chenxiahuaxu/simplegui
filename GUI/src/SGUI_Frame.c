@@ -44,13 +44,11 @@ void SGUI_Frame_DrawFullScreenFrame(SGUI_SCR_DEV* pstIFObj, SGUI_BOX_FRAME_STRUC
 		uiEdgeRectangleWidth	= SGUI_LCD_SIZE_WIDTH;
 		uiEdgeRectangleHeight	= SGUI_LCD_SIZE_HEIGHT;
 		uiTitleLineWidth		= g_stFontSize[pstFrameData->Parameter.FontSize].Height+2;
-	}
 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if(NULL != pstFrameData)
-	{
+
         // Draw frame edge
 		for(uiEdgeLayerIndex = 0; uiEdgeLayerIndex<pstFrameData->Parameter.EdgeLayers; uiEdgeLayerIndex++)
 		{

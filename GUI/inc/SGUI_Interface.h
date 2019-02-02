@@ -43,14 +43,14 @@ SGUI_SZSTR				SGUI_SystemIF_EncodeConvert(SGUI_CSZSTR szSourceEncode, SGUI_SZSTR
 #endif
 
 #ifdef _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
-void*					SGUI_SystemIF_Allocate(SGUI_SIZE uiSize);
-void					SGUI_SystemIF_Free(void* pFreePointer);
+SGUI_PTR				SGUI_SystemIF_Allocate(SGUI_SIZE sSize);
+void					SGUI_SystemIF_Free(SGUI_PTR pFreePointer);
 #endif
-void*                   SGUI_SystemIF_MemoryCopy(void* pDest, const void* pSrc, SGUI_UINT uiSize);
-void                    SGUI_SystemIF_MemorySet(void* pMemoryPtr, SGUI_BYTE iSetValue, SGUI_UINT uiSize);
+SGUI_PTR				SGUI_SystemIF_MemoryCopy(SGUI_PTR pDest, const SGUI_PTR pSrc, SGUI_SIZE sSize);
+void                    SGUI_SystemIF_MemorySet(SGUI_PTR pMemoryPtr, SGUI_BYTE iSetValue, SGUI_SIZE sSize);
 SGUI_SIZE               SGUI_SystemIF_StringLength(SGUI_CSZSTR szString);
 SGUI_SZSTR				SGUI_SystemIF_StringCopy(SGUI_SZSTR szDest, SGUI_CSZSTR szSrc);
-SGUI_SZSTR				SGUI_SystemIF_StringLengthCopy(SGUI_SZSTR szDest, SGUI_CSZSTR szSrc, SGUI_SIZE uiSize);
+SGUI_SZSTR				SGUI_SystemIF_StringLengthCopy(SGUI_SZSTR szDest, SGUI_CSZSTR szSrc, SGUI_SIZE sSize);
 void                    SGUI_SystemIF_GetNowTime(SGUI_TIME* pstTime);
 SGUI_SIZE				SGUI_SystemIF_GetFlashData(SGUI_SCR_DEV* pstIFObj, SGUI_FLASH_DATA_SOURCE eDataSource, SGUI_ROM_ADDRESS adStartAddr, SGUI_SIZE sReadSize, SGUI_BYTE* pOutputBuffer);
 

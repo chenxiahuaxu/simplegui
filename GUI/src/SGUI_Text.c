@@ -99,7 +99,7 @@ void SGUI_Text_DrawSingleLineText(SGUI_SCR_DEV* pstIFObj, SGUI_CSZSTR szText, SG
 		RECT_Y_START(stCharacterDataArea) = RECT_Y_START(*pstTextDataArea);
 		RECT_HEIGHT(stCharacterDataArea) = uiFontHeight;
 		// Loop for Each char.
-		while((*pcTextPointer != '\0') && (RECT_X_START(stCharacterDataArea) < RECT_WIDTH(*pstDisplayArea)))
+		while(((NULL != pcTextPointer) && ('\0' != *pcTextPointer)) && (RECT_X_START(stCharacterDataArea) < RECT_WIDTH(*pstDisplayArea)))
 		{
 			// Get character.
 			uiCodeHighByte = 0x00;
@@ -392,7 +392,7 @@ SGUI_SIZE SGUI_Text_GetMultiLineTextLines(SGUI_CSZSTR szNoticeText, SGUI_SIZE ui
 	/* Variable Declaration				*/
 	/*----------------------------------*/
 	SGUI_SIZE					uiLineCount, uiLineByteCount;
-	SGUI_CSZSTR				pcCur;
+	SGUI_CSZSTR					pcCur;
 
 	/*----------------------------------*/
 	/* Initialize						*/

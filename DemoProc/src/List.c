@@ -32,7 +32,9 @@ static HMI_ENGINE_RESULT	HMI_DemoList_PostProcess(SGUI_SCR_DEV* pstIFObj, SGUI_I
 //=======================================================================//
 static SGUI_CSZSTR		s_szListTitle = 			    DEMO_LIST_TITLE;
 static SGUI_CSZSTR		s_arrszNoticeType[] =		{	DEMO_LIST_ITEM_NOTICE_TEXT, DEMO_LIST_ITEM_NOTICE_TIME};
+#ifdef _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
 static SGUI_CSZSTR		s_arrszEnumedValue[] =		{	DEMO_LIST_ITEM_ENUM_VALUE1, DEMO_LIST_ITEM_ENUM_VALUE2, DEMO_LIST_ITEM_ENUM_VALUE3};
+#endif
 static SGUI_List_ITEM	s_arrstTestListItems[] =	{	DEMO_LIST_ITEM_0,
 														DEMO_LIST_ITEM_1,
 														DEMO_LIST_ITEM_2,
@@ -85,6 +87,10 @@ HMI_ENGINE_RESULT HMI_DemoList_Initialize(SGUI_SCR_DEV* pstIFObj)
     // Initialize list data.
     SGUI_SystemIF_MemorySet(&s_stDemoListObject, 0x00, sizeof(SGUI_List_STRUCT));
     // Title and font size must set before initialize list object.
+    s_stDemoListObject.Data.Rect.PosX = 0;
+    s_stDemoListObject.Data.Rect.PosY = 0;
+    s_stDemoListObject.Data.Rect.Width = 128;
+    s_stDemoListObject.Data.Rect.Height = 64;
     s_stDemoListObject.Data.Title = s_szListTitle;
     s_stDemoListObject.FontSize = SGUI_FONT_SIZE_H12;
     //Initialize list object.
@@ -292,5 +298,4 @@ HMI_ENGINE_RESULT HMI_DemoList_PostProcess(SGUI_SCR_DEV* pstIFObj, SGUI_INT iAct
 	}
 	return HMI_RET_NORMAL;
 }
-
 

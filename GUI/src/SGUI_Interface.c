@@ -46,29 +46,6 @@
  #endif
 #endif
 
-/*
-static SGUI_SYS_IF	g_stSystemIF =
-{
-#ifdef _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
-	// Allocate heap memory:fnMalloc
-	&malloc,
-	// Free heap memory:fnFree
-	&free,
-#endif
-	// Set memory block value:fnMemSet
-	&memset,
-	// Copy memory bloc:fnMemCpy
-	&memcpy,
-	// Get string length:fnStrlen
-	&strlen,
-	// Copy string:fnStrCpy
-	&strcpy,
-	// Copy specified length string:fnStrNCpy
-	&strncpy,
-	// Read data form flash(internal or external):fnReadFlashData
-	NULL,
-};
-*/
 //=======================================================================//
 //= Function define.										            =//
 //=======================================================================//
@@ -97,6 +74,7 @@ SGUI_SZSTR SGUI_SystemIF_EncodeConvert(SGUI_CSZSTR szSourceEncode, SGUI_SZSTR sz
 	/* Initialize						*/
 	/*----------------------------------*/
 	uiEncoderResult			= -1;
+
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
@@ -136,17 +114,37 @@ void SGUI_SystemIF_GetNowTime(SGUI_TIME* pstTime)
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
+#ifdef _SIMPLE_GUI_USE_SYS_PF_FUNCTIONS_
+	time_t						rawtime;
+	struct tm*					timeinfo;
+#else
 #ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
 	time_t						rawtime;
 	struct tm*					timeinfo;
 #else
 	// Add date structure variable declare here.
 #endif
+#endif
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
 	if(NULL != pstTime)
 	{
+#ifdef _SIMPLE_GUI_USE_SYS_PF_FUNCTIONS_
+		// Add RTC Interface call of the platform.
+		time(&rawtime);
+		timeinfo = localtime(&rawtime);
+		if(NULL != timeinfo)
+		{
+			pstTime->Year = timeinfo->tm_year+1900;
+			pstTime->Month = timeinfo->tm_mon+1;
+			pstTime->Day = timeinfo->tm_mday;
+			pstTime->Hour = timeinfo->tm_hour;
+			pstTime->Minute = timeinfo->tm_min;
+			pstTime->Second = timeinfo->tm_sec;
+		}
+#else
+		// Add RTC Interface call of the platform.
 #ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
 		time(&rawtime);
 		timeinfo = localtime(&rawtime);
@@ -160,13 +158,14 @@ void SGUI_SystemIF_GetNowTime(SGUI_TIME* pstTime)
 			pstTime->Second = timeinfo->tm_sec;
 		}
 #else
-	// Add RTC Interface call of the platform.
         pstTime->Year = g_stCleandar.tm_year;
         pstTime->Month = g_stCleandar.tm_mon;
         pstTime->Day = g_stCleandar.tm_mday;
         pstTime->Hour = g_stCleandar.tm_hour;
         pstTime->Minute = g_stCleandar.tm_min;
         pstTime->Second = g_stCleandar.tm_sec;
+#endif
+
 #endif
 	}
 }
@@ -186,27 +185,39 @@ SGUI_SZSTR SGUI_SystemIF_StringLengthCopy(SGUI_SZSTR szDest, SGUI_CSZSTR szSrc, 
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	SGUI_SZSTR					szDestPtr;
+#ifndef _SIMPLE_GUI_USE_SYS_PF_FUNCTIONS_
+	const SGUI_CHAR*			pcSrcPtr;
+	SGUI_CHAR*					pcDestPtr;
+	SGUI_SIZE					sCopiedCount;
+#endif
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	szDestPtr =					NULL;
+#ifndef _SIMPLE_GUI_USE_SYS_PF_FUNCTIONS_
+	pcSrcPtr =					szSrc;
+	pcDestPtr =					szDest;
+	sCopiedCount =				0;
+#endif
 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
 	if((NULL != szDest) && (NULL != szSrc))
 	{
-#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
-	szDestPtr = strncpy(szDest, szSrc, uiSize);
+#ifdef _SIMPLE_GUI_USE_SYS_PF_FUNCTIONS_
+		strncpy(szDest, szSrc, uiSize);
 #else
-	// Add RTC time process here;
-	szDestPtr = strncpy(szDest, szSrc, uiSize);
+		// Add string(character array) copy with length process here;
+		while(('\0' != *pcSrcPtr) && (sCopiedCount < uiSize))
+		{
+			*pcDestPtr++ = *pcSrcPtr++;
+			sCopiedCount++;
+		}
 #endif
 	}
 
-	return szDestPtr;
+	return szDest;
 }
 
 #ifdef _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
@@ -234,10 +245,11 @@ void* SGUI_SystemIF_Allocate(SGUI_SIZE uiSize)
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
+#ifdef _SIMPLE_GUI_USE_SYS_PF_FUNCTIONS_
 	pAllocatedMemory = malloc(uiSize);
 #else
 	// Add allocate memory function here;
+	pAllocatedMemory = malloc(uiSize);
 #endif
 	return pAllocatedMemory;
 }
@@ -257,10 +269,11 @@ void SGUI_SystemIF_Free(void* pFreePointer)
 	/*----------------------------------*/
 	if(NULL != pFreePointer)
 	{
-#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
+#ifdef _SIMPLE_GUI_USE_SYS_PF_FUNCTIONS_
 		free(pFreePointer);
 #else
 		// Add allocate memory function here;
+		free(pFreePointer);
 #endif
 	}
 }
@@ -273,34 +286,46 @@ void SGUI_SystemIF_Free(void* pFreePointer)
 /** Params:																**/
 /**	@ pDest[in]:		Memory address will copied to.					**/
 /**	@ pSrc[in]:			Memory data source.								**/
-/**	@ uiSize[in]:		Copied data size(in byte).						**/
+/**	@ sSize[in]:		Copied data size(in byte).						**/
 /** Return:			Destination memory block pointer.					**/
 /*************************************************************************/
-void* SGUI_SystemIF_MemoryCopy(void* pDest, const void* pSrc, SGUI_UINT uiSize)
+SGUI_PTR SGUI_SystemIF_MemoryCopy(SGUI_PTR pDest, const SGUI_PTR pSrc, SGUI_SIZE sSize)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	void						*pCopiedMemory;
+#ifndef _SIMPLE_GUI_USE_SYS_PF_FUNCTIONS_
+	SGUI_SIZE                   sIdx;
+	SGUI_BYTE*					pSrcPtr;
+#endif
+	SGUI_BYTE*					pDestPtr;
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	pCopiedMemory =		NULL;
+	pDestPtr =					NULL;
+#ifndef _SIMPLE_GUI_USE_SYS_PF_FUNCTIONS_
+	pSrcPtr =					(SGUI_BYTE*)pSrc;
+	pDestPtr =					(SGUI_BYTE*)pDest;
+#endif
+
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
 	if((NULL != pDest) && (NULL != pSrc))
 	{
-#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
-	pCopiedMemory = memcpy(pDest, pSrc, uiSize);
+#ifdef _SIMPLE_GUI_USE_SYS_PF_FUNCTIONS_
+		// Add memory block copy process here;
+		pDestPtr = memcpy(pDest, pSrc, sSize);
 #else
-	// Add memory block copy process here;
-	pCopiedMemory = memcpy(pDest, pSrc, uiSize);
+		for(sIdx=0; sIdx<sSize; sIdx++)
+		{
+			*pDestPtr++ = *pSrcPtr++;
+		}
 #endif
 	}
 
-	return pCopiedMemory;
+	return pDestPtr;
 }
 
 /*************************************************************************/
@@ -309,31 +334,32 @@ void* SGUI_SystemIF_MemoryCopy(void* pDest, const void* pSrc, SGUI_UINT uiSize)
 /** Params:																**/
 /**	@ pMemoryPtr[in]:	Memory address will filled. 					**/
 /**	@ iSetValue[in]:	Memory data byte value.							**/
-/**	@ uiSize[in]:		Memory area size.  				        		**/
+/**	@ sSize[in]:		Memory area size.  				        		**/
 /** Return:			None.                           					**/
 /*************************************************************************/
-void SGUI_SystemIF_MemorySet(void* pMemoryPtr, SGUI_BYTE iSetValue, SGUI_UINT uiSize)
+void SGUI_SystemIF_MemorySet(SGUI_PTR pMemoryPtr, SGUI_BYTE iSetValue, SGUI_SIZE sSize)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-#ifndef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
-	SGUI_UINT                   uiIdx;
+#ifndef _SIMPLE_GUI_USE_SYS_PF_FUNCTIONS_
+	SGUI_SIZE                   sIdx;
 	SGUI_BYTE*					pcbBytePtr;
 #endif
 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if((NULL != pMemoryPtr) && (0 != uiSize))
+	if((NULL != pMemoryPtr) && (0 != sSize))
 	{
-#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
-        memset(pMemoryPtr, iSetValue, uiSize);
+#ifdef _SIMPLE_GUI_USE_SYS_PF_FUNCTIONS_
+		// Add memory area value set process here.
+        memset(pMemoryPtr, iSetValue, sSize);
 #else
 		pcbBytePtr = (SGUI_BYTE*)pMemoryPtr;
-        for(uiIdx=0; uiIdx<uiSize; uiIdx++)
+        for(sIdx=0; sIdx<sSize; sIdx++)
         {
-            *(pcbBytePtr+uiIdx) = iSetValue;
+            *pcbBytePtr++ = iSetValue;
         }
 #endif
 	}
@@ -353,21 +379,28 @@ SGUI_SIZE SGUI_SystemIF_StringLength(SGUI_CSZSTR szString)
 	/* Variable Declaration				*/
 	/*----------------------------------*/
 	SGUI_SIZE					uiStringLength;
+	const SGUI_CHAR*			pcCharPtr;
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
 	uiStringLength =			0;
+	pcCharPtr =					szString;
+
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if(NULL != szString)
+	if(NULL != pcCharPtr)
 	{
-#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
-	uiStringLength = strlen(szString);
+#ifdef _SIMPLE_GUI_USE_SYS_PF_FUNCTIONS_
+		// Add string(character array) length process here;
+		uiStringLength = strlen(pcCharPtr);
 #else
-	// Add RTC time process here;
-	uiStringLength = strlen(szString);
+		while('\0' != *pcCharPtr)
+		{
+			uiStringLength++;
+			pcCharPtr++;
+		}
 #endif
 	}
 
@@ -388,27 +421,33 @@ SGUI_SZSTR SGUI_SystemIF_StringCopy(SGUI_SZSTR szDest, SGUI_CSZSTR szSrc)
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	SGUI_SZSTR					szDestPtr;
+	const SGUI_CHAR*			pcSrcPtr;
+	SGUI_CHAR*					pcDestPtr;
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	szDestPtr =					NULL;
+	pcSrcPtr =					szSrc;
+	pcDestPtr =					szDest;
 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if((NULL != szDest) && (NULL != szSrc))
+	if((NULL != pcDestPtr) && (NULL != pcSrcPtr))
 	{
-#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
-	szDestPtr = strcpy(szDest, szSrc);
+#ifdef _SIMPLE_GUI_USE_SYS_PF_FUNCTIONS_
+		// Add string(character array) time process here;
+		strcpy(pcDestPtr, pcSrcPtr);
 #else
-	// Add RTC time process here;
-	szDestPtr = strcpy(szDest, szSrc);
+		while('\0' != *pcSrcPtr)
+		{
+			*pcDestPtr++ = *pcSrcPtr++;
+		}
+		*pcDestPtr = '\0';
 #endif
 	}
 
-	return szDestPtr;
+	return pcDestPtr;
 }
 
 /*****************************************************************************/
@@ -436,22 +475,29 @@ SGUI_SIZE SGUI_SystemIF_GetFlashData(SGUI_SCR_DEV* pstIFObj, SGUI_FLASH_DATA_SOU
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
+//#ifndef _SIMPLE_GUI_USE_SYS_PF_FUNCTIONS_
 	SGUI_ROM_ADDRESS			adBaseAddr;
 	SGUI_BYTE*					pOutPutDataPtr;
 	SGUI_CBYTE*					pDataSource;
+//#endif
 	SGUI_SIZE					sReadBytes;
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
+//#ifndef _SIMPLE_GUI_USE_SYS_PF_FUNCTIONS_
 	adBaseAddr =				adStartAddr;
 	pOutPutDataPtr =			pOutputBuffer;
-	sReadBytes =				0;
- 	pDataSource =				NULL;
+	pDataSource =				NULL;
+//#endif
+ 	sReadBytes =				0;
 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
+//#ifdef _SIMPLE_GUI_USE_SYS_PF_FUNCTIONS_
+	// Add flash operation function here.
+//#else
 	if((eDataSource > SGUI_FONT_SRC_NONE) && (eDataSource < SGUI_FONT_SRC_UNKNOWN) && (sReadSize > 0) && (NULL != pOutputBuffer))
 	{
 		switch(eDataSource)
@@ -498,6 +544,6 @@ SGUI_SIZE SGUI_SystemIF_GetFlashData(SGUI_SCR_DEV* pstIFObj, SGUI_FLASH_DATA_SOU
 			}
 		}
 	}
-
+//#endif // _SIMPLE_GUI_USE_SYS_PF_FUNCTIONS_
 	return sReadBytes;
 }

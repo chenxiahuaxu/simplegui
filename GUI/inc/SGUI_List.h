@@ -58,7 +58,8 @@ typedef struct
 
 typedef struct
 {
-	SGUI_CSZSTR				Title;
+	SGUI_RECT_AREA				Rect;
+	SGUI_CSZSTR					Title;
 	SGUI_SIZE					Count;
 	SGUI_List_ITEM*				Items;
 }SGUI_List_DATA;
