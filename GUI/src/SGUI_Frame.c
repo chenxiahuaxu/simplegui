@@ -37,12 +37,12 @@ void SGUI_Frame_DrawFullScreenFrame(SGUI_SCR_DEV* pstIFObj, SGUI_BOX_FRAME_STRUC
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	if(NULL != pstFrameData)
+	if((NULL != pstFrameData) && (NULL != pstIFObj))
 	{
 		uiEdgeRectanglePosX		= 0;
 		uiEdgeRectanglePosY		= 0;
-		uiEdgeRectangleWidth	= SGUI_LCD_SIZE_WIDTH;
-		uiEdgeRectangleHeight	= SGUI_LCD_SIZE_HEIGHT;
+		uiEdgeRectangleWidth	= RECT_WIDTH(pstIFObj->stSize);
+		uiEdgeRectangleHeight	= RECT_HEIGHT(pstIFObj->stSize);
 		uiTitleLineWidth		= g_stFontSize[pstFrameData->Parameter.FontSize].Height+2;
 
 	/*----------------------------------*/
@@ -68,21 +68,21 @@ void SGUI_Frame_DrawFullScreenFrame(SGUI_SCR_DEV* pstIFObj, SGUI_BOX_FRAME_STRUC
 			if(pstFrameData->Parameter.EdgeLayers > 0)
 			{
 				SGUI_Basic_DrawLine(pstIFObj, (pstFrameData->Parameter.EdgeLayers*2-1), (pstFrameData->Parameter.EdgeLayers*2-1+uiTitleLineWidth),
-									SGUI_LCD_SIZE_WIDTH-pstFrameData->Parameter.EdgeLayers*2, (pstFrameData->Parameter.EdgeLayers*2-1+uiTitleLineWidth),
+									RECT_WIDTH(pstIFObj->stSize)-pstFrameData->Parameter.EdgeLayers*2, (pstFrameData->Parameter.EdgeLayers*2-1+uiTitleLineWidth),
 									SGUI_COLOR_FRGCLR);
 				stTitleTextDisplayArea.PosX		= pstFrameData->Parameter.EdgeLayers*2;
 				stTitleTextDisplayArea.PosY		= pstFrameData->Parameter.EdgeLayers*2;
-				stTitleTextDisplayArea.Width	= SGUI_LCD_SIZE_WIDTH-pstFrameData->Parameter.EdgeLayers*4;
+				stTitleTextDisplayArea.Width	= RECT_WIDTH(pstIFObj->stSize)-pstFrameData->Parameter.EdgeLayers*4;
 				stTitleTextDisplayArea.Height	= g_stFontSize[pstFrameData->Parameter.FontSize].Height;
 			}
 			else
 			{
 				SGUI_Basic_DrawLine( pstIFObj, 0, (pstFrameData->Parameter.EdgeLayers*2+uiTitleLineWidth),
-									SGUI_LCD_SIZE_WIDTH-1, (pstFrameData->Parameter.EdgeLayers*2+uiTitleLineWidth),
+									RECT_WIDTH(pstIFObj->stSize)-1, (pstFrameData->Parameter.EdgeLayers*2+uiTitleLineWidth),
 									SGUI_COLOR_FRGCLR);
 				stTitleTextDisplayArea.PosX		= 1;
 				stTitleTextDisplayArea.PosY		= 1;
-				stTitleTextDisplayArea.Width	= SGUI_LCD_SIZE_WIDTH-2;
+				stTitleTextDisplayArea.Width	= RECT_WIDTH(pstIFObj->stSize)-2;
 				stTitleTextDisplayArea.Height	= g_stFontSize[pstFrameData->Parameter.FontSize].Height;
 			}
 			SGUI_Text_DrawSingleLineText(pstIFObj, pstFrameData->Data.Title, pstFrameData->Parameter.FontSize,

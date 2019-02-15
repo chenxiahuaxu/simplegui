@@ -18,7 +18,7 @@ typedef struct
 
 typedef struct
 {
-    SGUI_CSZSTR				Title;
+    SGUI_CSZSTR					Title;
 }SGUI_BOX_FRAME_DATA;
 
 typedef struct

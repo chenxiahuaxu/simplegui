@@ -89,12 +89,10 @@ HMI_ENGINE_RESULT HMI_DemoList_Initialize(SGUI_SCR_DEV* pstIFObj)
     // Title and font size must set before initialize list object.
     s_stDemoListObject.Data.Rect.PosX = 0;
     s_stDemoListObject.Data.Rect.PosY = 0;
-    s_stDemoListObject.Data.Rect.Width = 128;
-    s_stDemoListObject.Data.Rect.Height = 64;
+    s_stDemoListObject.Data.Rect.Width = RECT_WIDTH(pstIFObj->stSize);
+    s_stDemoListObject.Data.Rect.Height = RECT_HEIGHT(pstIFObj->stSize);
     s_stDemoListObject.Data.Title = s_szListTitle;
     s_stDemoListObject.FontSize = SGUI_FONT_SIZE_H12;
-    //Initialize list object.
-	//SGUI_List_InitializeListData(&s_stDemoListObject);
 #ifdef _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
     s_stDemoListObject.Data.Items = NULL;
     s_stDemoListObject.Data.Count = 0;

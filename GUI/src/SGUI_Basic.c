@@ -15,7 +15,6 @@
 //=======================================================================//
 //= User Macro definition.											    =//
 //=======================================================================//
-#define	BMP_DATA_BUFFER_SIZE		(512)
 #define SGUI_MIN_VAL(A, B)			(((A)>(B)?(B):(A)))
 #define SGUI_MAX_VAL(A, B)			(((A)<(B)?(B):(A)))
 
@@ -46,8 +45,6 @@ SGUI_CBYTE SGUI_BASIC_FONT_H6[] =
     0x00, 0x00, 0x00, 0x00, //space
 };
 
-static SGUI_BYTE					auiBitmapDataBuffer[BMP_DATA_BUFFER_SIZE] = {0x00};
-
 //=======================================================================//
 //= Function define.										            =//
 //=======================================================================//
@@ -68,7 +65,7 @@ void SGUI_Basic_DrawPoint(SGUI_SCR_DEV* pstIFObj, SGUI_UINT uiCoordinateX, SGUI_
     /*----------------------------------*/
     /* Process							*/
     /*----------------------------------*/
-    if((uiCoordinateX < SGUI_LCD_SIZE_WIDTH) && (uiCoordinateY < SGUI_LCD_SIZE_HEIGHT) && (NULL != pstIFObj))
+    if((NULL != pstIFObj) && (uiCoordinateX < RECT_WIDTH(pstIFObj->stSize)) && (uiCoordinateY < RECT_HEIGHT(pstIFObj->stSize)))
     {
     	if(NULL == pstIFObj->fnSetPixel)
 		{
@@ -112,7 +109,7 @@ SGUI_COLOR SGUI_Basic_GetPoint(SGUI_SCR_DEV* pstIFObj, SGUI_UINT uiCoordinateX, 
     /*----------------------------------*/
     /* Process							*/
     /*----------------------------------*/
-    if((uiCoordinateX < SGUI_LCD_SIZE_WIDTH) && (uiCoordinateY < SGUI_LCD_SIZE_HEIGHT)&& (NULL != pstIFObj))
+    if((NULL != pstIFObj) && (uiCoordinateX < RECT_WIDTH(pstIFObj->stSize)) && (uiCoordinateY < RECT_HEIGHT(pstIFObj->stSize)))
     {
     	if(NULL == pstIFObj->fnSetPixel)
 		{
@@ -157,7 +154,7 @@ void SGUI_Basic_ClearScreen(SGUI_SCR_DEV* pstIFObj)
 		}
 		else
 		{
-			SGUI_Basic_DrawRectangle(pstIFObj, 0, 0, SGUI_LCD_SIZE_HEIGHT, SGUI_LCD_SIZE_HEIGHT, SGUI_COLOR_BKGCLR, SGUI_COLOR_BKGCLR);
+			SGUI_Basic_DrawRectangle(pstIFObj, 0, 0, RECT_WIDTH(pstIFObj->stSize), RECT_HEIGHT(pstIFObj->stSize), SGUI_COLOR_BKGCLR, SGUI_COLOR_BKGCLR);
 			SGUI_Basic_RefreshDisplay(pstIFObj);
 		}
 	}
@@ -168,15 +165,15 @@ void SGUI_Basic_ClearScreen(SGUI_SCR_DEV* pstIFObj)
 /** Purpose:		Draw a line by the Bresenham algorithm.				**/
 /** Params:																**/
 /**	@ pstIFObj[in]:	SimpleGUI object pointer.							**/
-/**	@ uiStartX[in]:		X coordinate of start point of line.			**/
-/**	@ uiStartY[in]:		Y coordinate of start point of line.			**/
-/**	@ uiEndX[in]:		X coordinate of end point of line.				**/
-/**	@ uiEndY[in]:		Y coordinate of end point of line.				**/
+/**	@ iStartX[in]:		X coordinate of start point of line.			**/
+/**	@ iStartY[in]:		Y coordinate of start point of line.			**/
+/**	@ iEndX[in]:		X coordinate of end point of line.				**/
+/**	@ iEndY[in]:		Y coordinate of end point of line.				**/
 /**	@ eColor[in]:		Line color.										**/
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_Basic_DrawLine(SGUI_SCR_DEV* pstIFObj, SGUI_INT uiStartX, SGUI_INT uiStartY, SGUI_INT uiEndX, SGUI_INT uiEndY, SGUI_COLOR eColor)
+void SGUI_Basic_DrawLine(SGUI_SCR_DEV* pstIFObj, SGUI_INT iStartX, SGUI_INT iStartY, SGUI_INT iEndX, SGUI_INT iEndY, SGUI_COLOR eColor)
 {
     /*----------------------------------*/
     /* Variable Declaration				*/
@@ -184,18 +181,18 @@ void SGUI_Basic_DrawLine(SGUI_SCR_DEV* pstIFObj, SGUI_INT uiStartX, SGUI_INT uiS
     SGUI_INT					iDx, iDy;
     SGUI_INT					iIncX, iIncY;
     SGUI_INT					iErrX = 0, iErrY = 0;
-    SGUI_INT					i, uiDs;
-    SGUI_INT					uiCurrentPosX, uiCurrentPosY;
+    SGUI_INT					i, iDs;
+    SGUI_INT					iCurrentPosX, iCurrentPosY;
 
     /*----------------------------------*/
     /* Initialize						*/
     /*----------------------------------*/
     iErrX = 0;
     iErrY = 0;
-    iDx = uiEndX - uiStartX;
-    iDy = uiEndY - uiStartY;
-    uiCurrentPosX = uiStartX;
-    uiCurrentPosY = uiStartY;
+    iDx = iEndX - iStartX;
+    iDy = iEndY - iStartY;
+    iCurrentPosX = iStartX;
+    iCurrentPosY = iStartY;
 
     if(iDx > 0)
     {
@@ -233,30 +230,30 @@ void SGUI_Basic_DrawLine(SGUI_SCR_DEV* pstIFObj, SGUI_INT uiStartX, SGUI_INT uiS
 
     if(iDx > iDy)
     {
-        uiDs = iDx;
+        iDs = iDx;
     }
     else
     {
-        uiDs = iDy;
+        iDs = iDy;
     }
 
     /*----------------------------------*/
     /* Process							*/
     /*----------------------------------*/
-    for(i = 0; i <= uiDs+1; i++)
+    for(i = 0; i <= iDs+1; i++)
     {
-        SGUI_Basic_DrawPoint(pstIFObj, uiCurrentPosX,uiCurrentPosY, eColor);
+        SGUI_Basic_DrawPoint(pstIFObj, iCurrentPosX,iCurrentPosY, eColor);
         iErrX += iDx;
-        if(iErrX > uiDs)
+        if(iErrX > iDs)
         {
-            iErrX -= uiDs;
-            uiCurrentPosX += iIncX;
+            iErrX -= iDs;
+            iCurrentPosX += iIncX;
         }
         iErrY += iDy;
-        if(iErrY > uiDs)
+        if(iErrY > iDs)
         {
-            iErrY -= uiDs;
-            uiCurrentPosY += iIncY;
+            iErrY -= iDs;
+            iCurrentPosY += iIncY;
         }
     }
 }
@@ -472,7 +469,7 @@ void SGUI_Basic_DrawBitMap(SGUI_SCR_DEV* pstIFObj, SGUI_RECT_AREA* pstDisplayAre
 	/* Process							*/
 	/*----------------------------------*/
 	// Only draw in visible area of screen.
-	if(	(RECT_X_START(*pstDisplayArea) < SGUI_LCD_SIZE_WIDTH) && (RECT_Y_START(*pstDisplayArea) < SGUI_LCD_SIZE_HEIGHT) &&
+	if(	(RECT_X_START(*pstDisplayArea) < RECT_WIDTH(pstIFObj->stSize)) && (RECT_Y_START(*pstDisplayArea) < RECT_HEIGHT(pstIFObj->stSize)) &&
 		(RECT_X_END(*pstDisplayArea) > 0) && (RECT_Y_END(*pstDisplayArea) > 0))
 	{
 		// Recalculate display area and data area.
@@ -494,7 +491,7 @@ void SGUI_Basic_DrawBitMap(SGUI_SCR_DEV* pstIFObj, SGUI_RECT_AREA* pstDisplayAre
 			// Calculate bitmap data size.
 			sBitmapDataSize = pstDataArea->Width * ((pstDataArea->Height-1)/8+1);
 			// Read flash data.
-			SGUI_SystemIF_GetFlashData(pstIFObj, eDataSource, adDataStartAddr, sBitmapDataSize, auiBitmapDataBuffer);
+			SGUI_SystemIF_GetFlashData(pstIFObj, eDataSource, adDataStartAddr, sBitmapDataSize);
 			// Set loop start parameter of x coordinate
 			iDrawPixX = RECT_X_START(*pstDisplayArea);
 			iBmpPixX = 0;
@@ -508,10 +505,10 @@ void SGUI_Basic_DrawBitMap(SGUI_SCR_DEV* pstIFObj, SGUI_RECT_AREA* pstDisplayAre
 			}
 			uiDrawnWidthIndex = iBmpPixX;
 			// Loop for x coordinate;
-			while((uiDrawnWidthIndex<RECT_WIDTH(*pstDataArea)) && (iDrawPixX<=RECT_X_END(*pstDisplayArea)) && (iDrawPixX<SGUI_LCD_SIZE_WIDTH))
+			while((uiDrawnWidthIndex<RECT_WIDTH(*pstDataArea)) && (iDrawPixX<=RECT_X_END(*pstDisplayArea)) && (iDrawPixX<RECT_WIDTH(pstIFObj->stSize)))
 			{
 				// Redirect to data array for column.
-				pData = auiBitmapDataBuffer + iBmpPixX;
+				pData = pstIFObj->arrBmpDataBuffer + iBmpPixX;
 				// Set loop start parameter of y coordinate
 				iDrawPixY = RECT_Y_START(*pstDisplayArea);
 				iBmpPixY = 0;
@@ -527,7 +524,7 @@ void SGUI_Basic_DrawBitMap(SGUI_SCR_DEV* pstIFObj, SGUI_RECT_AREA* pstDisplayAre
 				uiPixIndex = iBmpPixY % 8;
 				pData += (iBmpPixY / 8) * RECT_WIDTH(*pstDataArea);
 				// Loop for y coordinate;
-				while((uiDrawnHeightIndex<RECT_HEIGHT(*pstDataArea)) && (iDrawPixY<=RECT_Y_END(*pstDisplayArea)) && (iDrawPixY<SGUI_LCD_SIZE_HEIGHT))
+				while((uiDrawnHeightIndex<RECT_HEIGHT(*pstDataArea)) && (iDrawPixY<=RECT_Y_END(*pstDisplayArea)) && (iDrawPixY<RECT_HEIGHT(pstIFObj->stSize)))
 				{
 					if(uiPixIndex == 8)
 					{

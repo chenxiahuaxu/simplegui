@@ -52,6 +52,6 @@ SGUI_SIZE               SGUI_SystemIF_StringLength(SGUI_CSZSTR szString);
 SGUI_SZSTR				SGUI_SystemIF_StringCopy(SGUI_SZSTR szDest, SGUI_CSZSTR szSrc);
 SGUI_SZSTR				SGUI_SystemIF_StringLengthCopy(SGUI_SZSTR szDest, SGUI_CSZSTR szSrc, SGUI_SIZE sSize);
 void                    SGUI_SystemIF_GetNowTime(SGUI_TIME* pstTime);
-SGUI_SIZE				SGUI_SystemIF_GetFlashData(SGUI_SCR_DEV* pstIFObj, SGUI_FLASH_DATA_SOURCE eDataSource, SGUI_ROM_ADDRESS adStartAddr, SGUI_SIZE sReadSize, SGUI_BYTE* pOutputBuffer);
+SGUI_SIZE				SGUI_SystemIF_GetFlashData(SGUI_SCR_DEV* pstIFObj, SGUI_FLASH_DATA_SOURCE eDataSource, SGUI_ROM_ADDRESS adStartAddr, SGUI_SIZE sReadSize);
 
 #endif // __INCLUDED_SGUI_INTERFACE_H__

@@ -52,7 +52,6 @@ m_clsCDC(this)
 	// Initialize paint buffer and function pointer.
 	m_ppuiDisplayBuffer = nullptr;
 	m_pfDrawPoint = nullptr;
-	m_iLockLevel = 0;
 	// Process initialize.
 	m_bIsOK = _initialize();
 }
@@ -90,6 +89,8 @@ bool wxLCDBase::_initialize(void)
 		SetPixelUnitSize(wxDefaultLCDPixelUnitSize);
 		// Set grid visible.
 		SetGridVisibled(WX_LCD_DEFAULT_GRID_VISIBLE);
+		// Set grid color.
+		SetBorderWidth(WX_LCD_BORDER_WIDTH);
 	}
 	return bReturn;
 }
@@ -110,8 +111,18 @@ void wxLCDBase::_getBestSize(wxSize& clsBestSize) const
 	/* Process							*/
 	/*----------------------------------*/
 	// Set size object value.
-	clsBestSize.SetWidth(m_clsSizeInPixel.GetWidth()*m_clsPixelUnitSize.GetWidth()+(bGridIsVisible?1:0));
-	clsBestSize.SetHeight(m_clsSizeInPixel.GetHeight()*m_clsPixelUnitSize.GetHeight()+(bGridIsVisible?1:0));
+	clsBestSize.SetWidth(m_clsSizeInPixel.GetWidth()*m_clsPixelUnitSize.GetWidth()+(bGridIsVisible?1:0)+(2*m_iBorderWidth));
+	clsBestSize.SetHeight(m_clsSizeInPixel.GetHeight()*m_clsPixelUnitSize.GetHeight()+(bGridIsVisible?1:0)+(2*m_iBorderWidth));
+}
+
+void wxLCDBase::SetBorderWidth(int iBorderWidth)
+{
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	m_iBorderWidth = iBorderWidth;
+	// Repaint
+    RefreshDisplay();
 }
 
 void wxLCDBase::SetPixelNumber(int iHorizontalPixelNumber, int iVerticalPixelNumber)
@@ -374,7 +385,7 @@ void wxLCDBase::_drawPointSinglePixel(wxDC& clsDCObject, int iPosX, int iPosY, c
     /*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	clsDCObject.DrawPoint(wxPoint(iPosX, iPosY));
+	clsDCObject.DrawPoint(wxPoint(iPosX+m_iBorderWidth, iPosY+m_iBorderWidth));
 }
 
 void wxLCDBase::_drawPointMultiplePixel(wxDC& clsDCObject, int iPosX, int iPosY, const wxSize& clsPixelSize)
@@ -382,7 +393,7 @@ void wxLCDBase::_drawPointMultiplePixel(wxDC& clsDCObject, int iPosX, int iPosY,
     /*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	clsDCObject.DrawRectangle(wxPoint(iPosX*m_clsPixelUnitSize.GetWidth(), iPosY*m_clsPixelUnitSize.GetHeight()), clsPixelSize);
+	clsDCObject.DrawRectangle(wxPoint(iPosX*m_clsPixelUnitSize.GetWidth()+m_iBorderWidth, iPosY*m_clsPixelUnitSize.GetHeight()+m_iBorderWidth), clsPixelSize);
 }
 
 void wxLCDBase::_drawPointMultiplePixelWithGrid(wxDC& clsDCObject, int iPosX, int iPosY, const wxSize& clsPixelSize)
@@ -390,7 +401,7 @@ void wxLCDBase::_drawPointMultiplePixelWithGrid(wxDC& clsDCObject, int iPosX, in
     /*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	clsDCObject.DrawRectangle(wxPoint(iPosX*m_clsPixelUnitSize.GetWidth()+1, iPosY*m_clsPixelUnitSize.GetHeight()+1), wxSize(clsPixelSize.GetWidth()-1, clsPixelSize.GetHeight()-1));
+	clsDCObject.DrawRectangle(wxPoint(iPosX*m_clsPixelUnitSize.GetWidth()+m_iBorderWidth+1, iPosY*m_clsPixelUnitSize.GetHeight()+m_iBorderWidth+1), wxSize(clsPixelSize.GetWidth()-1, clsPixelSize.GetHeight()-1));
 }
 
 /*************************************************************************/
@@ -522,8 +533,8 @@ void wxLCDBase::RefreshDisplay(void)
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	iPaintSizeWidth =	m_clsSizeInPixel.GetWidth()*m_clsPixelUnitSize.GetWidth();
-	iPaintSizeHeight =	m_clsSizeInPixel.GetHeight()*m_clsPixelUnitSize.GetHeight();
+	iPaintSizeWidth =	m_clsSizeInPixel.GetWidth()*m_clsPixelUnitSize.GetWidth()+(2*m_iBorderWidth);
+	iPaintSizeHeight =	m_clsSizeInPixel.GetHeight()*m_clsPixelUnitSize.GetHeight()+(2*m_iBorderWidth);
 	bGridVisible = GetGridVisibled();
 
 	// Set buffer size.
@@ -543,7 +554,7 @@ void wxLCDBase::RefreshDisplay(void)
 	{
 		_setDCColor(m_clsGridColor);
 		_prepareDC(clsBufferedDC);
-		clsBufferedDC.DrawRectangle(wxPoint(0, 0),
+		clsBufferedDC.DrawRectangle(wxPoint(m_iBorderWidth, m_iBorderWidth),
 							wxSize(	m_clsSizeInPixel.GetWidth()*m_clsPixelUnitSize.GetWidth()+1,
 									m_clsSizeInPixel.GetHeight()*m_clsPixelUnitSize.GetHeight()+1));
 	}

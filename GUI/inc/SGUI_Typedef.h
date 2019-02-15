@@ -1,5 +1,5 @@
-#ifndef __INCLUDE_GUI_TYPEDEF_H__
-#define __INCLUDE_GUI_TYPEDEF_H__
+#ifndef _INCLUDE_GUI_TYPEDEF_H_
+#define _INCLUDE_GUI_TYPEDEF_H_
 //=======================================================================//
 //= Public function declaration.									    =//
 //=======================================================================//
@@ -20,6 +20,7 @@
 #define		RECT_VALID_HEIGHT(ST)		((RECT_Y_START(ST)>0)?RECT_HEIGHT(ST):(RECT_HEIGHT(ST)+RECT_Y_START(ST)))
 
 #define		SGUI_DEVPF_IF_DEFINE(R, FN, PARAM) typedef R(*FN)PARAM
+#define		SGUI_BMP_DATA_BUFFER_SIZE	(512)
 
 //=======================================================================//
 //= Data type definition.											    =//
@@ -132,6 +133,8 @@ typedef struct
 {
 	//Screen display area size in pixel.
 	SGUI_AREA_SIZE						stSize;
+	//Bitmap data buffer.
+	SGUI_BYTE							arrBmpDataBuffer[SGUI_BMP_DATA_BUFFER_SIZE];
     //Engine & device initialize function.
     SGUI_ENGINE_ACTION_FN_INITIALIZE	fnInitialize;
     //Clear screen function.
@@ -144,4 +147,4 @@ typedef struct
     SGUI_ENGINE_ACTION_FN_REFRESH		fnRefreshScreen;
 }SGUI_SCR_DEV;
 
-#endif // __INCLUDE_GUI_TYPEDEF_H__
+#endif // _INCLUDE_GUI_TYPEDEF_H_

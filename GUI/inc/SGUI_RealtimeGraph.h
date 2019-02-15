@@ -25,6 +25,7 @@ typedef struct
 
 typedef struct
 {
+	SGUI_RECT_AREA			Rect;
 	SGUI_INT				ValueArray[SGUI_RTGRAPH_VALUE_ARRAY_SIZE];
 	SGUI_INT				LimitedValueArray[SGUI_RTGRAPH_VALUE_ARRAY_SIZE];
 	SGUI_INT				PointYCoordinateArray[SGUI_RTGRAPH_VALUE_ARRAY_SIZE];
@@ -42,6 +43,6 @@ typedef struct
 //= Public function declaration.									    =//
 //=======================================================================//
 void			SGUI_RealtimeGraph_Initialize(SGUI_RTGRAPH* pstRTGraph);
-void			SGUI_RealtimeGraph_Refresh(SGUI_SCR_DEV* pstIFObj, SGUI_RTGRAPH* pstRTGraph, SGUI_CSZSTR szTopText, SGUI_CSZSTR szBottomText);
-void			SGUI_RealtimeGraph_AppendValue(SGUI_RTGRAPH* pstRTGraph, SGUI_INT iNewValue);
+void			SGUI_RealtimeGraph_Refresh(SGUI_SCR_DEV* pstIFObj, SGUI_RTGRAPH* pstRTGraph);
+void			SGUI_RealtimeGraph_AppendValue(SGUI_SCR_DEV* pstIFObj, SGUI_RTGRAPH* pstRTGraph, SGUI_INT iNewValue);
 #endif // __INCLUDE_GUI_REAL_GRAPH_H__

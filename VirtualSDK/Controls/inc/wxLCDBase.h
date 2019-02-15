@@ -1,6 +1,9 @@
 #ifndef _INCLUDE_CLASS_WXEX_LCD_BASE_H_
 #define _INCLUDE_CLASS_WXEX_LCD_BASE_H_
 
+//=======================================================================//
+//= Include files.													    =//
+//=======================================================================//
 #include <wx\panel.h>
 #include <wx\dcbuffer.h>
 #include <wx\colour.h>
@@ -13,6 +16,7 @@
 #define WX_LCD_DEFAULT_GRID_VISIBLE					(true)
 #define WX_LCD_PIX_SIZE_MIN							(3)
 #define WX_LCD_PIX_SIZE_MIN_WITH_GRID				(4)
+#define WX_LCD_BORDER_WIDTH							(5)
 #define WX_LCD_PIX_RGB(RGBA)						((0x00FFFFFF) & (RGBA))
 #define wxDefaultLCDPixelUnitSize					(wxSize(2, 2))
 
@@ -36,14 +40,13 @@ class wxLCDBase
 		wxBrush					m_clsBrush;
 		wxColour				m_clsGridColor;
 		wxSize					m_clsSizeInPixel;
-		//int						m_iPixelSize;
 		wxSize					m_clsPixelUnitSize;
 		bool					m_bGridVisible;
 		unsigned int**			m_ppuiDisplayBuffer;
 		wxCriticalSection		m_clsDisplayBufferCS;
 		void					(wxLCDBase::*m_pfDrawPoint)(wxDC& clsDCObject, int iPosX, int iPosY, const wxSize& clsPixelSize);
 		bool					m_bIsOK;
-		int						m_iLockLevel;
+		int						m_iBorderWidth;
 
 		bool					_initialize(void);
 		void					_getBestSize(wxSize& clsBestSize) const;
@@ -75,6 +78,8 @@ class wxLCDBase
 								wxLCDBase(wxWindow *pclsParent, wxWindowID iWinID = wxID_ANY, const wxPoint& clsPosition = wxDefaultPosition, const wxSize& clsSizeInPixel = wxDefaultSizeInPixel);
 								~wxLCDBase();
 		// Public interface
+		void					SetBorderWidth(int iBorderWidth);
+		int						GetBorderWidth(void)						{return m_iBorderWidth;}
 		void					SetPixelNumber(int iHorizontalPixelNumber, int iVerticalPixelNumber);
 		void					GetPixelNumber(int* piHorizontalPixelNumber, int* piVerticalPixelNumber);
 		void					SetPixelUnitSize(const wxSize clsPixelUnitSize);

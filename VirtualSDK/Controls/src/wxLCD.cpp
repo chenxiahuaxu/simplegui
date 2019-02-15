@@ -96,9 +96,12 @@ void wxLCD::SetParameter(PixelPanelParameter* pstPanelParameter)
 		SetPixelUnitSize(wxSize(pstPanelParameter->PixelUnitWidth, pstPanelParameter->PixelUnitHeight));
 	    SetGridVisibled(pstPanelParameter->EnableGrid);
 		SetPixelNumber(pstPanelParameter->HorizontalPixelNumber, pstPanelParameter->VerticalPixelNumber);
+		SetBorderWidth(pstPanelParameter->BorderWidth);
 
 		SetPixelColour(wxColor(pstPanelParameter->PixelColor), false);
 		SetPanelColour(wxColor(pstPanelParameter->PanelColor), false);
 		SetGridColor(wxColor(pstPanelParameter->GridColor));
+
+		Layout();
 	}
 }

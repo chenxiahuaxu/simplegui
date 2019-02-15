@@ -1,5 +1,5 @@
-#ifndef __INCLUDE_DEMO_RESOURCE_UTF8_H__
-#define __INCLUDE_DEMO_RESOURCE_UTF8_H__
+#ifndef _INCLUDE_DEMO_RESOURCE_UTF8_H_
+#define _INCLUDE_DEMO_RESOURCE_UTF8_H_
 
 /* Screen 1: Multiple lines text. */
 /* Start screen scroll text. */
@@ -21,18 +21,18 @@
 #define     DEMO_LIST_ITEM_ENUM_VALUE3  ("枚举项3")
 
 
-/* List items data.                      Sign   ListText                            List item type           List value                 Decimal point           Enumed text list    */
-/*                                                                                                           init.  min.   max.         init.  min.   max.                          */
-#define     DEMO_LIST_ITEM_0            {0,     "简单列表项",					LIST_ITEM_NORMAL,		{0,     0,     0     },    {0,     0,     0     },  NULL}
-#define     DEMO_LIST_ITEM_1			{1,     "枚举类型列表项",				LIST_ITEM_ENUM,			{0,     0,     1     },    {0,     0,     0     },  s_arrszNoticeType}
-#define     DEMO_LIST_ITEM_2            {2,     "数字列表项",					LIST_ITEM_DIGIT,		{0,     -50,   50    },    {0,     0,     3     },  NULL}
-#define     DEMO_LIST_ITEM_3			{3,     "带小数的数字列表项",			LIST_ITEM_DIGIT,		{1,     -50,   50    },    {2,     0,     5     },  NULL}
-#define     DEMO_LIST_ITEM_4            {4,     "超长文字的简单列表项",			LIST_ITEM_NORMAL,		{0,     0,     0     },    {0,     0,     0     },  NULL}
-#define     DEMO_LIST_ITEM_5            {5,     "编辑框",						LIST_ITEM_NORMAL,		{0,     0,     0     },    {0,     0,     0     },  NULL}
-#define     DEMO_LIST_ITEM_6			{6,     "实时曲线",						LIST_ITEM_NORMAL,		{0,     0,     0     },    {0,     0,     0     },  NULL}
-#define     DEMO_LIST_ITEM_7            {7,     "测试项目1",				        LIST_ITEM_NORMAL,		{0,     0,     0     },    {0,     0,     0     },  NULL}
-#define     DEMO_LIST_ITEM_8            {8,     "测试项目2",				        LIST_ITEM_ENUM,			{0,     0,     2     },    {0,     0,     0     },  s_arrszEnumedValue}
-#define     DEMO_LIST_ITEM_9			{9,     "测试项目3",				        LIST_ITEM_DIGIT,		{0,     -50,   50    },    {0,     0,     3     },  NULL}
+/* List items data.						Sign	ListText						List item type			List value					Decimal point				Enumed text list    */
+/*																										 init.  min.   max.          init.  min.   max.								*/
+#define     DEMO_LIST_ITEM_0            {0,     "简单列表项",					LIST_ITEM_NORMAL,		{0,     0,     0     },		{0,     0,     0     },		NULL}
+#define     DEMO_LIST_ITEM_1			{1,     "枚举类型列表项",				LIST_ITEM_ENUM,			{0,     0,     1     },		{0,     0,     0     },		s_arrszNoticeType}
+#define     DEMO_LIST_ITEM_2            {2,     "数字列表项",					LIST_ITEM_DIGIT,		{0,     -50,   50    },		{0,     0,     3     },		NULL}
+#define     DEMO_LIST_ITEM_3			{3,     "带小数的数字列表项",			LIST_ITEM_DIGIT,		{1,     -50,   50    },		{2,     0,     5     },		NULL}
+#define     DEMO_LIST_ITEM_4            {4,     "超长文字的简单列表项",			LIST_ITEM_NORMAL,		{0,     0,     0     },		{0,     0,     0     },		NULL}
+#define     DEMO_LIST_ITEM_5            {5,     "编辑框",						LIST_ITEM_NORMAL,		{0,     0,     0     },		{0,     0,     0     },		NULL}
+#define     DEMO_LIST_ITEM_6			{6,     "实时曲线",						LIST_ITEM_NORMAL,		{0,     0,     0     },		{0,     0,     0     },		NULL}
+#define     DEMO_LIST_ITEM_7            {7,     "测试项目1",				        LIST_ITEM_NORMAL,		{0,     0,     0     },		{0,     0,     0     },		NULL}
+#define     DEMO_LIST_ITEM_8            {8,     "测试项目2",				        LIST_ITEM_ENUM,			{0,     0,     2     },		{0,     0,     0     },		s_arrszEnumedValue}
+#define     DEMO_LIST_ITEM_9			{9,     "测试项目3",				        LIST_ITEM_DIGIT,		{0,     -50,   50    },		{0,     0,     3     },		NULL}
 
 /* Screen 3: Text notice box. */
 /* List notice text format. */
@@ -45,4 +45,4 @@
 #define     DEMO_VARIABLE_BOX_TITLE     ("数值/文本编辑演示")
 #define     DEMO_VARIABLE_BOX_HELPER    ("TAB键切换焦点编辑框。\n上下箭头调整数值。\n左右箭头调整焦点字符。\n按空格键继续。")
 
-#endif // __INCLUDE_DEMO_RESOURCE_UTF8_H__
+#endif // _INCLUDE_DEMO_RESOURCE_UTF8_H_

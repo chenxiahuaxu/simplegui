@@ -75,7 +75,7 @@ void SGUI_Text_DrawSingleLineText(SGUI_SCR_DEV* pstIFObj, SGUI_CSZSTR szText, SG
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if((szText != NULL) && (RECT_X_START(*pstDisplayArea) < SGUI_LCD_SIZE_WIDTH) && (SGUI_FONT_SRC_UNKNOWN != eFontResource))
+	if((szText != NULL) && (RECT_X_START(*pstDisplayArea) < RECT_WIDTH(pstIFObj->stSize)) && (SGUI_FONT_SRC_UNKNOWN != eFontResource))
 	{
 		// Recalculate text display area and data area.
         if(RECT_X_START(*pstDisplayArea) < 0)
@@ -186,7 +186,7 @@ SGUI_SIZE SGUI_Text_DrawMultipleLinesText(SGUI_SCR_DEV* pstIFObj, SGUI_CSZSTR sz
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if((szText != NULL) && (RECT_X_START(*pstDisplayArea) < SGUI_LCD_SIZE_WIDTH))
+	if((szText != NULL) && (RECT_X_START(*pstDisplayArea) < RECT_WIDTH(pstIFObj->stSize)))
 	{
 		// Recalculate text display area and data area.
 		if(RECT_X_START(*pstDisplayArea) < 0)

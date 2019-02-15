@@ -1,5 +1,6 @@
-#ifndef __INCLUDE_COMMON_H__
-#define __INCLUDE_COMMON_H__
+#ifndef _INCLUDE_COMMON_H_
+#define _INCLUDE_COMMON_H_
+
 //=======================================================================//
 //= Include files.													    =//
 //=======================================================================//
@@ -17,6 +18,7 @@
 
 #define PARAM_DEFAULT_PIXEL_NUM_H                       (128)
 #define PARAM_DEFAULT_PIXEL_NUM_V                       (64)
+#define PARAM_DEFAULT_PANEL_BORDER_WIDTH				(8)
 #define PARAM_DEFAULT_PIXEL_WIDTH					    (3)
 #define PARAM_DEFAULT_PIXEL_HEIGHT					    (3)
 #define PARAM_DEFAULT_GRID_ENABLE                       (true)
@@ -31,6 +33,7 @@ typedef struct
     size_t					VerticalPixelNumber;
     size_t					PixelUnitWidth;
     size_t					PixelUnitHeight;
+    size_t					BorderWidth;
     bool					EnableGrid;
 	unsigned int			PanelColor;
 	unsigned int			PixelColor;
@@ -47,4 +50,4 @@ extern PixelPanelParameter			g_stParameters;
 //=======================================================================//
 void SetDefaultParameterData(PixelPanelParameter* pstParameter);
 
-#endif // __INCLUDE_LCD_COMMON_H__
+#endif // _INCLUDE_LCD_COMMON_H_

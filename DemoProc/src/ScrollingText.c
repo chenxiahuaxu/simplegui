@@ -25,8 +25,8 @@
 		#endif
 #define		HMI_TEXT_DEMO_FRAME_TEXT_POSX				(HMI_TEXT_DEMO_FRAMR_EDGE_WIDTH+1)
 #define		HMI_TEXT_DEMO_FRAME_TEXT_POSY				(HMI_TEXT_DEMO_FRAMR_EDGE_WIDTH+1)
-#define		HMI_TEXT_DEMO_FRAME_TEXT_WIDTH				(SGUI_LCD_SIZE_WIDTH-(HMI_TEXT_DEMO_FRAMR_EDGE_WIDTH+1)*2)
-#define		HMI_TEXT_DEMO_FRAME_TEXT_HEIGHT				(SGUI_LCD_SIZE_HEIGHT-(HMI_TEXT_DEMO_FRAMR_EDGE_WIDTH+1)*2)
+#define		HMI_TEXT_DEMO_FRAME_TEXT_WIDTH(SCR_SIZE)	(((SCR_SIZE).Width)-(HMI_TEXT_DEMO_FRAMR_EDGE_WIDTH+1)*2)
+#define		HMI_TEXT_DEMO_FRAME_TEXT_HEIGHT(SCR_SIZE)	(((SCR_SIZE).Height)-(HMI_TEXT_DEMO_FRAMR_EDGE_WIDTH+1)*2)
 
 //=======================================================================//
 //= Static function declaration.									    =//
@@ -78,12 +78,12 @@ HMI_SCREEN_OBJECT       g_stHMIDemo_ScrollingText =		{
 /*****************************************************************************/
 HMI_ENGINE_RESULT HMI_DemoScrollingText_Initialize(SGUI_SCR_DEV* Interface)
 {
-	s_iTextOffset = HMI_TEXT_DEMO_FRAME_TEXT_HEIGHT;
-	s_iTextHeight = SGUI_Text_GetMultiLineTextLines(s_szDemoText, (HMI_TEXT_DEMO_FRAME_TEXT_WIDTH/g_stFontSize[SGUI_FONT_SIZE_H12].Width))*g_stFontSize[SGUI_FONT_SIZE_H12].Height;
+	s_iTextOffset = HMI_TEXT_DEMO_FRAME_TEXT_HEIGHT(Interface->stSize);
+	s_iTextHeight = SGUI_Text_GetMultiLineTextLines(s_szDemoText, (HMI_TEXT_DEMO_FRAME_TEXT_WIDTH(Interface->stSize)/g_stFontSize[SGUI_FONT_SIZE_H12].Width))*g_stFontSize[SGUI_FONT_SIZE_H12].Height;
 	s_stTextDisplayArea.PosX = HMI_TEXT_DEMO_FRAME_TEXT_POSX;
 	s_stTextDisplayArea.PosY = HMI_TEXT_DEMO_FRAME_TEXT_POSY;
-	s_stTextDisplayArea.Width = HMI_TEXT_DEMO_FRAME_TEXT_WIDTH;
-	s_stTextDisplayArea.Height = HMI_TEXT_DEMO_FRAME_TEXT_HEIGHT;
+	s_stTextDisplayArea.Width = HMI_TEXT_DEMO_FRAME_TEXT_WIDTH(Interface->stSize);
+	s_stTextDisplayArea.Height = HMI_TEXT_DEMO_FRAME_TEXT_HEIGHT(Interface->stSize);
 	return HMI_RET_NORMAL;
 }
 
@@ -170,7 +170,7 @@ HMI_ENGINE_RESULT HMI_DemoScrollingText_ProcessEvent(SGUI_SCR_DEV* pstIFObj, con
 			SGUI_Text_DrawMultipleLinesText(pstIFObj, s_szDemoText, SGUI_FONT_SIZE_H12, &s_stTextDisplayArea, s_iTextOffset, SGUI_DRAW_NORMAL);
 			if(s_iTextOffset + s_iTextHeight == 0)
 			{
-				s_iTextOffset = HMI_TEXT_DEMO_FRAME_TEXT_HEIGHT;
+				s_iTextOffset = HMI_TEXT_DEMO_FRAME_TEXT_HEIGHT(pstIFObj->stSize);
 			}
 			else
 			{

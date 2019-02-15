@@ -454,11 +454,10 @@ SGUI_SZSTR SGUI_SystemIF_StringCopy(SGUI_SZSTR szDest, SGUI_CSZSTR szSrc)
 /** Function Name:	SGUI_FlashData_GetFilash								**/
 /** Purpose:		Read a byte array form ROM(ex. flash).					**/
 /** Params:																	**/
-/**	@ pstIFObj[in]:	SimpleGUI object pointer.							**/
+/**	@ pstIFObj[in]:		SimpleGUI device interface object pointer.			**/
 /**	@ eDataSource[in]:	Data source.										**/
 /**	@ adStartAddr[in]:	Read data array start address in source.			**/
 /**	@ sReadSize[in]:	Number of data want to read.						**/
-/**	@ pOutputBuffer[out]: Output data buffer.								**/
 /** Return:			None.													**/
 /** Notice:			You can specify a data source by eDataSource parameter,	**/
 /**					and it always used when your data is in different ROM	**/
@@ -470,7 +469,7 @@ SGUI_SZSTR SGUI_SystemIF_StringCopy(SGUI_SZSTR szDest, SGUI_CSZSTR szSrc)
 /**					This function will be re-write when use in different 	**/
 /**					hardware PF.											**/
 /*****************************************************************************/
-SGUI_SIZE SGUI_SystemIF_GetFlashData(SGUI_SCR_DEV* pstIFObj, SGUI_FLASH_DATA_SOURCE eDataSource, SGUI_ROM_ADDRESS adStartAddr, SGUI_SIZE sReadSize, SGUI_BYTE* pOutputBuffer)
+SGUI_SIZE SGUI_SystemIF_GetFlashData(SGUI_SCR_DEV* pstIFObj, SGUI_FLASH_DATA_SOURCE eDataSource, SGUI_ROM_ADDRESS adStartAddr, SGUI_SIZE sReadSize)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -487,7 +486,7 @@ SGUI_SIZE SGUI_SystemIF_GetFlashData(SGUI_SCR_DEV* pstIFObj, SGUI_FLASH_DATA_SOU
 	/*----------------------------------*/
 //#ifndef _SIMPLE_GUI_USE_SYS_PF_FUNCTIONS_
 	adBaseAddr =				adStartAddr;
-	pOutPutDataPtr =			pOutputBuffer;
+	pOutPutDataPtr =			pstIFObj->arrBmpDataBuffer;
 	pDataSource =				NULL;
 //#endif
  	sReadBytes =				0;
@@ -498,7 +497,7 @@ SGUI_SIZE SGUI_SystemIF_GetFlashData(SGUI_SCR_DEV* pstIFObj, SGUI_FLASH_DATA_SOU
 //#ifdef _SIMPLE_GUI_USE_SYS_PF_FUNCTIONS_
 	// Add flash operation function here.
 //#else
-	if((eDataSource > SGUI_FONT_SRC_NONE) && (eDataSource < SGUI_FONT_SRC_UNKNOWN) && (sReadSize > 0) && (NULL != pOutputBuffer))
+	if((eDataSource > SGUI_FONT_SRC_NONE) && (eDataSource < SGUI_FONT_SRC_UNKNOWN) && (sReadSize > 0))
 	{
 		switch(eDataSource)
 		{

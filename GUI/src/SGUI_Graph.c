@@ -16,14 +16,14 @@
 //= User Macro definition.											    =//
 //=======================================================================//
 #define	GUI_GRAPH_SCROLLBAR_WIDTH					(3)
-#define GUI_GRAPH_GRAPH_AREA_WIDTH					(SGUI_LCD_SIZE_WIDTH-GUI_GRAPH_SCROLLBAR_WIDTH-1)
-#define GUI_GRAPH_GRAPH_AREA_HEIGHT					(SGUI_LCD_SIZE_HEIGHT- GUI_GRAPH_SCROLLBAR_WIDTH-1)
+#define GUI_GRAPH_GRAPH_AREA_WIDTH(GRAP_RECT)		(((GRAP_RECT).Width)-GUI_GRAPH_SCROLLBAR_WIDTH-1)
+#define GUI_GRAPH_GRAPH_AREA_HEIGHT(GRAP_RECT)		(((GRAP_RECT).Height)-GUI_GRAPH_SCROLLBAR_WIDTH-1)
 
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
 static void SGUI_Graph_DrawLine(SGUI_SCR_DEV* pstIFObj, SGUI_GRAPH* pstGraph, SGUI_UINT32 uiStartPointIndex, SGUI_UINT32 uiEndPointIndex);
-static void SGUI_Praph_GetPointDrawingCoordinate(SGUI_GRAPH_POINT* pstDataPoint, SGUI_GRAPH_CONTROL* pstControlData, SGUI_GRAPH_POINT* pstDrawingPoint);
+static void SGUI_Praph_GetPointDrawingCoordinate(SGUI_SCR_DEV* pstIFObj, SGUI_GRAPH_POINT* pstDataPoint, SGUI_GRAPH_CONTROL* pstControlData, SGUI_GRAPH_POINT* pstDrawingPoint);
 
 //=======================================================================//
 //= Function implementation.										    =//
@@ -38,7 +38,7 @@ static void SGUI_Praph_GetPointDrawingCoordinate(SGUI_GRAPH_POINT* pstDataPoint,
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_Graph_InitializeGraphData(SGUI_GRAPH* pstGraph, SGUI_GRAPH_INIT_DATA* pstInitializeData)
+void SGUI_Graph_InitializeGraphData(SGUI_SCR_DEV* pstIFObj, SGUI_GRAPH* pstGraph, SGUI_GRAPH_INIT_DATA* pstInitializeData)
 {
 	/*----------------------------------*/
 	/* Process							*/
@@ -73,7 +73,7 @@ void SGUI_Graph_InitializeGraphData(SGUI_GRAPH* pstGraph, SGUI_GRAPH_INIT_DATA* 
  		pstGraph->SubElement.xScrollBar.Parameter.MaxIndex = pstGraph->Control->PointRangeX;
 		pstGraph->SubElement.xScrollBar.Parameter.PosX = GUI_GRAPH_SCROLLBAR_WIDTH;
 		pstGraph->SubElement.xScrollBar.Parameter.PosY = 0;
-		pstGraph->SubElement.xScrollBar.Parameter.Width = SGUI_LCD_SIZE_WIDTH - GUI_GRAPH_SCROLLBAR_WIDTH;
+		pstGraph->SubElement.xScrollBar.Parameter.Width = RECT_WIDTH(pstIFObj->stSize) - GUI_GRAPH_SCROLLBAR_WIDTH;
 		pstGraph->SubElement.xScrollBar.Parameter.Height = GUI_GRAPH_SCROLLBAR_WIDTH;
 
 		pstGraph->SubElement.yScrollBar.Parameter.eDirection = SGUI_SCROLLBAR_VERTICAL;
@@ -81,7 +81,7 @@ void SGUI_Graph_InitializeGraphData(SGUI_GRAPH* pstGraph, SGUI_GRAPH_INIT_DATA* 
 		pstGraph->SubElement.yScrollBar.Parameter.PosX = 0;
 		pstGraph->SubElement.yScrollBar.Parameter.PosY = GUI_GRAPH_SCROLLBAR_WIDTH;
 		pstGraph->SubElement.yScrollBar.Parameter.Width = GUI_GRAPH_SCROLLBAR_WIDTH;
-		pstGraph->SubElement.yScrollBar.Parameter.Height = SGUI_LCD_SIZE_HEIGHT - GUI_GRAPH_SCROLLBAR_WIDTH;
+		pstGraph->SubElement.yScrollBar.Parameter.Height = RECT_HEIGHT(pstIFObj->stSize) - GUI_GRAPH_SCROLLBAR_WIDTH;
 
 		pstGraph->Control->FocusIndex = pstInitializeData->FocusIndex;
 	}
@@ -156,11 +156,11 @@ void SGUI_Graph_DrawLine(SGUI_SCR_DEV* pstIFObj, SGUI_GRAPH* pstGraph, SGUI_UINT
 	{
 		// Start point.
 		pstStartPoint = pstGraph->Data->Points+uiStartPointIndex;
-		SGUI_Praph_GetPointDrawingCoordinate(pstStartPoint, pstGraph->Control, &stGStartPoint);
+		SGUI_Praph_GetPointDrawingCoordinate(pstIFObj, pstStartPoint, pstGraph->Control, &stGStartPoint);
 
 		// End point.
 		pstEndPoint = pstGraph->Data->Points+uiEndPointIndex;
-		SGUI_Praph_GetPointDrawingCoordinate(pstEndPoint, pstGraph->Control, &stGEndPoint);
+		SGUI_Praph_GetPointDrawingCoordinate(pstIFObj, pstEndPoint, pstGraph->Control, &stGEndPoint);
 
 		// End point.
 		SGUI_Basic_DrawLine(pstIFObj, stGStartPoint.x, stGStartPoint.y, stGEndPoint.x, stGEndPoint.y, SGUI_COLOR_FRGCLR);
@@ -178,7 +178,7 @@ void SGUI_Graph_DrawLine(SGUI_SCR_DEV* pstIFObj, SGUI_GRAPH* pstGraph, SGUI_UINT
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_Praph_GetPointDrawingCoordinate(SGUI_GRAPH_POINT* pstDataPoint, SGUI_GRAPH_CONTROL* pstControlData, SGUI_GRAPH_POINT* pstDrawingPoint)
+void SGUI_Praph_GetPointDrawingCoordinate(SGUI_SCR_DEV* pstIFObj, SGUI_GRAPH_POINT* pstDataPoint, SGUI_GRAPH_CONTROL* pstControlData, SGUI_GRAPH_POINT* pstDrawingPoint)
 {
 	/*----------------------------------*/
 	/* Process							*/
@@ -189,7 +189,7 @@ void SGUI_Praph_GetPointDrawingCoordinate(SGUI_GRAPH_POINT* pstDataPoint, SGUI_G
 		pstDrawingPoint->x = (pstDataPoint->x-pstControlData->xAxis.Min);
 		pstDrawingPoint->y = (pstControlData->PointRangeY-(pstDataPoint->y-pstControlData->yAxis.Min)-1);
 
-		pstDrawingPoint->x = GUI_GRAPH_SCROLLBAR_WIDTH+pstDrawingPoint->x*GUI_GRAPH_GRAPH_AREA_WIDTH/pstControlData->PointRangeX;
-		pstDrawingPoint->y = GUI_GRAPH_SCROLLBAR_WIDTH+pstDrawingPoint->y*GUI_GRAPH_GRAPH_AREA_HEIGHT/pstControlData->PointRangeY;
+		pstDrawingPoint->x = GUI_GRAPH_SCROLLBAR_WIDTH+pstDrawingPoint->x*GUI_GRAPH_GRAPH_AREA_WIDTH(pstIFObj->stSize)/pstControlData->PointRangeX;
+		pstDrawingPoint->y = GUI_GRAPH_SCROLLBAR_WIDTH+pstDrawingPoint->y*GUI_GRAPH_GRAPH_AREA_HEIGHT(pstIFObj->stSize)/pstControlData->PointRangeY;
 	}
 }
