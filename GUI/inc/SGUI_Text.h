@@ -1,7 +1,7 @@
 #ifndef _INCLUDE_GUI_FONT_H_
 #define _INCLUDE_GUI_FONT_H_
 //=======================================================================//
-//= Public function declaration.									    =//
+//= Include files.													    =//
 //=======================================================================//
 #include "SGUI_Common.h"
 #include "SGUI_Basic.h"

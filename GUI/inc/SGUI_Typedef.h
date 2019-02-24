@@ -1,7 +1,7 @@
 #ifndef _INCLUDE_GUI_TYPEDEF_H_
 #define _INCLUDE_GUI_TYPEDEF_H_
 //=======================================================================//
-//= Public function declaration.									    =//
+//= Include files.													    =//
 //=======================================================================//
 #include "stdint.h"
 #include "stddef.h"
@@ -116,18 +116,18 @@ typedef struct
 }SGUI_BMP_DATA;
 
 // Screen device operation interface type declare.
-SGUI_DEVPF_IF_DEFINE(SGUI_INT,			SGUI_ENGINE_ACTION_FN_INITIALIZE,	(void));
-SGUI_DEVPF_IF_DEFINE(void,				SGUI_ENGINE_ACTION_FN_CLEAR,		(void));
-SGUI_DEVPF_IF_DEFINE(void,				SGUI_ENGINE_ACTION_FN_SET_POINT,	(SGUI_INT iX, SGUI_INT iY, SGUI_INT iColor));
-SGUI_DEVPF_IF_DEFINE(SGUI_INT,			SGUI_ENGINE_ACTION_FN_GET_POINT,	(SGUI_INT iX, SGUI_INT iY));
-SGUI_DEVPF_IF_DEFINE(SGUI_INT,			SGUI_ENGINE_ACTION_FN_SET_BYTE,		(SGUI_INT iPage, SGUI_INT iColumn));
-SGUI_DEVPF_IF_DEFINE(SGUI_INT,			SGUI_ENGINE_ACTION_FN_GET_BYTE,		(SGUI_INT iPage, SGUI_INT iColumn));
-SGUI_DEVPF_IF_DEFINE(void,				SGUI_ENGINE_ACTION_FN_REFRESH,		(void));
+SGUI_DEVPF_IF_DEFINE(SGUI_INT,			SGUI_FN_IF_INITIALIZE,				(void));
+SGUI_DEVPF_IF_DEFINE(void,				SGUI_FN_IF_CLEAR,					(void));
+SGUI_DEVPF_IF_DEFINE(void,				SGUI_FN_IF_SET_POINT,				(SGUI_INT iX, SGUI_INT iY, SGUI_INT iColor));
+SGUI_DEVPF_IF_DEFINE(SGUI_INT,			SGUI_FN_IF_GET_POINT,				(SGUI_INT iX, SGUI_INT iY));
+SGUI_DEVPF_IF_DEFINE(SGUI_INT,			SGUI_FN_IF_SET_BYTE,				(SGUI_INT iPage, SGUI_INT iColumn));
+SGUI_DEVPF_IF_DEFINE(SGUI_INT,			SGUI_FN_IF_GET_BYTE,				(SGUI_INT iPage, SGUI_INT iColumn));
+SGUI_DEVPF_IF_DEFINE(void,				SGUI_FN_IF_REFRESH,					(void));
 
 // System function interface type declare.
-SGUI_DEVPF_IF_DEFINE(void,				SGUI_SYS_FN_GET_RTC,				(SGUI_INT iYear, SGUI_INT iMounth, SGUI_INT iDay, SGUI_INT iWeekDay, SGUI_INT iHour, SGUI_INT iMinute, SGUI_INT iSecond));
-SGUI_DEVPF_IF_DEFINE(SGUI_SIZE,			SGUI_SYS_FN_READ_FLASH,				(SGUI_INT iSourceID, SGUI_ROM_ADDRESS adStartAddr, SGUI_SIZE sReadSize, SGUI_BYTE* pOutputBuffer));
-SGUI_DEVPF_IF_DEFINE(SGUI_INT,			SGUI_SYS_FN_GET_CHAR_INDEX,			(SGUI_CSZSTR cszSrc));
+SGUI_DEVPF_IF_DEFINE(void,				SGUI_FN_IF_GET_RTC,					(SGUI_INT iYear, SGUI_INT iMounth, SGUI_INT iDay, SGUI_INT iWeekDay, SGUI_INT iHour, SGUI_INT iMinute, SGUI_INT iSecond));
+SGUI_DEVPF_IF_DEFINE(SGUI_SIZE,			SGUI_FN_IF_READ_FLASH,				(SGUI_INT iSourceID, SGUI_ROM_ADDRESS adStartAddr, SGUI_SIZE sReadSize, SGUI_BYTE* pOutputBuffer));
+SGUI_DEVPF_IF_DEFINE(SGUI_INT,			SGUI_FN_IF_GET_CHAR_INDEX,			(SGUI_CSZSTR cszSrc));
 
 typedef struct
 {
@@ -136,15 +136,15 @@ typedef struct
 	//Bitmap data buffer.
 	SGUI_BYTE							arrBmpDataBuffer[SGUI_BMP_DATA_BUFFER_SIZE];
     //Engine & device initialize function.
-    SGUI_ENGINE_ACTION_FN_INITIALIZE	fnInitialize;
+    SGUI_FN_IF_INITIALIZE				fnInitialize;
     //Clear screen function.
-    SGUI_ENGINE_ACTION_FN_CLEAR			fnClearScreen;
+    SGUI_FN_IF_CLEAR					fnClearScreen;
     //Set pixel value function.
-    SGUI_ENGINE_ACTION_FN_SET_POINT		fnSetPixel;
+    SGUI_FN_IF_SET_POINT				fnSetPixel;
     //Get pixel value function.
-    SGUI_ENGINE_ACTION_FN_GET_POINT		fnGetPixel;
+    SGUI_FN_IF_GET_POINT				fnGetPixel;
     // Refresh screen display.
-    SGUI_ENGINE_ACTION_FN_REFRESH		fnRefreshScreen;
+    SGUI_FN_IF_REFRESH					fnRefreshScreen;
 }SGUI_SCR_DEV;
 
 #endif // _INCLUDE_GUI_TYPEDEF_H_

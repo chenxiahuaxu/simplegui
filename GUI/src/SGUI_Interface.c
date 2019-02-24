@@ -23,7 +23,7 @@
 #include <time.h>
 #else
 	// Include platform RTC interface declare here.
-#include "RTC.h"
+//#include "RTC.h"
 #endif
 
 // Dynamic memory operation switch.
@@ -158,12 +158,12 @@ void SGUI_SystemIF_GetNowTime(SGUI_TIME* pstTime)
 			pstTime->Second = timeinfo->tm_sec;
 		}
 #else
-        pstTime->Year = g_stCleandar.tm_year;
-        pstTime->Month = g_stCleandar.tm_mon;
-        pstTime->Day = g_stCleandar.tm_mday;
-        pstTime->Hour = g_stCleandar.tm_hour;
-        pstTime->Minute = g_stCleandar.tm_min;
-        pstTime->Second = g_stCleandar.tm_sec;
+//        pstTime->Year = g_stCleandar.tm_year;
+//        pstTime->Month = g_stCleandar.tm_mon;
+//        pstTime->Day = g_stCleandar.tm_mday;
+//        pstTime->Hour = g_stCleandar.tm_hour;
+//        pstTime->Minute = g_stCleandar.tm_min;
+//        pstTime->Second = g_stCleandar.tm_sec;
 #endif
 
 #endif
@@ -474,29 +474,23 @@ SGUI_SIZE SGUI_SystemIF_GetFlashData(SGUI_SCR_DEV* pstIFObj, SGUI_FLASH_DATA_SOU
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-//#ifndef _SIMPLE_GUI_USE_SYS_PF_FUNCTIONS_
 	SGUI_ROM_ADDRESS			adBaseAddr;
 	SGUI_BYTE*					pOutPutDataPtr;
 	SGUI_CBYTE*					pDataSource;
-//#endif
 	SGUI_SIZE					sReadBytes;
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-//#ifndef _SIMPLE_GUI_USE_SYS_PF_FUNCTIONS_
 	adBaseAddr =				adStartAddr;
 	pOutPutDataPtr =			pstIFObj->arrBmpDataBuffer;
 	pDataSource =				NULL;
-//#endif
+
  	sReadBytes =				0;
 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-//#ifdef _SIMPLE_GUI_USE_SYS_PF_FUNCTIONS_
-	// Add flash operation function here.
-//#else
 	if((eDataSource > SGUI_FONT_SRC_NONE) && (eDataSource < SGUI_FONT_SRC_UNKNOWN) && (sReadSize > 0))
 	{
 		switch(eDataSource)
@@ -516,13 +510,7 @@ SGUI_SIZE SGUI_SystemIF_GetFlashData(SGUI_SCR_DEV* pstIFObj, SGUI_FLASH_DATA_SOU
 				pDataSource = SGUI_FONT_H16;
 				break;
 			}
-#if 0
-			case SGUI_FONT_SRC_H32:
-			{
-				pDataSource = SGUI_FONT_H32;
-				break;
-			}
-#endif
+
 			case SGUI_NOTICE_ICON:
 			{
 				pDataSource = SGUI_NOTICE_ICON_DATA;
@@ -543,6 +531,5 @@ SGUI_SIZE SGUI_SystemIF_GetFlashData(SGUI_SCR_DEV* pstIFObj, SGUI_FLASH_DATA_SOU
 			}
 		}
 	}
-//#endif // _SIMPLE_GUI_USE_SYS_PF_FUNCTIONS_
 	return sReadBytes;
 }

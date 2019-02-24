@@ -11,6 +11,7 @@
 
 #ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
 #include "SDKInterface.h"
+#include "SGUI_FlashData.h"
 #else
 #include "OLED.h"
 #include "DemoActions.h"
@@ -258,3 +259,4 @@ void RTCEventProc(void)
     // Post RTC update message to a screen.
     EventProcess((HMI_EVENT_BASE*)&stEvent);
 }
+
