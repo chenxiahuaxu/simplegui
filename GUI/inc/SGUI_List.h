@@ -30,8 +30,8 @@ typedef struct
 
 typedef struct _st_sgui_list_item_
 {
-	SGUI_SIZE					Sign;
-	SGUI_CSZSTR				Text;
+	SGUI_SIZE					ItemID;
+	SGUI_CSZSTR					Text;
 	SGUI_List_ITEM_TYPE			Type;
 	SGUI_List_PARAMETER_VALUE	Valid;
 	SGUI_List_PARAMETER_VALUE	Decimal;

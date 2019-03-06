@@ -8,12 +8,7 @@
 //=======================================================================//
 //= Include files.													    =//
 //=======================================================================//
-#include "SGUI_Common.h"
-#include "SGUI_Basic.h"
-#include "SGUI_Text.h"
-#include "SGUI_ScrollBar.h"
 #include "SGUI_List.h"
-#include "SGUI_Frame.h"
 
 //=======================================================================//
 //= User Macro definition.											    =//

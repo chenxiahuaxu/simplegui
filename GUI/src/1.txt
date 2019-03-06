@@ -1,0 +1,13 @@
+ ドライブ F のボリューム ラベルは Work です
+ ボリューム シリアル番号は EEB2-19FB です
+
+ F:\Workspace\39_Developement\06-Gitee\SimpleGUI_Working\GUI\src のディレクトリ
+
+[.]                    [..]                   1.txt
+Listfile.cmd           SGUI_Basic.c           SGUI_Common.c
+SGUI_FlashData.c       SGUI_Frame.c           SGUI_Graph.c
+SGUI_Interface.c       SGUI_List.c            SGUI_Notice.c
+SGUI_ProcessBar.c      SGUI_RealtimeGraph.c   SGUI_ScrollBar.c
+SGUI_Text.c            SGUI_VariableBox.c     
+              15 個のファイル           1,505,620 バイト
+               2 個のディレクトリ  84,545,929,216 バイトの空き領域

@@ -20,7 +20,7 @@
 // HMI action type
 typedef enum
 {
-	EVENT_ID_UNKNOW				= 0,
+	EVENT_ID_UNKNOW =				0,
 	// User defined action type.
 	EVENT_ID_KEY_PRESS,
 	EVENT_ID_TIMER,
@@ -28,6 +28,21 @@ typedef enum
 	// User defined action above.
 	EVENT_ID_MAX
 }EVENT_ID;
+
+// HMI event type.
+typedef enum
+{
+    EVENT_TYPE_ANY =				0,
+    EVENT_TYPE_ACTION,
+    EVENT_TYPE_DATA,
+}EVENT_TYPE;
+
+enum DEMO_PROC_ACTION_ID
+{
+    HMI_DEMO_PROC_NO_ACT =			0,
+    HMI_DEMO_PROC_CONFIRM =			1,
+    HMI_DEMO_PROC_CANCEL =			2,
+};
 
 typedef struct
 {
@@ -55,7 +70,9 @@ HMI_EVENT_TYPE_DECLARE(DATA_EVENT, DUMMY_DATA_EVENT_DATA);
 //=======================================================================//
 //= Public variable declaration.									    =//
 //=======================================================================//
+/* HMI engine object. */
 extern HMI_ENGINE_OBJECT        g_stDemoEngine;
+/* Screen display objects. */
 extern HMI_SCREEN_OBJECT        g_stHMIDemo_ScrollingText;
 extern HMI_SCREEN_OBJECT		g_stHMIDemo_List;
 extern HMI_SCREEN_OBJECT		g_stHMIDemo_TextNotice;
@@ -70,7 +87,6 @@ extern "C"
 {
 #endif /* __cplusplus */
 HMI_ENGINE_RESULT	InitializeEngine(void);
-HMI_ENGINE_RESULT	EventProcess(const HMI_EVENT_BASE* pstEvent);
 int					DemoMainProcess(void);
 
 #ifdef __cplusplus

@@ -4,6 +4,7 @@
 //= Include files.													    =//
 //=======================================================================//
 #include "SGUI_Common.h"
+#include "SGUI_FlashData.h"
 
 //=======================================================================//
 //= Data type definition.											    =//
@@ -39,6 +40,5 @@ void					SGUI_Basic_DrawRectangle(SGUI_SCR_DEV* pstIFObj, SGUI_UINT uiStartX, SG
 void					SGUI_Basic_DrawCircle(SGUI_SCR_DEV* pstIFObj, SGUI_UINT uiCx, SGUI_UINT uiCy, SGUI_UINT uiRadius, SGUI_COLOR eEdgeColor, SGUI_COLOR eFillColor);
 void					SGUI_Basic_ReverseBlockColor(SGUI_SCR_DEV* pstIFObj, SGUI_UINT uiStartX, SGUI_UINT uiStartY, SGUI_UINT uiWidth, SGUI_UINT uiHeight);
 void					SGUI_Basic_DrawBitMap(SGUI_SCR_DEV* pstIFObj, SGUI_RECT_AREA* pstDisplayArea, SGUI_RECT_AREA* pstDataArea, SGUI_FLASH_DATA_SOURCE eDataSource, SGUI_ROM_ADDRESS adDataStartAddr, SGUI_DRAW_MODE eDrawMode);
-void                    SGUI_Basic_RefreshDisplay(SGUI_SCR_DEV* pstIFObj);
 
 #endif

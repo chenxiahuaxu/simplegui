@@ -18,25 +18,25 @@
 static HMI_ENGINE_RESULT	HMI_DemoRealGraph_Initialize(SGUI_SCR_DEV* pstIFObj);
 static HMI_ENGINE_RESULT	HMI_DemoRealGraph_Prepare(SGUI_SCR_DEV* pstIFObj, const void* pstParameters);
 static HMI_ENGINE_RESULT	HMI_DemoRealGraph_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const void* pstParameters);
-static HMI_ENGINE_RESULT	HMI_DemoRealGraph_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent);
-static HMI_ENGINE_RESULT	HMI_DemoRealGraph_PostProcess(SGUI_SCR_DEV* pstIFObj, SGUI_INT iActionResult);
+static HMI_ENGINE_RESULT	HMI_DemoRealGraph_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent, SGUI_INT* piActionID);
+static HMI_ENGINE_RESULT	HMI_DemoRealGraph_PostProcess(SGUI_SCR_DEV* pstIFObj, HMI_ENGINE_RESULT eProcResult, SGUI_INT iActionID);
 
 //=======================================================================//
 //= Static variable declaration.									    =//
 //=======================================================================//
-SGUI_RTGRAPH_CONTROL	s_stRealtimeGraphControl =	{50, -50, SGUI_TRUE, 3, 0};
-SGUI_RTGRAPH_DATA		s_stRealtimeGraphData =		{{1, 9, 126, 46}, {0}, {0}, {0}, 0, 0};
-SGUI_RTGRAPH			s_stRealtimeGraph =			{&s_stRealtimeGraphData, &s_stRealtimeGraphControl};
+SGUI_RTGRAPH_CONTROL		s_stRealtimeGraphControl =	{50, -50, SGUI_TRUE, 3, 0};
+SGUI_RTGRAPH_DATA			s_stRealtimeGraphData =		{{1, 9, 126, 46}, {0}, {0}, {0}, 0, 0};
+SGUI_RTGRAPH				s_stRealtimeGraph =			{&s_stRealtimeGraphData, &s_stRealtimeGraphControl};
 //=======================================================================//
 //= Global variable declaration.									    =//
 //=======================================================================//
-HMI_SCREEN_ACTION		s_stDemoRealtimeGraphActions =	{	HMI_DemoRealGraph_Initialize,
+static HMI_SCREEN_ACTION	s_stDemoRealtimeGraphActions =	{	HMI_DemoRealGraph_Initialize,
 														HMI_DemoRealGraph_Prepare,
 														HMI_DemoRealGraph_RefreshScreen,
 														HMI_DemoRealGraph_ProcessEvent,
 														HMI_DemoRealGraph_PostProcess,
 														};
-HMI_SCREEN_OBJECT				g_stHMI_DemoRealtimeGraph =		{	HMI_SCREEN_ID_DEMO_REAL_TIME_GRAPH,
+HMI_SCREEN_OBJECT			g_stHMI_DemoRealtimeGraph =		{	HMI_SCREEN_ID_DEMO_REAL_TIME_GRAPH,
                                                         &s_stDemoRealtimeGraphActions
                                                     };
 
@@ -92,7 +92,7 @@ HMI_ENGINE_RESULT HMI_DemoRealGraph_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const 
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoRealGraph_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent)
+HMI_ENGINE_RESULT HMI_DemoRealGraph_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent, SGUI_INT* piActionID)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -103,11 +103,13 @@ HMI_ENGINE_RESULT HMI_DemoRealGraph_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const H
 	SGUI_UINT16					uiKeyValue;
 	KEY_PRESS_EVENT*			pstKeyEvent;
 	DATA_EVENT*					pstDataEvent;
+	SGUI_INT					iProcessAction;
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
 	eProcessResult =			HMI_RET_NORMAL;
+	iProcessAction =			HMI_DEMO_PROC_NO_ACT;
 
 	/*----------------------------------*/
 	/* Process							*/
@@ -129,11 +131,7 @@ HMI_ENGINE_RESULT HMI_DemoRealGraph_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const H
 
 				if(KEY_VALUE_ESC == uiKeyValue)
 				{
-					eProcessResult = HMI_RET_CANCEL;
-				}
-				else
-				{
-					eProcessResult = HMI_RET_NOACTION;
+					iProcessAction = HMI_DEMO_PROC_CANCEL;
 				}
 			}
 			break;
@@ -156,25 +154,34 @@ HMI_ENGINE_RESULT HMI_DemoRealGraph_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const H
 		}
 		default:
 		{
-			eProcessResult = HMI_RET_NOACTION;
+			/* No process. */
 			break;
 		}
+	}
+
+	if(NULL != piActionID)
+	{
+		*piActionID = iProcessAction;
 	}
 
 	return eProcessResult;
 }
 
-HMI_ENGINE_RESULT HMI_DemoRealGraph_PostProcess(SGUI_SCR_DEV* pstIFObj, SGUI_INT iActionResult)
+HMI_ENGINE_RESULT HMI_DemoRealGraph_PostProcess(SGUI_SCR_DEV* pstIFObj, HMI_ENGINE_RESULT eProcResult, SGUI_INT iActionID)
 {
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if(HMI_RET_CANCEL == iActionResult)
+	if(HMI_PROCESS_SUCCESSFUL(eProcResult))
 	{
-		// Stop heart-beat timer.
-		SGUI_SDK_ConfigHearBeatTimer(0);
-		// Go back to last screen.
-		HMI_GoBack(NULL);
+		if(HMI_DEMO_PROC_CANCEL == iActionID)
+		{
+			// Stop heart-beat timer.
+			SGUI_SDK_ConfigHearBeatTimer(0);
+			// Go back to last screen.
+			HMI_GoBack(NULL);
+		}
 	}
+
 	return HMI_RET_NORMAL;
 }

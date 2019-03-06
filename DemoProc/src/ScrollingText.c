@@ -11,7 +11,6 @@
 //=======================================================================//
 #include "DemoProc.h"
 #include "SGUI_Text.h"
-#include "SGUI_Frame.h"
 #include "HMI_Engine.h"
 
 //=======================================================================//
@@ -34,8 +33,9 @@
 static HMI_ENGINE_RESULT    HMI_DemoScrollingText_Initialize(SGUI_SCR_DEV* Interface);
 static HMI_ENGINE_RESULT    HMI_DemoScrollingText_Prepare(SGUI_SCR_DEV* Interface, const void* pstParameters);
 static HMI_ENGINE_RESULT    HMI_DemoScrollingText_RefreshScreen(SGUI_SCR_DEV* Interface, const void* pstParameters);
-static HMI_ENGINE_RESULT    HMI_DemoScrollingText_ProcessEvent(SGUI_SCR_DEV* Interface, const HMI_EVENT_BASE* pstEvent);
-static HMI_ENGINE_RESULT    HMI_DemoScrollingText_PostProcess(SGUI_SCR_DEV* Interface, SGUI_INT iActionResult);
+static HMI_ENGINE_RESULT    HMI_DemoScrollingText_ProcessEvent(SGUI_SCR_DEV* Interface, const HMI_EVENT_BASE* pstEvent, SGUI_INT* piActionID);
+static HMI_ENGINE_RESULT    HMI_DemoScrollingText_PostProcess(SGUI_SCR_DEV* Interface, HMI_ENGINE_RESULT eProcResult, SGUI_INT iActionID);
+static void					HMI_DemoScrollingText_DrawFrame(SGUI_SCR_DEV* Interface);
 
 //=======================================================================//
 //= Static variable declaration.									    =//
@@ -47,9 +47,6 @@ static int32_t				s_iTextOffset;
 static SGUI_INT				s_iTextHeight;
 static SGUI_RECT_AREA		s_stTextDisplayArea;
 
-static SGUI_BOX_FRAME_STRUCT s_stTextFrame =			{	{HMI_TEXT_DEMO_FRAME_EDGE_LAYERS, SGUI_FONT_SIZE_H12},
-															{NULL}
-														};
 static HMI_SCREEN_ACTION	s_stDemoScrollingTextActions =	{
 															HMI_DemoScrollingText_Initialize,
 															HMI_DemoScrollingText_Prepare,
@@ -98,7 +95,7 @@ HMI_ENGINE_RESULT HMI_DemoScrollingText_Initialize(SGUI_SCR_DEV* Interface)
 HMI_ENGINE_RESULT HMI_DemoScrollingText_Prepare(SGUI_SCR_DEV* pstIFObj, const void* pstParameters)
 {
 	// Paint frame edge.
-	SGUI_Frame_DrawFullScreenFrame(pstIFObj, &s_stTextFrame);
+	HMI_DemoScrollingText_DrawFrame(pstIFObj);
 	// Start dummy heart-beat timer.
 	SGUI_SDK_ConfigHearBeatTimer(SDK_DEFAULT_HEART_BEAT_INTERVAL_MS);
 	return HMI_RET_NORMAL;
@@ -114,7 +111,7 @@ HMI_ENGINE_RESULT HMI_DemoScrollingText_Prepare(SGUI_SCR_DEV* pstIFObj, const vo
 /*****************************************************************************/
 HMI_ENGINE_RESULT HMI_DemoScrollingText_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const void* pstParameters)
 {
-	SGUI_Frame_DrawFullScreenFrame(pstIFObj, &s_stTextFrame);
+	HMI_DemoScrollingText_DrawFrame(pstIFObj);
 	SGUI_Text_DrawMultipleLinesText(pstIFObj, s_szDemoText, SGUI_FONT_SIZE_H12, &s_stTextDisplayArea, s_iTextOffset, SGUI_DRAW_NORMAL);
 	return HMI_RET_NORMAL;
 }
@@ -130,19 +127,21 @@ HMI_ENGINE_RESULT HMI_DemoScrollingText_RefreshScreen(SGUI_SCR_DEV* pstIFObj, co
 /** Limitation:		Parameter pointer is a void type, convert to the 		**/
 /**					appropriate type before use.							**/
 /*****************************************************************************/
-HMI_ENGINE_RESULT HMI_DemoScrollingText_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent)
+HMI_ENGINE_RESULT HMI_DemoScrollingText_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent, SGUI_INT* piActionID)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
 	HMI_ENGINE_RESULT           eProcessResult;
 	SGUI_UINT16					uiKeyValue;
-	KEY_PRESS_EVENT*					pstKeyEvent;
+	KEY_PRESS_EVENT*			pstKeyEvent;
+	SGUI_INT					iProcessAction;
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
 	eProcessResult =			HMI_RET_NORMAL;
+	iProcessAction =			HMI_DEMO_PROC_NO_ACT;
 
 	/*----------------------------------*/
 	/* Process							*/
@@ -156,17 +155,12 @@ HMI_ENGINE_RESULT HMI_DemoScrollingText_ProcessEvent(SGUI_SCR_DEV* pstIFObj, con
 
 			if(KEY_VALUE_SPACE == uiKeyValue)
 			{
-				eProcessResult = HMI_RET_FOLLOWUP;
-			}
-			else
-			{
-				eProcessResult = HMI_RET_NOACTION;
+				iProcessAction = HMI_DEMO_PROC_CONFIRM;
 			}
 			break;
 		}
 		case EVENT_ID_TIMER:
 		{
-			//SGUI_Frame_DrawFullScreenFrame(pstIFObj, &s_stTextFrame);
 			SGUI_Text_DrawMultipleLinesText(pstIFObj, s_szDemoText, SGUI_FONT_SIZE_H12, &s_stTextDisplayArea, s_iTextOffset, SGUI_DRAW_NORMAL);
 			if(s_iTextOffset + s_iTextHeight == 0)
 			{
@@ -176,15 +170,19 @@ HMI_ENGINE_RESULT HMI_DemoScrollingText_ProcessEvent(SGUI_SCR_DEV* pstIFObj, con
 			{
 				s_iTextOffset--;
 			}
-			eProcessResult = HMI_RET_NOACTION;
 			break;
 		}
 		default:
 		{
-			eProcessResult = HMI_RET_NOACTION;
+			/* No process. */
 			break;
 		}
 	}
+	if(NULL != piActionID)
+	{
+		*piActionID = iProcessAction;
+	}
+
 	return eProcessResult;
 }
 
@@ -193,18 +191,39 @@ HMI_ENGINE_RESULT HMI_DemoScrollingText_ProcessEvent(SGUI_SCR_DEV* pstIFObj, con
 /** Purpose:		Do something after user action or update screen.		**/
 /** Resources:		List data structure and bind data if existed.			**/
 /** Parameters:																**/
-/** @iActionResult[in]: User action or system action process result.		**/
+/** @ iActionResult[in]: User action or system action process result.		**/
 /** Return:			Post process result.									**/
 /** Limitation:		None.													**/
 /*****************************************************************************/
-HMI_ENGINE_RESULT HMI_DemoScrollingText_PostProcess(SGUI_SCR_DEV* pstIFObj, SGUI_INT iActionResult)
+HMI_ENGINE_RESULT HMI_DemoScrollingText_PostProcess(SGUI_SCR_DEV* pstIFObj, HMI_ENGINE_RESULT eProcResult, SGUI_INT iActionID)
 {
-	if(HMI_RET_FOLLOWUP == iActionResult)
+	if(HMI_PROCESS_SUCCESSFUL(eProcResult))
 	{
-		// Stop heart-beat timer.
-		SGUI_SDK_ConfigHearBeatTimer(0);
-		// Go to main list.
-		HMI_Goto(HMI_SCREEN_ID_DEMO_LIST, NULL);
+		if(HMI_DEMO_PROC_CONFIRM == iActionID)
+		{
+			// Stop heart-beat timer.
+			SGUI_SDK_ConfigHearBeatTimer(0);
+			// Go to main list.
+			HMI_SwitchScreen(HMI_SCREEN_ID_DEMO_LIST, NULL);
+		}
 	}
+
 	return HMI_RET_NORMAL;
+}
+
+/*****************************************************************************/
+/** Function Name:	HMI_DemoScrollingText_DrawFrame							**/
+/** Purpose:		Draw frame edge for scroll text screen.					**/
+/** Parameters:																**/
+/** @ Interface[in]:	Device driver object.								**/
+/** Return:			None.													**/
+/** Limitation:		None.													**/
+/*****************************************************************************/
+void HMI_DemoScrollingText_DrawFrame(SGUI_SCR_DEV* Interface)
+{
+	if(NULL != Interface)
+	{
+        SGUI_Basic_DrawRectangle(Interface, 0, 0, RECT_WIDTH(Interface->stSize), RECT_HEIGHT(Interface->stSize), SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
+		SGUI_Basic_DrawRectangle(Interface, 2, 2, RECT_WIDTH(Interface->stSize)-4, RECT_HEIGHT(Interface->stSize)-4, SGUI_COLOR_FRGCLR, SGUI_COLOR_TRANS);
+	}
 }

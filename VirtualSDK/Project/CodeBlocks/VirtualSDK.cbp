@@ -118,8 +118,6 @@
 		<Unit filename="../../../GUI/inc/SGUI_Basic.h" />
 		<Unit filename="../../../GUI/inc/SGUI_Common.h" />
 		<Unit filename="../../../GUI/inc/SGUI_FlashData.h" />
-		<Unit filename="../../../GUI/inc/SGUI_Frame.h" />
-		<Unit filename="../../../GUI/inc/SGUI_Graph.h" />
 		<Unit filename="../../../GUI/inc/SGUI_Interface.h" />
 		<Unit filename="../../../GUI/inc/SGUI_List.h" />
 		<Unit filename="../../../GUI/inc/SGUI_Notice.h" />
@@ -136,12 +134,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../../../GUI/src/SGUI_FlashData.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="../../../GUI/src/SGUI_Frame.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="../../../GUI/src/SGUI_Graph.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../../../GUI/src/SGUI_Interface.c">

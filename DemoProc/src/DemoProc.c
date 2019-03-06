@@ -20,8 +20,17 @@
 //=======================================================================//
 //= Static variable declaration.									    =//
 //=======================================================================//
-HMI_ENGINE_OBJECT			g_stDemoEngine;
 SGUI_SCR_DEV				g_stDeviceInterface;
+HMI_SCREEN_OBJECT*			g_arrpstScreenObjs[] =
+							{
+								&g_stHMIDemo_ScrollingText,
+								&g_stHMIDemo_List,
+								&g_stHMIDemo_TextNotice,
+								&g_stHMIDemo_RTCNotice,
+								&g_stHMIDemo_VariableBox,
+								&g_stHMI_DemoRealtimeGraph,
+							};
+HMI_ENGINE_OBJECT			g_stDemoEngine;
 
 //=======================================================================//
 //= Static function declare.								            =//
@@ -48,6 +57,7 @@ HMI_ENGINE_RESULT InitializeEngine(void)
 	/* Variable Declaration				*/
 	/*----------------------------------*/
 	HMI_ENGINE_RESULT           eProcessResult;
+	int							iIndex;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -79,81 +89,49 @@ HMI_ENGINE_RESULT InitializeEngine(void)
 	g_stDeviceInterface.stActions.fnClearScreen = OLED_ClearDisplay;
 	g_stDeviceInterface.stActions.fnRefreshScreen = OLED_RefreshScreen;
 #endif
-	g_stDemoEngine.Interface = &g_stDeviceInterface;
 
-	/* Configure HMI engine. */
-	if(HMI_PROCESS_SUCCESSFUL(eProcessResult))
+	do
 	{
-		eProcessResult = HMI_PrepareEngine(&g_stDemoEngine);
-	}
+		/* Prepare HMI engine object. */
+		g_stDemoEngine.ScreenCount = sizeof(g_arrpstScreenObjs)/sizeof(*g_arrpstScreenObjs);
+		g_stDemoEngine.ScreenObjPtr = g_arrpstScreenObjs;
+		g_stDemoEngine.Interface = &g_stDeviceInterface;
 
-	if(HMI_PROCESS_SUCCESSFUL(eProcessResult))
-	{
-		eProcessResult = HMI_AddScreen(&g_stDemoEngine, &g_stHMIDemo_ScrollingText, SGUI_TRUE);
-	}
-	if(HMI_PROCESS_SUCCESSFUL(eProcessResult))
-	{
-		eProcessResult = HMI_AddScreen(&g_stDemoEngine, &g_stHMIDemo_List, SGUI_TRUE);
-	}
-	if(HMI_PROCESS_SUCCESSFUL(eProcessResult))
-	{
-		eProcessResult = HMI_AddScreen(&g_stDemoEngine, &g_stHMIDemo_TextNotice, SGUI_TRUE);
-	}
-	if(HMI_PROCESS_SUCCESSFUL(eProcessResult))
-	{
-		eProcessResult = HMI_AddScreen(&g_stDemoEngine, &g_stHMIDemo_RTCNotice, SGUI_TRUE);
-	}
-	if(HMI_PROCESS_SUCCESSFUL(eProcessResult))
-	{
-		eProcessResult = HMI_AddScreen(&g_stDemoEngine, &g_stHMIDemo_VariableBox, SGUI_TRUE);
-	}
-	if(HMI_PROCESS_SUCCESSFUL(eProcessResult))
-	{
-		eProcessResult = HMI_AddScreen(&g_stDemoEngine, &g_stHMI_DemoRealtimeGraph, SGUI_TRUE);
-	}
+		/* Initialize all screen object. */
+		if(NULL != g_stDemoEngine.ScreenObjPtr)
+		{
+			for(iIndex=0; iIndex<g_stDemoEngine.ScreenCount; iIndex++)
+			{
+				if( (NULL != g_stDemoEngine.ScreenObjPtr[iIndex])
+					&& (NULL != g_stDemoEngine.ScreenObjPtr[iIndex]->pstActions)
+					&& (g_stDemoEngine.ScreenObjPtr[iIndex]->pstActions->Initialize)
+					)
+				{
+					g_stDemoEngine.ScreenObjPtr[iIndex]->pstActions->Initialize(&g_stDeviceInterface);
+					g_stDemoEngine.ScreenObjPtr[iIndex]->pstPrevious = NULL;
+				}
+			}
+		}
+		else
+		{
 
-	if(HMI_PROCESS_SUCCESSFUL(eProcessResult))
-	{
+		}
+		/* Active engine object. */
 		eProcessResult = HMI_ActiveEngine(&g_stDemoEngine, HMI_SCREEN_ID_DEMO_SCROLLING_TEXT);
-	}
-
-	if(HMI_PROCESS_SUCCESSFUL(eProcessResult))
-	{
+		if(HMI_PROCESS_FAILED(eProcessResult))
+		{
+			/* Active engine failed. */
+			break;
+		}
+		/* Start engine process. */
 		eProcessResult = HMI_StartEngine(NULL);
-	}
+		if(HMI_PROCESS_FAILED(eProcessResult))
+		{
+			/* Start engine failed. */
+			break;
+		}
+	}while(0);
 
-	return eProcessResult;
-}
-
-/*****************************************************************************/
-/** Function Name:	EventProcess											**/
-/** Purpose:		Process posted event.									**/
-/** Parameters:																**/
-/** @ pstEvent[in]:     HMI event data.                                     **/
-/** Return:			HMI_ENGINE_RESULT.										**/
-/** Notice:			This function must be called when initialize.			**/
-/*****************************************************************************/
-HMI_ENGINE_RESULT EventProcess(const HMI_EVENT_BASE* pstEvent)
-{
-	/*----------------------------------*/
-	/* Variable Declaration				*/
-	/*----------------------------------*/
-	HMI_ENGINE_RESULT           eProcessResult;
-
-	/*----------------------------------*/
-	/* Initialize						*/
-	/*----------------------------------*/
-	eProcessResult =			HMI_RET_NORMAL;
-
-	/*----------------------------------*/
-	/* Process							*/
-	/*----------------------------------*/
-
-	eProcessResult = HMI_ProcessEvent(pstEvent);
-	if(HMI_PROCESS_SUCCESSFUL(eProcessResult))
-	{
-		HMI_PostProcess(eProcessResult);
-	}
 
 	return eProcessResult;
 }
@@ -209,11 +187,11 @@ void KeyPressEventProc(void)
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	stEvent.Head.eType = HMI_ENGINE_EVENT_ACTION;
+	stEvent.Head.iType = EVENT_TYPE_ACTION;
 	stEvent.Head.iID = EVENT_ID_KEY_PRESS;
 	stEvent.Data.uiKeyValue = SGUI_SDK_GetKeyEventData();
 	// Post key press event.
-	EventProcess((HMI_EVENT_BASE*)(&stEvent));
+	HMI_ProcessEvent((HMI_EVENT_BASE*)(&stEvent));
 }
 
 void SysTickTimerEventProc(void)
@@ -231,11 +209,11 @@ void SysTickTimerEventProc(void)
     /*----------------------------------*/
     /* Process							*/
     /*----------------------------------*/
-    stEvent.Head.eType =	HMI_ENGINE_EVENT_DATA;
+    stEvent.Head.iType =	EVENT_TYPE_DATA;
     stEvent.Head.iID =		EVENT_ID_TIMER;
     stEvent.Data.iValue = (rand() % 200)-100;
     // Post timer event.
-    EventProcess((HMI_EVENT_BASE*)&stEvent);
+    HMI_ProcessEvent((HMI_EVENT_BASE*)&stEvent);
 }
 
 
@@ -254,9 +232,9 @@ void RTCEventProc(void)
     /*----------------------------------*/
     /* Process							*/
     /*----------------------------------*/
-    stEvent.Head.eType =	HMI_ENGINE_EVENT_DATA;
+    stEvent.Head.iType =	EVENT_TYPE_DATA;
     stEvent.Head.iID =		EVENT_ID_RTC;
     // Post RTC update message to a screen.
-    EventProcess((HMI_EVENT_BASE*)&stEvent);
+    HMI_ProcessEvent((HMI_EVENT_BASE*)&stEvent);
 }
 

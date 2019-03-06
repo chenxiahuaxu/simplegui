@@ -10,7 +10,6 @@
 //= Include files.													    =//
 //=======================================================================//
 #include "SGUI_Basic.h"
-#include "SGUI_FlashData.h"
 
 //=======================================================================//
 //= User Macro definition.											    =//
@@ -155,7 +154,6 @@ void SGUI_Basic_ClearScreen(SGUI_SCR_DEV* pstIFObj)
 		else
 		{
 			SGUI_Basic_DrawRectangle(pstIFObj, 0, 0, RECT_WIDTH(pstIFObj->stSize), RECT_HEIGHT(pstIFObj->stSize), SGUI_COLOR_BKGCLR, SGUI_COLOR_BKGCLR);
-			SGUI_Basic_RefreshDisplay(pstIFObj);
 		}
 	}
 }
@@ -549,24 +547,5 @@ void SGUI_Basic_DrawBitMap(SGUI_SCR_DEV* pstIFObj, SGUI_RECT_AREA* pstDisplayAre
 				iBmpPixX ++;
 			}
 		}
-	}
-}
-
-/*************************************************************************/
-/** Function Name:	SGUI_Basic_RefreshDisplay							**/
-/** Purpose:		Sync display buffer to screen.                      **/
-/** Params:																**/
-/**	@ pstIFObj[in]:		SimpleGUI object pointer.						**/
-/** Return:			None.												**/
-/** Notice:			None.												**/
-/*************************************************************************/
-void SGUI_Basic_RefreshDisplay(SGUI_SCR_DEV* pstIFObj)
-{
-    /*----------------------------------*/
-    /* Process							*/
-    /*----------------------------------*/
-    if(NULL != pstIFObj)
-	{
-		pstIFObj->fnRefreshScreen();
 	}
 }

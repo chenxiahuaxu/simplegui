@@ -263,5 +263,5 @@ SGUI_SIZE SGUI_Text_GetCharacterTableIndex(SGUI_UINT16 uiCharacterCode)
 >SimpleGUI@开源中国：https://www.oschina.net/p/simplegui  
 >SimpleGUI@码云：https://gitee.com/Polarix/simplegui  
 
-&emsp;&emsp;本人并不是全职的开源开发者，依然有工作及家庭的琐碎事务要处理，所以对于大家的需求和疑问反馈的可能并不及时，多有怠慢，敬请谅解。
+&emsp;&emsp;本人并不是全职的开源开发者，依然有工作及家庭的琐碎事务要处理，所以对于大家的需求和疑问反馈的可能并不及时，多有怠慢，敬请谅解。    
 &emsp;&emsp;最后，再次感谢您的支持。  

@@ -34,6 +34,8 @@ typedef	uint32_t						SGUI_UINT32;
 
 typedef	int								SGUI_INT;
 typedef unsigned int					SGUI_UINT;
+typedef long							SGUI_LONG;
+typedef unsigned long					SGUI_ULONG;
 typedef unsigned char					SGUI_BYTE;
 typedef const unsigned char				SGUI_CBYTE;
 typedef size_t							SGUI_SIZE;

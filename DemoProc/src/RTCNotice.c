@@ -21,17 +21,16 @@
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
-static HMI_ENGINE_RESULT	HMI_DemoRTCNotice_Initialize(SGUI_SCR_DEV* pstIFObj);
 static HMI_ENGINE_RESULT	HMI_DemoRTCNotice_Prepare(SGUI_SCR_DEV* pstIFObj, const void* pstParameters);
 static HMI_ENGINE_RESULT	HMI_DemoRTCNotice_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const void* pstParameters);
-static HMI_ENGINE_RESULT	HMI_DemoRTCNotice_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent);
-static HMI_ENGINE_RESULT	HMI_DemoRTCNotice_PostProcess(SGUI_SCR_DEV* pstIFObj, SGUI_INT iActionResult);
+static HMI_ENGINE_RESULT	HMI_DemoRTCNotice_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent, SGUI_INT* piActionID);
+static HMI_ENGINE_RESULT	HMI_DemoRTCNotice_PostProcess(SGUI_SCR_DEV* pstIFObj, HMI_ENGINE_RESULT eProcResult, SGUI_INT iActionID);
 
 //=======================================================================//
 //= Static variable declaration.									    =//
 //=======================================================================//
 static char				s_szRTCNoticeText[NOTICE_RTC_BUFFER_SIZE+1] = {0x00};
-HMI_SCREEN_ACTION		s_stDemoRTCNoticeActions =		{	HMI_DemoRTCNotice_Initialize,
+HMI_SCREEN_ACTION		s_stDemoRTCNoticeActions =		{	NULL,
 															HMI_DemoRTCNotice_Prepare,
 															HMI_DemoRTCNotice_RefreshScreen,
 															HMI_DemoRTCNotice_ProcessEvent,
@@ -47,15 +46,10 @@ HMI_SCREEN_OBJECT       g_stHMIDemo_RTCNotice =			{	HMI_SCREEN_ID_DEMO_RTC_NOTIC
 //=======================================================================//
 //= Function define.										            =//
 //=======================================================================//
-HMI_ENGINE_RESULT HMI_DemoRTCNotice_Initialize(SGUI_SCR_DEV* pstIFObj)
-{
-	SGUI_SystemIF_MemorySet(s_szRTCNoticeText, 0x00, sizeof(SGUI_CHAR)*(NOTICE_RTC_BUFFER_SIZE+1));
-	return HMI_RET_NORMAL;
-}
-
 HMI_ENGINE_RESULT HMI_DemoRTCNotice_Prepare(SGUI_SCR_DEV* pstIFObj, const void* pstParameters)
 {
 	SGUI_SDK_EnableRTCInterrupt(true);
+	SGUI_SystemIF_MemorySet(s_szRTCNoticeText, 0x00, sizeof(SGUI_CHAR)*(NOTICE_RTC_BUFFER_SIZE+1));
 	HMI_DemoRTCNotice_RefreshScreen(pstIFObj, NULL);
 	return HMI_RET_NORMAL;
 }
@@ -78,7 +72,7 @@ HMI_ENGINE_RESULT HMI_DemoRTCNotice_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const 
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoRTCNotice_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent)
+HMI_ENGINE_RESULT HMI_DemoRTCNotice_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent, SGUI_INT* piActionID)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -86,19 +80,21 @@ HMI_ENGINE_RESULT HMI_DemoRTCNotice_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const H
 	HMI_ENGINE_RESULT           eProcessResult;
 	SGUI_TIME					stRTCTime;
 	SGUI_UINT16					uiKeyValue;
-	KEY_PRESS_EVENT*					pstKeyEvent;
+	KEY_PRESS_EVENT*			pstKeyEvent;
+	SGUI_INT					iProcessAction;
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
 	eProcessResult =			HMI_RET_NORMAL;
+	iProcessAction =			HMI_DEMO_PROC_NO_ACT;
 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
 	if(NULL != pstEvent)
 	{
-		if(HMI_ENGINE_EVENT_ACTION == pstEvent->eType)
+		if(EVENT_TYPE_ACTION == pstEvent->iType)
 		{
 			if(EVENT_ID_KEY_PRESS == pstEvent->iID)
 			{
@@ -109,13 +105,13 @@ HMI_ENGINE_RESULT HMI_DemoRTCNotice_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const H
 					case KEY_VALUE_ENTER:
 					case KEY_VALUE_ESC:
 					{
-						eProcessResult = HMI_RET_CANCEL;
+						iProcessAction = HMI_DEMO_PROC_CANCEL;
 						break;
 					}
 				}
 			}
 		}
-		else if(HMI_ENGINE_EVENT_DATA == pstEvent->eType)
+		else if(EVENT_TYPE_DATA == pstEvent->iType)
 		{
 			if(EVENT_ID_RTC == pstEvent->iID)
 			{
@@ -124,26 +120,28 @@ HMI_ENGINE_RESULT HMI_DemoRTCNotice_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const H
 					stRTCTime.Year, stRTCTime.Month, stRTCTime.Day,
 					stRTCTime.Hour, stRTCTime.Minute, stRTCTime.Second);
 				SGUI_Notice_Refresh(pstIFObj, s_szRTCNoticeText, 0, SGUI_ICON_INFORMATION);
-				eProcessResult = HMI_RET_NOACTION;
-
 			}
 		}
 	}
-	else
+	if(NULL != piActionID)
 	{
-		eProcessResult = HMI_RET_NOACTION;
+		*piActionID = iProcessAction;
 	}
 
 	return eProcessResult;
 }
 
-HMI_ENGINE_RESULT HMI_DemoRTCNotice_PostProcess(SGUI_SCR_DEV* pstIFObj, SGUI_INT iActionResult)
+HMI_ENGINE_RESULT HMI_DemoRTCNotice_PostProcess(SGUI_SCR_DEV* pstIFObj, HMI_ENGINE_RESULT eProcResult, SGUI_INT iActionID)
 {
-	if(HMI_RET_CANCEL == iActionResult)
+	if(HMI_PROCESS_SUCCESSFUL(eProcResult))
 	{
-		SGUI_SDK_EnableRTCInterrupt(false);
-		HMI_GoBack(NULL);
+		if(HMI_DEMO_PROC_CANCEL == iActionID)
+		{
+			SGUI_SDK_EnableRTCInterrupt(false);
+			HMI_GoBack(NULL);
+		}
 	}
+
 	return HMI_RET_NORMAL;
 }
 

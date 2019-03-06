@@ -24,8 +24,8 @@
 static HMI_ENGINE_RESULT	HMI_DemoList_Initialize(SGUI_SCR_DEV* pstIFObj);
 static HMI_ENGINE_RESULT	HMI_DemoList_Prepare(SGUI_SCR_DEV* pstIFObj, const void* pstParameters);
 static HMI_ENGINE_RESULT	HMI_DemoList_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const void* pstParameters);
-static HMI_ENGINE_RESULT	HMI_DemoList_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent);
-static HMI_ENGINE_RESULT	HMI_DemoList_PostProcess(SGUI_SCR_DEV* pstIFObj, SGUI_INT iActionResult);
+static HMI_ENGINE_RESULT	HMI_DemoList_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent, SGUI_INT* piActionID);
+static HMI_ENGINE_RESULT	HMI_DemoList_PostProcess(SGUI_SCR_DEV* pstIFObj, HMI_ENGINE_RESULT eProcResult, SGUI_INT iActionID);
 
 //=======================================================================//
 //= Static variable declaration.									    =//
@@ -130,7 +130,7 @@ HMI_ENGINE_RESULT HMI_DemoList_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const void*
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoList_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent)
+HMI_ENGINE_RESULT HMI_DemoList_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent, SGUI_INT* piActionID)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -139,18 +139,20 @@ HMI_ENGINE_RESULT HMI_DemoList_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EV
 	SGUI_UINT16					uiKeyCode;
 	SGUI_UINT16					uiKeyValue;
 	SGUI_UINT16					uiOptionCode;
-	KEY_PRESS_EVENT*					pstKeyEvent;
+	KEY_PRESS_EVENT*			pstKeyEvent;
+	SGUI_INT					iProcessAction;
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
 	eProcessResult =			HMI_RET_NORMAL;
 	pstKeyEvent =				(KEY_PRESS_EVENT*)pstEvent;
+	iProcessAction =			HMI_DEMO_PROC_NO_ACT;
 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if(pstEvent->eType == HMI_ENGINE_EVENT_ACTION)
+	if(pstEvent->iType == EVENT_TYPE_ACTION)
 	{
 		// Check event is valid.
 		if(SGUI_FALSE == HMI_EVENT_SIZE_CHK(*pstKeyEvent, KEY_PRESS_EVENT))
@@ -167,12 +169,12 @@ HMI_ENGINE_RESULT HMI_DemoList_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EV
 			{
 				case KEY_VALUE_ENTER:
 				{
-					eProcessResult = HMI_RET_CONFIRM;
+					iProcessAction = HMI_DEMO_PROC_CONFIRM;
 					break;
 				}
 				case KEY_VALUE_ESC:
 				{
-					eProcessResult = HMI_RET_CANCEL;
+					iProcessAction = HMI_DEMO_PROC_CANCEL;
 					break;
 				}
 				case KEY_VALUE_UP:
@@ -242,19 +244,24 @@ HMI_ENGINE_RESULT HMI_DemoList_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EV
 			}
 		}
 	}
+	if(NULL != piActionID)
+	{
+		*piActionID = iProcessAction;
+	}
+
 	return eProcessResult;
 }
 
-HMI_ENGINE_RESULT HMI_DemoList_PostProcess(SGUI_SCR_DEV* pstIFObj, SGUI_INT iActionResult)
+HMI_ENGINE_RESULT HMI_DemoList_PostProcess(SGUI_SCR_DEV* pstIFObj, HMI_ENGINE_RESULT eProcResult, SGUI_INT iActionID)
 {
 	uint32_t			uiSelectListIndex;
 	SGUI_List_ITEM*		pstSelectedItem;
 	int32_t				iListItemParameterValue;
 
-	if(HMI_RET_CONFIRM == iActionResult)
+	if(HMI_DEMO_PROC_CONFIRM == iActionID)
 	{
 		uiSelectListIndex = s_stDemoListObject.ControlVariable.SelectIndex;
-		switch(SGUI_List_GetListItemPtr(&s_stDemoListObject, uiSelectListIndex)->Sign)
+		switch(SGUI_List_GetListItemPtr(&s_stDemoListObject, uiSelectListIndex)->ItemID)
 		{
 			case 1:
 			{
@@ -264,36 +271,37 @@ HMI_ENGINE_RESULT HMI_DemoList_PostProcess(SGUI_SCR_DEV* pstIFObj, SGUI_INT iAct
 				if(0 == iListItemParameterValue)
 				{
 					sprintf(s_szNoticeTextBuffer, DEMO_LIST_NOTICE_TEXT_FMT, uiSelectListIndex);
-					HMI_Goto(HMI_SCREEN_ID_DEMO_TEXT_NOTICE, s_szNoticeTextBuffer);
+					HMI_SwitchScreen(HMI_SCREEN_ID_DEMO_TEXT_NOTICE, s_szNoticeTextBuffer);
 				}
 				else
 				{
-					HMI_Goto(HMI_SCREEN_ID_DEMO_RTC_NOTICE, NULL);
+					HMI_SwitchScreen(HMI_SCREEN_ID_DEMO_RTC_NOTICE, NULL);
 				}
 				break;
 			}
 			case 5:
 			{
-				HMI_Goto(HMI_SCREEN_ID_DEMO_VARIABLE_BOX, NULL);
+				HMI_SwitchScreen(HMI_SCREEN_ID_DEMO_VARIABLE_BOX, NULL);
 				break;
 			}
 			case 6:
 			{
-				HMI_Goto(HMI_SCREEN_ID_DEMO_REAL_TIME_GRAPH, NULL);
+				HMI_SwitchScreen(HMI_SCREEN_ID_DEMO_REAL_TIME_GRAPH, NULL);
 				break;
 			}
 			default:
 			{
 				sprintf(s_szNoticeTextBuffer, DEMO_LIST_NOTICE_TEXT_FMT, uiSelectListIndex);
-				HMI_Goto(HMI_SCREEN_ID_DEMO_TEXT_NOTICE, s_szNoticeTextBuffer);
+				HMI_SwitchScreen(HMI_SCREEN_ID_DEMO_TEXT_NOTICE, s_szNoticeTextBuffer);
 				break;
 			}
 		}
 	}
-	else if(HMI_RET_CANCEL == iActionResult)
+	else if(HMI_DEMO_PROC_CANCEL == iActionID)
 	{
 		HMI_GoBack(NULL);
 	}
+
 	return HMI_RET_NORMAL;
 }
 
