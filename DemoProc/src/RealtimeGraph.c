@@ -56,7 +56,7 @@ HMI_ENGINE_RESULT HMI_DemoRealGraph_Prepare(SGUI_SCR_DEV* pstIFObj, const void* 
 	// Paint frame.
 	SGUI_Basic_DrawRectangle(pstIFObj, 0, 0, RECT_WIDTH(pstIFObj->stSize), RECT_HEIGHT(pstIFObj->stSize), SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
 	// Update screen display.
-	SGUI_RealtimeGraph_Refresh(pstIFObj, &s_stRealtimeGraph);
+	SGUI_RealtimeGraph_Repaint(pstIFObj, &s_stRealtimeGraph);
 	// Start dummy heart-beat timer.
 	SGUI_SDK_ConfigHearBeatTimer(SDK_DEFAULT_HEART_BEAT_INTERVAL_MS);
 
@@ -88,7 +88,7 @@ HMI_ENGINE_RESULT HMI_DemoRealGraph_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const 
 	stTextDataArea.PosX = 0;
 	stTextDataArea.PosY = 0;
 	SGUI_Text_DrawSingleLineText(pstIFObj, szTextBuffer, SGUI_FONT_SIZE_H8, &stTextDisplayArea, &stTextDataArea, SGUI_DRAW_NORMAL);
-	SGUI_RealtimeGraph_Refresh(pstIFObj, &s_stRealtimeGraph);
+	SGUI_RealtimeGraph_Repaint(pstIFObj, &s_stRealtimeGraph);
 	return HMI_RET_NORMAL;
 }
 

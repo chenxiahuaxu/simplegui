@@ -79,7 +79,7 @@ typedef enum
 //= Public function declaration.									    =//
 //=======================================================================//
 void			SGUI_IntegerVariableBox_Refresh(SGUI_SCR_DEV* pstIFObj, SGUI_INT_VARBOX_STRUCT* pstValue, SGUI_VARBOX_ALIG eAlignment, SGUI_DRAW_MODE eMode);
-void			SGUI_TextVariableBox_Refresh(SGUI_SCR_DEV* pstIFObj, SGUI_TEXT_VARBOX_STRUCT* pstTextValue, SGUI_DRAW_MODE eMode);
+void			SGUI_TextVariableBox_Pepaint(SGUI_SCR_DEV* pstIFObj, SGUI_TEXT_VARBOX_STRUCT* pstTextValue, SGUI_DRAW_MODE eMode);
 void			SGUI_TextVariableBox_ChangeCharacter(SGUI_SCR_DEV* pstIFObj, SGUI_TEXT_VARBOX_STRUCT* pstTextValue, SGUI_DRAW_MODE eMode, SGUI_UINT uiCharacterSet, SGUI_TEXT_VARBOX_OPT eOpt);
 
 

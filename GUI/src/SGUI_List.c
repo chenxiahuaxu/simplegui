@@ -54,7 +54,7 @@ static void		SGUI_List_DrawItem(SGUI_SCR_DEV* pstIFObj, SGUI_List_STRUCT* pstLis
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_List_InitializeListData(SGUI_List_STRUCT* pstList)
+void SGUI_List_Initialize(SGUI_List_STRUCT* pstList)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -157,7 +157,7 @@ void SGUI_List_RefreshListItems(SGUI_SCR_DEV* pstIFObj, SGUI_List_STRUCT* pstLis
 										LIST_ITEM_RECT_WIDTH(pstListData->Rect), pstListControl->VisibleItemsAreaHeight, SGUI_COLOR_BKGCLR, SGUI_COLOR_BKGCLR);
 			// Refresh scroll bar
 			pstSubElement->ScrollBar.Data.Index = pstListControl->PageStartIndex;
-			SGUI_ScrollBar_Refresh(pstIFObj, &(pstSubElement->ScrollBar));
+			SGUI_ScrollBar_Repaint(pstIFObj, &(pstSubElement->ScrollBar));
 			// Draw all visible items.
 			while((uiCurrentItemIndex < pstListControl->PageStartIndex+pstListControl->VisibleItemsNum) && (uiCurrentItemIndex < pstListData->Count))
 			{
@@ -181,7 +181,7 @@ void SGUI_List_RefreshListItems(SGUI_SCR_DEV* pstIFObj, SGUI_List_STRUCT* pstLis
 /** Notice:			This function will refresh all list display on		**/
 /**					screen, include edge, items, title and scrollbar.	**/
 /*************************************************************************/
-void SGUI_List_Refresh(SGUI_SCR_DEV* pstIFObj, SGUI_List_STRUCT* pstList)
+void SGUI_List_Repaint(SGUI_SCR_DEV* pstIFObj, SGUI_List_STRUCT* pstList)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/

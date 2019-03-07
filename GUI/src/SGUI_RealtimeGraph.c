@@ -87,7 +87,7 @@ void SGUI_RealtimeGraph_Initialize(SGUI_RTGRAPH* pstRTGraph)
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_RealtimeGraph_Refresh(SGUI_SCR_DEV* pstIFObj, SGUI_RTGRAPH* pstRTGraph)
+void SGUI_RealtimeGraph_Repaint(SGUI_SCR_DEV* pstIFObj, SGUI_RTGRAPH* pstRTGraph)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/

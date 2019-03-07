@@ -80,8 +80,8 @@ typedef struct
 //=======================================================================//
 //= Public function declaration.									    =//
 //=======================================================================//
-void			SGUI_List_InitializeListData(SGUI_List_STRUCT* pstList);
-void			SGUI_List_Refresh(SGUI_SCR_DEV* pstIFObj, SGUI_List_STRUCT* pstList);
+void			SGUI_List_Initialize(SGUI_List_STRUCT* pstList);
+void			SGUI_List_Repaint(SGUI_SCR_DEV* pstIFObj, SGUI_List_STRUCT* pstList);
 void			SGUI_List_SelectUpItem(SGUI_SCR_DEV* pstIFObj, SGUI_List_STRUCT* pstList);
 void			SGUI_List_SelectDownItem(SGUI_SCR_DEV* pstIFObj, SGUI_List_STRUCT* pstList);
 void			SGUI_List_SetListItemValue(SGUI_SCR_DEV* pstIFObj, SGUI_List_STRUCT* pstList, SGUI_INDEX iItemIndex, SGUI_INT32 iSetValid, SGUI_INT32 iSetDecimal);

@@ -147,9 +147,9 @@ void SGUI_Basic_ClearScreen(SGUI_SCR_DEV* pstIFObj)
     if(NULL != pstIFObj)
 	{
 		/* Clear screen. */
-        if((NULL != pstIFObj->fnClearScreen) && (NULL != pstIFObj->fnRefreshScreen))
+        if((NULL != pstIFObj->fnClear) && (NULL != pstIFObj->fnSyncBuffer))
 		{
-			pstIFObj->fnClearScreen();
+			pstIFObj->fnClear();
 		}
 		else
 		{

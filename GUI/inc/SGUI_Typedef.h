@@ -140,13 +140,13 @@ typedef struct
     //Engine & device initialize function.
     SGUI_FN_IF_INITIALIZE				fnInitialize;
     //Clear screen function.
-    SGUI_FN_IF_CLEAR					fnClearScreen;
+    SGUI_FN_IF_CLEAR					fnClear;
     //Set pixel value function.
     SGUI_FN_IF_SET_POINT				fnSetPixel;
     //Get pixel value function.
     SGUI_FN_IF_GET_POINT				fnGetPixel;
-    // Refresh screen display.
-    SGUI_FN_IF_REFRESH					fnRefreshScreen;
+    // Sync display buffer data to screen device.
+    SGUI_FN_IF_REFRESH					fnSyncBuffer;
 }SGUI_SCR_DEV;
 
 #endif // _INCLUDE_GUI_TYPEDEF_H_

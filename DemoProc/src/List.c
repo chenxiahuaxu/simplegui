@@ -107,7 +107,7 @@ HMI_ENGINE_RESULT HMI_DemoList_Initialize(SGUI_SCR_DEV* pstIFObj)
 #endif
 
      //Initialize list object.
-	SGUI_List_InitializeListData(&s_stDemoListObject);
+	SGUI_List_Initialize(&s_stDemoListObject);
 
 	return HMI_RET_NORMAL;
 }
@@ -117,7 +117,7 @@ HMI_ENGINE_RESULT HMI_DemoList_Prepare (SGUI_SCR_DEV* pstIFObj, const void* pstP
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	SGUI_List_Refresh(pstIFObj, &s_stDemoListObject);
+	SGUI_List_Repaint(pstIFObj, &s_stDemoListObject);
 	return HMI_RET_NORMAL;
 }
 
@@ -126,7 +126,7 @@ HMI_ENGINE_RESULT HMI_DemoList_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const void*
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	SGUI_List_Refresh(pstIFObj, &s_stDemoListObject);
+	SGUI_List_Repaint(pstIFObj, &s_stDemoListObject);
 	return HMI_RET_NORMAL;
 }
 
@@ -215,25 +215,25 @@ HMI_ENGINE_RESULT HMI_DemoList_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EV
 				case KEY_VALUE_F8:
 				{
 					SGUI_List_RemoveItem(&s_stDemoListObject, s_stDemoListObject.ControlVariable.SelectIndex);
-					SGUI_List_Refresh(pstIFObj, &s_stDemoListObject);
+					SGUI_List_Repaint(pstIFObj, &s_stDemoListObject);
 					break;
 				}
 				case KEY_VALUE_F9:	// Insert to head.
 				{
 					SGUI_List_InsertItem(&s_stDemoListObject, &s_arrstAppendListItems[0], 0);
-					SGUI_List_Refresh(pstIFObj, &s_stDemoListObject);
+					SGUI_List_Repaint(pstIFObj, &s_stDemoListObject);
 					break;
 				}
 				case KEY_VALUE_F10:	// Insert to intermediate.
 				{
 					SGUI_List_InsertItem(&s_stDemoListObject, &s_arrstAppendListItems[1], 5);
-					SGUI_List_Refresh(pstIFObj, &s_stDemoListObject);
+					SGUI_List_Repaint(pstIFObj, &s_stDemoListObject);
 					break;
 				}
 				case KEY_VALUE_F11:	// Insert to end.
 				{
 					SGUI_List_InsertItem(&s_stDemoListObject, &s_arrstAppendListItems[2], s_stDemoListObject.Data.Count);
-					SGUI_List_Refresh(pstIFObj, &s_stDemoListObject);
+					SGUI_List_Repaint(pstIFObj, &s_stDemoListObject);
 					break;
 				}
 #endif

@@ -206,7 +206,7 @@ void SGUI_TextVariableBox_UpdateCharacter(SGUI_SCR_DEV* pstIFObj, SGUI_TEXT_VARB
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_TextVariableBox_Refresh(SGUI_SCR_DEV* pstIFObj, SGUI_TEXT_VARBOX_STRUCT* pstTextValue, SGUI_DRAW_MODE eMode)
+void SGUI_TextVariableBox_Pepaint(SGUI_SCR_DEV* pstIFObj, SGUI_TEXT_VARBOX_STRUCT* pstTextValue, SGUI_DRAW_MODE eMode)
 {
 
 	/*----------------------------------*/

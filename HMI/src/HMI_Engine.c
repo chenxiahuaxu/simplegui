@@ -128,7 +128,7 @@ HMI_ENGINE_RESULT HMI_StartEngine(const void* pstParameters)
 				if(NULL != pstStartScreen->pstActions->Prepare)
 				{
 					eProcessResult = pstStartScreen->pstActions->Prepare(g_pstActivedEngineObject->Interface, pstParameters);
-					g_pstActivedEngineObject->Interface->fnRefreshScreen();
+					g_pstActivedEngineObject->Interface->fnSyncBuffer();
 				}
 			}
 		}
@@ -195,9 +195,9 @@ HMI_ENGINE_RESULT HMI_ProcessEvent(const HMI_EVENT_BASE* pstEvent)
 		}
 		*/
 		if( (NULL != g_pstActivedEngineObject->Interface) &&
-			(NULL != g_pstActivedEngineObject->Interface->fnRefreshScreen))
+			(NULL != g_pstActivedEngineObject->Interface->fnSyncBuffer))
 		{
-			g_pstActivedEngineObject->Interface->fnRefreshScreen();
+			g_pstActivedEngineObject->Interface->fnSyncBuffer();
 		}
     }
     else

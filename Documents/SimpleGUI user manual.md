@@ -32,13 +32,13 @@ typedef struct
     //Engine & device initialize function.
     SGUI_FN_IF_INITIALIZE       fnInitialize;
     //Clear screen function.
-    SGUI_FN_IF_CLEAR            fnClearScreen;
+    SGUI_FN_IF_CLEAR            fnClear;
     //Set pixel value function.
     SGUI_FN_IF_SET_POINT        fnSetPixel;
     //Get pixel value function.
     SGUI_FN_IF_GET_POINT        fnGetPixel;
     // Refresh screen display.
-    SGUI_FN_IF_REFRESH          fnRefreshScreen;
+    SGUI_FN_IF_REFRESH          fnSyncBuffer;
 }SGUI_SCR_DEV;
 ```
 &emsp;&emsp;此数据结构的定义位于SGUI_Typedef.h文件中，包含若干函数指针，用户需要声明一个此类型的结构体，然后按照结构体中函数指针的数据类型设计和实现相应功能的设备驱动函数，并将对应的函数指针注册到结构体实例，然后在调用SimpleGUI绘图函数时，将该结构体的指针作为参数传入函数（通常是参数表的第一个参数）。  
@@ -48,17 +48,17 @@ typedef struct
 |stSize|保存屏幕设备的现实尺寸，单位为像素。|-|-|  
 |arrBmpDataBuffer|字节数组，用于在位图绘制（包括文字绘制）时读取位图数据。|-|-| 
 |fnInitialize|设备初始化，通常由HMI部分调用。|void|SGUI_INT|  
-|fnClearScreen|清除屏幕显示，如果使用了显示缓存，同时清除缓存。|void|void|  
+|fnClear|清除屏幕显示，如果使用了显示缓存，同时清除缓存。|void|void|  
 |fnSetPixel|设定像素值，0为灭1为亮。|SGUI_INT, SGUI_INT, SGUI_INT|void|  
 |fnGetPixel|读取像素值，0为灭1为亮。|SGUI_INT, SGUI_INT|SGUI_INT| 
-|fnRefreshScreen|更新屏幕显示，通常指将显示缓存的数据同步到设备。|void|void|  
+|fnSyncBuffer|更新屏幕显示，通常指将显示缓存的数据同步到设备。|void|void|  
 
 &emsp;&emsp;具体的数据类型定义请参考SGUI_Typedef.h文件的内容。  
 &emsp;&emsp;在使用SimpleGUI之前，首先需要您实现您目标平台上对屏幕设备的操作函数。实现内容至少包括设备初始化、读像素和写像素三个接口。  
 &emsp;&emsp;如果不考虑执行效率，以上三个函数实现后就，SimpleGUi就可以工作了，当然，如果想更有效的绘图，还需根据驱动程序的逻辑结构、缓存的数据结构、硬件特性等因素实现其他的接口函数，如清除屏幕、更新屏幕、水平线绘制、垂直线绘制等，如果使用了显示缓存，那么还有必要实现缓存同步函数，以实现将缓存内容同步到屏幕的功能。  
 &emsp;&emsp;以下为演示例程中对该结构体实例的声明和使用。  
 ```c++
-SGUI_SCR_DEV				g_stDeviceInterface;
+SGUI_SCR_DEV g_stDeviceInterface;
 
 SGUI_SystemIF_MemorySet(&g_stDeviceInterface, 0x00, sizeof(SGUI_SCR_DEV));
 /* Initialize display size. */
@@ -96,7 +96,7 @@ g_stDeviceInterface.stActions.fnRefreshScreen = OLED_RefreshScreen;
 
 &emsp;&emsp;以上文件均提供同名的头文件(.h)，可以直接包含和调用。 
 
-&emsp;&emsp;所有的控件的实例在显示和操作中，均使用一个结构体进行数据和参数的保存，同时，所有的控件均提供画面更新接口(SGUI_XXX_Refresh函数)，用以在任何需要的时候恢复控件在屏幕设备上的显示。此方法的设计意在在绝大多数情况下可以取代图层的概念。
+&emsp;&emsp;所有的控件的实例在显示和操作中，均使用一个结构体进行数据和参数的保存，同时，所有的控件均提供画面更新接口(SGUI_XXX_Repaint函数)，用以在任何需要的时候恢复控件在屏幕设备上的显示。此方法的设计意在在绝大多数情况下可以取代图层的概念。
 
 ### 2.4. 依赖关系  
 

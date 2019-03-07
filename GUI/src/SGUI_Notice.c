@@ -52,7 +52,7 @@
 /** Return:			Remaining text height display.						**/
 /** Notice:			None.												**/
 /*************************************************************************/
-SGUI_SIZE SGUI_Notice_Refresh(SGUI_SCR_DEV* pstIFObj, SGUI_CSZSTR szNoticeText, SGUI_INT uiTextOffset, SGUI_NOTICE_ICON_IDX eIcon)
+SGUI_SIZE SGUI_Notice_Repaint(SGUI_SCR_DEV* pstIFObj, SGUI_CSZSTR szNoticeText, SGUI_INT uiTextOffset, SGUI_NOTICE_ICON_IDX eIcon)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/

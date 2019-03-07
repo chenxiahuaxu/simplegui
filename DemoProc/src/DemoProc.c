@@ -77,17 +77,17 @@ HMI_ENGINE_RESULT InitializeEngine(void)
 	/* Initialize interface object. */
 	g_stDeviceInterface.fnSetPixel = SGUI_SDK_SetPixel;
 	g_stDeviceInterface.fnGetPixel = SGUI_SDK_GetPixel;
-	g_stDeviceInterface.fnClearScreen = SGUI_SDK_ClearDisplay;
-	g_stDeviceInterface.fnRefreshScreen = SGUI_SDK_RefreshDisplay;
+	g_stDeviceInterface.fnClear = SGUI_SDK_ClearDisplay;
+	g_stDeviceInterface.fnSyncBuffer = SGUI_SDK_RefreshDisplay;
 #else
 	/* Initialize display size. */
 	g_stDeviceInterface.stSize.Width = 128;
 	g_stDeviceInterface.stSize.Height = 64;
 	/* Initialize interface object. */
-	g_stDeviceInterface.stActions.fnSetPixel = OLED_SetPixel;
-	g_stDeviceInterface.stActions.fnGetPixel = OLED_GetPixel;
-	g_stDeviceInterface.stActions.fnClearScreen = OLED_ClearDisplay;
-	g_stDeviceInterface.stActions.fnRefreshScreen = OLED_RefreshScreen;
+	g_stDeviceInterface.fnSetPixel = OLED_SetPixel;
+	g_stDeviceInterface.fnGetPixel = OLED_GetPixel;
+	g_stDeviceInterface.fnClear = OLED_ClearDisplay;
+	g_stDeviceInterface.fnSyncBuffer = OLED_RefreshScreen;
 #endif
 
 	do

@@ -43,6 +43,6 @@ typedef struct
 //= Public function declaration.									    =//
 //=======================================================================//
 void			SGUI_RealtimeGraph_Initialize(SGUI_RTGRAPH* pstRTGraph);
-void			SGUI_RealtimeGraph_Refresh(SGUI_SCR_DEV* pstIFObj, SGUI_RTGRAPH* pstRTGraph);
+void			SGUI_RealtimeGraph_Repaint(SGUI_SCR_DEV* pstIFObj, SGUI_RTGRAPH* pstRTGraph);
 void			SGUI_RealtimeGraph_AppendValue(SGUI_SCR_DEV* pstIFObj, SGUI_RTGRAPH* pstRTGraph, SGUI_INT iNewValue);
 #endif // __INCLUDE_GUI_REAL_GRAPH_H__

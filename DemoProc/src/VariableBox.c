@@ -89,7 +89,7 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_Prepare(SGUI_SCR_DEV* pstIFObj, const void
 	s_szFrameTitle = s_szDefaultFrameTitle;
 	HMI_DemoVariableBox_DrawFrame(pstIFObj, (SGUI_SZSTR)s_szFrameTitle);
 	// Show notice
-	SGUI_Notice_Refresh(pstIFObj, s_szHelpNoticeText, 0, SGUI_ICON_INFORMATION);
+	SGUI_Notice_Repaint(pstIFObj, s_szHelpNoticeText, 0, SGUI_ICON_INFORMATION);
 	// Start RTC
 	SGUI_SDK_EnableRTCInterrupt(true);
 	return HMI_RET_NORMAL;
@@ -107,7 +107,7 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_RefreshScreen(SGUI_SCR_DEV* pstIFObj, cons
     SGUI_IntegerVariableBox_Refresh(pstIFObj, &s_stNumberVariableBox, SGUI_CENTER, (0 == s_uiFocusedFlag)?SGUI_DRAW_REVERSE:SGUI_DRAW_NORMAL);
     // Draw text box
     SGUI_Basic_DrawRectangle(pstIFObj, VARIABLE_BOX_POSX, VARIABLE_BOX_TEXT_POSY, VARIABLE_BOX_WIDTH+4,  g_stFontSize[s_stTextVariableBox.FontSize].Height+6, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
-    SGUI_TextVariableBox_Refresh(pstIFObj, &s_stTextVariableBox, (0 == s_uiFocusedFlag)?SGUI_DRAW_NORMAL:SGUI_DRAW_REVERSE);
+    SGUI_TextVariableBox_Pepaint(pstIFObj, &s_stTextVariableBox, (0 == s_uiFocusedFlag)?SGUI_DRAW_NORMAL:SGUI_DRAW_REVERSE);
 
 	return HMI_RET_NORMAL;
 }
@@ -178,12 +178,12 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const
 					if(0 == s_uiFocusedFlag)
 					{
 						SGUI_IntegerVariableBox_Refresh(pstIFObj, &s_stNumberVariableBox, SGUI_CENTER, SGUI_DRAW_REVERSE);
-						SGUI_TextVariableBox_Refresh(pstIFObj, &s_stTextVariableBox, SGUI_DRAW_NORMAL);
+						SGUI_TextVariableBox_Pepaint(pstIFObj, &s_stTextVariableBox, SGUI_DRAW_NORMAL);
 					}
 					else
 					{
 						SGUI_IntegerVariableBox_Refresh(pstIFObj, &s_stNumberVariableBox, SGUI_CENTER, SGUI_DRAW_NORMAL);
-						SGUI_TextVariableBox_Refresh(pstIFObj, &s_stTextVariableBox, SGUI_DRAW_REVERSE);
+						SGUI_TextVariableBox_Pepaint(pstIFObj, &s_stTextVariableBox, SGUI_DRAW_REVERSE);
 					}
 					break;
 				}
@@ -253,7 +253,7 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const
 						SGUI_IntegerVariableBox_Refresh(pstIFObj, &s_stNumberVariableBox, SGUI_CENTER, SGUI_DRAW_NORMAL);
 						// Draw text box
 						SGUI_Basic_DrawRectangle(pstIFObj, VARIABLE_BOX_POSX, VARIABLE_BOX_TEXT_POSY, VARIABLE_BOX_WIDTH+4, g_stFontSize[s_stTextVariableBox.FontSize].Height+6, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
-						SGUI_TextVariableBox_Refresh(pstIFObj, &s_stTextVariableBox, SGUI_DRAW_REVERSE);
+						SGUI_TextVariableBox_Pepaint(pstIFObj, &s_stTextVariableBox, SGUI_DRAW_REVERSE);
 					}
 					break;
 				}
