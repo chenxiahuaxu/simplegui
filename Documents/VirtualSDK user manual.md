@@ -17,7 +17,11 @@ SimpleGUI Virtual SDK 使用说明
 #### 2.2. 部署wxWidgets
 
 &emsp;&emsp;请访问[wxWidgets下载页面](http://www.wxwidgets.org/downloads/)，选择页面中“Latest Development Release: 3.1.2”或者“Latest Stable Release: 3.0.4”标题下“Binaries”中的“Download windows binaries”链接。
->![02-wxWidgets下载页面](https://images.gitee.com/uploads/images/2019/0117/131820_a6ed6bf6_769424.png)   
+>![02-wxWidgets下载页面](https://images.gitee.com/uploads/images/2019/0117/131820_a6ed6bf6_769424.png)  
+
+&emsp;&emsp;截至SimpleGUI最后一次更新，wxWidgets最新版本为3.0.4(稳定版)和3.1.2(开发版)，请各位根据自己的喜好下载并部署，由于3.0版本和3.1版本链接库的文件名不尽相同，所以SimpleGUI的VirtualSDK也准备了面向3.0版本和3.1版本的工程文件，请对应使用。  
+
+&emsp;&emsp;为避免开发版本中存在的一些潜在问题，影响VirtualSDK的使用，在本说明中，将以wxWidgets的最新稳定版3.0.4为例进行说明。
 
 &emsp;&emsp;在弹出的列表中下载对应的编译器使用的库，本例中使用Codeblocks自带的TDM-GCC 5.1.0本编译器。所以选择下载“MinGW-TDM5.10”下的头文件（Header Files）和开发用库文件（Development Files）。  
 
@@ -75,7 +79,7 @@ SimpleGUI Virtual SDK 使用说明
 |VirtualSDK|Virtual SDK的工程及源码|  
 
 #### 3.2. 编译Virtual SDK工程
-&emsp;&emsp;进入VirtualSDK\Project\CodeBlocks目录下，SimpleGUI.cbp文件夹即为模拟环境的工程文件，使用Code::Blocks打开。如果用户下载的是nosetup（绿色版）的Code::Blocks，需要手动建立关联才能直接用双击的方式打开cbp文件，否则，用户只能先打开Code::Blocks，然后从Code::Blocks中执行打开操作以打开工程文件。  
+&emsp;&emsp;进入VirtualSDK\Project\CodeBlocks目录，此目录中为SimpleGUI的VirtualSDK的工程文件，使用Code::Blocks打开，VirtualSDK_wx30.cbp对应使用wxWidgets的3.0.x版本库，VirtualSDK_wx31.cbp对应使用3.1.x版本库，请根据之前配置的wxWidgets版本选用。如果用户下载的是nosetup（绿色版）的Code::Blocks，需要手动建立关联才能直接用双击的方式打开cbp文件，否则，用户只能先打开Code::Blocks，然后从Code::Blocks中执行打开操作以打开工程文件。  
 &emsp;&emsp;点击工具栏上的编译按钮或按快捷键Ctrl+F9，开始编译模拟环境演示工程。  
 &emsp;&emsp;编译完成，显示无错误和警告，现在点击工具栏上的运行按钮或按快捷键Ctrl+F10就可以看到模拟环境的运行效果了。  
 >![07-编译工程](https://images.gitee.com/uploads/images/2019/0117/131925_defb4a75_769424.png)  
