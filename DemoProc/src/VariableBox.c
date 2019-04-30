@@ -89,9 +89,9 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_Prepare(SGUI_SCR_DEV* pstIFObj, const void
 	s_szFrameTitle = s_szDefaultFrameTitle;
 	HMI_DemoVariableBox_DrawFrame(pstIFObj, (SGUI_SZSTR)s_szFrameTitle);
 	// Show notice
-	SGUI_Notice_Repaint(pstIFObj, s_szHelpNoticeText, 0, SGUI_ICON_INFORMATION);
+	SGUI_Notice_Repaint(pstIFObj, s_szHelpNoticeText, SGUI_FONT_SIZE_H12, 0, SGUI_ICON_INFORMATION);
 	// Start RTC
-	SGUI_SDK_EnableRTCInterrupt(true);
+	RTCTimerEnable(true);
 	return HMI_RET_NORMAL;
 }
 
@@ -160,7 +160,7 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const
         if(0 == s_uiAutoConfirmTimer)
         {
             eProcessResult = HMI_DemoVariableBox_RefreshScreen(pstIFObj, NULL);
-            SGUI_SDK_EnableRTCInterrupt(false);
+            RTCTimerEnable(false);
         }
     }
     else

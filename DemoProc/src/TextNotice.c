@@ -68,13 +68,13 @@ HMI_ENGINE_RESULT HMI_DemoTextNotice_Prepare(SGUI_SCR_DEV* pstIFObj, const void*
 		SGUI_SystemIF_StringLengthCopy(s_szDemoNoticeText, (SGUI_SZSTR)pstParameters, NOTICE_TEXT_BUFFER_SIZE);
 		s_szDemoNoticeText[NOTICE_TEXT_BUFFER_SIZE] = '\0';
 	}
-	SGUI_Notice_Repaint(pstIFObj, s_szDemoNoticeText, 0, SGUI_ICON_INFORMATION);
+	SGUI_Notice_Repaint(pstIFObj, s_szDemoNoticeText, SGUI_FONT_SIZE_H12, 0, SGUI_ICON_INFORMATION);
 	return HMI_RET_NORMAL;
 }
 
 HMI_ENGINE_RESULT HMI_DemoTextNotice_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const void* pstParameters)
 {
-	SGUI_Notice_Repaint(pstIFObj, s_szDemoNoticeText, 0, SGUI_ICON_INFORMATION);
+	SGUI_Notice_Repaint(pstIFObj, s_szDemoNoticeText, SGUI_FONT_SIZE_H12, 0, SGUI_ICON_INFORMATION);
 	return HMI_RET_NORMAL;
 }
 

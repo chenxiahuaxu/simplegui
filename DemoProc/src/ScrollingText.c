@@ -97,7 +97,7 @@ HMI_ENGINE_RESULT HMI_DemoScrollingText_Prepare(SGUI_SCR_DEV* pstIFObj, const vo
 	// Paint frame edge.
 	HMI_DemoScrollingText_DrawFrame(pstIFObj);
 	// Start dummy heart-beat timer.
-	SGUI_SDK_ConfigHearBeatTimer(SDK_DEFAULT_HEART_BEAT_INTERVAL_MS);
+	SysTickTimerEnable(true);
 	return HMI_RET_NORMAL;
 }
 
@@ -202,7 +202,7 @@ HMI_ENGINE_RESULT HMI_DemoScrollingText_PostProcess(SGUI_SCR_DEV* pstIFObj, HMI_
 		if(HMI_DEMO_PROC_CONFIRM == iActionID)
 		{
 			// Stop heart-beat timer.
-			SGUI_SDK_ConfigHearBeatTimer(0);
+			SysTickTimerEnable(false);
 			// Go to main list.
 			HMI_SwitchScreen(HMI_SCREEN_ID_DEMO_LIST, NULL);
 		}

@@ -6,6 +6,7 @@
 #include "SGUI_Typedef.h"
 #include "SGUI_Common.h"
 #include "HMI_Engine.h"
+#include "DemoActions.h"
 #ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
 #include "DemoResource_UTF8.h"
 #include "SDKInterface.h"
@@ -67,6 +68,8 @@ HMI_EVENT_TYPE_DECLARE(DATA_EVENT, DUMMY_DATA_EVENT_DATA);
 #define		HMI_SCREEN_ID_DEMO_VARIABLE_BOX				(1005)
 #define		HMI_SCREEN_ID_DEMO_REAL_TIME_GRAPH			(1006)
 
+#define 	DEMO_HEART_BEAT_INTERVAL_MS					(20)
+
 //=======================================================================//
 //= Public variable declaration.									    =//
 //=======================================================================//
@@ -86,8 +89,15 @@ extern HMI_SCREEN_OBJECT		g_stHMI_DemoRealtimeGraph;
 extern "C"
 {
 #endif /* __cplusplus */
-HMI_ENGINE_RESULT	InitializeEngine(void);
+HMI_ENGINE_RESULT	InitializeHMIEngineObj(void);
 int					DemoMainProcess(void);
+
+bool				SysTickTimerTriggered(void);
+bool				RTCTimerTriggered(void);
+bool				UserEventTriggered(void);
+
+void				SysTickTimerEnable(bool bEnable);
+void				RTCTimerEnable(bool bEnable);
 
 #ifdef __cplusplus
 }

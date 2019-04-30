@@ -48,7 +48,7 @@ HMI_SCREEN_OBJECT       g_stHMIDemo_RTCNotice =			{	HMI_SCREEN_ID_DEMO_RTC_NOTIC
 //=======================================================================//
 HMI_ENGINE_RESULT HMI_DemoRTCNotice_Prepare(SGUI_SCR_DEV* pstIFObj, const void* pstParameters)
 {
-	SGUI_SDK_EnableRTCInterrupt(true);
+	RTCTimerEnable(true);
 	SGUI_SystemIF_MemorySet(s_szRTCNoticeText, 0x00, sizeof(SGUI_CHAR)*(NOTICE_RTC_BUFFER_SIZE+1));
 	HMI_DemoRTCNotice_RefreshScreen(pstIFObj, NULL);
 	return HMI_RET_NORMAL;
@@ -68,7 +68,7 @@ HMI_ENGINE_RESULT HMI_DemoRTCNotice_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const 
 	sprintf(s_szRTCNoticeText, DEMO_RTC_NOTICE_TEXT_FMT,
 				stRTCTime.Year, stRTCTime.Month, stRTCTime.Day,
 				stRTCTime.Hour, stRTCTime.Minute, stRTCTime.Second);
-	SGUI_Notice_Repaint(pstIFObj, s_szRTCNoticeText, 0, SGUI_ICON_INFORMATION);
+	SGUI_Notice_Repaint(pstIFObj, s_szRTCNoticeText, SGUI_FONT_SIZE_H12, 0, SGUI_ICON_INFORMATION);
 	return HMI_RET_NORMAL;
 }
 
@@ -119,7 +119,7 @@ HMI_ENGINE_RESULT HMI_DemoRTCNotice_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const H
 				sprintf(s_szRTCNoticeText, DEMO_RTC_NOTICE_TEXT_FMT,
 					stRTCTime.Year, stRTCTime.Month, stRTCTime.Day,
 					stRTCTime.Hour, stRTCTime.Minute, stRTCTime.Second);
-				SGUI_Notice_Repaint(pstIFObj, s_szRTCNoticeText, 0, SGUI_ICON_INFORMATION);
+				SGUI_Notice_Repaint(pstIFObj, s_szRTCNoticeText, SGUI_FONT_SIZE_H12, 0, SGUI_ICON_INFORMATION);
 			}
 		}
 	}
@@ -137,7 +137,7 @@ HMI_ENGINE_RESULT HMI_DemoRTCNotice_PostProcess(SGUI_SCR_DEV* pstIFObj, HMI_ENGI
 	{
 		if(HMI_DEMO_PROC_CANCEL == iActionID)
 		{
-			SGUI_SDK_EnableRTCInterrupt(false);
+			RTCTimerEnable(false);
 			HMI_GoBack(NULL);
 		}
 	}

@@ -17,6 +17,7 @@
 //=======================================================================//
 #define EventSyncLock()							{s_clsEventSyncCS.Enter();}
 #define EventSyncUnlock()						{s_clsEventSyncCS.Leave();}
+#define SDK_DEFAULT_EVENT_SYNC_TIMEOUT_MS		(500)
 
 //=======================================================================//
 //= Static function declaration.									    =//

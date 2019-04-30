@@ -58,7 +58,7 @@ HMI_ENGINE_RESULT HMI_DemoRealGraph_Prepare(SGUI_SCR_DEV* pstIFObj, const void* 
 	// Update screen display.
 	SGUI_RealtimeGraph_Repaint(pstIFObj, &s_stRealtimeGraph);
 	// Start dummy heart-beat timer.
-	SGUI_SDK_ConfigHearBeatTimer(SDK_DEFAULT_HEART_BEAT_INTERVAL_MS);
+	SysTickTimerEnable(true);
 
 	return HMI_RET_NORMAL;
 }
@@ -177,7 +177,7 @@ HMI_ENGINE_RESULT HMI_DemoRealGraph_PostProcess(SGUI_SCR_DEV* pstIFObj, HMI_ENGI
 		if(HMI_DEMO_PROC_CANCEL == iActionID)
 		{
 			// Stop heart-beat timer.
-			SGUI_SDK_ConfigHearBeatTimer(0);
+			SysTickTimerEnable(false);
 			// Go back to last screen.
 			HMI_GoBack(NULL);
 		}

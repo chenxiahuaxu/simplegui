@@ -11,6 +11,8 @@
 #include <wx/app.h>
 #include "LCDFrame.h"
 #include "SDKInterface.h"
+// Only used in demo process.
+#include "DemoActions.h"
 
 //=======================================================================//
 //= User Macro definition.											    =//
