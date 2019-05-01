@@ -9,11 +9,10 @@
 /* Screen 1: Multiple lines text. */
 /* Start screen scroll text. */
 #define     DEMO_START_NOTICE           (\
-"  欢迎来到SimpleGUI演示工程，本工程用于演示SimpleGUI各API的显示效果、\
-使用方法以及运作机理，在演示过程中，您可以通过串口发送特定字节模拟键盘\
-输入与SimpleGUI演示工程进行交互，以实现与模拟器中类似的效果。每字节高\
-四位为控制键码，低四位为主键码。\n\
-  使用串口发送0x04(空格)开始演示，串口配置为115200/N/8/1。"\
+"  欢迎来到SimpleGUI演示工程，本工程用于演示GUI绘图及HMI模型交互的使用方法\
+以及运作机理。演示程序使用串口模拟键盘操作，串口数格式为115200/N/8/1，每次\
+发送两字节模拟一次键盘动作，键码请参考DemoActions.h文件。\n\
+  发送空格键码(0x0020)开始演示。"\
 )
 
 /* Screen 2: List*/
@@ -42,7 +41,7 @@
 
 /* Screen 3: Text notice box. */
 /* List notice text format. */
-#define     DEMO_LIST_NOTICE_TEXT_FMT   ("选择列表项%lu.")
+#define     DEMO_LIST_NOTICE_TEXT_FMT   ("选择列表项%u.")
 
 /* Screen 4: RTC notice box. */
 #define     DEMO_RTC_NOTICE_TEXT_FMT    ("系统时间\n%04u-%02u-%02u\n%02u:%02u:%02u")

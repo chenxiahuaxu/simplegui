@@ -66,10 +66,6 @@
 			<Add option="-D__WXMSW__" />
 			<Add option="-DWXUSINGDLL" />
 			<Add option="-DwxUSE_UNICODE" />
-			<Add option="-D_SIMPLE_GUI_ENABLE_ICONV_GB2312_" />
-			<Add option="-D_SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_" />
-			<Add option="-D_SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_" />
-			<Add option="-D_SIMPLE_GUI_ENABLE_BASIC_FONT_" />
 			<Add directory="$(#wxBin)/include" />
 			<Add directory="$(#wxBin)/lib/gcc_dll/mswu" />
 			<Add directory="../../Application/inc" />
@@ -93,7 +89,11 @@
 			<Add option="-mthreads" />
 			<Add directory="$(#wxBin)/lib/gcc_dll" />
 		</Linker>
+		<Unit filename="../../../DemoProc/inc/DemoActions.h" />
 		<Unit filename="../../../DemoProc/inc/DemoProc.h" />
+		<Unit filename="../../../DemoProc/inc/DemoResource_ASCII.h" />
+		<Unit filename="../../../DemoProc/inc/DemoResource_GB2312.h" />
+		<Unit filename="../../../DemoProc/inc/DemoResource_UTF8.h" />
 		<Unit filename="../../../DemoProc/src/DemoProc.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -117,6 +117,7 @@
 		</Unit>
 		<Unit filename="../../../GUI/inc/SGUI_Basic.h" />
 		<Unit filename="../../../GUI/inc/SGUI_Common.h" />
+		<Unit filename="../../../GUI/inc/SGUI_Config.h" />
 		<Unit filename="../../../GUI/inc/SGUI_FlashData.h" />
 		<Unit filename="../../../GUI/inc/SGUI_Interface.h" />
 		<Unit filename="../../../GUI/inc/SGUI_List.h" />
@@ -172,7 +173,6 @@
 		<Unit filename="../../Controls/inc/wxLCDBase.h" />
 		<Unit filename="../../Controls/src/wxLCD.cpp" />
 		<Unit filename="../../Controls/src/wxLCDBase.cpp" />
-		<Unit filename="../../Demo/inc/DemoResource_UTF8.h" />
 		<Unit filename="../../Events/inc/CustomEvents.h" />
 		<Unit filename="../../Events/src/CustomEvents.cpp" />
 		<Unit filename="../../Frame/inc/LCDFrame.h" />

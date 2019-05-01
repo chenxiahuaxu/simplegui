@@ -91,6 +91,9 @@
 		</Linker>
 		<Unit filename="../../../DemoProc/inc/DemoActions.h" />
 		<Unit filename="../../../DemoProc/inc/DemoProc.h" />
+		<Unit filename="../../../DemoProc/inc/DemoResource_ASCII.h" />
+		<Unit filename="../../../DemoProc/inc/DemoResource_GB2312.h" />
+		<Unit filename="../../../DemoProc/inc/DemoResource_UTF8.h" />
 		<Unit filename="../../../DemoProc/src/DemoProc.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -170,7 +173,6 @@
 		<Unit filename="../../Controls/inc/wxLCDBase.h" />
 		<Unit filename="../../Controls/src/wxLCD.cpp" />
 		<Unit filename="../../Controls/src/wxLCDBase.cpp" />
-		<Unit filename="../../Demo/inc/DemoResource_UTF8.h" />
 		<Unit filename="../../Events/inc/CustomEvents.h" />
 		<Unit filename="../../Events/src/CustomEvents.cpp" />
 		<Unit filename="../../Frame/inc/LCDFrame.h" />

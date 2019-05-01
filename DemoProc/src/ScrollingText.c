@@ -27,6 +27,12 @@
 #define		HMI_TEXT_DEMO_FRAME_TEXT_WIDTH(SCR_SIZE)	(((SCR_SIZE).Width)-(HMI_TEXT_DEMO_FRAMR_EDGE_WIDTH+1)*2)
 #define		HMI_TEXT_DEMO_FRAME_TEXT_HEIGHT(SCR_SIZE)	(((SCR_SIZE).Height)-(HMI_TEXT_DEMO_FRAMR_EDGE_WIDTH+1)*2)
 
+#ifdef _SIMPLE_GUI_NON_ASCII_
+#define SCROLL_TEXT_FONT_SIZE							(SGUI_FONT_SIZE_H12)
+#else
+#define SCROLL_TEXT_FONT_SIZE							(SGUI_FONT_SIZE_H8)
+#endif // _SIMPLE_GUI_NON_ASCII_
+
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
@@ -76,7 +82,7 @@ HMI_SCREEN_OBJECT       g_stHMIDemo_ScrollingText =		{
 HMI_ENGINE_RESULT HMI_DemoScrollingText_Initialize(SGUI_SCR_DEV* Interface)
 {
 	s_iTextOffset = HMI_TEXT_DEMO_FRAME_TEXT_HEIGHT(Interface->stSize);
-	s_iTextHeight = SGUI_Text_GetMultiLineTextLines(s_szDemoText, (HMI_TEXT_DEMO_FRAME_TEXT_WIDTH(Interface->stSize)/g_stFontSize[SGUI_FONT_SIZE_H12].Width))*g_stFontSize[SGUI_FONT_SIZE_H12].Height;
+	s_iTextHeight = SGUI_Text_GetMultiLineTextLines(s_szDemoText, (HMI_TEXT_DEMO_FRAME_TEXT_WIDTH(Interface->stSize)/g_stFontSize[SCROLL_TEXT_FONT_SIZE].Width))*g_stFontSize[SCROLL_TEXT_FONT_SIZE].Height;
 	s_stTextDisplayArea.PosX = HMI_TEXT_DEMO_FRAME_TEXT_POSX;
 	s_stTextDisplayArea.PosY = HMI_TEXT_DEMO_FRAME_TEXT_POSY;
 	s_stTextDisplayArea.Width = HMI_TEXT_DEMO_FRAME_TEXT_WIDTH(Interface->stSize);
@@ -112,7 +118,7 @@ HMI_ENGINE_RESULT HMI_DemoScrollingText_Prepare(SGUI_SCR_DEV* pstIFObj, const vo
 HMI_ENGINE_RESULT HMI_DemoScrollingText_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const void* pstParameters)
 {
 	HMI_DemoScrollingText_DrawFrame(pstIFObj);
-	SGUI_Text_DrawMultipleLinesText(pstIFObj, s_szDemoText, SGUI_FONT_SIZE_H12, &s_stTextDisplayArea, s_iTextOffset, SGUI_DRAW_NORMAL);
+	SGUI_Text_DrawMultipleLinesText(pstIFObj, s_szDemoText, SCROLL_TEXT_FONT_SIZE, &s_stTextDisplayArea, s_iTextOffset, SGUI_DRAW_NORMAL);
 	return HMI_RET_NORMAL;
 }
 
@@ -161,7 +167,7 @@ HMI_ENGINE_RESULT HMI_DemoScrollingText_ProcessEvent(SGUI_SCR_DEV* pstIFObj, con
 		}
 		case EVENT_ID_TIMER:
 		{
-			SGUI_Text_DrawMultipleLinesText(pstIFObj, s_szDemoText, SGUI_FONT_SIZE_H12, &s_stTextDisplayArea, s_iTextOffset, SGUI_DRAW_NORMAL);
+			SGUI_Text_DrawMultipleLinesText(pstIFObj, s_szDemoText, SCROLL_TEXT_FONT_SIZE, &s_stTextDisplayArea, s_iTextOffset, SGUI_DRAW_NORMAL);
 			if(s_iTextOffset + s_iTextHeight == 0)
 			{
 				s_iTextOffset = HMI_TEXT_DEMO_FRAME_TEXT_HEIGHT(pstIFObj->stSize);

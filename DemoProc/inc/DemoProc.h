@@ -3,18 +3,25 @@
 //=======================================================================//
 //= Include files.													    =//
 //=======================================================================//
+#include <stdlib.h>
+#include <stdio.h>
 #include "SGUI_Typedef.h"
 #include "SGUI_Common.h"
 #include "HMI_Engine.h"
 #include "DemoActions.h"
-#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
+#ifdef _SIMPLE_GUI_NON_ASCII_
+#ifdef _SIMPLE_GUI_ENCODE_TEXT_
 #include "DemoResource_UTF8.h"
-#include "SDKInterface.h"
 #else
 #include "DemoResource_GB2312.h"
+#endif // _SIMPLE_GUI_ENCODE_TEXT_
+#else
+#include "DemoResource_ASCII.h"
 #endif
-#include <stdlib.h>
-#include <stdio.h>
+#ifdef _SIMPLE_GUI_IN_VIRTUAL_SDK_
+#include "SDKInterface.h"
+#endif
+
 //=======================================================================//
 //= Data type definition.											    =//
 //=======================================================================//

@@ -30,15 +30,11 @@
 //=======================================================================//
 //= Public function declaration.									    =//
 //=======================================================================//
-#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
- #ifdef _SIMPLE_GUI_ENABLE_ICONV_GB2312_
+#ifdef _SIMPLE_GUI_ENCODE_TEXT_
 // Only used when running in simulated environment and text encode need convert to GB2312.
 SGUI_SZSTR				SGUI_SystemIF_EncodeConvert(SGUI_CSZSTR szSourceEncode, SGUI_SZSTR szDestinationEncode, SGUI_SZSTR szSource);
   #define		SGUI_ENCODE_BUFFER_SIZE			(512)
-  #define		ENCODE(S)						(SGUI_SystemIF_EncodeConvert("UTF-8", "GB2312", (char *)S))
- #else
-
- #endif
+  #define		ENCODE(S)						(SGUI_SystemIF_EncodeConvert(_SIMPLE_GUI_ENCODE_TEXT_SRC_, _SIMPLE_GUI_ENCODE_TEXT_DEST_, (char *)S))
 #else
  #define		ENCODE(S)						(S)
 #endif

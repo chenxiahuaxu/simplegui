@@ -11,24 +11,24 @@
 #include "SGUI_FlashData.h"
 
 // SDK string encode convert library interface
-#ifdef _SIMPLE_GUI_ENABLE_ICONV_GB2312_
- #ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
+#ifdef _SIMPLE_GUI_ENCODE_TEXT_
+ #ifdef _SIMPLE_GUI_IN_VIRTUAL_SDK_
   #include <iconv.h>
  #endif
 #endif
 
 // System RTC interface switch.
-#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
+#ifdef _SIMPLE_GUI_IN_VIRTUAL_SDK_
 #include <windows.h>
 #include <time.h>
 #else
 	// Include platform RTC interface declare here.
-//#include "RTC.h"
+#include "RTC.h"
 #endif
 
 // Dynamic memory operation switch.
 #ifdef _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
- #ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
+ #ifdef _SIMPLE_GUI_IN_VIRTUAL_SDK_
   #include <malloc.h>
   #include <string.h>
  #endif
@@ -40,8 +40,8 @@
 //=======================================================================//
 //= Static variable declaration.									    =//
 //=======================================================================//
-#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
- #ifdef _SIMPLE_GUI_ENABLE_ICONV_GB2312_
+#ifdef _SIMPLE_GUI_IN_VIRTUAL_SDK_
+ #ifdef _SIMPLE_GUI_ENCODE_TEXT_
   static SGUI_CHAR	g_arrcEncodeBuffer[SGUI_ENCODE_BUFFER_SIZE];
  #endif
 #endif
@@ -49,7 +49,7 @@
 //=======================================================================//
 //= Function define.										            =//
 //=======================================================================//
-#ifdef _SIMPLE_GUI_ENABLE_ICONV_GB2312_
+#ifdef _SIMPLE_GUI_ENCODE_TEXT_
 /*************************************************************************/
 /** Function Name:	SGUI_SystemIF_EncodeConvert							**/
 /** Purpose:		Convert string encode.								**/
@@ -118,7 +118,7 @@ void SGUI_SystemIF_GetNowTime(SGUI_TIME* pstTime)
 	time_t						rawtime;
 	struct tm*					timeinfo;
 #else
-#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
+#ifdef _SIMPLE_GUI_IN_VIRTUAL_SDK_
 	time_t						rawtime;
 	struct tm*					timeinfo;
 #else
@@ -145,7 +145,7 @@ void SGUI_SystemIF_GetNowTime(SGUI_TIME* pstTime)
 		}
 #else
 		// Add RTC Interface call of the platform.
-#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
+#ifdef _SIMPLE_GUI_IN_VIRTUAL_SDK_
 		time(&rawtime);
 		timeinfo = localtime(&rawtime);
 		if(NULL != timeinfo)
@@ -158,12 +158,12 @@ void SGUI_SystemIF_GetNowTime(SGUI_TIME* pstTime)
 			pstTime->Second = timeinfo->tm_sec;
 		}
 #else
-//        pstTime->Year = g_stCleandar.tm_year;
-//        pstTime->Month = g_stCleandar.tm_mon;
-//        pstTime->Day = g_stCleandar.tm_mday;
-//        pstTime->Hour = g_stCleandar.tm_hour;
-//        pstTime->Minute = g_stCleandar.tm_min;
-//        pstTime->Second = g_stCleandar.tm_sec;
+        pstTime->Year = g_stCleandar.tm_year;
+        pstTime->Month = g_stCleandar.tm_mon;
+        pstTime->Day = g_stCleandar.tm_mday;
+        pstTime->Hour = g_stCleandar.tm_hour;
+        pstTime->Minute = g_stCleandar.tm_min;
+        pstTime->Second = g_stCleandar.tm_sec;
 #endif
 
 #endif

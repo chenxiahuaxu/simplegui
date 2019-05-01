@@ -89,7 +89,11 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_Prepare(SGUI_SCR_DEV* pstIFObj, const void
 	s_szFrameTitle = s_szDefaultFrameTitle;
 	HMI_DemoVariableBox_DrawFrame(pstIFObj, (SGUI_SZSTR)s_szFrameTitle);
 	// Show notice
+#ifdef _SIMPLE_GUI_NON_ASCII_
 	SGUI_Notice_Repaint(pstIFObj, s_szHelpNoticeText, SGUI_FONT_SIZE_H12, 0, SGUI_ICON_INFORMATION);
+#else
+	SGUI_Notice_Repaint(pstIFObj, s_szHelpNoticeText, SGUI_FONT_SIZE_H8, 0, SGUI_ICON_INFORMATION);
+#endif //_SIMPLE_GUI_NON_ASCII_
 	// Start RTC
 	RTCTimerEnable(true);
 	return HMI_RET_NORMAL;

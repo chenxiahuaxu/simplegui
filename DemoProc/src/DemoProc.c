@@ -9,11 +9,14 @@
 //=======================================================================//
 #include "DemoProc.h"
 
-#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
+#ifdef _SIMPLE_GUI_IN_VIRTUAL_SDK_
 #include "SDKInterface.h"
 #include "SGUI_FlashData.h"
 #else
 #include "OLED.h"
+#include "Usart.h"
+#include "RTC.h"
+#include "Timer.h"
 #include "DemoActions.h"
 #endif
 
@@ -32,13 +35,17 @@ HMI_SCREEN_OBJECT*			g_arrpstScreenObjs[] =
 							};
 HMI_ENGINE_OBJECT			g_stDemoEngine;
 
+#ifndef _SIMPLE_GUI_IN_VIRTUAL_SDK_
+static unsigned int			s_uiKeyValue;
+#endif
+
 //=======================================================================//
 //= Static function declare.								            =//
 //=======================================================================//
 static void					KeyPressEventProc(void);
 static void					RTCEventProc(void);
 static void					SysTickTimerEventProc(void);
-#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
+#ifdef _SIMPLE_GUI_IN_VIRTUAL_SDK_
 static bool					CheckEventFlag(ENV_FLAG_INDEX eIndex);
 #endif // _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
 
@@ -73,7 +80,7 @@ HMI_ENGINE_RESULT InitializeHMIEngineObj(void)
 	/* Clear structure. */
 	SGUI_SystemIF_MemorySet(&g_stDeviceInterface, 0x00, sizeof(SGUI_SCR_DEV));
 	SGUI_SystemIF_MemorySet(&g_stDemoEngine, 0x00, sizeof(HMI_ENGINE_OBJECT));
-#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
+#ifdef _SIMPLE_GUI_IN_VIRTUAL_SDK_
 	/* Initialize display size. */
 	g_stDeviceInterface.stSize.Width = 128;
 	g_stDeviceInterface.stSize.Height = 64;
@@ -138,7 +145,7 @@ HMI_ENGINE_RESULT InitializeHMIEngineObj(void)
 	return eProcessResult;
 }
 
-#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
+#ifdef _SIMPLE_GUI_IN_VIRTUAL_SDK_
 /*****************************************************************************/
 /** Function Name:	CheckEventFlag   										**/
 /** Purpose:		Check SimpleGUI virtual SDK event trigger flag and		**/
@@ -235,7 +242,11 @@ void KeyPressEventProc(void)
 	/*----------------------------------*/
 	stEvent.Head.iType = EVENT_TYPE_ACTION;
 	stEvent.Head.iID = EVENT_ID_KEY_PRESS;
+#ifdef _SIMPLE_GUI_IN_VIRTUAL_SDK_
 	stEvent.Data.uiKeyValue = SGUI_SDK_GetKeyEventData();
+#else
+	stEvent.Data.uiKeyValue = s_uiKeyValue;
+#endif
 	// Post key press event.
 	HMI_ProcessEvent((HMI_EVENT_BASE*)(&stEvent));
 }
@@ -306,13 +317,26 @@ void RTCEventProc(void)
 /*****************************************************************************/
 bool SysTickTimerTriggered(void)
 {
+#ifndef _SIMPLE_GUI_IN_VIRTUAL_SDK_
+	/*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+	bool				bIsTriggered;
+#endif
 	/*----------------------------------*/
     /* Process							*/
     /*----------------------------------*/
-#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
+#ifdef _SIMPLE_GUI_IN_VIRTUAL_SDK_
 	return CheckEventFlag(ENV_FLAG_IDX_SDK_TIM_EVENT);
 #else
 	// Dummy sys-tick Timer interrupt triggered process.
+	bIsTriggered = GetTimerTriggered();
+	if(true == bIsTriggered)
+	{
+		ResetTimerTriggered();
+	}
+
+	return bIsTriggered;
 #endif
 }
 
@@ -325,13 +349,26 @@ bool SysTickTimerTriggered(void)
 /*****************************************************************************/
 bool RTCTimerTriggered(void)
 {
+#ifndef _SIMPLE_GUI_IN_VIRTUAL_SDK_
+	/*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+	bool				bIsTriggered;
+#endif
 	/*----------------------------------*/
     /* Process							*/
     /*----------------------------------*/
-#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
+#ifdef _SIMPLE_GUI_IN_VIRTUAL_SDK_
 	return CheckEventFlag(ENV_FLAG_IDX_SDK_RTC_EVENT);
 #else
 	// RTC interrupt triggered process.
+	bIsTriggered = (g_eRTCRefreshedFlag == RTC_REFRESHED);
+	if(true == bIsTriggered)
+	{
+		g_eRTCRefreshedFlag = RTC_HOLD;
+	}
+
+	return bIsTriggered;
 #endif
 }
 
@@ -344,13 +381,38 @@ bool RTCTimerTriggered(void)
 /*****************************************************************************/
 bool UserEventTriggered(void)
 {
+#ifndef _SIMPLE_GUI_IN_VIRTUAL_SDK_
+	/*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+	uint8_t				szReceivedData[2];
+	bool				bIsTriggered;
+
+	/*----------------------------------*/
+    /* Initialize						*/
+    /*----------------------------------*/
+	szReceivedData[0] =	0;
+	szReceivedData[1] =	0;
+#endif
 	/*----------------------------------*/
     /* Process							*/
     /*----------------------------------*/
-#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
+#ifdef _SIMPLE_GUI_IN_VIRTUAL_SDK_
 	return CheckEventFlag(ENV_FLAG_IDX_SDK_KEY_EVENT);
 #else
 	// User event triggered process.
+	bIsTriggered = IsNewTarget();
+	if(true == bIsTriggered)
+	{
+		s_uiKeyValue = 0;
+		(void)GetReveivedByte(szReceivedData, 2);
+		s_uiKeyValue = szReceivedData[0];
+		s_uiKeyValue <<= 8;
+		s_uiKeyValue |= szReceivedData[1];
+		ResetReveivedByte();
+	}
+
+	return bIsTriggered;
 #endif
 }
 
@@ -367,10 +429,11 @@ void SysTickTimerEnable(bool bEnable)
 	/*----------------------------------*/
     /* Process							*/
     /*----------------------------------*/
-#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
+#ifdef _SIMPLE_GUI_IN_VIRTUAL_SDK_
 	(void)SGUI_SDK_ConfigHearBeatTimer(bEnable?DEMO_HEART_BEAT_INTERVAL_MS:0);
 #else
 	// Add Dummy sys-tick timer interrupt enable change operation here.
+	TIM_Cmd(TIM3, bEnable?ENABLE:DISABLE);
 #endif
 }
 
@@ -384,13 +447,17 @@ void SysTickTimerEnable(bool bEnable)
 /*****************************************************************************/
 void RTCTimerEnable(bool bEnable)
 {
+
 	/*----------------------------------*/
     /* Process							*/
     /*----------------------------------*/
-#ifdef _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
+#ifdef _SIMPLE_GUI_IN_VIRTUAL_SDK_
 	(void)SGUI_SDK_EnableRTCInterrupt(bEnable);
 #else
 	// Add RTC interrupt enable change operation here.
+	RTC_WaitForSynchro();
+	RTC_ITConfig(RTC_IT_SEC, bEnable?ENABLE:DISABLE);
+	RTC_WaitForLastTask();
 #endif
 }
 
