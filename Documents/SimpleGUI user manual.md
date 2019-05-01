@@ -3,9 +3,10 @@
 * [1. 概述](#1) 
 * [2. GUI](#2) 
 * [3. HMI](#3) 
-* [4. 其他应用技巧](#4) 
-* [5. 使用限制](#5) 
-* [6. 联系开发者](#6) 
+* [4. 相关配置](#4) 
+* [5. 其他应用技巧](#5) 
+* [6. 使用限制](#6) 
+* [7. 联系开发者](#7) 
 -------
 <h2 id="1">1. 概述</h2>  
 
@@ -592,25 +593,54 @@ HMI_ENGINE_RESULT HMI_SwitchScreen(SGUI_INT iDestScreenID, const void* pstParame
 
 <返回到[目录](#0)/[标题](#3)>
 
-<h2 id="4">4. 其他应用技巧</h2> 
+<h2 id="4">4. SimpleGUI配置</h2>   
 
-### 4.1 HMI引擎切换  
+&emsp;&emsp;SimpleGUI的全局配置依赖一些宏定义开关来实现，这些宏定义集中在SGUI_Config.h文件中，分为“VirtualSDK用”、“SimpleGUI接口用”和“演示程序用”三大部分。  
+
+### 4.1 VirtualSDK用    
+* \_SIMPLE\_GUI\_ENCODE\_TEXT\_    
+&emsp;&emsp;此宏定义生效时，将启用ICONV转码接口。由于代码文件均使用UTF-8编码保存，所以在编码时若使用了基本ASCII以外的字符时，就需要在文字显示接口中对应相应的解码方法，已获取对应文字的缩写。    
+&emsp;&emsp;以中文为例，通常使用的时GB2312或GB10801编码（SimpleGUI默认情况下对非ASCII的解析就是以GB2312编码方式为准），而代码文件由于是UTF-8格式，所以在编译时也是以UTF-8格式的字节序列编译的，同样，在运行时也是以UTF-8编码使用的，这是如果还使用GB2312方式进行解码，就会出现乱码。启用此宏定义后，SimpleGUI的API在显示文字前将先对文字进行转码，然后再从字库中索引文字数据。    
+* \_SIMPLE\_GUI\_ENCODE\_TEXT\_SRC\_    
+&emsp;&emsp;此宏定义了ICONV编码转换的源编码，默认为UTF-8格式。仅在\_SIMPLE\_GUI\_ENCODE\_TEXT\_生效的前提下有效。    
+* \_SIMPLE\_GUI\_ENCODE\_TEXT\_DEST\_    
+&emsp;&emsp;此宏定义了ICONV编码转换的目标编码，默认为GB2312格式。仅在\_SIMPLE\_GUI\_ENCODE\_TEXT\_生效的前提下有效。    
+* \_SIMPLE\_GUI\_IN\_VIRTUAL\_SDK\_    
+&emsp;&emsp;此宏定义的声明意味着程序将运行于SimpleGUI的VirtualSDK中，在此情况下将可以使用一些VirtualSDK提供的一些模拟硬件资源（中断、用户输入等）的接口。    
+&emsp;&emsp;此宏定义的生效与否请更具实际情况谨慎设定，否则可能导致运行时异常。    
+
+### 4.2 SimpleGUI接口用    
+* \_SIMPLE\_GUI\_ENABLE\_DYNAMIC\_MEMORY\_    
+&emsp;&emsp;此宏定义的使能需要内存池动态管理的支持。当此宏定义使能时，意味着SGUI_SystemIF_Allocate和SGUI_SystemIF_Freeh函数可以使用，对应malloc和free函数，可以动态的申请和释放堆上内存。  
+&emsp;&emsp;此宏定义使能后，将SimpleGUI中依赖动态内存的接口和功能将可以使用。目前只有列表项目的动态添加和删除。    
+* \_SIMPLE\_GUI\_USE\_SYS\_PF\_FUNCTIONS\_    
+&emsp;&emsp;此宏定义被使能时，SimpleGUI再使用的一些系统函数时将直接调用对应的系统函数，例如SGUI_SystemIF_StringLengthCopy对应strncpy，SGUI_SystemIF_StringCopy对应strcpy，SGUI_SystemIF_GetNowTime中需要使用localtimeh函数等，如果此宏没有被定义，则响应的功能需要使用者自行实现。    
+
+### 4.3 演示程序用     
+&emsp;&emsp;此部分宏定义仅在Demo中使用，用户在开发中可以无视此部分的宏定义。
+* \_SIMPLE\_GUI\_NON\_ASCII\_    
+&emsp;&emsp;SimpleGUI内部包含一个演示用的字库，其中包含6\*8像素的ASCII字符、6\*12像素的ASCII和GB2312字符以及8\*16像素的ASCII和GB2312字符。为了节约Flash空间，使Demo程序可以运行在Flash空间不足的芯片中，只有当此宏被定义时，才能使用ASCII以外的字符。
+
+
+<h2 id="5">5. 其他应用技巧</h2> 
+
+### 5.1 HMI引擎切换  
 &emsp;&emsp;在使用SimpleGUI的HMI引擎时，如果有必要在系统中依据不同的条件进入不同的交互系统时，可以创建多个HMI对象，并使用HMI_ActiveEngineh函数激活对应的HMI对象。    
 &emsp;&emsp;本质上，HMI引擎在HMI_Engine.c文件中声明了一个指向HMI_ENGINE_OBJECT类型实例的内部指针变量，指向的HMI引擎对象就是当前被激活的HMI引擎，通过HMI_ActiveEngine函数可以将这个指针重新设定并调用新指定HMI引擎中当前活动画面的Prepare方法。进行切换后的初次显示。    
 
-### 4.2 多显示设备  
+### 5.2 多显示设备  
 &emsp;&emsp;如果系统中需要支持多个显示屏时，可以针对不同的显示屏定义多个设备驱动对象。在需要切换不同的显示设备进行相应控制时，可以使用HMI引擎提供的HMI_SetDeviceObject函数为当前活动的HMI引擎设定新的设备驱动对象，从而实现在多屏环境下的区别控制。
 
 <返回到[目录](#0)/[标题](#4)>
 
-<h2 id="5">5. 使用限制</h2> 
+<h2 id="6">6. 使用限制</h2> 
 
 &emsp;&emsp;SimpleGUI的GUI部分和HMI部分目前均没有进行线程安全设计，在使用中强烈建议将SimpleGUi的额画面处理放在同一个线程中进行，避免多线程或在中断函数中调用GUI或HMI接口函数，除非在设计期间您可以严格保证使用SimpleGUI处理部分的绝对线程安全。
 
 
 <返回到[目录](#0)/[标题](#5)>
 
-<h2 id="6">6. 联系开发者</h2> 
+<h2 id="7">7. 联系开发者</h2> 
 
 &emsp;&emsp;首先，感谢您对SimpleGUI的赏识与支持。
 &emsp;&emsp;虽然最早仅仅作为一套GUI接口库使用，但我最终希望SimpleGUI能够为您提供一套完整的单色屏GUI及交互设计解决方案，如果您有新的需求、提议亦或想法，欢迎在以下地址留言，或加入[QQ交流群799501887](https://jq.qq.com/?_wv=1027&k=5ahGPvK)留言交流。  
