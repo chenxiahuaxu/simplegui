@@ -184,7 +184,7 @@ bool CheckEventFlag(ENV_FLAG_INDEX eIndex)
 /** Return:			Terminal code, seam as main function return code.		**/
 /** Notice:			None.													**/
 /*****************************************************************************/
-int DemoMainProcess(void)
+void DemoMainProcess(void)
 {
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -213,8 +213,6 @@ int DemoMainProcess(void)
             RTCEventProc();
         }
     }
-
-	return 0;
 }
 
 /*****************************************************************************/

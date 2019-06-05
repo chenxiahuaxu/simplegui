@@ -97,7 +97,7 @@ extern "C"
 {
 #endif /* __cplusplus */
 HMI_ENGINE_RESULT	InitializeHMIEngineObj(void);
-int					DemoMainProcess(void);
+void				DemoMainProcess(void);
 
 bool				SysTickTimerTriggered(void);
 bool				RTCTimerTriggered(void);

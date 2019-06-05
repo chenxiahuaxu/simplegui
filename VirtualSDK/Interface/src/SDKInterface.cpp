@@ -450,7 +450,9 @@ int SGUI_SDK_DummyMainProc(void)
     // Initialize main frame.
     SGUI_SDK_Initialize();
     // Call main process.
-    return DemoMainProcess();
+    DemoMainProcess();
+
+    return 0;
 }
 
 /*************************************************************************/
