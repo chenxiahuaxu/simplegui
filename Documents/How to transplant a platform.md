@@ -33,17 +33,17 @@ OLED_RST---------PB10
 &emsp;&emsp;如果需要修改引脚定义，请进入SSD1306_SPI.c文件中进行修改，引脚定义的映射位于文件头部。为方便随意更改GPIO，驱动程序使用软件SPI编写。
 &emsp;&emsp;接下来将SimpleGUI根目录下的GUI、HMI、DemoProc和Transplant文件夹下的STM32F1文件夹复制到准备好的空白工程中，然后打开工程。    
 
->![01-准备工程文件](https://xxxxxxx.png)
+>![01-准备工程文件](https://images.gitee.com/uploads/images/2019/0605/225932_b7cbc466_769424.png "01-准备工程文件.png")
 
 &emsp;&emsp;接下来，将工程中的main函数删除，因为Demo程序中已经写好了main函数。
 &emsp;&emsp;然后将GUI目录、HMI目录、DemoProc目录和STM32F1目录下src文件夹中所有的c文件添加到工程。  
 
->![02-添加文件到工程](https://xxxxxxx.png)
+>![02-添加文件到工程](https://images.gitee.com/uploads/images/2019/0605/230006_7301f48b_769424.png "02-添加文件到工程.png")
 
 &emsp;&emsp;至此，所有文件添加完成，上图中的User组中的内容就是STM32F1文件夹中的文件。
 &emsp;&emsp;然后将GUI目录、HMI目录、DemoProc目录和STM32F1目录下inc文件夹添加到工程的包含路径(Include path)中。
     
->![03-添加包含路径](https://xxxxxxx.png)  
+>![03-添加包含路径](https://images.gitee.com/uploads/images/2019/0605/230028_179a33b0_769424.png "03-添加包含路径.png")  
 
 &emsp;&emsp;接下来打开GUI\\inc目录下的SGUI_Config.h文件，大致内容如下：    
 
@@ -76,15 +76,15 @@ OLED_RST---------PB10
  - 将宏\_SIMPLE\_GUI\_ENABLE\_DYNAMIC\_MEMORY\_的定义注释掉。    
 
 &emsp;&emsp;此修改完成如下图：    
->![04-编辑Config文件](https://xxxxxxx.png)
+>![04-编辑Config文件](https://images.gitee.com/uploads/images/2019/0605/230044_80806f21_769424.png "04-编辑Config文件.png")
 
 &emsp;&emsp;然后保存、重新编译工程。  
 
->![05-编译](https://xxxxxxx.png)
+>![05-编译](https://images.gitee.com/uploads/images/2019/0605/230107_a423aca4_769424.png "05-编译.png")
 
 &emsp;&emsp;由于包含有12像素和16像素的中文字库，所以编译的程序比较大，这也就是为什么选用STM32F103VE/ZE这样的大容量芯片运行Demo的原因了。接下来将程序下载到芯片，下载方式请根据用户自己的硬件设备环境决定，下载完成后，OLED显示屏上就可以看到显示内容了。  
 
->![06-演示程序运行](https://xxxxxxx.png)
+>![06-演示程序运行](https://images.gitee.com/uploads/images/2019/0605/230139_ee01cc19_769424.png "06-运行.png")
 
 #### 2.4. Demo程序的交互。    
 
@@ -92,7 +92,7 @@ OLED_RST---------PB10
 &emsp;&emsp;完成前文描述的移植操作并成功烧录到芯片中运行，在确保芯片的串口正确连接到电脑后，就可以尝试与SimpleGUI的Demo程序进行交互了。在此之前，请准保好一个您习惯使用的串口调试软件，但此软件需要支持发送十六进制数据。
 &emsp;&emsp;基于前文的操作，确保芯片硬件系统处于上电运行状态，显示屏上滚动显示关于SimpleGUI的简介内容。此时使用串口发送十六进制数据0x0020模拟空格按键操作，此时何以看到，SimpleGUI的Demo程序已经显示列表画面了。  
 
->![07-列表画面](https://xxxxxxx.png) 
+>![07-列表画面](https://images.gitee.com/uploads/images/2019/0605/230152_82b96512_769424.png "07-列表画面.png")
 
 &emsp;&emsp;其他的案件动作，请参考演示工程中的DemoActions.h文件，文件中对一些常用的按键功能进行了定义，这些定义是与在VirtualSDK环境中运行时一致的，只不过是用串口来代替键盘输入而已，每次发送两个字节。    
 
@@ -135,15 +135,15 @@ OLED_RST---------PB10
 &emsp;&emsp;SimpleGUI的Demo程序对资源的消耗主要体现在中文字库对片内Flash的消耗上，如果您手上暂时没有类似STM32F103ZE/VE这样的大容量芯片，可以考虑精简掉一部分字库，以实现在容量较小的芯片上运行。      
 &emsp;&emsp;打开之前操作过的SGUI\_Config.h文件，将宏定义\_SIMPLE\_GUI\_NON\_ASCII\_的定义注释掉，就可以时中文字库的代码定义失能，此时再次编译整个工程，可以发现，资源消耗明显减少。    
   
->![08-精简编译](https://xxxxxxx.png)
+>![08-精简编译](https://images.gitee.com/uploads/images/2019/0605/230212_403c143d_769424.png "08-精简编译.png")
 
 &emsp;&emsp;当然，精简掉中文字库，也就不可能再显示中文文字了，所以编译时Demo程序绘制用另外一个资源文件，运行时界面上也只显示英语。    
 
->![09-精简编译的运行效果](https://xxxxxxx.png)
+>![09-精简编译的运行效果](https://images.gitee.com/uploads/images/2019/0605/230225_5f7263b0_769424.png "09-精简代码.png")
 
 &emsp;&emsp;以下是相同的代码在STM32F103C8T6上的运行效果。
 
->![10-相同的代码在C8T6上运行](https://xxxxxxx.png)
+>![10-相同的代码在C8T6上运行](https://images.gitee.com/uploads/images/2019/0605/230244_a3bd94d4_769424.png "10-精简代码在C8T6上运行.png")
 
 &emsp;&emsp;为了兼容在VirtualSDK中运行、片上全字库运行和片上精简字库运行等多种情况，Demo程序中使用了DemoResource_UTF8.h、DemoResource_GB2312.h和DemoResource_ASCII.h三个文件作为显示用的资源文件，Demo程序中显示的文字均为同名不同内容的宏定义，在不同环境下根据不同的宏开关、引用不同的文件来实现切换不同显示内容的效果。    
 &emsp;&emsp;为了避免不同情况下的乱码，在VirtualSDK中运行时，使用的资源文件是DemoResource_UTF8.h，运行时通过iconv转换库将字符串转换为GB2312编码再进行解码和显示。 而由于在芯片上运行全字库时，由于没有足够的资源保存转码库的资源，所以使用DemoResource_GB2312.h文件，此文件本身就以GB2312形式保存无需转码，壳直接解码，而使用精简字库时，由于只有ASCII文字，所以使用DemoResource_ASCII.h文件，使界面显示英语，不使用中文字库。   
