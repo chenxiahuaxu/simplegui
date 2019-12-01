@@ -21,7 +21,7 @@
 #define		LIST_SCROLLBAR_WIDTH						(5)
 // Automatic calculation
 #define		LIST_EDGE_SIZE								1
-#define		LIST_TITLE_HEIGHT(FONT)             		(g_stFontSize[FONT].Height+2)
+#define		LIST_TITLE_HEIGHT(FONT_HEIGH)               ((FONT_HEIGH)+2)
 
 #define		LIST_RECT_START_X(LIST_RECT)				((LIST_RECT).PosX)
 #define		LIST_RECT_END_X(LIST_RECT)					((LIST_RECT).PosX+(LIST_RECT).Width-1)
@@ -73,12 +73,12 @@ void SGUI_List_Initialize(SGUI_List_STRUCT* pstList)
 		pstListData = &(pstList->Data);
 		pstSubElement = &(pstList->SubElement);
         // Initialize visible area control parameter.
-		pstListControl->ListTitleHeight = LIST_TITLE_HEIGHT(pstList->FontSize); // List title height, Include border.
+		pstListControl->ListTitleHeight = LIST_TITLE_HEIGHT(pstList->FontRes->iHeight); // List title height, Include border.
 		pstListControl->PageStartIndex = 0;
 		pstListControl->SelectIndex = 0;
 		pstListControl->ItemPosYOffSet = 0;
 		pstListControl->FirstVisibleItemPosY = LIST_RECT_START_Y(pstListData->Rect)+LIST_EDGE_SIZE;
-		pstListControl->ListItemHeight = g_stFontSize[pstList->FontSize].Height + (LIST_ITEM_TEXT_BLANK_EDGEY*2);
+		pstListControl->ListItemHeight = pstList->FontRes->iHeight + (LIST_ITEM_TEXT_BLANK_EDGEY*2);
 		pstListControl->VisibleItemsAreaHeight = LIST_RECT_HEIGHT(pstListData->Rect)-LIST_EDGE_SIZE*2;
 		// Reset list items display area when title is existed.
 		if(NULL != pstList->Data.Title)
@@ -211,7 +211,7 @@ void SGUI_List_Repaint(SGUI_SCR_DEV* pstIFObj, SGUI_List_STRUCT* pstList)
 			stTitleTextDisplayArea.Width	= pstListData->Rect.Width - 4;
 			stTitleTextDisplayArea.Height	= g_stFontSize[pstList->FontSize].Height;
 
-			SGUI_Text_DrawSingleLineText(pstIFObj, pstListData->Title, pstList->FontSize,
+			SGUI_Text_DrawSingleLineText(pstIFObj, pstListData->Title, SGUI_DEFAULT_FONT,
 											&stTitleTextDisplayArea, &stTitleTextDataArea, SGUI_DRAW_NORMAL);
 		}
 		// Draw list items
@@ -413,7 +413,7 @@ void SGUI_List_DrawItem(SGUI_SCR_DEV* pstIFObj, SGUI_List_STRUCT* pstList, SGUI_
 
 			// Draw list item text.
 			SGUI_Text_DrawSingleLineText(	pstIFObj,
-											pstListItemPointer->Text, pstList->FontSize,
+											pstListItemPointer->Text, SGUI_DEFAULT_FONT,
 											&stItemTextDisplayArea, &stItemTextDataArea, SGUI_DRAW_NORMAL);
 
 			// Prepare draw parameter text.
@@ -470,7 +470,7 @@ void SGUI_List_DrawItem(SGUI_SCR_DEV* pstIFObj, SGUI_List_STRUCT* pstList, SGUI_
 					}
 				}
 				// Draw parameter text.
-				SGUI_Text_DrawSingleLineText(pstIFObj, szParameterStringBuffer, pstList->FontSize, &stItemTextDisplayArea, &stItemTextDataArea, SGUI_DRAW_NORMAL);
+				SGUI_Text_DrawSingleLineText(pstIFObj, szParameterStringBuffer, SGUI_DEFAULT_FONT, &stItemTextDisplayArea, &stItemTextDataArea, SGUI_DRAW_NORMAL);
 			}
 		}
 	}

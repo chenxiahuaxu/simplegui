@@ -50,7 +50,7 @@
 
 ### 3.4. Unicode编码 
 &emsp;&emsp;由于ANSI无法表达特定的编码，在跨地域时乱码的问题几乎无可避免，这就催生了Unicoed，这种一个联合编码集，意在使用一个字符集表达世界上所有语言所包含的所有书面符号(甚至是同一汉字的不同写法，如“户”和“戸”等)，且每一个符号都有自己唯一的编码，这样一来，乱码的问题就迎刃而解了。  
-&emsp;&emsp;Unicode码使用3字节的长度表达一个字符，最高字节为平面(Panel)索引，范围为0x00\~0x10(十进制17)，低两字节为字符码，表达范围为0\~65535。也就是说，Unicode编码的表达范围为0x000000\~0x10FFFF。  
+&emsp;&emsp;Unicode码使用3字节的长度表达一个字符，最高字节为平面(Panel)索引，范围为0x00~0x10(十进制17)，低两字节为字符码，表达范围为0~65535。也就是说，Unicode编码的表达范围为0x000000~0x10FFFF。  
 &emsp;&emsp;其他Unicode编码的细节，网上有详细介绍，不作详述。  
 
 ### 3.5. UTF-8的编码与解码  
@@ -261,7 +261,7 @@ SGUI_SIZE SGUI_Text_GetCharacterTableIndex(SGUI_UINT16 uiCharacterCode)
 &emsp;&emsp;同时，为了方便这个文字提取与重编码的操作，我还编写了一个小工具MinimumFontLib，您可以访问码云上[MinimumFontLib的托管页面](https://gitee.com/Polarix/MinimumFontLib)获取该工具的可执行文件与源码，欢迎您试用和反馈。
 
 ### 5. 联系开发者
-&emsp;&emsp;首先，感谢您对SimpleGUI的赏识与支持。    
+&emsp;&emsp;首先，感谢您对SimpleGUI的赏识与支持。
 &emsp;&emsp;虽然最早仅仅作为一套GUI接口库使用，但我最终希望SimpleGUI能够为您提供一套完整的单色屏GUI及交互设计解决方案，如果您有新的需求、提议亦或想法，欢迎在以下地址留言，或加入[QQ交流群799501887](https://jq.qq.com/?_wv=1027&k=5ahGPvK)留言交流。  
 >SimpleGUI@开源中国：https://www.oschina.net/p/simplegui  
 >SimpleGUI@码云：https://gitee.com/Polarix/simplegui  

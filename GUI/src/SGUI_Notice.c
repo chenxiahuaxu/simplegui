@@ -33,8 +33,8 @@
 #define NOTICE_TEXT_POSX_NOICON								(NOTICE_BOX_POSX+NOTICE_BOX_MARGIN*2)
 #define NOTICE_TEXT_POSX									(NOTICE_TEXT_POSX_NOICON+NOTICE_ICON_SIZE+NOTICE_BOX_MARGIN*2)
 #define NOTICE_TEXT_POSY(SCR_OBJ, HEIGHT)					(NOTICE_BOX_POSY(SCR_OBJ, HEIGHT)+NOTICE_BOX_MARGIN)
-#define	NOTICE_TEXT_LINES_MAX(SCR_OBJ, FONT_SIZE)			(NOTICE_TEXT_AREA_WIDTH(SCR_OBJ)/g_stFontSize[FONT_SIZE].Width)
-#define	NOTICE_TEXT_LINES_MAX_NOICON(SCR_OBJ, FONT_SIZE)	(NOTICE_TEXT_AREA_WIDTH_NOICON(SCR_OBJ)/g_stFontSize[FONT_SIZE].Width)
+#define	NOTICE_TEXT_LINES_MAX(SCR_OBJ, FONT_WIDTH)			(NOTICE_TEXT_AREA_WIDTH(SCR_OBJ)/FONT_WIDTH)
+#define	NOTICE_TEXT_LINES_MAX_NOICON(SCR_OBJ, FONT_WIDTH)	(NOTICE_TEXT_AREA_WIDTH_NOICON(SCR_OBJ)/FONT_WIDTH)
 
 //=======================================================================//
 //= Function define.										            =//
@@ -52,7 +52,7 @@
 /** Return:			Remaining text height display.						**/
 /** Notice:			None.												**/
 /*************************************************************************/
-SGUI_SIZE SGUI_Notice_Repaint(SGUI_SCR_DEV* pstIFObj, SGUI_CSZSTR szNoticeText, SGUI_FONT_SIZE iFontSize, SGUI_INT uiTextOffset, SGUI_NOTICE_ICON_IDX eIcon)
+SGUI_SIZE SGUI_Notice_Repaint(SGUI_SCR_DEV* pstIFObj, SGUI_CSZSTR szNoticeText, const SGUI_FONT_RES* pstFontRes, SGUI_INT uiTextOffset, SGUI_NOTICE_ICON_IDX eIcon)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -62,7 +62,8 @@ SGUI_SIZE SGUI_Notice_Repaint(SGUI_SCR_DEV* pstIFObj, SGUI_CSZSTR szNoticeText, 
 	SGUI_SIZE					uiTextLines;
 	SGUI_RECT_AREA				stTextDisplayArea;
 	SGUI_RECT_AREA				stIconDisplayArea, stIconDataArea;
-	SGUI_CSZSTR				pszNoticeTextPtr;
+	SGUI_CSZSTR				    pszNoticeTextPtr;
+	SGUI_SIZE                   sIconDataAddr;
 
 	/*----------------------------------*/
 	/* Process							*/
@@ -72,11 +73,11 @@ SGUI_SIZE SGUI_Notice_Repaint(SGUI_SCR_DEV* pstIFObj, SGUI_CSZSTR szNoticeText, 
 	// Get max line of notice text.
 	if(SGUI_ICON_NONE != eIcon)
 	{
-		uiLineCount = SGUI_Text_GetMultiLineTextLines(pszNoticeTextPtr, NOTICE_TEXT_LINES_MAX(*pstIFObj, iFontSize));
+		uiLineCount = SGUI_Text_GetMultiLineTextLines(pszNoticeTextPtr, NOTICE_TEXT_LINES_MAX(*pstIFObj, pstFontRes->iHalfWidth));
 	}
 	else
 	{
-		uiLineCount = SGUI_Text_GetMultiLineTextLines(pszNoticeTextPtr, NOTICE_TEXT_LINES_MAX_NOICON(*pstIFObj, iFontSize));
+		uiLineCount = SGUI_Text_GetMultiLineTextLines(pszNoticeTextPtr, NOTICE_TEXT_LINES_MAX_NOICON(*pstIFObj, pstFontRes->iHalfWidth));
 	}
 	if(uiLineCount < 2)
 	{
@@ -100,7 +101,12 @@ SGUI_SIZE SGUI_Notice_Repaint(SGUI_SCR_DEV* pstIFObj, SGUI_CSZSTR szNoticeText, 
 		stIconDataArea.PosY = 0;
 		stIconDataArea.Width = NOTICE_ICON_SIZE;
 		stIconDataArea.Height = NOTICE_ICON_SIZE;
-		SGUI_Basic_DrawBitMap(pstIFObj, &stIconDisplayArea, &stIconDataArea, SGUI_NOTICE_ICON, eIcon*(NOTICE_ICON_SIZE*(NOTICE_ICON_SIZE/8)), SGUI_DRAW_NORMAL);
+
+		sIconDataAddr = (NOTICE_ICON_SIZE*NOTICE_ICON_SIZE/8)*eIcon;
+
+		SGUI_SystemIF_GetFlashData(pstIFObj, SGUI_NOTICE_ICON, sIconDataAddr, NOTICE_ICON_SIZE*NOTICE_ICON_SIZE);
+
+		SGUI_Basic_DrawBitMap(pstIFObj, &stIconDisplayArea, &stIconDataArea, pstIFObj->arrBmpDataBuffer, SGUI_DRAW_NORMAL);
 	}
     // Draw text;
     if(SGUI_ICON_NONE != eIcon)

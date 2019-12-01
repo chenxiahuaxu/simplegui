@@ -74,7 +74,7 @@ typedef struct
 	SGUI_List_DATA				Data;
 	SGUI_List_CONTROL			ControlVariable;
 	SGUI_List_SUBELEMENT		SubElement;
-	SGUI_FONT_SIZE	            FontSize;
+	const SGUI_FONT_RES*        FontRes;
 }SGUI_List_STRUCT;
 
 //=======================================================================//

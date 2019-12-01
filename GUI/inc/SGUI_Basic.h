@@ -18,6 +18,7 @@
 #define		BASIC_FONT_WIDTH				(6)
 #define		BASIC_FONT_CHAR_DATA_SIZE		(((BASIC_FONT_HEIGHT-1)/8)+1)*BASIC_FONT_WIDTH
 #define		BASIC_FONT_DATA					(SGUI_BASIC_FONT_H8)
+#define     SGUI_USED_BYTE(V)               (((V-1)/8)+1)
 
 //Bitmap(include font) data bit operation
 #define     SGUI_SET_PAGE_BIT(PAGE, Bit)	((PAGE) = (PAGE) | (0x01 << (Bit)))
@@ -39,6 +40,6 @@ void					SGUI_Basic_DrawLine(SGUI_SCR_DEV* pstIFObj, SGUI_INT uiStartX, SGUI_INT
 void					SGUI_Basic_DrawRectangle(SGUI_SCR_DEV* pstIFObj, SGUI_UINT uiStartX, SGUI_UINT uiStartY, SGUI_UINT uiWidth, SGUI_UINT uiHeight, SGUI_COLOR eEdgeColor, SGUI_COLOR eFillColor);
 void					SGUI_Basic_DrawCircle(SGUI_SCR_DEV* pstIFObj, SGUI_UINT uiCx, SGUI_UINT uiCy, SGUI_UINT uiRadius, SGUI_COLOR eEdgeColor, SGUI_COLOR eFillColor);
 void					SGUI_Basic_ReverseBlockColor(SGUI_SCR_DEV* pstIFObj, SGUI_UINT uiStartX, SGUI_UINT uiStartY, SGUI_UINT uiWidth, SGUI_UINT uiHeight);
-void					SGUI_Basic_DrawBitMap(SGUI_SCR_DEV* pstIFObj, SGUI_RECT_AREA* pstDisplayArea, SGUI_RECT_AREA* pstDataArea, SGUI_FLASH_DATA_SOURCE eDataSource, SGUI_ROM_ADDRESS adDataStartAddr, SGUI_DRAW_MODE eDrawMode);
+void                    SGUI_Basic_DrawBitMap(SGUI_SCR_DEV* pstIFObj, SGUI_RECT_AREA* pstDisplayArea, SGUI_POINT* pstDataArea, SGUI_BMP_RES* pstBitmapData, SGUI_DRAW_MODE eDrawMode);
 
 #endif

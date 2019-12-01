@@ -15,6 +15,38 @@
 //= Function define.										            =//
 //=======================================================================//
 /*************************************************************************/
+/** Function Name:	SGUI_Common_AdaptDisplayInfo						**/
+/** Purpose:		Adapt display area data and internal position data	**/
+/**					order by display area position and screen size.		**/
+/** Params:																**/
+/**	@ pstDisplayArea[in/out]: Display area info.						**/
+/**	@ pstInnerPos[in/out]: Display position info in display rectangular	**/
+/**					area .												**/
+/** Return:			None.												**/
+/** Notice:			This function will reset display information on		**/
+/**					given data, make sure the display area is within	**/
+/**					the screen area.									**/
+/*************************************************************************/
+void SGUI_Common_AdaptDisplayInfo(SGUI_RECT_AREA* pstDisplayArea, SGUI_POINT* pstInnerPos)
+{
+	if((NULL != pstDisplayArea) && (NULL != pstInnerPos))
+	{
+		if(RECT_X_START(*pstDisplayArea) < 0)
+		{
+			RECT_X_START(*pstInnerPos) += RECT_X_START(*pstDisplayArea);
+			RECT_WIDTH(*pstDisplayArea) += RECT_X_START(*pstDisplayArea);
+			RECT_X_START(*pstDisplayArea) = 0;
+		}
+		if(RECT_Y_START(*pstDisplayArea) < 0)
+		{
+			RECT_Y_START(*pstInnerPos) += RECT_Y_START(*pstDisplayArea);
+			RECT_HEIGHT(*pstDisplayArea) += RECT_Y_START(*pstDisplayArea);
+			RECT_Y_START(*pstDisplayArea) = 0;
+		}
+	}
+}
+
+/*************************************************************************/
 /** Function Name:	SGUI_Common_IntegerToStringWithDecimalPoint			**/
 /** Purpose:		Convert number to a string and insert decimal point.**/
 /** Params:																**/

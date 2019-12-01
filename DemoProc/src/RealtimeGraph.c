@@ -78,7 +78,7 @@ HMI_ENGINE_RESULT HMI_DemoRealGraph_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const 
 	stTextDisplayArea.Height = 8;
 	stTextDataArea.PosX = 0;
 	stTextDataArea.PosY = 0;
-	SGUI_Text_DrawSingleLineText(pstIFObj, "Real-time graph", SGUI_FONT_SIZE_H8, &stTextDisplayArea, &stTextDataArea, SGUI_DRAW_NORMAL);
+	SGUI_Text_DrawSingleLineText(pstIFObj, "Real-time graph", &SGUI_DEFAULT_FONT, &stTextDisplayArea, &stTextDataArea, SGUI_DRAW_NORMAL);
 	// Paint value.
 	SGUI_Common_IntegerToString(s_stRealtimeGraph.Data->ValueArray[s_stRealtimeGraph.Data->ValueCount-1], szTextBuffer, 10, -15, ' ');
 	stTextDisplayArea.PosX = 1;
@@ -87,7 +87,7 @@ HMI_ENGINE_RESULT HMI_DemoRealGraph_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const 
 	stTextDisplayArea.Height = 8;
 	stTextDataArea.PosX = 0;
 	stTextDataArea.PosY = 0;
-	SGUI_Text_DrawSingleLineText(pstIFObj, szTextBuffer, SGUI_FONT_SIZE_H8, &stTextDisplayArea, &stTextDataArea, SGUI_DRAW_NORMAL);
+	SGUI_Text_DrawSingleLineText(pstIFObj, szTextBuffer, &SGUI_DEFAULT_FONT, &stTextDisplayArea, &stTextDataArea, SGUI_DRAW_NORMAL);
 	SGUI_RealtimeGraph_Repaint(pstIFObj, &s_stRealtimeGraph);
 	return HMI_RET_NORMAL;
 }

@@ -10,47 +10,27 @@
 //= User Macro definition.											    =//
 //=======================================================================//
 #define FONT_LIB_ADDR					0X00000
-#define FONT_LIB_OFFSET_ASCII			(-32)
-#define FONT_LIB_OFFSET_GB2312_SYMBOL	(95)
-#define FONT_LIB_OFFSET_GB2312_CHARL1	(659)
 // Max font size is 64 pix, maximum of font data size is 64 * 8 = 512 Bytes.
-#define FONT_DATA_BUFFER_SIZE			(512)
 #define TEXT_NUMBER_STR_LENGTH_MAX		(12)
 #define TEXT_PLACEHOLDER_CHARACTER		('*')
+#define SGUI_IS_VISIBLE_CHAR(C)			((C>0x1F) && (C<0x7F))
 
 //=======================================================================//
 //= Data type definition.											    =//
 //=======================================================================//
-typedef struct
-{
-	const SGUI_UINT16	Size;
-	const SGUI_UINT16	Width;
-	const SGUI_UINT16	Height;
-	const SGUI_UINT16	HalfCharDataSize;
-}SGUI_FONT_SIZE_STRUCT;
-
-typedef enum
-{
-	SGUI_FONT_SIZE_H6 = 0,
-	SGUI_FONT_SIZE_H8,
-	SGUI_FONT_SIZE_H12,
-	SGUI_FONT_SIZE_H16,
-	SGUI_FONT_SIZE_H24,
-	SGUI_FONT_SIZE_H32,
-	SGUI_FONT_SIZE_MAX,
-}SGUI_FONT_SIZE;
 
 //=======================================================================//
 //= Public variable declaration.									    =//
 //=======================================================================//
-extern const SGUI_FONT_SIZE_STRUCT g_stFontSize[];
 
 //=======================================================================//
 //= Public function declaration.									    =//
 //=======================================================================//
-void			SGUI_Text_DrawSingleLineText(SGUI_SCR_DEV* pstIFObj, SGUI_CSZSTR szTextBuffer, SGUI_FONT_SIZE eFontSize, SGUI_RECT_AREA* pstDisplayArea, SGUI_RECT_AREA* pstStringDataArea, SGUI_DRAW_MODE eFontMode);
-SGUI_SIZE		SGUI_Text_DrawMultipleLinesText(SGUI_SCR_DEV* pstIFObj, SGUI_CSZSTR szTextBuffer, SGUI_FONT_SIZE eFontSize, SGUI_RECT_AREA* pstDisplayArea, SGUI_INT iTopOffset, SGUI_DRAW_MODE eFontMode);
-SGUI_SIZE		SGUI_Text_GetTextGraphicsWidth(SGUI_CSZSTR szText, SGUI_FONT_SIZE eFontSize);
-SGUI_SIZE		SGUI_Text_GetMultiLineTextLines(SGUI_CSZSTR szNoticeText, SGUI_SIZE uiHalfWidthCharInLine);
+void			SGUI_Text_GetTextExtent(SGUI_CSZSTR cszTextBuffer, const SGUI_FONT_RES* pstFontRes, SGUI_AREA_SIZE* pstTextExtent);
+void			SGUI_Text_DrawText(SGUI_SCR_DEV* pstIFObj, SGUI_CSZSTR cszTextBuffer, const SGUI_FONT_RES* pstFontRes, SGUI_RECT_AREA* pstDisplayArea, SGUI_POINT* pstInnerPos, SGUI_DRAW_MODE eFontMode);
+SGUI_SIZE		SGUI_Text_DrawMultipleLinesText(SGUI_SCR_DEV* pstIFObj, SGUI_CSZSTR szTextBuffer, const SGUI_FONT_RES* pstFontRes, SGUI_RECT_AREA* pstDisplayArea, SGUI_INT iTopOffset, SGUI_DRAW_MODE eFontMode);
+SGUI_SIZE		SGUI_Text_GetTextGraphicsWidth(SGUI_CSZSTR szText, const SGUI_FONT_RES* pstFontRes);
+SGUI_SIZE		SGUI_Text_GetMultiLineTextLines(SGUI_CSZSTR cszText, const SGUI_FONT_RES* pstFontRes, SGUI_SIZE uiDisplayAreaWidth);
+SGUI_SIZE       SGUI_Text_GetCharacterData(const SGUI_FONT_RES* pstFontRes, SGUI_UINT32 uiCode, SGUI_BYTE* pDataBuffer, SGUI_SIZE sBufferSize);
 
 #endif

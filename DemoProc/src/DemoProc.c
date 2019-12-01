@@ -24,6 +24,7 @@
 //= Static variable declaration.									    =//
 //=======================================================================//
 SGUI_SCR_DEV				g_stDeviceInterface;
+#if 0
 HMI_SCREEN_OBJECT*			g_arrpstScreenObjs[] =
 							{
 								&g_stHMIDemo_ScrollingText,
@@ -33,6 +34,7 @@ HMI_SCREEN_OBJECT*			g_arrpstScreenObjs[] =
 								&g_stHMIDemo_VariableBox,
 								&g_stHMI_DemoRealtimeGraph,
 							};
+#endif
 HMI_ENGINE_OBJECT			g_stDemoEngine;
 
 #ifndef _SIMPLE_GUI_IN_VIRTUAL_SDK_
@@ -82,8 +84,8 @@ HMI_ENGINE_RESULT InitializeHMIEngineObj(void)
 	SGUI_SystemIF_MemorySet(&g_stDemoEngine, 0x00, sizeof(HMI_ENGINE_OBJECT));
 #ifdef _SIMPLE_GUI_IN_VIRTUAL_SDK_
 	/* Initialize display size. */
-	g_stDeviceInterface.stSize.Width = 128;
-	g_stDeviceInterface.stSize.Height = 64;
+	g_stDeviceInterface.stSize.iWidth = 128;
+	g_stDeviceInterface.stSize.iHeight = 64;
 	/* Initialize interface object. */
 	g_stDeviceInterface.fnSetPixel = SGUI_SDK_SetPixel;
 	g_stDeviceInterface.fnGetPixel = SGUI_SDK_GetPixel;
@@ -91,15 +93,15 @@ HMI_ENGINE_RESULT InitializeHMIEngineObj(void)
 	g_stDeviceInterface.fnSyncBuffer = SGUI_SDK_RefreshDisplay;
 #else
 	/* Initialize display size. */
-	g_stDeviceInterface.stSize.Width = 128;
-	g_stDeviceInterface.stSize.Height = 64;
+	g_stDeviceInterface.stSize.iWidth = 128;
+	g_stDeviceInterface.stSize.iHeight = 64;
 	/* Initialize interface object. */
 	g_stDeviceInterface.fnSetPixel = OLED_SetPixel;
 	g_stDeviceInterface.fnGetPixel = OLED_GetPixel;
 	g_stDeviceInterface.fnClear = OLED_ClearDisplay;
 	g_stDeviceInterface.fnSyncBuffer = OLED_RefreshScreen;
 #endif
-
+#if 0
 	do
 	{
 		/* Prepare HMI engine object. */
@@ -143,6 +145,9 @@ HMI_ENGINE_RESULT InitializeHMIEngineObj(void)
 	}while(0);
 
 	return eProcessResult;
+#else
+    return HMI_RET_NORMAL;
+#endif
 }
 
 #ifdef _SIMPLE_GUI_IN_VIRTUAL_SDK_
@@ -186,6 +191,11 @@ bool CheckEventFlag(ENV_FLAG_INDEX eIndex)
 /*****************************************************************************/
 void DemoMainProcess(void)
 {
+	SGUI_RECT_AREA		stDisplayArea = {15, 15, 50, 8};
+	SGUI_POINT			stInnerPos = {-4, 0};
+	SGUI_AREA_SIZE		stAreaSize;
+	char				szTempBuffer[100] = {0x00};
+
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
@@ -195,8 +205,52 @@ void DemoMainProcess(void)
     /*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
+	//SGUI_Basic_DrawLine(&g_stDeviceInterface, 2, 2, 40, 40, SGUI_COLOR_FRGCLR);
+	SGUI_Basic_DrawRectangle(&g_stDeviceInterface, 1, 1, 126, 10, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
+	stDisplayArea.iPosX = 2;
+	stDisplayArea.iPosY = 2;
+	stDisplayArea.iWidth = 124;
+	stDisplayArea.iHeight = 8;
+	stInnerPos.iPosX = 0;
+	stInnerPos.iPosY = 0;
+	SGUI_Text_DrawText(&g_stDeviceInterface, "This is text form SGUI_DEFAULT_FONT_8", &SGUI_DEFAULT_FONT_8, &stDisplayArea, &stInnerPos, SGUI_DRAW_NORMAL);
+
+	SGUI_Basic_DrawRectangle(&g_stDeviceInterface, 1, 12, 126, 14, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
+	stDisplayArea.iPosX = 2;
+	stDisplayArea.iPosY = 13;
+	stDisplayArea.iWidth = 124;
+	stDisplayArea.iHeight = 12;
+	stInnerPos.iPosX = 5;
+	stInnerPos.iPosY = 0;
+	SGUI_Text_GetTextExtent("123ABC", &SGUI_DEFAULT_FONT_12, &stAreaSize);
+	sprintf(szTempBuffer, "Size is (%d, %d).", stAreaSize.iWidth, stAreaSize.iHeight);
+	SGUI_Text_DrawText(&g_stDeviceInterface, szTempBuffer, &SGUI_DEFAULT_FONT_12, &stDisplayArea, &stInnerPos, SGUI_DRAW_NORMAL);
+
+	SGUI_Basic_DrawRectangle(&g_stDeviceInterface, 1, 27, 126, 18, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
+	stDisplayArea.iPosX = 2;
+	stDisplayArea.iPosY = 28;
+	stDisplayArea.iWidth = 124;
+	stDisplayArea.iHeight = 16;
+	stInnerPos.iPosX = 0;
+	stInnerPos.iPosY = 0;
+	SGUI_Text_DrawText(&g_stDeviceInterface, "Pixel 16 font source.", &SGUI_DEFAULT_FONT_16, &stDisplayArea, &stInnerPos, SGUI_DRAW_NORMAL);
+
+	stDisplayArea.iPosX = -10;
+	stDisplayArea.iPosY = 0;
+	stDisplayArea.iWidth = 64;
+	stDisplayArea.iHeight = 64;
+	SGUI_Text_DrawMultipleLinesText(&g_stDeviceInterface, DEMO_START_NOTICE, &SGUI_DEFAULT_FONT_8, &stDisplayArea, -0, SGUI_DRAW_NORMAL);
+
+	stDisplayArea.iPosX = 64;
+	stDisplayArea.iPosY = 0;
+	stDisplayArea.iWidth = 64;
+	stDisplayArea.iHeight = 64;
+	SGUI_Text_DrawMultipleLinesText(&g_stDeviceInterface, DEMO_START_NOTICE, &SGUI_DEFAULT_FONT_8, &stDisplayArea, -0, SGUI_DRAW_NORMAL);
+
+	g_stDeviceInterface.fnSyncBuffer();
     while(1)
     {
+        /*
         // Check and process heart-beat timer event.
         if(true == SysTickTimerTriggered())
         {
@@ -212,6 +266,7 @@ void DemoMainProcess(void)
         {
             RTCEventProc();
         }
+        */
     }
 }
 

@@ -68,7 +68,7 @@ HMI_ENGINE_RESULT HMI_DemoRTCNotice_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const 
 	sprintf(s_szRTCNoticeText, DEMO_RTC_NOTICE_TEXT_FMT,
 				stRTCTime.Year, stRTCTime.Month, stRTCTime.Day,
 				stRTCTime.Hour, stRTCTime.Minute, stRTCTime.Second);
-	SGUI_Notice_Repaint(pstIFObj, s_szRTCNoticeText, SGUI_FONT_SIZE_H12, 0, SGUI_ICON_INFORMATION);
+	SGUI_Notice_Repaint(pstIFObj, s_szRTCNoticeText, &SGUI_DEFAULT_FONT, 0, SGUI_ICON_INFORMATION);
 	return HMI_RET_NORMAL;
 }
 

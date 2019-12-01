@@ -153,6 +153,7 @@ void SGUI_Basic_ClearScreen(SGUI_SCR_DEV* pstIFObj)
 		}
 		else
 		{
+		    /* Draw a blank rectangle for clean screen when clean function is not supposed. */
 			SGUI_Basic_DrawRectangle(pstIFObj, 0, 0, RECT_WIDTH(pstIFObj->stSize), RECT_HEIGHT(pstIFObj->stSize), SGUI_COLOR_BKGCLR, SGUI_COLOR_BKGCLR);
 		}
 	}
@@ -439,13 +440,13 @@ void SGUI_Basic_ReverseBlockColor(SGUI_SCR_DEV* pstIFObj, SGUI_UINT uiStartX, SG
 /** Params:																**/
 /**	@ pstIFObj[in]:	SimpleGUI object pointer.							**/
 /**	@ pstDisplayArea[in]: Display area position and size.				**/
-/**	@ pstDataArea[in]:	Data area size and display offset.				**/
-/**	@ pDataBuffer[in]:	Bit map data buffer.							**/
+/**	@ pstInnerPos[in]:	Data area size and display offset.				**/
+/**	@ pstBitmapData[in]: Bitmap object, include size and data.			**/
 /**	@ eDrawMode[in]		Bit map display mode(normal or reverse color).	**/
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_Basic_DrawBitMap(SGUI_SCR_DEV* pstIFObj, SGUI_RECT_AREA* pstDisplayArea, SGUI_RECT_AREA* pstDataArea, SGUI_FLASH_DATA_SOURCE eDataSource, SGUI_ROM_ADDRESS adDataStartAddr, SGUI_DRAW_MODE eDrawMode)
+void SGUI_Basic_DrawBitMap(SGUI_SCR_DEV* pstIFObj, SGUI_RECT_AREA* pstDisplayArea, SGUI_POINT* pstInnerPos, SGUI_BMP_RES* pstBitmapData, SGUI_DRAW_MODE eDrawMode)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -454,8 +455,7 @@ void SGUI_Basic_DrawBitMap(SGUI_SCR_DEV* pstIFObj, SGUI_RECT_AREA* pstDisplayAre
 	SGUI_INT					iBmpPixX, iBmpPixY;
 	SGUI_UINT					uiDrawnWidthIndex, uiDrawnHeightIndex;
 	SGUI_UINT					uiPixIndex;
-	SGUI_BYTE*					pData;
-	SGUI_SIZE					sBitmapDataSize;
+	SGUI_BYTE*                  pData;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -468,66 +468,51 @@ void SGUI_Basic_DrawBitMap(SGUI_SCR_DEV* pstIFObj, SGUI_RECT_AREA* pstDisplayAre
 	/*----------------------------------*/
 	// Only draw in visible area of screen.
 	if(	(RECT_X_START(*pstDisplayArea) < RECT_WIDTH(pstIFObj->stSize)) && (RECT_Y_START(*pstDisplayArea) < RECT_HEIGHT(pstIFObj->stSize)) &&
-		(RECT_X_END(*pstDisplayArea) > 0) && (RECT_Y_END(*pstDisplayArea) > 0))
+		(RECT_X_END(*pstDisplayArea, *pstDisplayArea) > 0) && (RECT_Y_END(*pstDisplayArea, *pstDisplayArea) > 0))
 	{
-		// Recalculate display area and data area.
-		if(RECT_X_START(*pstDisplayArea) < 0)
-		{
-			RECT_X_START(*pstDataArea) += RECT_X_START(*pstDisplayArea);
-			RECT_WIDTH(*pstDisplayArea) += RECT_X_START(*pstDisplayArea);
-			RECT_X_START(*pstDisplayArea) = 0;
-		}
-		if(RECT_Y_START(*pstDisplayArea) < 0)
-		{
-			RECT_Y_START(*pstDataArea) += RECT_Y_START(*pstDisplayArea);
-			RECT_HEIGHT(*pstDisplayArea) += RECT_Y_START(*pstDisplayArea);
-			RECT_Y_START(*pstDisplayArea) = 0;
-		}
+		// Adapt text display area and data area.
+        SGUI_Common_AdaptDisplayInfo(pstDisplayArea, pstInnerPos);
 		// Only process drawing when valid display data existed
-		if((RECT_VALID_WIDTH(*pstDataArea) > 0) && (RECT_VALID_HEIGHT(*pstDataArea) > 0))
+		if((RECT_VALID_WIDTH(*pstBitmapData, *pstInnerPos) > 0) && (RECT_VALID_HEIGHT(*pstBitmapData, *pstInnerPos) > 0))
 		{
-			// Calculate bitmap data size.
-			sBitmapDataSize = pstDataArea->Width * ((pstDataArea->Height-1)/8+1);
-			// Read flash data.
-			SGUI_SystemIF_GetFlashData(pstIFObj, eDataSource, adDataStartAddr, sBitmapDataSize);
 			// Set loop start parameter of x coordinate
 			iDrawPixX = RECT_X_START(*pstDisplayArea);
 			iBmpPixX = 0;
-			if(RECT_X_START(*pstDataArea) > 0)
+			if(RECT_X_START(*pstInnerPos) > 0)
 			{
-				iDrawPixX += RECT_X_START(*pstDataArea);
+				iDrawPixX += RECT_X_START(*pstInnerPos);
 			}
 			else
 			{
-				iBmpPixX -= RECT_X_START(*pstDataArea);
+				iBmpPixX -= RECT_X_START(*pstInnerPos);
 			}
 			uiDrawnWidthIndex = iBmpPixX;
 			// Loop for x coordinate;
-			while((uiDrawnWidthIndex<RECT_WIDTH(*pstDataArea)) && (iDrawPixX<=RECT_X_END(*pstDisplayArea)) && (iDrawPixX<RECT_WIDTH(pstIFObj->stSize)))
+			while((uiDrawnWidthIndex<RECT_WIDTH(*pstBitmapData)) && (iDrawPixX<=RECT_X_END(*pstDisplayArea, *pstDisplayArea)) && (iDrawPixX<RECT_WIDTH(pstIFObj->stSize)))
 			{
 				// Redirect to data array for column.
-				pData = pstIFObj->arrBmpDataBuffer + iBmpPixX;
+				pData = pstBitmapData->pData+iBmpPixX;
 				// Set loop start parameter of y coordinate
 				iDrawPixY = RECT_Y_START(*pstDisplayArea);
 				iBmpPixY = 0;
-				if(RECT_Y_START(*pstDataArea) > 0)
+				if(RECT_Y_START(*pstInnerPos) > 0)
 				{
-					iDrawPixY += RECT_Y_START(*pstDataArea);
+					iDrawPixY += RECT_Y_START(*pstInnerPos);
 				}
 				else
 				{
-					iBmpPixY -= RECT_Y_START(*pstDataArea);
+					iBmpPixY -= RECT_Y_START(*pstInnerPos);
 				}
 				uiDrawnHeightIndex = iBmpPixY;
 				uiPixIndex = iBmpPixY % 8;
-				pData += (iBmpPixY / 8) * RECT_WIDTH(*pstDataArea);
+				pData += (iBmpPixY / 8) * RECT_WIDTH(*pstBitmapData);
 				// Loop for y coordinate;
-				while((uiDrawnHeightIndex<RECT_HEIGHT(*pstDataArea)) && (iDrawPixY<=RECT_Y_END(*pstDisplayArea)) && (iDrawPixY<RECT_HEIGHT(pstIFObj->stSize)))
+				while((uiDrawnHeightIndex<RECT_HEIGHT(*pstBitmapData)) && (iDrawPixY<=RECT_Y_END(*pstDisplayArea, *pstDisplayArea)) && (iDrawPixY<RECT_HEIGHT(pstIFObj->stSize)))
 				{
 					if(uiPixIndex == 8)
 					{
 						uiPixIndex = 0;
-						pData += RECT_WIDTH(*pstDataArea);
+						pData += RECT_WIDTH(*pstBitmapData);
 					}
 					if(SGUI_GET_PAGE_BIT(*pData, uiPixIndex) != eDrawMode)
 					{

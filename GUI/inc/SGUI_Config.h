@@ -20,6 +20,6 @@
 //=======================================================================//
 //= Used for SimpleGUI demo process.								    =//
 //=======================================================================//
-#define _SIMPLE_GUI_NON_ASCII_
+//#define _SIMPLE_GUI_NON_ASCII_
 
 #endif // _INCLUDE_SIMPLE_GUI_CONFIG_H_

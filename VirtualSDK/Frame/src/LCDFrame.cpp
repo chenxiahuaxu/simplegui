@@ -649,7 +649,7 @@ wxThread::ExitCode LCDFrame::Entry(void)
 		while(false == bExit)
 		{
 			bExit = pclsThread->TestDestroy();
-            lExitCode = (wxThread::ExitCode)SGUI_SDK_DummyMainProc();
+            lExitCode = reinterpret_cast<wxThread::ExitCode>(SGUI_SDK_DummyMainProc());
 		}
 	}
 

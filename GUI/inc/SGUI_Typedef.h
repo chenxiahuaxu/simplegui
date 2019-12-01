@@ -10,14 +10,14 @@
 //=======================================================================//
 //= User Macro definition.											    =//
 //=======================================================================//
-#define 	RECT_X_START(ST)			((ST).PosX)
-#define 	RECT_X_END(ST)				(((ST).PosX + (ST).Width - 1))
-#define 	RECT_Y_START(ST)			((ST).PosY)
-#define 	RECT_Y_END(ST)				(((ST).PosY + (ST).Height - 1))
-#define 	RECT_WIDTH(ST)				((ST).Width)
-#define 	RECT_HEIGHT(ST)				((ST).Height)
-#define 	RECT_VALID_WIDTH(ST)		((RECT_X_START(ST)>0)?RECT_WIDTH(ST):(RECT_WIDTH(ST)+RECT_X_START(ST)))
-#define		RECT_VALID_HEIGHT(ST)		((RECT_Y_START(ST)>0)?RECT_HEIGHT(ST):(RECT_HEIGHT(ST)+RECT_Y_START(ST)))
+#define 	RECT_X_START(ST)			((ST).iPosX)
+#define 	RECT_X_END(RC, POS)			(((POS).iPosX + (RC).iWidth - 1))
+#define 	RECT_Y_START(ST)			((ST).iPosY)
+#define 	RECT_Y_END(RC, POS)			(((POS).iPosY + (RC).iHeight - 1))
+#define 	RECT_WIDTH(ST)				((ST).iWidth)
+#define 	RECT_HEIGHT(ST)				((ST).iHeight)
+#define 	RECT_VALID_WIDTH(DATA, POS)		((RECT_X_START(POS)>0)?RECT_WIDTH(DATA):(RECT_WIDTH(DATA)+RECT_X_START(POS)))
+#define		RECT_VALID_HEIGHT(DATA, POS)		((RECT_Y_START(POS)>0)?RECT_HEIGHT(DATA):(RECT_HEIGHT(DATA)+RECT_Y_START(POS)))
 
 #define		SGUI_DEVPF_IF_DEFINE(R, FN, PARAM) typedef R(*FN)PARAM
 #define		SGUI_BMP_DATA_BUFFER_SIZE	(512)
@@ -57,22 +57,22 @@ typedef	SGUI_UINT32						SGUI_ROM_ADDRESS;
 
 typedef struct
 {
-	SGUI_INT							PosX;
-	SGUI_INT							PosY;
-	SGUI_INT							Width;
-	SGUI_INT							Height;
+	SGUI_INT							iPosX;
+	SGUI_INT							iPosY;
+	SGUI_INT							iWidth;
+	SGUI_INT							iHeight;
 }SGUI_RECT_AREA;
 
 typedef struct
 {
-	SGUI_INT							Width;
-	SGUI_INT							Height;
+	SGUI_INT							iWidth;
+	SGUI_INT							iHeight;
 }SGUI_AREA_SIZE;
 
 typedef struct
 {
-	SGUI_INT							PosX;
-	SGUI_INT							PosY;
+	SGUI_INT							iPosX;
+	SGUI_INT							iPosY;
 }SGUI_POINT;
 
 typedef struct
@@ -98,25 +98,6 @@ typedef enum
 	SGUI_DRAW_REVERSE   = 1,
 }SGUI_DRAW_MODE;
 
-// Declare data source flag here.
-typedef enum
-{
-	SGUI_FONT_SRC_NONE	= 0,
-	SGUI_FONT_SRC_H6,
-	SGUI_FONT_SRC_H8,
-	SGUI_FONT_SRC_H12,
-	SGUI_FONT_SRC_H16,
-	SGUI_NOTICE_ICON,
-	SGUI_FONT_SRC_UNKNOWN,
-}SGUI_FLASH_DATA_SOURCE;
-
-typedef struct
-{
-	SGUI_FLASH_DATA_SOURCE				Source;
-	SGUI_ROM_ADDRESS					StartAddr;
-	SGUI_SIZE							Length;
-}SGUI_BMP_DATA;
-
 // Screen device operation interface type declare.
 SGUI_DEVPF_IF_DEFINE(SGUI_INT,			SGUI_FN_IF_INITIALIZE,				(void));
 SGUI_DEVPF_IF_DEFINE(void,				SGUI_FN_IF_CLEAR,					(void));
@@ -128,8 +109,10 @@ SGUI_DEVPF_IF_DEFINE(void,				SGUI_FN_IF_REFRESH,					(void));
 
 // System function interface type declare.
 SGUI_DEVPF_IF_DEFINE(void,				SGUI_FN_IF_GET_RTC,					(SGUI_INT iYear, SGUI_INT iMounth, SGUI_INT iDay, SGUI_INT iWeekDay, SGUI_INT iHour, SGUI_INT iMinute, SGUI_INT iSecond));
-SGUI_DEVPF_IF_DEFINE(SGUI_SIZE,			SGUI_FN_IF_READ_FLASH,				(SGUI_INT iSourceID, SGUI_ROM_ADDRESS adStartAddr, SGUI_SIZE sReadSize, SGUI_BYTE* pOutputBuffer));
-SGUI_DEVPF_IF_DEFINE(SGUI_INT,			SGUI_FN_IF_GET_CHAR_INDEX,			(SGUI_CSZSTR cszSrc));
+SGUI_DEVPF_IF_DEFINE(SGUI_INT,			SGUI_FN_IF_GET_CHAR_INDEX,			(SGUI_UINT32 uiCode));
+SGUI_DEVPF_IF_DEFINE(SGUI_CSZSTR,       SGUI_FN_IF_STEP_NEXT,               (SGUI_CSZSTR cszSrc, SGUI_UINT32* puiCode));
+SGUI_DEVPF_IF_DEFINE(SGUI_SIZE,         SGUI_FN_IF_GET_DATA,                (SGUI_SIZE sStartAddr, SGUI_BYTE* pDataBuffer, SGUI_SIZE sReadSize));
+SGUI_DEVPF_IF_DEFINE(SGUI_BOOL,         SGUI_FN_IF_IS_FULL_WIDTH,           (SGUI_UINT32 uiCode));
 
 typedef struct
 {
@@ -148,5 +131,25 @@ typedef struct
     // Sync display buffer data to screen device.
     SGUI_FN_IF_REFRESH					fnSyncBuffer;
 }SGUI_SCR_DEV;
+
+typedef struct
+{
+    SGUI_INT							iHeight;
+    SGUI_INT							iHalfWidth;
+    SGUI_INT							iFullWidth;
+	//SGUI_INT							iHorizontalSpacing;
+	//SGUI_INT							iVerticalSpacing;
+	SGUI_FN_IF_GET_CHAR_INDEX			fnGetIndex;
+	SGUI_FN_IF_GET_DATA                 fnGetData;
+	SGUI_FN_IF_STEP_NEXT                fnStepNext;
+	SGUI_FN_IF_IS_FULL_WIDTH            fnIsFullWidth;
+}SGUI_FONT_RES;
+
+typedef struct
+{
+    SGUI_INT							iHeight;
+    SGUI_INT							iWidth;
+    SGUI_BYTE*                          pData;
+}SGUI_BMP_RES;
 
 #endif // _INCLUDE_GUI_TYPEDEF_H_

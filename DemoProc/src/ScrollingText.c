@@ -82,7 +82,7 @@ HMI_SCREEN_OBJECT       g_stHMIDemo_ScrollingText =		{
 HMI_ENGINE_RESULT HMI_DemoScrollingText_Initialize(SGUI_SCR_DEV* Interface)
 {
 	s_iTextOffset = HMI_TEXT_DEMO_FRAME_TEXT_HEIGHT(Interface->stSize);
-	s_iTextHeight = SGUI_Text_GetMultiLineTextLines(s_szDemoText, (HMI_TEXT_DEMO_FRAME_TEXT_WIDTH(Interface->stSize)/g_stFontSize[SCROLL_TEXT_FONT_SIZE].Width))*g_stFontSize[SCROLL_TEXT_FONT_SIZE].Height;
+	s_iTextHeight = SGUI_Text_GetMultiLineTextLines(s_szDemoText, (HMI_TEXT_DEMO_FRAME_TEXT_WIDTH(Interface->stSize)/SGUI_DEFAULT_FONT.iHalfWidth))*SGUI_DEFAULT_FONT.iHeight;
 	s_stTextDisplayArea.PosX = HMI_TEXT_DEMO_FRAME_TEXT_POSX;
 	s_stTextDisplayArea.PosY = HMI_TEXT_DEMO_FRAME_TEXT_POSY;
 	s_stTextDisplayArea.Width = HMI_TEXT_DEMO_FRAME_TEXT_WIDTH(Interface->stSize);

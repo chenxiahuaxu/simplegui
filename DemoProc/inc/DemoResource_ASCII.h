@@ -4,7 +4,7 @@
 /* Screen 1: Multiple lines text. */
 /* Start screen scroll text. */
 #define     DEMO_START_NOTICE           (\
-"welcom to SimpleGUI demo process, ti will show you how \
+"Welcom to SimpleGUI demo process, it will show you how \
 to use GUI to show and deal some user action with HMI \
 interfacce.\n\
 This program uses a uart port to simulate user interaction. \

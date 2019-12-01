@@ -26,6 +26,7 @@
 //=======================================================================//
 //= Public function declaration.									    =//
 //=======================================================================//
+void					SGUI_Common_AdaptDisplayInfo(SGUI_RECT_AREA* pstDisplayArea, SGUI_POINT* pstInnerPos);
 SGUI_SIZE               SGUI_Common_IntegerToStringWithDecimalPoint(SGUI_INT iInteger, SGUI_UINT uiDecimalPlaces, SGUI_SZSTR pszStringBuffer, SGUI_INT iAlignment, SGUI_CHAR cFillCharacter);
 SGUI_SIZE               SGUI_Common_IntegerToString(SGUI_INT iInteger, SGUI_SZSTR pszStringBuffer, SGUI_UINT uiBase, SGUI_INT iAlignment, SGUI_CHAR cFillCharacter);
 SGUI_UINT               SGUI_Common_ConvertStringToUnsignedInteger(SGUI_SZSTR szString, SGUI_CHAR** ppcEndPointer, SGUI_UINT uiBase);
