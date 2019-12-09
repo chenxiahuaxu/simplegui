@@ -27,15 +27,17 @@ static HMI_ENGINE_RESULT	HMI_DemoRealGraph_PostProcess(SGUI_SCR_DEV* pstIFObj, H
 SGUI_RTGRAPH_CONTROL		s_stRealtimeGraphControl =	{50, -50, SGUI_TRUE, 3, 0};
 SGUI_RTGRAPH_DATA			s_stRealtimeGraphData =		{{1, 9, 126, 46}, {0}, {0}, {0}, 0, 0};
 SGUI_RTGRAPH				s_stRealtimeGraph =			{&s_stRealtimeGraphData, &s_stRealtimeGraphControl};
-//=======================================================================//
-//= Global variable declaration.									    =//
-//=======================================================================//
 static HMI_SCREEN_ACTION	s_stDemoRealtimeGraphActions =	{	HMI_DemoRealGraph_Initialize,
 														HMI_DemoRealGraph_Prepare,
 														HMI_DemoRealGraph_RefreshScreen,
 														HMI_DemoRealGraph_ProcessEvent,
 														HMI_DemoRealGraph_PostProcess,
 														};
+
+//=======================================================================//
+//= Global variable declaration.									    =//
+//=======================================================================//
+
 HMI_SCREEN_OBJECT			g_stHMI_DemoRealtimeGraph =		{	HMI_SCREEN_ID_DEMO_REAL_TIME_GRAPH,
                                                         &s_stDemoRealtimeGraphActions
                                                     };
@@ -67,27 +69,27 @@ HMI_ENGINE_RESULT HMI_DemoRealGraph_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const 
 {
 	SGUI_CHAR			szTextBuffer[16];
 	SGUI_RECT_AREA		stTextDisplayArea;
-	SGUI_RECT_AREA		stTextDataArea;
+	SGUI_POINT			stInnerPos;
 
 	// Paint frame.
 	SGUI_Basic_DrawRectangle(pstIFObj, 0, 0, RECT_WIDTH(pstIFObj->stSize), RECT_HEIGHT(pstIFObj->stSize), SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
 	// Paint title
-	stTextDisplayArea.PosX = 1;
-	stTextDisplayArea.PosY = 1;
-	stTextDisplayArea.Width = RECT_WIDTH(pstIFObj->stSize)-2;
-	stTextDisplayArea.Height = 8;
-	stTextDataArea.PosX = 0;
-	stTextDataArea.PosY = 0;
-	SGUI_Text_DrawSingleLineText(pstIFObj, "Real-time graph", &SGUI_DEFAULT_FONT, &stTextDisplayArea, &stTextDataArea, SGUI_DRAW_NORMAL);
+	stTextDisplayArea.iPosX = 1;
+	stTextDisplayArea.iPosY = 1;
+	stTextDisplayArea.iWidth = RECT_WIDTH(pstIFObj->stSize)-2;
+	stTextDisplayArea.iHeight = 8;
+	stInnerPos.iPosX = 0;
+	stInnerPos.iPosY = 0;
+	SGUI_Text_DrawText(pstIFObj, "Real-time graph", &SGUI_DEFAULT_FONT_8, &stTextDisplayArea, &stInnerPos, SGUI_DRAW_NORMAL);
 	// Paint value.
 	SGUI_Common_IntegerToString(s_stRealtimeGraph.Data->ValueArray[s_stRealtimeGraph.Data->ValueCount-1], szTextBuffer, 10, -15, ' ');
-	stTextDisplayArea.PosX = 1;
-	stTextDisplayArea.PosY = RECT_HEIGHT(pstIFObj->stSize)-9;
-	stTextDisplayArea.Width = RECT_WIDTH(pstIFObj->stSize)-2;
-	stTextDisplayArea.Height = 8;
-	stTextDataArea.PosX = 0;
-	stTextDataArea.PosY = 0;
-	SGUI_Text_DrawSingleLineText(pstIFObj, szTextBuffer, &SGUI_DEFAULT_FONT, &stTextDisplayArea, &stTextDataArea, SGUI_DRAW_NORMAL);
+	stTextDisplayArea.iPosX = 1;
+	stTextDisplayArea.iPosY = RECT_HEIGHT(pstIFObj->stSize)-9;
+	stTextDisplayArea.iWidth = RECT_WIDTH(pstIFObj->stSize)-2;
+	stTextDisplayArea.iHeight = 8;
+	stInnerPos.iPosX = 0;
+	stInnerPos.iPosY = 0;
+	SGUI_Text_DrawText(pstIFObj, szTextBuffer, &SGUI_DEFAULT_FONT_8, &stTextDisplayArea, &stInnerPos, SGUI_DRAW_NORMAL);
 	SGUI_RealtimeGraph_Repaint(pstIFObj, &s_stRealtimeGraph);
 	return HMI_RET_NORMAL;
 }

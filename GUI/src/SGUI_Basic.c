@@ -5,7 +5,6 @@
 /** Version: 1.1.0.2													**/
 /** Description: Simple GUI basic drawing operating interface.			**/
 /*************************************************************************/
-
 //=======================================================================//
 //= Include files.													    =//
 //=======================================================================//
@@ -446,7 +445,7 @@ void SGUI_Basic_ReverseBlockColor(SGUI_SCR_DEV* pstIFObj, SGUI_UINT uiStartX, SG
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_Basic_DrawBitMap(SGUI_SCR_DEV* pstIFObj, SGUI_RECT_AREA* pstDisplayArea, SGUI_POINT* pstInnerPos, SGUI_BMP_RES* pstBitmapData, SGUI_DRAW_MODE eDrawMode)
+void SGUI_Basic_DrawBitMap(SGUI_SCR_DEV* pstIFObj, SGUI_RECT_AREA* pstDisplayArea, SGUI_POINT* pstInnerPos, const SGUI_BMP_RES* pstBitmapData, SGUI_DRAW_MODE eDrawMode)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -455,7 +454,7 @@ void SGUI_Basic_DrawBitMap(SGUI_SCR_DEV* pstIFObj, SGUI_RECT_AREA* pstDisplayAre
 	SGUI_INT					iBmpPixX, iBmpPixY;
 	SGUI_UINT					uiDrawnWidthIndex, uiDrawnHeightIndex;
 	SGUI_UINT					uiPixIndex;
-	SGUI_BYTE*                  pData;
+	const SGUI_BYTE*			pData;
 
 	/*----------------------------------*/
 	/* Initialize						*/

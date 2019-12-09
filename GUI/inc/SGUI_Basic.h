@@ -40,6 +40,6 @@ void					SGUI_Basic_DrawLine(SGUI_SCR_DEV* pstIFObj, SGUI_INT uiStartX, SGUI_INT
 void					SGUI_Basic_DrawRectangle(SGUI_SCR_DEV* pstIFObj, SGUI_UINT uiStartX, SGUI_UINT uiStartY, SGUI_UINT uiWidth, SGUI_UINT uiHeight, SGUI_COLOR eEdgeColor, SGUI_COLOR eFillColor);
 void					SGUI_Basic_DrawCircle(SGUI_SCR_DEV* pstIFObj, SGUI_UINT uiCx, SGUI_UINT uiCy, SGUI_UINT uiRadius, SGUI_COLOR eEdgeColor, SGUI_COLOR eFillColor);
 void					SGUI_Basic_ReverseBlockColor(SGUI_SCR_DEV* pstIFObj, SGUI_UINT uiStartX, SGUI_UINT uiStartY, SGUI_UINT uiWidth, SGUI_UINT uiHeight);
-void                    SGUI_Basic_DrawBitMap(SGUI_SCR_DEV* pstIFObj, SGUI_RECT_AREA* pstDisplayArea, SGUI_POINT* pstDataArea, SGUI_BMP_RES* pstBitmapData, SGUI_DRAW_MODE eDrawMode);
+void                    SGUI_Basic_DrawBitMap(SGUI_SCR_DEV* pstIFObj, SGUI_RECT_AREA* pstDisplayArea, SGUI_POINT* pstDataArea, const SGUI_BMP_RES* pstBitmapData, SGUI_DRAW_MODE eDrawMode);
 
 #endif

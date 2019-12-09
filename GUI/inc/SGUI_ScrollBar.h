@@ -17,23 +17,13 @@ typedef enum
 
 typedef struct
 {
-	SGUI_INT					PosX;
-	SGUI_INT					PosY;
-	SGUI_SIZE					Width;
-	SGUI_SIZE					Height;
-	SGUI_UINT32					MaxIndex;
+	SGUI_INT					iPosX;
+	SGUI_INT					iPosY;
+	SGUI_INT					iWidth;
+	SGUI_INT					iHeight;
+	SGUI_SIZE					sMaxIndex;
+	SGUI_SIZE					sIndex;
 	SGUI_SCROLLBAR_DIRECTION	eDirection;
-}SGUI_SCROLLBAR_PARAMETER;
-
-typedef struct
-{
-	SGUI_UINT32					Index;
-}SGUI_SCROLLBAR_DATA;
-
-typedef struct
-{
-	SGUI_SCROLLBAR_PARAMETER	Parameter;
-	SGUI_SCROLLBAR_DATA			Data;
 }SGUI_SCROLLBAR_STRUCT;
 
 //=======================================================================//

@@ -97,15 +97,29 @@
 		<Unit filename="../../../DemoProc/src/DemoProc.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="../../../DemoProc/src/ItemsBase.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../DemoProc/src/List.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../DemoProc/src/RealtimeGraph.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../DemoProc/src/VariableBox.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="../../../GUI/inc/SGUI_Basic.h" />
 		<Unit filename="../../../GUI/inc/SGUI_Common.h" />
 		<Unit filename="../../../GUI/inc/SGUI_Config.h" />
 		<Unit filename="../../../GUI/inc/SGUI_FlashData.h" />
 		<Unit filename="../../../GUI/inc/SGUI_Interface.h" />
+		<Unit filename="../../../GUI/inc/SGUI_ItemsBase.h" />
 		<Unit filename="../../../GUI/inc/SGUI_List.h" />
 		<Unit filename="../../../GUI/inc/SGUI_Notice.h" />
 		<Unit filename="../../../GUI/inc/SGUI_ProcessBar.h" />
 		<Unit filename="../../../GUI/inc/SGUI_RealtimeGraph.h" />
+		<Unit filename="../../../GUI/inc/SGUI_Resource.h" />
 		<Unit filename="../../../GUI/inc/SGUI_ScrollBar.h" />
 		<Unit filename="../../../GUI/inc/SGUI_Text.h" />
 		<Unit filename="../../../GUI/inc/SGUI_Typedef.h" />
@@ -122,13 +136,31 @@
 		<Unit filename="../../../GUI/src/SGUI_Interface.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="../../../GUI/src/SGUI_ItemsBase.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../GUI/src/SGUI_List.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../GUI/src/SGUI_Notice.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="../../../GUI/src/SGUI_ProcessBar.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../GUI/src/SGUI_RealtimeGraph.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../GUI/src/SGUI_Resource.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../../../GUI/src/SGUI_ScrollBar.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../../../GUI/src/SGUI_Text.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../GUI/src/SGUI_VariableBox.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../../../HMI/inc/HMI_Engine.h" />

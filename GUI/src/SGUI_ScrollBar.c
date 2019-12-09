@@ -34,63 +34,63 @@ void SGUI_ScrollBar_Repaint(SGUI_SCR_DEV* pstIFObj, SGUI_SCROLLBAR_STRUCT* pstSc
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	if(SGUI_SCROLLBAR_VERTICAL == pstScrollBar->Parameter.eDirection)
+	if(SGUI_SCROLLBAR_VERTICAL == pstScrollBar->eDirection)
 	{
-		uiScrollBlockSize	= pstScrollBar->Parameter.Width-2;
+		uiScrollBlockSize	= pstScrollBar->iWidth-2;
 	}
 	else
 	{
-		uiScrollBlockSize	= pstScrollBar->Parameter.Height-2;
+		uiScrollBlockSize	= pstScrollBar->iHeight-2;
 	}
 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if(((pstScrollBar->Parameter.Height > 2) && (pstScrollBar->Parameter.Width > 2)) && (pstScrollBar->Parameter.Height != pstScrollBar->Parameter.Width))
+	if(((pstScrollBar->iHeight > 2) && (pstScrollBar->iWidth > 2)) && (pstScrollBar->iHeight != pstScrollBar->iWidth))
 	{
 		// Check new value must be less then max value.
-		if(pstScrollBar->Data.Index > pstScrollBar->Parameter.MaxIndex)
+		if(pstScrollBar->sIndex > pstScrollBar->sMaxIndex)
 		{
-			pstScrollBar->Data.Index = pstScrollBar->Parameter.MaxIndex;
+			pstScrollBar->sIndex = pstScrollBar->sMaxIndex;
 		}
 
-		if(SGUI_SCROLLBAR_VERTICAL == pstScrollBar->Parameter.eDirection)
+		if(SGUI_SCROLLBAR_VERTICAL == pstScrollBar->eDirection)
 		{
 			// Draw scroll bar edge.
-			SGUI_Basic_DrawRectangle(pstIFObj, pstScrollBar->Parameter.PosX, pstScrollBar->Parameter.PosY,
-									pstScrollBar->Parameter.Width, pstScrollBar->Parameter.Height,
+			SGUI_Basic_DrawRectangle(pstIFObj, pstScrollBar->iPosX, pstScrollBar->iPosY,
+									pstScrollBar->iWidth, pstScrollBar->iHeight,
 									SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
 			// Value lower limit is 0, scroll blocks must be greater then 0.
-			if(pstScrollBar->Parameter.MaxIndex > 0)
+			if(pstScrollBar->sMaxIndex > 0)
 			{
-				uiScrollBlockPos = pstScrollBar->Parameter.PosY+1+((pstScrollBar->Parameter.Height-uiScrollBlockSize-2)*pstScrollBar->Data.Index/pstScrollBar->Parameter.MaxIndex);
+				uiScrollBlockPos = pstScrollBar->iPosY+1+((pstScrollBar->iHeight-uiScrollBlockSize-2)*pstScrollBar->sIndex/pstScrollBar->sMaxIndex);
 				// Redraw process block
-				SGUI_Basic_DrawRectangle(pstIFObj, pstScrollBar->Parameter.PosX+1, uiScrollBlockPos,
+				SGUI_Basic_DrawRectangle(pstIFObj, pstScrollBar->iPosX+1, uiScrollBlockPos,
 										uiScrollBlockSize, uiScrollBlockSize, SGUI_COLOR_FRGCLR, SGUI_COLOR_FRGCLR);
 			}
 			else
 			{
-				SGUI_Basic_DrawRectangle(pstIFObj, pstScrollBar->Parameter.PosX+1, pstScrollBar->Parameter.PosY+1,
+				SGUI_Basic_DrawRectangle(pstIFObj, pstScrollBar->iPosX+1, pstScrollBar->iPosY+1,
 										uiScrollBlockSize, uiScrollBlockSize, SGUI_COLOR_FRGCLR, SGUI_COLOR_FRGCLR);
 			}
 		}
 		else // Horizontal
 		{
 			// Draw scroll bar edge.
-			SGUI_Basic_DrawRectangle(pstIFObj, pstScrollBar->Parameter.PosX, pstScrollBar->Parameter.PosY,
-									pstScrollBar->Parameter.Width, pstScrollBar->Parameter.Height,
+			SGUI_Basic_DrawRectangle(pstIFObj, pstScrollBar->iPosX, pstScrollBar->iPosY,
+									pstScrollBar->iWidth, pstScrollBar->iHeight,
 									SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
 			// Value lower limit is 0, scroll blocks must be greater then 0.
-			if(pstScrollBar->Parameter.MaxIndex > 0)
+			if(pstScrollBar->sMaxIndex > 0)
 			{
-				uiScrollBlockPos = pstScrollBar->Parameter.PosX+1+((pstScrollBar->Parameter.Width-uiScrollBlockSize-2)*pstScrollBar->Data.Index/pstScrollBar->Parameter.MaxIndex);
+				uiScrollBlockPos = pstScrollBar->iPosX+1+((pstScrollBar->iWidth-uiScrollBlockSize-2)*pstScrollBar->sIndex/pstScrollBar->sMaxIndex);
 				// Redraw process block
-				SGUI_Basic_DrawRectangle(pstIFObj, uiScrollBlockPos, pstScrollBar->Parameter.PosY+1,
+				SGUI_Basic_DrawRectangle(pstIFObj, uiScrollBlockPos, pstScrollBar->iPosY+1,
 										uiScrollBlockSize, uiScrollBlockSize, SGUI_COLOR_FRGCLR, SGUI_COLOR_FRGCLR);
 			}
 			else
 			{
-				SGUI_Basic_DrawRectangle(pstIFObj, pstScrollBar->Parameter.PosX+1, pstScrollBar->Parameter.PosY+1,
+				SGUI_Basic_DrawRectangle(pstIFObj, pstScrollBar->iPosX+1, pstScrollBar->iPosY+1,
 										uiScrollBlockSize, uiScrollBlockSize, SGUI_COLOR_FRGCLR, SGUI_COLOR_FRGCLR);
 			}
 		}

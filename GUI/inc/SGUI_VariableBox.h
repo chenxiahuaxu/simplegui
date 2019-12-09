@@ -12,32 +12,21 @@
 //=======================================================================//
 typedef struct
 {
-	SGUI_SIZE		PosX;
-	SGUI_SIZE		PosY;
-	SGUI_SIZE		Width;
-	SGUI_FONT_SIZE	FontSize;
-	SGUI_INT		Min;
-	SGUI_INT		Max;
-	SGUI_INT		Value;
-}SGUI_INT_VARBOX_STRUCT;
+	SGUI_RECT_AREA			stLayout;
+	const SGUI_FONT_RES*	pstFontRes;
+	SGUI_INT				Min;
+	SGUI_INT				Max;
+	SGUI_INT				Value;
+}SGUI_NUM_VARBOX_STRUCT;
 
 typedef struct
 {
-	SGUI_SIZE		PosX;
-	SGUI_SIZE		PosY;
-	SGUI_SIZE		Width;
-	SGUI_FONT_SIZE	FontSize;
-	SGUI_SIZE		FocusIndex;
-	SGUI_SIZE		MaxTextLength;
-	SGUI_SZSTR		Value;
+	SGUI_RECT_AREA			stLayout;
+	const SGUI_FONT_RES*	pstFontRes;
+	SGUI_SIZE				sFocusIndex;
+	SGUI_SIZE				sMaxTextLength;
+	SGUI_SZSTR				szValue;
 }SGUI_TEXT_VARBOX_STRUCT;
-
-typedef enum
-{
-	SGUI_RIGHT = 0,
-	SGUI_CENTER,
-	SGUI_LEFT,
-}SGUI_VARBOX_ALIG;
 
 enum
 {
@@ -67,19 +56,17 @@ typedef enum
 #define VARBOX_TEXT_BUFFER_SIZE			(VARBOX_TEXT_LENGTH_MAX+1)
 #define VARBOX_TEXT_WIDTH(FONT_SIZE, L)	(L*(g_stFontSize[FONT_SIZE].Width))
 
-#define GUI_TEXT_ASCII					(SGUI_TEXT_NUMBER|SGUI_TEXT_ALPHA|SGUI_TEXT_PUNCTUATION)
+#define SGUI_TEXT_ASCII					(SGUI_TEXT_NUMBER|SGUI_TEXT_ALPHA|SGUI_TEXT_PUNCTUATION)
 
-#define GUI_TEXT_ISDIGIT(C)				((C>='0' && C<='9')?true:false)
-#define GUI_TEXT_ISUPPER(C)				((C>='A' && C<='Z')?true:false)
 #define GUI_TEXT_ISLOWER(C)				((C>='a' && C<='z')?true:false)
-#define GUI_TEXT_ISALPHA(C)				(GUI_TEXT_ISUPPER(C) || GUI_TEXT_ISLOWER(C))
+#define GUI_TEXT_ISALPHA(C)				(SGUI_IS_UPPER(C) || GUI_TEXT_ISLOWER(C))
 #define GUI_TEXT_ISASCII(C)				((C>=0x20 && C<=0x7E)?true:false)
 
 //=======================================================================//
 //= Public function declaration.									    =//
 //=======================================================================//
-void			SGUI_IntegerVariableBox_Refresh(SGUI_SCR_DEV* pstIFObj, SGUI_INT_VARBOX_STRUCT* pstValue, SGUI_VARBOX_ALIG eAlignment, SGUI_DRAW_MODE eMode);
-void			SGUI_TextVariableBox_Pepaint(SGUI_SCR_DEV* pstIFObj, SGUI_TEXT_VARBOX_STRUCT* pstTextValue, SGUI_DRAW_MODE eMode);
+void			SGUI_NumberVariableBox_Paint(SGUI_SCR_DEV* pstIFObj, SGUI_NUM_VARBOX_STRUCT* pstValue, SGUI_ALIG_MODE eAlignment, SGUI_DRAW_MODE eMode);
+void			SGUI_TextVariableBox_Paint(SGUI_SCR_DEV* pstIFObj, SGUI_TEXT_VARBOX_STRUCT* pstTextValue, SGUI_DRAW_MODE eMode);
 void			SGUI_TextVariableBox_ChangeCharacter(SGUI_SCR_DEV* pstIFObj, SGUI_TEXT_VARBOX_STRUCT* pstTextValue, SGUI_DRAW_MODE eMode, SGUI_UINT uiCharacterSet, SGUI_TEXT_VARBOX_OPT eOpt);
 
 

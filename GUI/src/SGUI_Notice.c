@@ -45,89 +45,54 @@
 /** Params:																**/
 /** Params:																**/
 /**	@ pstIFObj[in]:		SimpleGUI object pointer.						**/
-/**	@ szNoticeText[in]:	Notice text.									**/
-/** @ iFontSize[in]:	Text font size.									**/
+/**	@ pstObject[in]:	Object structure pointer.						**/
+/** @ pstFontRes[in]:	Text font resource.								**/
 /**	@ uiTextOffset[in]:	Text top offset.								**/
-/**	@ eIcon[in]:		Notice icon index.								**/
 /** Return:			Remaining text height display.						**/
 /** Notice:			None.												**/
 /*************************************************************************/
-SGUI_SIZE SGUI_Notice_Repaint(SGUI_SCR_DEV* pstIFObj, SGUI_CSZSTR szNoticeText, const SGUI_FONT_RES* pstFontRes, SGUI_INT uiTextOffset, SGUI_NOTICE_ICON_IDX eIcon)
+SGUI_SIZE SGUI_Notice_Repaint(SGUI_SCR_DEV* pstIFObj, SGUI_NOTICT_BOX* pstObject, const SGUI_FONT_RES* pstFontRes, SGUI_INT uiTextOffset)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	SGUI_SIZE					uiLineCount;
-	SGUI_SIZE					uiNoticeBoxHeight;
 	SGUI_SIZE					uiTextLines;
+	SGUI_RECT_AREA				stIconDisplayArea;
+	SGUI_POINT					stIconPosition;
 	SGUI_RECT_AREA				stTextDisplayArea;
-	SGUI_RECT_AREA				stIconDisplayArea, stIconDataArea;
-	SGUI_CSZSTR				    pszNoticeTextPtr;
-	SGUI_SIZE                   sIconDataAddr;
 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	// Encode string if defined.
-	pszNoticeTextPtr = szNoticeText;
-	// Get max line of notice text.
-	if(SGUI_ICON_NONE != eIcon)
+	if((NULL != pstObject) && (NULL != pstObject->cszNoticeText))
 	{
-		uiLineCount = SGUI_Text_GetMultiLineTextLines(pszNoticeTextPtr, NOTICE_TEXT_LINES_MAX(*pstIFObj, pstFontRes->iHalfWidth));
-	}
-	else
-	{
-		uiLineCount = SGUI_Text_GetMultiLineTextLines(pszNoticeTextPtr, NOTICE_TEXT_LINES_MAX_NOICON(*pstIFObj, pstFontRes->iHalfWidth));
-	}
-	if(uiLineCount < 2)
-	{
-		uiLineCount = 2;
-	}
-	uiNoticeBoxHeight = NOTICE_BOX_HEIGHT(uiLineCount, iFontSize);
-	if(uiNoticeBoxHeight > NOTICE_BOX_HEIGHT_MAX(*pstIFObj))
-	{
-		uiNoticeBoxHeight = NOTICE_BOX_HEIGHT_MAX(*pstIFObj);
-	}
-	// Draw edge
-    SGUI_Basic_DrawRectangle(pstIFObj, NOTICE_BOX_POSX, NOTICE_BOX_POSY(*pstIFObj, uiNoticeBoxHeight), NOTICE_BOX_WIDTH(*pstIFObj), uiNoticeBoxHeight, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
-    // Draw icon if exists.
-    if(SGUI_ICON_NONE != eIcon)
-	{
-		stIconDisplayArea.PosX = NOTICE_BOX_POSX+NOTICE_BOX_MARGIN;
-		stIconDisplayArea.PosY = NOTICE_BOX_POSY(*pstIFObj, uiNoticeBoxHeight)+NOTICE_BOX_MARGIN;
-		stIconDisplayArea.Width = NOTICE_ICON_SIZE;
-		stIconDisplayArea.Height = NOTICE_ICON_SIZE;
-		stIconDataArea.PosX = 0;
-		stIconDataArea.PosY = 0;
-		stIconDataArea.Width = NOTICE_ICON_SIZE;
-		stIconDataArea.Height = NOTICE_ICON_SIZE;
+		// Draw edge
+		SGUI_Basic_DrawRectangle(pstIFObj, pstObject->stLayout.iPosX, pstObject->stLayout.iPosY, pstObject->stLayout.iWidth, pstObject->stLayout.iHeight, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
 
-		sIconDataAddr = (NOTICE_ICON_SIZE*NOTICE_ICON_SIZE/8)*eIcon;
+		stTextDisplayArea.iPosY = pstObject->stLayout.iPosY+2;
+		stTextDisplayArea.iHeight = pstObject->stLayout.iHeight-4;
+		if(NULL == pstObject->pstIcon)
+		{
+			stTextDisplayArea.iPosX = pstObject->stLayout.iPosX+2;
+			stTextDisplayArea.iWidth = pstObject->stLayout.iWidth-4;
+		}
+		else
+		{
+			stTextDisplayArea.iPosX = pstObject->stLayout.iPosX+pstObject->pstIcon->iWidth+4;
+			stTextDisplayArea.iWidth = pstObject->stLayout.iWidth-pstObject->pstIcon->iWidth-6;
 
-		SGUI_SystemIF_GetFlashData(pstIFObj, SGUI_NOTICE_ICON, sIconDataAddr, NOTICE_ICON_SIZE*NOTICE_ICON_SIZE);
-
-		SGUI_Basic_DrawBitMap(pstIFObj, &stIconDisplayArea, &stIconDataArea, pstIFObj->arrBmpDataBuffer, SGUI_DRAW_NORMAL);
+			stIconDisplayArea.iPosX = pstObject->stLayout.iPosX+2;
+			stIconDisplayArea.iPosY = pstObject->stLayout.iPosY+2;
+			stIconDisplayArea.iWidth = pstObject->pstIcon->iWidth;
+			stIconDisplayArea.iHeight = pstObject->pstIcon->iHeight;
+			stIconPosition.iPosX = 0;
+			stIconPosition.iPosY = 0;
+			// Paint icon.
+			SGUI_Basic_DrawBitMap(pstIFObj, &stIconDisplayArea, &stIconPosition, pstObject->pstIcon, SGUI_DRAW_NORMAL);
+		}
+		// Draw text;
+		uiTextLines = SGUI_Text_DrawMultipleLinesText(pstIFObj, pstObject->cszNoticeText, pstFontRes, &stTextDisplayArea, uiTextOffset, SGUI_DRAW_NORMAL);
 	}
-    // Draw text;
-    if(SGUI_ICON_NONE != eIcon)
-	{
-		stTextDisplayArea.PosX = NOTICE_TEXT_POSX;
-		stTextDisplayArea.Width = NOTICE_TEXT_AREA_WIDTH(*pstIFObj);
-	}
-	else
-	{
-		stTextDisplayArea.PosX = NOTICE_TEXT_POSX_NOICON;
-		stTextDisplayArea.Width = NOTICE_TEXT_AREA_WIDTH_NOICON(*pstIFObj);
-	}
-	stTextDisplayArea.PosY = NOTICE_TEXT_POSY(*pstIFObj, uiNoticeBoxHeight);
-	stTextDisplayArea.Height = NOTICE_TEXT_AREA_HEIGHT(uiLineCount, iFontSize);
-    if(stTextDisplayArea.Height > NOTICE_TEXT_AREA_HEIGHT_MAX(*pstIFObj))
-	{
-		stTextDisplayArea.Height = NOTICE_TEXT_AREA_HEIGHT_MAX(*pstIFObj);
-	}
-
-    uiTextLines = SGUI_Text_DrawMultipleLinesText(pstIFObj, pszNoticeTextPtr, iFontSize, &stTextDisplayArea, uiTextOffset, SGUI_DRAW_NORMAL);
-
     return uiTextLines;
 }
 

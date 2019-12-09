@@ -14,7 +14,6 @@
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
-static void				SGUI_TextVariableBox_UpdateCharacter(SGUI_SCR_DEV* pstIFObj, SGUI_TEXT_VARBOX_STRUCT* pstTextValue, char cNewCharacters, SGUI_DRAW_MODE eMode);
 
 //=======================================================================//
 //= Function define.										            =//
@@ -23,22 +22,21 @@ static void				SGUI_TextVariableBox_UpdateCharacter(SGUI_SCR_DEV* pstIFObj, SGUI
 /** Function Name:	GUI_RefreshVariableBox								**/
 /** Purpose:		Display or refresh a integer value edit box.		**/
 /** Params:																**/
-/**	@pstValue[in]:		Value structure, include max value, min value	**/
-/**						and current value.								**/
-/**	@eAlignment[in]:	Alignment, might be right, center or left.		**/
-/**	@eMode[in]:			Display mode, normal or reveres.				**/
+/**	@ pstIFObj[in]:	Device driver object pointer.						**/
+/**	@ pstValue[in]:	Value structure, include max value, min value and	**/
+/**					current value.										**/
+/**	@ eAlignment[in]: Alignment mode, might be right, center or left.	**/
+/**	@ eMode[in]:	Display mode, normal or reveres.					**/
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_IntegerVariableBox_Refresh(SGUI_SCR_DEV* pstIFObj, SGUI_INT_VARBOX_STRUCT* pstValue, SGUI_VARBOX_ALIG eAlignment, SGUI_DRAW_MODE eMode)
+void SGUI_NumberVariableBox_Paint(SGUI_SCR_DEV* pstIFObj, SGUI_NUM_VARBOX_STRUCT* pstValue, SGUI_ALIG_MODE eAlignment, SGUI_DRAW_MODE eMode)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	SGUI_RECT_AREA				stTextDisplayArea;
-	SGUI_RECT_AREA				stTextDataArea;
-	SGUI_SIZE					uiTextLength;
-	SGUI_SIZE					uiTextWidth;
+	SGUI_AREA_SIZE				stTextExtentSize;
+	SGUI_POINT					stTextInnerPos;
 	SGUI_COLOR					eBackColor;
 	SGUI_CHAR					szTextBuffer[VARBOX_TEXT_BUFFER_SIZE];
 
@@ -48,7 +46,7 @@ void SGUI_IntegerVariableBox_Refresh(SGUI_SCR_DEV* pstIFObj, SGUI_INT_VARBOX_STR
 	SGUI_SystemIF_MemorySet(szTextBuffer, 0x00, VARBOX_TEXT_BUFFER_SIZE);
 	eBackColor =				((eMode==SGUI_DRAW_NORMAL)?SGUI_COLOR_BKGCLR:SGUI_COLOR_FRGCLR);
 	// Draw edge
-	SGUI_Basic_DrawRectangle(pstIFObj, pstValue->PosX, pstValue->PosY, pstValue->Width, VARBOX_HEIGHT(pstValue->FontSize), eBackColor, eBackColor);
+	SGUI_Basic_DrawRectangle(pstIFObj, pstValue->stLayout.iPosX, pstValue->stLayout.iPosY, pstValue->stLayout.iWidth, pstValue->stLayout.iHeight, eBackColor, eBackColor);
 
 	/*----------------------------------*/
 	/* Process							*/
@@ -66,162 +64,101 @@ void SGUI_IntegerVariableBox_Refresh(SGUI_SCR_DEV* pstIFObj, SGUI_INT_VARBOX_STR
 			pstValue->Value = pstValue->Min;
 		}
 		// Convert number to string
-		uiTextLength = SGUI_Common_IntegerToString(pstValue->Value, szTextBuffer, 10, -1, ' ');
-		uiTextWidth = VARBOX_TEXT_WIDTH(pstValue->FontSize, uiTextLength);
-		stTextDisplayArea.PosX = pstValue->PosX+1;
-		stTextDisplayArea.PosY = pstValue->PosY+1;
-		stTextDisplayArea.Width = VARBOX_TEXT_AREA_WIDTH(pstValue->Width);
-		stTextDisplayArea.Height = g_stFontSize[pstValue->FontSize].Height;
+		(void)SGUI_Common_IntegerToString(pstValue->Value, szTextBuffer, 10, -1, ' ');
+		SGUI_Text_GetTextExtent(szTextBuffer, pstValue->pstFontRes, &stTextExtentSize);
 		switch(eAlignment)
 		{
 			case SGUI_RIGHT:
 			{
-				stTextDataArea.PosX = stTextDisplayArea.Width - uiTextWidth;
+				stTextInnerPos.iPosX = pstValue->stLayout.iWidth - stTextExtentSize.iWidth;
 				break;
 			}
 			case SGUI_CENTER:
 			{
-				stTextDataArea.PosX = (stTextDisplayArea.Width - uiTextWidth) / 2;
+				stTextInnerPos.iPosX = (pstValue->stLayout.iWidth - stTextExtentSize.iWidth) / 2;
 				break;
 			}
 			default:
 			{
-				stTextDataArea.PosX = 0;
+				stTextInnerPos.iPosX = 0;
 			}
 		}
-		stTextDataArea.PosY = 0;
-		SGUI_Text_DrawSingleLineText(pstIFObj, szTextBuffer, pstValue->FontSize, &stTextDisplayArea, &stTextDataArea, eMode);
+		stTextInnerPos.iPosY = 0;
+		SGUI_Text_DrawText(pstIFObj, szTextBuffer, pstValue->pstFontRes, &(pstValue->stLayout), &stTextInnerPos, eMode);
 	}
 }
 
 /*************************************************************************/
-/** Function Name:	SGUI_TextVariableBox_UpdateCharacter				**/
+/** Function Name:	SGUI_TextVariableBox_Paint							**/
 /** Purpose:		Display or refresh a integer value edit box.		**/
 /** Params:																**/
-/** @pstTextValue[in]:	Text value edit box pointer.					**/
-/** @cNewCharacters[in]: New character of value.						**/
-/**	@eMode[in]:			Display mode, normal or reveres.				**/
+/**	@ pstIFObj[in]:	Device driver object pointer.						**/
+/** @ pstTextValue[in]:	Text value edit box pointer.					**/
+/** @ cNewCharacters[in]: New character of value.						**/
+/**	@ eMode[in]:			Display mode, normal or reveres.			**/
 /** Return:			None.												**/
 /** Notice:			Static function, call by others interface.			**/
 /*************************************************************************/
-void SGUI_TextVariableBox_UpdateCharacter(SGUI_SCR_DEV* pstIFObj, SGUI_TEXT_VARBOX_STRUCT* pstTextValue, char cNewCharacters, SGUI_DRAW_MODE eMode)
+void SGUI_TextVariableBox_Paint(SGUI_SCR_DEV* pstIFObj, SGUI_TEXT_VARBOX_STRUCT* pstTextValue, SGUI_DRAW_MODE eMode)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
 	SGUI_COLOR					eBackColor;
-	SGUI_RECT_AREA				stTextDisplayArea, stTextDataArea;
+	SGUI_POINT					stTextInnerPos;
 	SGUI_RECT_AREA				stFocusArea;
 	SGUI_UINT16					uiFontWidth, uiFontHeight;
 	SGUI_SIZE					uiTextLength, uiFocusIndexMax;
-	SGUI_SIZE					uiFillIndex;
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
 	eBackColor =				((eMode==SGUI_DRAW_NORMAL)?SGUI_COLOR_BKGCLR:SGUI_COLOR_FRGCLR);
-	// Clear background.
-	if(NULL != pstTextValue->Value)
+	if(NULL != pstTextValue->szValue)
 	{
-		SGUI_Basic_DrawRectangle(pstIFObj, pstTextValue->PosX, pstTextValue->PosY, pstTextValue->Width, VARBOX_HEIGHT(pstTextValue->FontSize), eBackColor, eBackColor);
+		// Clear background.
+		SGUI_Basic_DrawRectangle(pstIFObj, pstTextValue->stLayout.iPosX, pstTextValue->stLayout.iPosY, pstTextValue->stLayout.iWidth, pstTextValue->stLayout.iHeight, eBackColor, eBackColor);
+		// Get font graphics size.
+		uiFontWidth =				pstTextValue->pstFontRes->iHalfWidth;
+		uiFontHeight =				pstTextValue->pstFontRes->iHeight;
 	}
-	// Get font graphics size.
-	uiFontWidth =				g_stFontSize[pstTextValue->FontSize].Width;
-	uiFontHeight =				g_stFontSize[pstTextValue->FontSize].Height;
 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if((NULL != pstTextValue) && (NULL != pstTextValue->Value))
+	if((NULL != pstTextValue) && (NULL != pstTextValue->szValue))
 	{
 		// Get max text length and graphics width.
-
-		if(pstTextValue->MaxTextLength > VARBOX_TEXT_LENGTH_MAX)
-		{
-			pstTextValue->MaxTextLength = VARBOX_TEXT_LENGTH_MAX;
-		}
-		uiFocusIndexMax = pstTextValue->MaxTextLength-1;
+		uiFocusIndexMax = pstTextValue->sMaxTextLength-1;
 		// Ignore too long text string.
-		uiTextLength = SGUI_SystemIF_StringLength(pstTextValue->Value);
-		if(uiTextLength > pstTextValue->MaxTextLength)
+		uiTextLength = SGUI_SystemIF_StringLength(pstTextValue->szValue);
+		if(uiTextLength > pstTextValue->sMaxTextLength)
 		{
-			uiTextLength = pstTextValue->MaxTextLength;
-			*(pstTextValue->Value+uiTextLength) = '\0';
+			uiTextLength = pstTextValue->sMaxTextLength;
+			*(pstTextValue->szValue+uiTextLength) = '\0';
             // Point at to last character position if index is more then string length.
-			if(pstTextValue->FocusIndex > uiFocusIndexMax)
+			if(pstTextValue->sFocusIndex > uiFocusIndexMax)
 			{
-				pstTextValue->FocusIndex = uiFocusIndexMax;
-			}
-		}
-		// Update character in text string when index is valid.
-		if(GUI_TEXT_ISASCII(cNewCharacters))
-		{
-			if(pstTextValue->FocusIndex < uiTextLength)
-			{
-				*(pstTextValue->Value+pstTextValue->FocusIndex) = cNewCharacters;
-			}
-			else
-			{
-				// Extend string with space if focus index is more then text length.
-				uiFillIndex = uiTextLength;
-				while(uiFillIndex <= pstTextValue->FocusIndex)
-				{
-					*(pstTextValue->Value+uiFillIndex) = ' ';
-					uiFillIndex++;
-				}
-				*(pstTextValue->Value+uiFillIndex) = '\0';
+				pstTextValue->sFocusIndex = uiFocusIndexMax;
 			}
 		}
 		// Set text display area.
-		stTextDisplayArea.PosX = pstTextValue->PosX+1;
-		stTextDisplayArea.PosY = pstTextValue->PosY+1;
-		stTextDisplayArea.Width = VARBOX_TEXT_AREA_WIDTH(pstTextValue->Width);
-		stTextDisplayArea.Height = uiFontHeight;
-		stTextDataArea.PosX = 0;
-		stTextDataArea.PosY = 0;
-
+		stTextInnerPos.iPosX = 0;
+		stTextInnerPos.iPosY = 0;
 		// Set focus character area.
-		stFocusArea.PosX = stTextDisplayArea.PosX+pstTextValue->FocusIndex*uiFontWidth;
-		stFocusArea.PosY = stTextDisplayArea.PosY;
-		stFocusArea.Width = uiFontWidth;
-		stFocusArea.Height = uiFontHeight;
-		if(RECT_X_END(stFocusArea) > RECT_X_END(stTextDisplayArea))
+		stFocusArea.iPosX = pstTextValue->stLayout.iPosX+pstTextValue->sFocusIndex*uiFontWidth;
+		stFocusArea.iPosY = pstTextValue->stLayout.iPosY;
+		stFocusArea.iWidth = uiFontWidth;
+		stFocusArea.iHeight = uiFontHeight;
+		if(RECT_X_END(stFocusArea, stFocusArea) > RECT_X_END(pstTextValue->stLayout, pstTextValue->stLayout))
 		{
-			stTextDataArea.PosX = RECT_X_END(stTextDisplayArea) - RECT_X_END(stFocusArea);
-			stFocusArea.PosX = stFocusArea.PosX + stTextDataArea.PosX;
+			stTextInnerPos.iPosX = RECT_X_END(pstTextValue->stLayout, pstTextValue->stLayout) - RECT_X_END(stFocusArea, stFocusArea);
+			stFocusArea.iPosX = stFocusArea.iPosX + stTextInnerPos.iPosX;
 		}
 		// Display text.
-		SGUI_Text_DrawSingleLineText(pstIFObj, pstTextValue->Value, pstTextValue->FontSize, &stTextDisplayArea, &stTextDataArea, eMode);
+		SGUI_Text_DrawText(pstIFObj, pstTextValue->szValue, pstTextValue->pstFontRes, &(pstTextValue->stLayout), &stTextInnerPos, eMode);
 		// Focus first character.
-        SGUI_Basic_ReverseBlockColor(pstIFObj, stFocusArea.PosX, stFocusArea.PosY, stFocusArea.Width, stFocusArea.Height);
-	}
-}
-
-/*************************************************************************/
-/** Function Name:	SGUI_TextVariableBox_Refresh						**/
-/** Purpose:		Display or refresh a integer value edit box.		**/
-/** Params:																**/
-/** @pstTextValue[in]:	Text value edit box pointer.					**/
-/**	@eMode[in]:			Display mode, normal or reveres.				**/
-/** Return:			None.												**/
-/** Notice:			None.												**/
-/*************************************************************************/
-void SGUI_TextVariableBox_Pepaint(SGUI_SCR_DEV* pstIFObj, SGUI_TEXT_VARBOX_STRUCT* pstTextValue, SGUI_DRAW_MODE eMode)
-{
-
-	/*----------------------------------*/
-	/* Process							*/
-	/*----------------------------------*/
-	if(NULL != pstTextValue)
-	{
-		if(NULL != pstTextValue->Value)
-		{
-			if(pstTextValue->FocusIndex >= pstTextValue->MaxTextLength)
-			{
-				pstTextValue->FocusIndex = pstTextValue->MaxTextLength-1;
-			}
-			SGUI_TextVariableBox_UpdateCharacter(pstIFObj, pstTextValue, '\0', eMode);
-		}
+        SGUI_Basic_ReverseBlockColor(pstIFObj, stFocusArea.iPosX, stFocusArea.iPosY, stFocusArea.iWidth, stFocusArea.iHeight);
 	}
 }
 
@@ -254,9 +191,9 @@ void SGUI_TextVariableBox_ChangeCharacter(SGUI_SCR_DEV* pstIFObj, SGUI_TEXT_VARB
 	/*----------------------------------*/
 	if(NULL != pstTextValue)
 	{
-		if(NULL != pstTextValue->Value)
+		if(NULL != pstTextValue->szValue)
 		{
-			cCurChar = *(pstTextValue->Value+pstTextValue->FocusIndex);
+			cCurChar = *(pstTextValue->szValue+pstTextValue->sFocusIndex);
 			while(SGUI_FALSE == bUpdated)
 			{
 				cCurChar += (SGUI_INT)eOpt;
@@ -268,21 +205,21 @@ void SGUI_TextVariableBox_ChangeCharacter(SGUI_SCR_DEV* pstIFObj, SGUI_TEXT_VARB
 				{
 					cCurChar = 0x7E;
 				}
-				if(GUI_TEXT_ISDIGIT(cCurChar) || ('.' == cCurChar) || ('-' == cCurChar))
+				if(SGUI_ISDIGIT(cCurChar) || ('.' == cCurChar) || ('-' == cCurChar))
 				{
 					if(uiCharacterSet & SGUI_TEXT_NUMBER)
 					{
 						bUpdated = SGUI_TRUE;
 					}
 				}
-				if(GUI_TEXT_ISALPHA(cCurChar))
+				if(SGUI_ISALPHA(cCurChar))
 				{
 					if(uiCharacterSet & SGUI_TEXT_ALPHA)
 					{
 						bUpdated = SGUI_TRUE;
 					}
 				}
-				if((!GUI_TEXT_ISDIGIT(cCurChar)) && (!(GUI_TEXT_ISALPHA(cCurChar))))
+				if((!SGUI_ISDIGIT(cCurChar)) && (!(SGUI_ISALPHA(cCurChar))))
 				{
 					if(uiCharacterSet & SGUI_TEXT_PUNCTUATION)
 					{
@@ -290,7 +227,8 @@ void SGUI_TextVariableBox_ChangeCharacter(SGUI_SCR_DEV* pstIFObj, SGUI_TEXT_VARB
 					}
 				}
 			}
-			SGUI_TextVariableBox_UpdateCharacter(pstIFObj, pstTextValue, cCurChar, eMode);
+			pstTextValue->szValue[pstTextValue->sFocusIndex] = cCurChar;
+			SGUI_TextVariableBox_Paint(pstIFObj, pstTextValue, eMode);
 		}
 	}
 }

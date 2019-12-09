@@ -10,7 +10,7 @@
 //= Include files.													    =//
 //=======================================================================//
 #include "DemoProc.h"
-#include "SGUI_List.h"
+#include "SGUI_ItemsBase.h"
 #include "SGUI_FlashData.h"
 #include "HMI_Engine.h"
 
@@ -22,83 +22,84 @@
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
-static HMI_ENGINE_RESULT	HMI_DemoList_Initialize(SGUI_SCR_DEV* pstIFObj);
-static HMI_ENGINE_RESULT	HMI_DemoList_Prepare(SGUI_SCR_DEV* pstIFObj, const void* pstParameters);
-static HMI_ENGINE_RESULT	HMI_DemoList_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const void* pstParameters);
-static HMI_ENGINE_RESULT	HMI_DemoList_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent, SGUI_INT* piActionID);
-static HMI_ENGINE_RESULT	HMI_DemoList_PostProcess(SGUI_SCR_DEV* pstIFObj, HMI_ENGINE_RESULT eProcResult, SGUI_INT iActionID);
+static HMI_ENGINE_RESULT	HMI_DemoItemsBase_Initialize(SGUI_SCR_DEV* pstIFObj);
+static HMI_ENGINE_RESULT	HMI_DemoItemsBase_Prepare(SGUI_SCR_DEV* pstIFObj, const void* pstParameters);
+static HMI_ENGINE_RESULT	HMI_DemoItemsBase_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const void* pstParameters);
+static HMI_ENGINE_RESULT	HMI_DemoItemsBase_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent, SGUI_INT* piActionID);
+static HMI_ENGINE_RESULT	HMI_DemoItemsBase_PostProcess(SGUI_SCR_DEV* pstIFObj, HMI_ENGINE_RESULT eProcResult, SGUI_INT iActionID);
 
 //=======================================================================//
 //= Static variable declaration.									    =//
 //=======================================================================//
-static SGUI_ITEMS_ITEM		s_arrstListItems[] =		{	{"Variable box", NULL},
-															{"Real-time Graph", NULL},
+static SGUI_ITEMS_ITEM		s_arrstTestItems[] =		{	{"Variable box", NULL},
+															{"Item2 text", NULL},
 															{"Item3 text", NULL},
 															{"Item4 text", NULL},
 															{"Item5 text", NULL},
 															{"Item6 text", NULL},
 															{"Item7 text", NULL},
 														};
-static SGUI_SCROLLBAR_STRUCT s_stListScrollBar =		{0x00};
-static SGUI_LIST_CONTROL	s_stDemoListObject = 		{0x00};
+
+HMI_SCREEN_ACTION			s_stDemoItemsBaseActions =	{	HMI_DemoItemsBase_Initialize,
+															HMI_DemoItemsBase_Prepare,
+															HMI_DemoItemsBase_RefreshScreen,
+															HMI_DemoItemsBase_ProcessEvent,
+															HMI_DemoItemsBase_PostProcess
+														};
+
+static SGUI_ITEMS_BASE		s_stDemoItemsBaseObject;
 
 //=======================================================================//
 //= Global variable declaration.									    =//
 //=======================================================================//
-HMI_SCREEN_ACTION		s_stDemoListActions =			{	HMI_DemoList_Initialize,
-															HMI_DemoList_Prepare,
-															HMI_DemoList_RefreshScreen,
-															HMI_DemoList_ProcessEvent,
-															HMI_DemoList_PostProcess
-														};
-HMI_SCREEN_OBJECT       g_stHMIDemo_List =				{	HMI_SCREEN_ID_DEMO_LIST,
-															&s_stDemoListActions
+HMI_SCREEN_OBJECT       g_stHMIDemo_ItemsBase =			{	HMI_SCREEN_ID_DEMO_ITEMS_BASE,
+															&s_stDemoItemsBaseActions
 														};
 
 //=======================================================================//
 //= Function define.										            =//
 //=======================================================================//
-HMI_ENGINE_RESULT HMI_DemoList_Initialize(SGUI_SCR_DEV* pstIFObj)
+HMI_ENGINE_RESULT HMI_DemoItemsBase_Initialize(SGUI_SCR_DEV* pstIFObj)
 {
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
     // Initialize list data.
-    SGUI_SystemIF_MemorySet(&s_stDemoListObject, 0x00, sizeof(SGUI_LIST_CONTROL));
-    SGUI_SystemIF_MemorySet(&s_stDemoListObject, 0x00, sizeof(SGUI_LIST_CONTROL));
+    SGUI_SystemIF_MemorySet(&s_stDemoItemsBaseObject, 0x00, sizeof(SGUI_ITEMS_BASE));
     // Title and font size must set before initialize list object.
-    s_stDemoListObject.stLayout.iPosX = 0;
-    s_stDemoListObject.stLayout.iPosY = 0;
-    s_stDemoListObject.stLayout.iWidth = 128;
-    s_stDemoListObject.stLayout.iHeight = 64;
-    s_stDemoListObject.pstScrollBar = &s_stListScrollBar;
-    s_stDemoListObject.szTitle = "Demo list";
+    s_stDemoItemsBaseObject.stLayout.iPosX = 5;
+    s_stDemoItemsBaseObject.stLayout.iPosY = 5;
+    s_stDemoItemsBaseObject.stLayout.iWidth = 118;
+    s_stDemoItemsBaseObject.stLayout.iHeight = 54;
      //Initialize list object.
-	SGUI_List_Initialize(&s_stDemoListObject, &SGUI_DEFAULT_FONT_12);
-	SGUI_List_BindItemsData(&s_stDemoListObject, s_arrstListItems, sizeof(s_arrstListItems)/sizeof(SGUI_ITEMS_ITEM));
+	SGUI_ItemsBase_Initialize(&s_stDemoItemsBaseObject, &SGUI_DEFAULT_FONT_8);
+	SGUI_ItemsBase_BintItemsData(&s_stDemoItemsBaseObject, s_arrstTestItems, sizeof(s_arrstTestItems)/sizeof(SGUI_ITEMS_ITEM));
 
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoList_Prepare (SGUI_SCR_DEV* pstIFObj, const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoItemsBase_Prepare (SGUI_SCR_DEV* pstIFObj, const void* pstParameters)
 {
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	SGUI_List_Repaint(pstIFObj, &s_stDemoListObject);
+	SGUI_Basic_DrawRectangle(pstIFObj, 4, 4, 120, 56, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
+	//s_stDemoItemsBaseObject.iSelection = 2;
+	SGUI_ItemsBase_Repaint(pstIFObj, &s_stDemoItemsBaseObject);
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoList_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoItemsBase_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const void* pstParameters)
 {
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	SGUI_List_Repaint(pstIFObj, &s_stDemoListObject);
+	SGUI_Basic_DrawRectangle(pstIFObj, 4, 4, 62, 22, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
+	SGUI_ItemsBase_Repaint(pstIFObj, &s_stDemoItemsBaseObject);
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoList_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent, SGUI_INT* piActionID)
+HMI_ENGINE_RESULT HMI_DemoItemsBase_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent, SGUI_INT* piActionID)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -145,20 +146,20 @@ HMI_ENGINE_RESULT HMI_DemoList_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EV
 				}
 				case KEY_VALUE_UP:
 				{
-					if(s_stDemoListObject.stItems.iSelection > 0)
+					if(s_stDemoItemsBaseObject.iSelection > 0)
 					{
-						s_stDemoListObject.stItems.iSelection -= 1;
+						s_stDemoItemsBaseObject.iSelection -= 1;
 					}
-					SGUI_List_Repaint(pstIFObj, &s_stDemoListObject);
+					SGUI_ItemsBase_Repaint(pstIFObj, &s_stDemoItemsBaseObject);
 					break;
 				}
 				case KEY_VALUE_DOWN:
 				{
-					if(s_stDemoListObject.stItems.iSelection < s_stDemoListObject.stItems.iCount-1)
+					if(s_stDemoItemsBaseObject.iSelection < s_stDemoItemsBaseObject.iCount-1)
 					{
-						s_stDemoListObject.stItems.iSelection += 1;
+						s_stDemoItemsBaseObject.iSelection += 1;
 					}
-					SGUI_List_Repaint(pstIFObj, &s_stDemoListObject);
+					SGUI_ItemsBase_Repaint(pstIFObj, &s_stDemoItemsBaseObject);
 					break;
 				}
 				default:
@@ -176,20 +177,15 @@ HMI_ENGINE_RESULT HMI_DemoList_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EV
 	return eProcessResult;
 }
 
-HMI_ENGINE_RESULT HMI_DemoList_PostProcess(SGUI_SCR_DEV* pstIFObj, HMI_ENGINE_RESULT eProcResult, SGUI_INT iActionID)
+HMI_ENGINE_RESULT HMI_DemoItemsBase_PostProcess(SGUI_SCR_DEV* pstIFObj, HMI_ENGINE_RESULT eProcResult, SGUI_INT iActionID)
 {
 	if(HMI_DEMO_PROC_CONFIRM == iActionID)
 	{
-        switch(s_stDemoListObject.stItems.iSelection)
+        switch(s_stDemoItemsBaseObject.iSelection)
         {
 			case 0:
 			{
 				HMI_SwitchScreen(HMI_SCREEN_ID_DEMO_VARIABLE_BOX, NULL);
-				break;
-			}
-			case 1:
-			{
-				HMI_SwitchScreen(HMI_SCREEN_ID_DEMO_REAL_TIME_GRAPH, NULL);
 				break;
 			}
 			default:

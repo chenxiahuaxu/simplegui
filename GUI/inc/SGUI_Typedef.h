@@ -16,8 +16,8 @@
 #define 	RECT_Y_END(RC, POS)			(((POS).iPosY + (RC).iHeight - 1))
 #define 	RECT_WIDTH(ST)				((ST).iWidth)
 #define 	RECT_HEIGHT(ST)				((ST).iHeight)
-#define 	RECT_VALID_WIDTH(DATA, POS)		((RECT_X_START(POS)>0)?RECT_WIDTH(DATA):(RECT_WIDTH(DATA)+RECT_X_START(POS)))
-#define		RECT_VALID_HEIGHT(DATA, POS)		((RECT_Y_START(POS)>0)?RECT_HEIGHT(DATA):(RECT_HEIGHT(DATA)+RECT_Y_START(POS)))
+#define 	RECT_VALID_WIDTH(DATA, POS)	((RECT_X_START(POS)>0)?RECT_WIDTH(DATA):(RECT_WIDTH(DATA)+RECT_X_START(POS)))
+#define		RECT_VALID_HEIGHT(DATA, POS) ((RECT_Y_START(POS)>0)?RECT_HEIGHT(DATA):(RECT_HEIGHT(DATA)+RECT_Y_START(POS)))
 
 #define		SGUI_DEVPF_IF_DEFINE(R, FN, PARAM) typedef R(*FN)PARAM
 #define		SGUI_BMP_DATA_BUFFER_SIZE	(512)
@@ -87,16 +87,23 @@ typedef struct
 
 typedef enum
 {
-	SGUI_COLOR_BKGCLR   = 0,
-	SGUI_COLOR_FRGCLR   = 1,
-	SGUI_COLOR_TRANS    = 2,
+	SGUI_COLOR_BKGCLR =					0,
+	SGUI_COLOR_FRGCLR =					1,
+	SGUI_COLOR_TRANS =					2,
 }SGUI_COLOR;
 
 typedef enum
 {
-	SGUI_DRAW_NORMAL    = 0,
-	SGUI_DRAW_REVERSE   = 1,
+	SGUI_DRAW_NORMAL =					0,
+	SGUI_DRAW_REVERSE =					1,
 }SGUI_DRAW_MODE;
+
+typedef enum
+{
+	SGUI_RIGHT =						0,
+	SGUI_CENTER,
+	SGUI_LEFT,
+}SGUI_ALIG_MODE;
 
 // Screen device operation interface type declare.
 SGUI_DEVPF_IF_DEFINE(SGUI_INT,			SGUI_FN_IF_INITIALIZE,				(void));
@@ -149,7 +156,7 @@ typedef struct
 {
     SGUI_INT							iHeight;
     SGUI_INT							iWidth;
-    SGUI_BYTE*                          pData;
+    const SGUI_BYTE*					pData;
 }SGUI_BMP_RES;
 
 #endif // _INCLUDE_GUI_TYPEDEF_H_

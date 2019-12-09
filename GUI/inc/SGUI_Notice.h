@@ -10,15 +10,20 @@
 //=======================================================================//
 //= User Macro definition.											    =//
 //=======================================================================//
-//#define		NOTICE_ICON_SIZE				(24)
 
 //=======================================================================//
 //= Data type definition.											    =//
 //=======================================================================//
+typedef struct
+{
+    SGUI_CSZSTR			cszNoticeText;
+    const SGUI_BMP_RES*	pstIcon;
+    SGUI_RECT_AREA		stLayout;
+}SGUI_NOTICT_BOX;
 
 //=======================================================================//
 //= Public function declaration.									    =//
 //=======================================================================//
-SGUI_SIZE SGUI_Notice_Repaint(SGUI_SCR_DEV* pstIFObj, SGUI_CSZSTR szNoticeText, const SGUI_FONT_RES* pstFontRes, SGUI_INT uiTextOffset, SGUI_NOTICE_ICON_IDX eIcon);
+SGUI_SIZE SGUI_Notice_Repaint(SGUI_SCR_DEV* pstIFObj, SGUI_NOTICT_BOX* pstObject, const SGUI_FONT_RES* pstFontRes, SGUI_INT uiTextOffset);
 
 #endif // __INCLUDE_GUI_NOTICE_H__

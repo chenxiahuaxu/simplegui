@@ -69,11 +69,12 @@ HMI_EVENT_TYPE_DECLARE(DATA_EVENT, DUMMY_DATA_EVENT_DATA);
 //= User Macro definition.											    =//
 //=======================================================================//
 #define		HMI_SCREEN_ID_DEMO_SCROLLING_TEXT			(1001)
-#define		HMI_SCREEN_ID_DEMO_LIST						(1002)
-#define		HMI_SCREEN_ID_DEMO_TEXT_NOTICE				(1003)
-#define		HMI_SCREEN_ID_DEMO_RTC_NOTICE				(1004)
-#define		HMI_SCREEN_ID_DEMO_VARIABLE_BOX				(1005)
-#define		HMI_SCREEN_ID_DEMO_REAL_TIME_GRAPH			(1006)
+#define		HMI_SCREEN_ID_DEMO_ITEMS_BASE				(1002)
+#define		HMI_SCREEN_ID_DEMO_LIST						(1003)
+#define		HMI_SCREEN_ID_DEMO_TEXT_NOTICE				(1004)
+#define		HMI_SCREEN_ID_DEMO_RTC_NOTICE				(1005)
+#define		HMI_SCREEN_ID_DEMO_VARIABLE_BOX				(1006)
+#define		HMI_SCREEN_ID_DEMO_REAL_TIME_GRAPH			(1007)
 
 #define 	DEMO_HEART_BEAT_INTERVAL_MS					(20)
 
@@ -84,6 +85,7 @@ HMI_EVENT_TYPE_DECLARE(DATA_EVENT, DUMMY_DATA_EVENT_DATA);
 extern HMI_ENGINE_OBJECT        g_stDemoEngine;
 /* Screen display objects. */
 extern HMI_SCREEN_OBJECT        g_stHMIDemo_ScrollingText;
+extern HMI_SCREEN_OBJECT		g_stHMIDemo_ItemsBase;
 extern HMI_SCREEN_OBJECT		g_stHMIDemo_List;
 extern HMI_SCREEN_OBJECT		g_stHMIDemo_TextNotice;
 extern HMI_SCREEN_OBJECT		g_stHMIDemo_RTCNotice;
