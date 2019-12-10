@@ -73,7 +73,7 @@ HMI_ENGINE_RESULT HMI_DemoItemsBase_Initialize(SGUI_SCR_DEV* pstIFObj)
     s_stDemoItemsBaseObject.stLayout.iHeight = 54;
      //Initialize list object.
 	SGUI_ItemsBase_Initialize(&s_stDemoItemsBaseObject, &SGUI_DEFAULT_FONT_8);
-	SGUI_ItemsBase_BintItemsData(&s_stDemoItemsBaseObject, s_arrstTestItems, sizeof(s_arrstTestItems)/sizeof(SGUI_ITEMS_ITEM));
+	SGUI_ItemsBase_BindItemsData(&s_stDemoItemsBaseObject, s_arrstTestItems, sizeof(s_arrstTestItems)/sizeof(SGUI_ITEMS_ITEM));
 
 	return HMI_RET_NORMAL;
 }
@@ -84,7 +84,6 @@ HMI_ENGINE_RESULT HMI_DemoItemsBase_Prepare (SGUI_SCR_DEV* pstIFObj, const void*
 	/* Process							*/
 	/*----------------------------------*/
 	SGUI_Basic_DrawRectangle(pstIFObj, 4, 4, 120, 56, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
-	//s_stDemoItemsBaseObject.iSelection = 2;
 	SGUI_ItemsBase_Repaint(pstIFObj, &s_stDemoItemsBaseObject);
 	return HMI_RET_NORMAL;
 }

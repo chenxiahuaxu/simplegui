@@ -44,7 +44,7 @@ void SGUI_Text_GetTextExtent(SGUI_CSZSTR cszText, const SGUI_FONT_RES* pstFontRe
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	pcChar =				    cszText;
+	pcChar =				    (SGUI_CSZSTR)ENCODE(cszText);
 
 	/*----------------------------------*/
 	/* Process							*/
@@ -93,8 +93,7 @@ void SGUI_Text_DrawText(SGUI_SCR_DEV* pstIFObj, SGUI_CSZSTR cszText, const SGUI_
 	/* Initialize						*/
 	/*----------------------------------*/
 	// Initialize variable.
-	pcChar =				    cszText;
-	uiCharacterCode =			0x00000000;
+	pcChar =				    (SGUI_CSZSTR)ENCODE(cszText);
 	eBackColor =				(eFontMode == SGUI_DRAW_NORMAL)?SGUI_COLOR_BKGCLR:SGUI_COLOR_FRGCLR;
 
 	/*----------------------------------*/
@@ -119,7 +118,7 @@ void SGUI_Text_DrawText(SGUI_SCR_DEV* pstIFObj, SGUI_CSZSTR cszText, const SGUI_
 		{
 		    uiCharacterCode = 0;
             pcChar = pstFontRes->fnStepNext(pcChar, &uiCharacterCode);
-            if(SGUI_IS_VISIBLE_CHAR(uiCharacterCode))
+            //if(SGUI_IS_VISIBLE_CHAR(uiCharacterCode))
 			{
 				RECT_WIDTH(stCharBitmap) = pstFontRes->fnIsFullWidth(uiCharacterCode)?pstFontRes->iFullWidth:pstFontRes->iHalfWidth;
 				if(RECT_X_END(stCharBitmap, stPaintPos) >= 0)
@@ -162,7 +161,7 @@ SGUI_SIZE SGUI_Text_DrawMultipleLinesText(SGUI_SCR_DEV* pstIFObj, SGUI_CSZSTR cs
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	pcChar =					cszText;
+	pcChar =					(SGUI_CSZSTR)ENCODE(cszText);
 	uiCharacterCode =			0;
 	uiLines =					0;
 	eBackColor =				(eFontMode == SGUI_DRAW_NORMAL)?SGUI_COLOR_BKGCLR:SGUI_COLOR_FRGCLR;
@@ -255,7 +254,7 @@ SGUI_SIZE SGUI_Text_GetMultiLineTextLines(SGUI_CSZSTR cszText, const SGUI_FONT_R
 	/*----------------------------------*/
 	uiLineLength =				0;
 	uiLineNumber =				1;
-	pcChar =					cszText;
+	pcChar =					(SGUI_CSZSTR)ENCODE(cszText);
 
 	/*----------------------------------*/
 	/* Process							*/
@@ -305,13 +304,11 @@ SGUI_SIZE SGUI_Text_GetCharacterData(const SGUI_FONT_RES* pstFontRes, SGUI_UINT3
 	SGUI_SIZE					sReadDataSize;
 	SGUI_SIZE                   sDataBlockSize;
 	SGUI_SIZE                   sCharIndex;
-	SGUI_BOOL                   bIsFullWidth;
 
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
 	sGetDataSize =              0;
-	bIsFullWidth =              SGUI_FALSE;
 
 	/*----------------------------------*/
 	/* Process							*/
@@ -321,8 +318,8 @@ SGUI_SIZE SGUI_Text_GetCharacterData(const SGUI_FONT_RES* pstFontRes, SGUI_UINT3
 		sCharIndex = pstFontRes->fnGetIndex(uiCode);
         if(SGUI_INVALID_INDEX != sCharIndex)
         {
-            sDataBlockSize = SGUI_USED_BYTE(pstFontRes->iHeight) * pstFontRes->iHalfWidth;
-            sReadDataSize = bIsFullWidth?(sDataBlockSize*2):sDataBlockSize;
+            sDataBlockSize = SGUI_USED_BYTE(pstFontRes->iHeight)*(pstFontRes->iHalfWidth);
+            sReadDataSize = pstFontRes->fnIsFullWidth(uiCode)?(sDataBlockSize*2):sDataBlockSize;
             sGetDataSize = pstFontRes->fnGetData(sCharIndex*sDataBlockSize, pDataBuffer, sReadDataSize>sBufferSize?sBufferSize:sReadDataSize);
         }
     }

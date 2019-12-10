@@ -49,7 +49,16 @@ void SGUI_ItemsBase_Initialize(SGUI_ITEMS_BASE* pstObj, const SGUI_FONT_RES* pst
 	}
 }
 
-void SGUI_ItemsBase_BintItemsData(SGUI_ITEMS_BASE* pstObj, SGUI_ITEMS_ITEM* pstItemsData, SGUI_INT iItemsCount)
+/*************************************************************************/
+/** Function Name:	SGUI_ItemsBase_BindItemsData						**/
+/** Purpose:		Bind items data to object.							**/
+/** Params:																**/
+/** @ pstObj[in]:	Pointer of items-base object will be initialized.	**/
+/** @ pstItemsData[in]: Items data array.								**/
+/** @ iItemsCount[in]: Number of list item data.						**/
+/** Return:			None.												**/
+/*************************************************************************/
+void SGUI_ItemsBase_BindItemsData(SGUI_ITEMS_BASE* pstObj, SGUI_ITEMS_ITEM* pstItemsData, SGUI_INT iItemsCount)
 {
 	/*----------------------------------*/
 	/* Process							*/
@@ -65,6 +74,14 @@ void SGUI_ItemsBase_BintItemsData(SGUI_ITEMS_BASE* pstObj, SGUI_ITEMS_ITEM* pstI
 	}
 }
 
+/*************************************************************************/
+/** Function Name:	SGUI_ItemsBase_Repaint								**/
+/** Purpose:		Update list display on screen.						**/
+/** Params:																**/
+/**	@ pstDeviceIF[in]: Device driver object pointer.					**/
+/** @ pstObj[in]:	Pointer of items-base object will be paint.			**/
+/** Return:			None.												**/
+/*************************************************************************/
 void SGUI_ItemsBase_Repaint(SGUI_SCR_DEV* pstDeviceIF, SGUI_ITEMS_BASE* pstObj)
 {
 	/*----------------------------------*/
@@ -146,6 +163,57 @@ void SGUI_ItemsBase_Repaint(SGUI_SCR_DEV* pstDeviceIF, SGUI_ITEMS_BASE* pstObj)
 					cszItemText = (NULL==pstObj->pstItems[iItemIndex].szVariableText)?pstObj->pstItems[iItemIndex].cszLabelText:pstObj->pstItems[iItemIndex].szVariableText;
 					SGUI_Text_DrawText(pstDeviceIF, cszItemText, pstObj->pstFontRes, &stItemPaintArea, &stItemTextPos, iItemIndex==pstObj->iSelection?SGUI_DRAW_REVERSE:SGUI_DRAW_NORMAL);
 				}
+			}
+		}
+	}
+}
+
+/*************************************************************************/
+/** Function Name:	SGUI_ItemsBase_GetItemExtent						**/
+/** Purpose:		Get item object display area position and size.		**/
+/** Params:																**/
+/** @ pstObj[in]:	Pointer of items-base object will be paint.			**/
+/** @ iSelection[in]: Selected item index.								**/
+/** @ pstItemExtent[out]: Item position and display area size.			**/
+/** Return:			None.												**/
+/** Notice:			This function only used for the visible item, if	**/
+/**					selection is invisible, output size will be (0, 0).	**/
+/*************************************************************************/
+void SGUI_ItemsBase_GetItemExtent(SGUI_ITEMS_BASE* pstObj, SGUI_INT iSelection, SGUI_RECT_AREA* pstItemExtent)
+{
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	if((NULL != pstObj) && (iSelection > SGUI_INVALID_INDEX) && (iSelection < pstObj->iCount) && (NULL != pstItemExtent))
+	{
+		/* Item is not visible. */
+        if((iSelection < pstObj->iPageStartIndex) || (iSelection > pstObj->iPageEndIndex))
+		{
+			pstItemExtent->iPosX = 0;
+			pstItemExtent->iPosY = 0;
+			pstItemExtent->iWidth = 0;
+			pstItemExtent->iHeight = 0;
+		}
+		else
+		{
+			pstItemExtent->iPosX = pstObj->stLayout.iPosX;
+			pstItemExtent->iWidth = pstObj->stLayout.iWidth;
+			if((0 == pstObj->iItemPaintOffset) && (iSelection == pstObj->iPageEndIndex))
+			{
+				pstItemExtent->iPosY = pstObj->stLayout.iPosY+(ITEM_HEIGHT(pstObj->pstFontRes)*(pstObj->iVisibleItems-1));
+				pstItemExtent->iHeight = (0==pstObj->iItemPaintOffset)?(pstObj->stLayout.iHeight%ITEM_HEIGHT(pstObj->pstFontRes)):(ITEM_HEIGHT(pstObj->pstFontRes));
+				/* Correct last visible item height when items area height is an integer multiple of item height. */
+				pstItemExtent->iHeight = (0==pstItemExtent->iHeight)?ITEM_HEIGHT(pstObj->pstFontRes):pstItemExtent->iHeight;
+			}
+			else if((0 != pstObj->iItemPaintOffset) && (iSelection == pstObj->iPageStartIndex))
+			{
+				pstItemExtent->iPosY = pstObj->stLayout.iPosY;
+				pstItemExtent->iHeight = ITEM_HEIGHT(pstObj->pstFontRes)+pstObj->iItemPaintOffset;
+			}
+			else
+			{
+				pstItemExtent->iPosY = pstObj->stLayout.iPosY+((iSelection - pstObj->iPageStartIndex)*ITEM_HEIGHT(pstObj->pstFontRes));
+				pstItemExtent->iHeight = ITEM_HEIGHT(pstObj->pstFontRes);
 			}
 		}
 	}

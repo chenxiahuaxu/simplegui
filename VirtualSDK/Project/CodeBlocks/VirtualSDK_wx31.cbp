@@ -94,6 +94,9 @@
 		<Unit filename="../../../DemoProc/inc/DemoResource_ASCII.h" />
 		<Unit filename="../../../DemoProc/inc/DemoResource_GB2312.h" />
 		<Unit filename="../../../DemoProc/inc/DemoResource_UTF8.h" />
+		<Unit filename="../../../DemoProc/inc/Resource.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
 		<Unit filename="../../../DemoProc/src/DemoProc.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -104,6 +107,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../../../DemoProc/src/RealtimeGraph.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../DemoProc/src/Resource.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../../../DemoProc/src/VariableBox.c">

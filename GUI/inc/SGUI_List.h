@@ -18,7 +18,7 @@ typedef struct
 	SGUI_RECT_AREA				stLayout;
 	SGUI_ITEMS_BASE				stItems;
 	SGUI_CSZSTR					szTitle;
-	SGUI_SCROLLBAR_STRUCT*		pstScrollBar;
+	SGUI_SCROLLBAR_STRUCT		stScrollBar;
 	const SGUI_FONT_RES*        pstFontRes;
 }SGUI_LIST_CONTROL;
 

@@ -78,14 +78,14 @@ void SGUI_List_BindItemsData(SGUI_LIST_CONTROL* pstObj, SGUI_ITEMS_ITEM* pstItem
 	/*----------------------------------*/
 	if((NULL != pstObj) && (NULL != pstItemsData) && (iItemsCount > 0))
 	{
-		SGUI_ItemsBase_BintItemsData(&(pstObj->stItems), pstItemsData, iItemsCount);
+		SGUI_ItemsBase_BindItemsData(&(pstObj->stItems), pstItemsData, iItemsCount);
 		// Initialize scroll bar.
-        pstObj->pstScrollBar->eDirection = SGUI_SCROLLBAR_VERTICAL;
-		pstObj->pstScrollBar->iPosX = pstObj->stItems.stLayout.iPosX+pstObj->stItems.stLayout.iWidth;
-		pstObj->pstScrollBar->iPosY = pstObj->stItems.stLayout.iPosY;
-		pstObj->pstScrollBar->iWidth = LIST_SCROLLBAR_WIDTH;
-		pstObj->pstScrollBar->iHeight = pstObj->stItems.stLayout.iHeight;
-		pstObj->pstScrollBar->sMaxIndex = (pstObj->stItems.iCount > pstObj->stItems.iVisibleItems)?(pstObj->stItems.iCount - pstObj->stItems.iVisibleItems):0;
+        pstObj->stScrollBar.eDirection = SGUI_SCROLLBAR_VERTICAL;
+		pstObj->stScrollBar.iPosX = pstObj->stItems.stLayout.iPosX+pstObj->stItems.stLayout.iWidth;
+		pstObj->stScrollBar.iPosY = pstObj->stItems.stLayout.iPosY;
+		pstObj->stScrollBar.iWidth = LIST_SCROLLBAR_WIDTH;
+		pstObj->stScrollBar.iHeight = pstObj->stItems.stLayout.iHeight;
+		pstObj->stScrollBar.sMaxIndex = (pstObj->stItems.iCount > pstObj->stItems.iVisibleItems)?(pstObj->stItems.iCount - pstObj->stItems.iVisibleItems):0;
 	}
 }
 
@@ -129,7 +129,7 @@ void SGUI_List_Repaint(SGUI_SCR_DEV* pstDeviceIF, SGUI_LIST_CONTROL* pstObj)
 		// Paint items.
 		SGUI_ItemsBase_Repaint(pstDeviceIF, &(pstObj->stItems));
 		// Paint scroll bar.
-		pstObj->pstScrollBar->sIndex = pstObj->stItems.iPageStartIndex;
-		SGUI_ScrollBar_Repaint(pstDeviceIF, pstObj->pstScrollBar);
+		pstObj->stScrollBar.sIndex = pstObj->stItems.iPageStartIndex;
+		SGUI_ScrollBar_Repaint(pstDeviceIF, &(pstObj->stScrollBar));
 	}
 }

@@ -1,4 +1,4 @@
-/*************************************************************************/
+﻿/*************************************************************************/
 /** Copyright.															**/
 /** FileName: List.c													**/
 /** Author: Polarix														**/
@@ -13,6 +13,7 @@
 #include "SGUI_List.h"
 #include "SGUI_FlashData.h"
 #include "HMI_Engine.h"
+#include "Resource.h"
 
 //=======================================================================//
 //= User Macro definition.											    =//
@@ -33,13 +34,12 @@ static HMI_ENGINE_RESULT	HMI_DemoList_PostProcess(SGUI_SCR_DEV* pstIFObj, HMI_EN
 //=======================================================================//
 static SGUI_ITEMS_ITEM		s_arrstListItems[] =		{	{"Variable box", NULL},
 															{"Real-time Graph", NULL},
-															{"Item3 text", NULL},
-															{"Item4 text", NULL},
-															{"Item5 text", NULL},
-															{"Item6 text", NULL},
-															{"Item7 text", NULL},
+															{"啊啊啊", NULL},
+															{"额滴神，终于好用了！", NULL},
+															{"ぁあぃいぅうぇえぉ", NULL},
+															{"ㄅㄆㄇㄈ", NULL},
+															{"！@#￥%……&*（）", NULL},
 														};
-static SGUI_SCROLLBAR_STRUCT s_stListScrollBar =		{0x00};
 static SGUI_LIST_CONTROL	s_stDemoListObject = 		{0x00};
 
 //=======================================================================//
@@ -71,12 +71,10 @@ HMI_ENGINE_RESULT HMI_DemoList_Initialize(SGUI_SCR_DEV* pstIFObj)
     s_stDemoListObject.stLayout.iPosY = 0;
     s_stDemoListObject.stLayout.iWidth = 128;
     s_stDemoListObject.stLayout.iHeight = 64;
-    s_stDemoListObject.pstScrollBar = &s_stListScrollBar;
-    s_stDemoListObject.szTitle = "Demo list";
+    s_stDemoListObject.szTitle = "新版测试列表";
      //Initialize list object.
-	SGUI_List_Initialize(&s_stDemoListObject, &SGUI_DEFAULT_FONT_12);
+	SGUI_List_Initialize(&s_stDemoListObject, &GB2312_FZXS12);
 	SGUI_List_BindItemsData(&s_stDemoListObject, s_arrstListItems, sizeof(s_arrstListItems)/sizeof(SGUI_ITEMS_ITEM));
-
 	return HMI_RET_NORMAL;
 }
 
