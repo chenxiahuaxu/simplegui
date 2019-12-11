@@ -11,7 +11,7 @@
 //=======================================================================//
 #include "DemoProc.h"
 #include "SGUI_ItemsBase.h"
-#include "SGUI_FlashData.h"
+#include "SGUI_FontResource.h"
 #include "HMI_Engine.h"
 
 //=======================================================================//

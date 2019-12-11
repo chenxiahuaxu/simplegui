@@ -4,7 +4,6 @@
 //= Include files.													    =//
 //=======================================================================//
 #include "SGUI_Common.h"
-#include "SGUI_FlashData.h"
 
 //=======================================================================//
 //= Data type definition.											    =//
@@ -14,22 +13,11 @@
 //=======================================================================//
 //= User Macro definition.											    =//
 //=======================================================================//
-#define		BASIC_FONT_HEIGHT				(8)
-#define		BASIC_FONT_WIDTH				(6)
-#define		BASIC_FONT_CHAR_DATA_SIZE		(((BASIC_FONT_HEIGHT-1)/8)+1)*BASIC_FONT_WIDTH
-#define		BASIC_FONT_DATA					(SGUI_BASIC_FONT_H8)
 #define     SGUI_USED_BYTE(V)               (((V-1)/8)+1)
-
 //Bitmap(include font) data bit operation
 #define     SGUI_SET_PAGE_BIT(PAGE, Bit)	((PAGE) = (PAGE) | (0x01 << (Bit)))
 #define     SGUI_CLR_PAGE_BIT(PAGE, Bit)	((PAGE) = (PAGE) & (~(0x01 << (Bit))))
 #define     SGUI_GET_PAGE_BIT(PAGE, Bit)	((((PAGE) & (0x01 << (Bit)))>0)?1:0)
-
-//=======================================================================//
-//= Public variable declaration.									    =//
-//=======================================================================//
-extern SGUI_CBYTE		SGUI_BASIC_FONT_H8[];
-extern SGUI_CBYTE		SGUI_BASIC_FONT_H6[];
 
 //=======================================================================//
 //= Public function declaration.									    =//

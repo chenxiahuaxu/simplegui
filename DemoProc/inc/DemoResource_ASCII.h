@@ -45,6 +45,6 @@ Send \"SPACE\" to start process."\
 
 /* Screen 5: Variable box. */
 #define     DEMO_VARIABLE_BOX_TITLE     ("Edit box demo")
-#define     DEMO_VARIABLE_BOX_HELPER    ("Press TAB to switch focus.\nUp&Down to change value。\nSend \"SPACE\" to continue.")
+#define     DEMO_VARIABLE_BOX_HELPER    ("Press TAB to switch focus.\nUp&Down to change value.\nSend \"SPACE\" to continue.")
 
 #endif // _INCLUDE_DEMO_RESOURCE_UTF8_H_

@@ -2,7 +2,6 @@
 /** Copyright.															**/
 /** FileName: SGUI_List.c												**/
 /** Author: XuYulin														**/
-/** Version: 1.0.0.0													**/
 /** Description: Draw list interface.									**/
 /*************************************************************************/
 //=======================================================================//
@@ -46,7 +45,7 @@ void SGUI_List_Initialize(SGUI_LIST_CONTROL* pstObj, const SGUI_FONT_RES* pstFon
 		pstObj->pstFontRes = pstFontRes;
 		pstObj->stItems.pstItems = NULL;
 		pstObj->stItems.stLayout.iPosX = pstObj->stLayout.iPosX+2;
-		pstObj->stItems.stLayout.iWidth = pstObj->stLayout.iWidth-3-LIST_SCROLLBAR_WIDTH;
+		pstObj->stItems.stLayout.iWidth = pstObj->stLayout.iWidth-4-LIST_SCROLLBAR_WIDTH;
 		if(NULL == pstObj->szTitle)
 		{
 			pstObj->stItems.stLayout.iPosY = pstObj->stLayout.iPosY+2;
@@ -81,7 +80,7 @@ void SGUI_List_BindItemsData(SGUI_LIST_CONTROL* pstObj, SGUI_ITEMS_ITEM* pstItem
 		SGUI_ItemsBase_BindItemsData(&(pstObj->stItems), pstItemsData, iItemsCount);
 		// Initialize scroll bar.
         pstObj->stScrollBar.eDirection = SGUI_SCROLLBAR_VERTICAL;
-		pstObj->stScrollBar.iPosX = pstObj->stItems.stLayout.iPosX+pstObj->stItems.stLayout.iWidth;
+		pstObj->stScrollBar.iPosX = pstObj->stItems.stLayout.iPosX+pstObj->stItems.stLayout.iWidth+1;
 		pstObj->stScrollBar.iPosY = pstObj->stItems.stLayout.iPosY;
 		pstObj->stScrollBar.iWidth = LIST_SCROLLBAR_WIDTH;
 		pstObj->stScrollBar.iHeight = pstObj->stItems.stLayout.iHeight;

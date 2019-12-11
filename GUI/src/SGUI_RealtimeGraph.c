@@ -1,8 +1,7 @@
 /*************************************************************************/
 /** Copyright.															**/
-/** FileName: SGUI_Graph.c												**/
+/** FileName: SGUI_RealtimeGraph.c										**/
 /** Author: Polarix														**/
-/** Version: 1.7.0.0													**/
 /** Description: Graph adjustment UI interface.							**/
 /*************************************************************************/
 

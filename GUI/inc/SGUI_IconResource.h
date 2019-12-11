@@ -10,9 +10,6 @@
 //=======================================================================//
 #define	SGUI_BMP_RESOURCE_DECLARE(NAME)				extern const SGUI_BMP_RES NAME
 
-#define	SGUI_BMP_RESOURCE_DEFINE(NAME, W, H, ...)	const SGUI_BYTE NAME##DATA[] = {__VA_ARGS__};\
-													const SGUI_BMP_RES NAME = {W, H, NAME##DATA}
-
 //=======================================================================//
 //= Public variable declaration.									    =//
 //=======================================================================//

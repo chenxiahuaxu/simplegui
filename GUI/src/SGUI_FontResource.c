@@ -1,15 +1,14 @@
 /*************************************************************************/
 /** Copyright.															**/
-/** FileName: SGUI_FlashData.c											**/
+/** FileName: SGUI_FontResource.c										**/
 /** Author: Polarix														**/
-/** Version: 1.1.0.0													**/
 /** Description: Internal font data.									**/
 /*************************************************************************/
 //=======================================================================//
 //= Include files.													    =//
 //=======================================================================//
 #include "SGUI_Common.h"
-#include "SGUI_FlashData.h"
+#include "SGUI_FontResource.h"
 
 //=======================================================================//
 //= User Macro definition.											    =//
@@ -37,9 +36,9 @@
 static SGUI_INT         SGUI_Resource_GetCharIndex_Default(SGUI_UINT32 uiCode);
 static SGUI_CSZSTR      SGUI_Resource_StepNext_Default(SGUI_CSZSTR cszSrc, SGUI_UINT32* puiCode);
 static SGUI_BOOL        SGUI_Resource_IsFullWidth_Default(SGUI_UINT32 uiCode);
-static SGUI_FONT_RES_DECLARE(8);
-static SGUI_FONT_RES_DECLARE(12);
-static SGUI_FONT_RES_DECLARE(16);
+static 					SGUI_FONT_RES_DECLARE(8);
+static					SGUI_FONT_RES_DECLARE(12);
+static					SGUI_FONT_RES_DECLARE(16);
 
 //=======================================================================//
 //= Static variable declaration.									    =//
@@ -49,8 +48,6 @@ const SGUI_FONT_RES SGUI_DEFAULT_FONT_8 =
     /*SGUI_INT                      iHeight*/               8,
     /*SGUI_INT                      iHalfWidth*/            6,
     /*SGUI_INT                      iFullWidth*/            0,
-//	/*SGUI_INT                      iHorizontalSpacing*/    0,
-//	/*SGUI_INT                      iVerticalSpacing*/      0,
 	/*SGUI_FN_IF_GET_CHAR_INDEX     fnGetIndex*/            SGUI_Resource_GetCharIndex_Default,
 	/*SGUI_FN_IF_GET_DATA           fnGetData*/             SGUI_FONT_RES_DATA_FUNC_NAME(8),
 	/*SGUI_FN_IF_STEP_NEXT          fnStepNext*/            SGUI_Resource_StepNext_Default,
@@ -61,9 +58,7 @@ const SGUI_FONT_RES SGUI_DEFAULT_FONT_12 =
 {
     /*SGUI_INT                      iHeight*/               12,
     /*SGUI_INT                      iHalfWidth*/            6,
-    /*SGUI_INT                      iFullWidth*/            12,
-//	/*SGUI_INT                      iHorizontalSpacing*/    0,
-//	/*SGUI_INT                      iVerticalSpacing*/      0,
+    /*SGUI_INT                      iFullWidth*/            0,
 	/*SGUI_FN_IF_GET_CHAR_INDEX     fnGetIndex*/            SGUI_Resource_GetCharIndex_Default,
 	/*SGUI_FN_IF_GET_DATA           fnGetData*/             SGUI_FONT_RES_DATA_FUNC_NAME(12),
 	/*SGUI_FN_IF_STEP_NEXT          fnStepNext*/            SGUI_Resource_StepNext_Default,
@@ -74,9 +69,7 @@ const SGUI_FONT_RES SGUI_DEFAULT_FONT_16 =
 {
     /*SGUI_INT                      iHeight*/               16,
     /*SGUI_INT                      iHalfWidth*/            8,
-    /*SGUI_INT                      iFullWidth*/            16,
-//	/*SGUI_INT                      iHorizontalSpacing*/    0,
-//	/*SGUI_INT                      iVerticalSpacing*/      0,
+    /*SGUI_INT                      iFullWidth*/            0,
 	/*SGUI_FN_IF_GET_CHAR_INDEX     fnGetIndex*/            SGUI_Resource_GetCharIndex_Default,
 	/*SGUI_FN_IF_GET_DATA           fnGetData*/             SGUI_FONT_RES_DATA_FUNC_NAME(16),
 	/*SGUI_FN_IF_STEP_NEXT          fnStepNext*/            SGUI_Resource_StepNext_Default,

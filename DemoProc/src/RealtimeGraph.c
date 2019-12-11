@@ -11,6 +11,7 @@
 #include "DemoProc.h"
 #include "SGUI_Text.h"
 #include "SGUI_RealtimeGraph.h"
+#include "SGUI_FontResource.h"
 
 //=======================================================================//
 //= Static function declaration.									    =//

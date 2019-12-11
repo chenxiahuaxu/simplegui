@@ -1,14 +1,19 @@
 /*************************************************************************/
 /** Copyright.															**/
-/** FileName: SGUI_Basic.c												**/
+/** FileName: SGUI_IconResource.c										**/
 /** Author: XuYulin														**/
-/** Version: 1.1.0.2													**/
 /** Description: Simple GUI basic drawing operating interface.			**/
 /*************************************************************************/
 //=======================================================================//
 //= Include files.													    =//
 //=======================================================================//
-#include "SGUI_Resource.h"
+#include "SGUI_IconResource.h"
+
+//=======================================================================//
+//= User Macro definition.											    =//
+//=======================================================================//
+#define	SGUI_BMP_RESOURCE_DEFINE(NAME, W, H, ...)	const SGUI_BYTE NAME##DATA[] = {__VA_ARGS__};\
+													const SGUI_BMP_RES NAME = {W, H, NAME##DATA}
 
 //=======================================================================//
 //= Static variable define.												=//

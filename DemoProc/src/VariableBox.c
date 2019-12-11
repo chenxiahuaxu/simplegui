@@ -11,7 +11,8 @@
 #include "DemoProc.h"
 #include "SGUI_Notice.h"
 #include "SGUI_VariableBox.h"
-#include "SGUI_Resource.h"
+#include "SGUI_FontResource.h"
+#include "SGUI_IconResource.h"
 
 //=======================================================================//
 //= User Macro definition.											    =//
@@ -89,11 +90,7 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_Prepare(SGUI_SCR_DEV* pstIFObj, const void
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	stNoticeBox.stLayout.iPosX = 5;
-	stNoticeBox.stLayout.iPosY = 5;
-	stNoticeBox.stLayout.iWidth = pstIFObj->stSize.iWidth-10;
-	stNoticeBox.stLayout.iHeight = pstIFObj->stSize.iHeight-10;
-	stNoticeBox.pstIcon = &SGUI_RES_ICON_INFORMATION_24;
+	stNoticeBox.pstIcon = &SGUI_RES_ICON_INFORMATION_16;
 	stNoticeBox.cszNoticeText = s_szHelpNoticeText;
 	/*----------------------------------*/
 	/* Process							*/
@@ -102,10 +99,11 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_Prepare(SGUI_SCR_DEV* pstIFObj, const void
 	s_szFrameTitle = s_szDefaultFrameTitle;
 	HMI_DemoVariableBox_DrawFrame(pstIFObj, (SGUI_SZSTR)s_szFrameTitle);
 	// Show notice
+	SGUI_Notice_FitArea(pstIFObj, &(stNoticeBox.stLayout));
 #ifdef _SIMPLE_GUI_NON_ASCII_
-	SGUI_Notice_Repaint(pstIFObj, &stNoticeBox, &SGUI_DEFAULT_FONT_12, 0);
+	SGUI_Notice_Repaint(pstIFObj, &stNoticeBox, &SGUI_DEFAULT_FONT_8, 0);
 #else
-	SGUI_Notice_Repaint(pstIFObj, &stNoticeBox, &SGUI_DEFAULT_FONT_12, 0);
+	SGUI_Notice_Repaint(pstIFObj, &stNoticeBox, &SGUI_DEFAULT_FONT_8, 0);
 #endif //_SIMPLE_GUI_NON_ASCII_
 	// Start RTC
 	RTCTimerEnable(true);

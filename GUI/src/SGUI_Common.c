@@ -2,7 +2,6 @@
 /** Copyright.															**/
 /** FileName: SGUI_Common.c												**/
 /** Author: Polarix														**/
-/** Version: 1.0.0.0													**/
 /** Description: Simple GUI common process.								**/
 /*************************************************************************/
 

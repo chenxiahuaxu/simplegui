@@ -8,7 +8,6 @@
 //= Include files.													    =//
 //=======================================================================//
 #include "SGUI_Interface.h"
-#include "SGUI_FlashData.h"
 
 // SDK string encode convert library interface
 #ifdef _SIMPLE_GUI_ENCODE_TEXT_

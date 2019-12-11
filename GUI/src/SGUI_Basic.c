@@ -2,7 +2,6 @@
 /** Copyright.															**/
 /** FileName: SGUI_Basic.c												**/
 /** Author: XuYulin														**/
-/** Version: 1.1.0.2													**/
 /** Description: Simple GUI basic drawing operating interface.			**/
 /*************************************************************************/
 //=======================================================================//

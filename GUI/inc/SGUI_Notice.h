@@ -8,10 +8,6 @@
 #include "SGUI_Text.h"
 
 //=======================================================================//
-//= User Macro definition.											    =//
-//=======================================================================//
-
-//=======================================================================//
 //= Data type definition.											    =//
 //=======================================================================//
 typedef struct
@@ -24,6 +20,7 @@ typedef struct
 //=======================================================================//
 //= Public function declaration.									    =//
 //=======================================================================//
-SGUI_SIZE SGUI_Notice_Repaint(SGUI_SCR_DEV* pstIFObj, SGUI_NOTICT_BOX* pstObject, const SGUI_FONT_RES* pstFontRes, SGUI_INT uiTextOffset);
+SGUI_SIZE	SGUI_Notice_Repaint(SGUI_SCR_DEV* pstIFObj, SGUI_NOTICT_BOX* pstObject, const SGUI_FONT_RES* pstFontRes, SGUI_INT uiTextOffset);
+void		SGUI_Notice_FitArea(SGUI_SCR_DEV* pstIFObj, SGUI_RECT_AREA* pstFitArea);
 
 #endif // __INCLUDE_GUI_NOTICE_H__

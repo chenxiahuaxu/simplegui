@@ -2,7 +2,6 @@
 /** Copyright.															**/
 /** FileName: SGUI_ItemsBase.c											**/
 /** Author: XuYulin														**/
-/** Version: 1.0.0.0													**/
 /** Description: Simple GUI items base interface, used to extend list	**/
 /**				components .											**/
 /*************************************************************************/

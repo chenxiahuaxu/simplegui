@@ -2,7 +2,6 @@
 /** Copyright.															**/
 /** FileName: SGUI_VariableBox.c										**/
 /** Author: XuYulin														**/
-/** Version: 1.0.0.0													**/
 /** Description: Show and change variable box.							**/
 /*************************************************************************/
 

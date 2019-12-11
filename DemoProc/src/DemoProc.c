@@ -11,7 +11,7 @@
 
 #ifdef _SIMPLE_GUI_IN_VIRTUAL_SDK_
 #include "SDKInterface.h"
-#include "SGUI_FlashData.h"
+#include "SGUI_FontResource.h"
 #else
 #include "OLED.h"
 #include "Usart.h"

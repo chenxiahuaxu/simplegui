@@ -118,14 +118,14 @@
 		<Unit filename="../../../GUI/inc/SGUI_Basic.h" />
 		<Unit filename="../../../GUI/inc/SGUI_Common.h" />
 		<Unit filename="../../../GUI/inc/SGUI_Config.h" />
-		<Unit filename="../../../GUI/inc/SGUI_FlashData.h" />
+		<Unit filename="../../../GUI/inc/SGUI_FontResource.h" />
+		<Unit filename="../../../GUI/inc/SGUI_IconResource.h" />
 		<Unit filename="../../../GUI/inc/SGUI_Interface.h" />
 		<Unit filename="../../../GUI/inc/SGUI_ItemsBase.h" />
 		<Unit filename="../../../GUI/inc/SGUI_List.h" />
 		<Unit filename="../../../GUI/inc/SGUI_Notice.h" />
 		<Unit filename="../../../GUI/inc/SGUI_ProcessBar.h" />
 		<Unit filename="../../../GUI/inc/SGUI_RealtimeGraph.h" />
-		<Unit filename="../../../GUI/inc/SGUI_Resource.h" />
 		<Unit filename="../../../GUI/inc/SGUI_ScrollBar.h" />
 		<Unit filename="../../../GUI/inc/SGUI_Text.h" />
 		<Unit filename="../../../GUI/inc/SGUI_Typedef.h" />
@@ -136,7 +136,10 @@
 		<Unit filename="../../../GUI/src/SGUI_Common.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="../../../GUI/src/SGUI_FlashData.c">
+		<Unit filename="../../../GUI/src/SGUI_FontResource.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../GUI/src/SGUI_IconResource.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../../../GUI/src/SGUI_Interface.c">
@@ -155,9 +158,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../../../GUI/src/SGUI_RealtimeGraph.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="../../../GUI/src/SGUI_Resource.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../../../GUI/src/SGUI_ScrollBar.c">

@@ -2,7 +2,6 @@
 /** Copyright.															**/
 /** FileName: SGUI_ProcessBar.c											**/
 /** Author: XuYulin														**/
-/** Version: 1.0.0.0													**/
 /** Description: Process bar display interface.							**/
 /*************************************************************************/
 
