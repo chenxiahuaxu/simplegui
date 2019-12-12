@@ -39,7 +39,7 @@ static HMI_SCREEN_ACTION	s_stDemoRealtimeGraphActions =	{	HMI_DemoRealGraph_Init
 //= Global variable declaration.									    =//
 //=======================================================================//
 
-HMI_SCREEN_OBJECT			g_stHMI_DemoRealtimeGraph =		{	HMI_SCREEN_ID_DEMO_REAL_TIME_GRAPH,
+HMI_SCREEN_OBJECT			g_stHMIDemo_RealtimeGraph =		{	HMI_SCREEN_ID_DEMO_REAL_TIME_GRAPH,
                                                         &s_stDemoRealtimeGraphActions
                                                     };
 

@@ -45,9 +45,9 @@ static					SGUI_FONT_RES_DECLARE(16);
 //=======================================================================//
 const SGUI_FONT_RES SGUI_DEFAULT_FONT_8 =
 {
-    /*SGUI_INT                      iHeight*/               8,
     /*SGUI_INT                      iHalfWidth*/            6,
     /*SGUI_INT                      iFullWidth*/            0,
+    /*SGUI_INT                      iHeight*/               8,
 	/*SGUI_FN_IF_GET_CHAR_INDEX     fnGetIndex*/            SGUI_Resource_GetCharIndex_Default,
 	/*SGUI_FN_IF_GET_DATA           fnGetData*/             SGUI_FONT_RES_DATA_FUNC_NAME(8),
 	/*SGUI_FN_IF_STEP_NEXT          fnStepNext*/            SGUI_Resource_StepNext_Default,
@@ -56,9 +56,9 @@ const SGUI_FONT_RES SGUI_DEFAULT_FONT_8 =
 
 const SGUI_FONT_RES SGUI_DEFAULT_FONT_12 =
 {
-    /*SGUI_INT                      iHeight*/               12,
     /*SGUI_INT                      iHalfWidth*/            6,
     /*SGUI_INT                      iFullWidth*/            0,
+    /*SGUI_INT                      iHeight*/               12,
 	/*SGUI_FN_IF_GET_CHAR_INDEX     fnGetIndex*/            SGUI_Resource_GetCharIndex_Default,
 	/*SGUI_FN_IF_GET_DATA           fnGetData*/             SGUI_FONT_RES_DATA_FUNC_NAME(12),
 	/*SGUI_FN_IF_STEP_NEXT          fnStepNext*/            SGUI_Resource_StepNext_Default,
@@ -67,9 +67,9 @@ const SGUI_FONT_RES SGUI_DEFAULT_FONT_12 =
 
 const SGUI_FONT_RES SGUI_DEFAULT_FONT_16 =
 {
-    /*SGUI_INT                      iHeight*/               16,
     /*SGUI_INT                      iHalfWidth*/            8,
     /*SGUI_INT                      iFullWidth*/            0,
+    /*SGUI_INT                      iHeight*/               16,
 	/*SGUI_FN_IF_GET_CHAR_INDEX     fnGetIndex*/            SGUI_Resource_GetCharIndex_Default,
 	/*SGUI_FN_IF_GET_DATA           fnGetData*/             SGUI_FONT_RES_DATA_FUNC_NAME(16),
 	/*SGUI_FN_IF_STEP_NEXT          fnStepNext*/            SGUI_Resource_StepNext_Default,

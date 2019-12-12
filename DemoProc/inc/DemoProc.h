@@ -75,6 +75,7 @@ HMI_EVENT_TYPE_DECLARE(DATA_EVENT, DUMMY_DATA_EVENT_DATA);
 #define		HMI_SCREEN_ID_DEMO_RTC_NOTICE				(1005)
 #define		HMI_SCREEN_ID_DEMO_VARIABLE_BOX				(1006)
 #define		HMI_SCREEN_ID_DEMO_REAL_TIME_GRAPH			(1007)
+#define		HMI_SCREEN_ID_DEMO_MENU						(1008)
 
 #define 	DEMO_HEART_BEAT_INTERVAL_MS					(20)
 
@@ -90,7 +91,8 @@ extern HMI_SCREEN_OBJECT		g_stHMIDemo_List;
 extern HMI_SCREEN_OBJECT		g_stHMIDemo_TextNotice;
 extern HMI_SCREEN_OBJECT		g_stHMIDemo_RTCNotice;
 extern HMI_SCREEN_OBJECT        g_stHMIDemo_VariableBox;
-extern HMI_SCREEN_OBJECT		g_stHMI_DemoRealtimeGraph;
+extern HMI_SCREEN_OBJECT		g_stHMIDemo_RealtimeGraph;
+extern HMI_SCREEN_OBJECT		g_stHMIDemo_Menu;
 //=======================================================================//
 //= Function declare.   											    =//
 //=======================================================================//

@@ -141,11 +141,9 @@ typedef struct
 
 typedef struct
 {
-    SGUI_INT							iHeight;
     SGUI_INT							iHalfWidth;
     SGUI_INT							iFullWidth;
-	//SGUI_INT							iHorizontalSpacing;
-	//SGUI_INT							iVerticalSpacing;
+    SGUI_INT							iHeight;
 	SGUI_FN_IF_GET_CHAR_INDEX			fnGetIndex;
 	SGUI_FN_IF_GET_DATA                 fnGetData;
 	SGUI_FN_IF_STEP_NEXT                fnStepNext;
@@ -154,8 +152,8 @@ typedef struct
 
 typedef struct
 {
+	SGUI_INT							iWidth;
     SGUI_INT							iHeight;
-    SGUI_INT							iWidth;
     const SGUI_BYTE*					pData;
 }SGUI_BMP_RES;
 

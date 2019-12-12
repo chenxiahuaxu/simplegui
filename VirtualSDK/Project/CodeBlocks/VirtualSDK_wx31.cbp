@@ -106,6 +106,9 @@
 		<Unit filename="../../../DemoProc/src/List.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="../../../DemoProc/src/Menu.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="../../../DemoProc/src/RealtimeGraph.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -123,6 +126,7 @@
 		<Unit filename="../../../GUI/inc/SGUI_Interface.h" />
 		<Unit filename="../../../GUI/inc/SGUI_ItemsBase.h" />
 		<Unit filename="../../../GUI/inc/SGUI_List.h" />
+		<Unit filename="../../../GUI/inc/SGUI_Menu.h" />
 		<Unit filename="../../../GUI/inc/SGUI_Notice.h" />
 		<Unit filename="../../../GUI/inc/SGUI_ProcessBar.h" />
 		<Unit filename="../../../GUI/inc/SGUI_RealtimeGraph.h" />
@@ -149,6 +153,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../../../GUI/src/SGUI_List.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../GUI/src/SGUI_Menu.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../../../GUI/src/SGUI_Notice.c">

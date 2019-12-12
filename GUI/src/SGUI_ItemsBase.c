@@ -168,6 +168,37 @@ void SGUI_ItemsBase_Repaint(SGUI_SCR_DEV* pstDeviceIF, SGUI_ITEMS_BASE* pstObj)
 }
 
 /*************************************************************************/
+/** Function Name:	SGUI_ItemsBase_GetItem								**/
+/** Purpose:		Get item object pointer by index.					**/
+/** Params:																**/
+/** @ pstObj[in]:	Pointer of items-base object will be paint.			**/
+/** @ iIndex[in]:	Index of wanted item.								**/
+/** Return:			Item object pointer.								**/
+/*************************************************************************/
+SGUI_ITEMS_ITEM* SGUI_ItemsBase_GetItem(SGUI_ITEMS_BASE* pstObj, SGUI_INT iIndex)
+{
+	/*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+	SGUI_ITEMS_ITEM*			pstSelectedItem;
+
+	/*----------------------------------*/
+	/* Initialize						*/
+	/*----------------------------------*/
+	pstSelectedItem =			NULL;
+
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	if((NULL != pstObj) && (iIndex > SGUI_INVALID_INDEX) && (iIndex < pstObj->iCount))
+	{
+		pstSelectedItem = pstObj->pstItems+iIndex;
+	}
+
+	return pstSelectedItem;
+}
+
+/*************************************************************************/
 /** Function Name:	SGUI_ItemsBase_GetItemExtent						**/
 /** Purpose:		Get item object display area position and size.		**/
 /** Params:																**/
@@ -185,18 +216,16 @@ void SGUI_ItemsBase_GetItemExtent(SGUI_ITEMS_BASE* pstObj, SGUI_INT iSelection, 
 	/*----------------------------------*/
 	if((NULL != pstObj) && (iSelection > SGUI_INVALID_INDEX) && (iSelection < pstObj->iCount) && (NULL != pstItemExtent))
 	{
+		pstItemExtent->iPosX = pstObj->stLayout.iPosX;
+		pstItemExtent->iWidth = pstObj->stLayout.iWidth;
 		/* Item is not visible. */
         if((iSelection < pstObj->iPageStartIndex) || (iSelection > pstObj->iPageEndIndex))
 		{
-			pstItemExtent->iPosX = 0;
 			pstItemExtent->iPosY = 0;
-			pstItemExtent->iWidth = 0;
 			pstItemExtent->iHeight = 0;
 		}
 		else
 		{
-			pstItemExtent->iPosX = pstObj->stLayout.iPosX;
-			pstItemExtent->iWidth = pstObj->stLayout.iWidth;
 			if((0 == pstObj->iItemPaintOffset) && (iSelection == pstObj->iPageEndIndex))
 			{
 				pstItemExtent->iPosY = pstObj->stLayout.iPosY+(ITEM_HEIGHT(pstObj->pstFontRes)*(pstObj->iVisibleItems-1));
@@ -211,9 +240,31 @@ void SGUI_ItemsBase_GetItemExtent(SGUI_ITEMS_BASE* pstObj, SGUI_INT iSelection, 
 			}
 			else
 			{
-				pstItemExtent->iPosY = pstObj->stLayout.iPosY+((iSelection - pstObj->iPageStartIndex)*ITEM_HEIGHT(pstObj->pstFontRes));
+				pstItemExtent->iPosY = pstObj->stLayout.iPosY+((iSelection - pstObj->iPageStartIndex)*ITEM_HEIGHT(pstObj->pstFontRes))+pstObj->iItemPaintOffset;
 				pstItemExtent->iHeight = ITEM_HEIGHT(pstObj->pstFontRes);
 			}
 		}
+	}
+}
+
+/*************************************************************************/
+/** Function Name:	SGUI_ItemsBase_FitLayout							**/
+/** Purpose:		Recalculate layout data when display area size is 	**/
+/**					changed.											**/
+/** Params:																**/
+/** @ pstObj[in]:	Pointer of items-base object will be paint.			**/
+/** Return:			None.												**/
+/** Notice:			This function only used for the visible item, if	**/
+/**					selection is invisible, output size will be (0, 0).	**/
+/*************************************************************************/
+void SGUI_ItemsBase_FitLayout(SGUI_ITEMS_BASE* pstObj)
+{
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	if(NULL != pstObj)
+	{
+		pstObj->iVisibleItems = (pstObj->stLayout.iHeight-1)/ITEM_HEIGHT(pstObj->pstFontRes)+1;
+		pstObj->iPageEndIndex = pstObj->iPageStartIndex + pstObj->iVisibleItems - 1;
 	}
 }

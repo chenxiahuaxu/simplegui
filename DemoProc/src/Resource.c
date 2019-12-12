@@ -7736,9 +7736,9 @@ const SGUI_CBYTE GB2312_H12[] = {
 
 const SGUI_FONT_RES GB2312_FZXS12 =
 {
-    /*SGUI_INT                      iHeight*/               12,
     /*SGUI_INT                      iHalfWidth*/            6,
     /*SGUI_INT                      iFullWidth*/            12,
+    /*SGUI_INT                      iHeight*/               12,
 	/*SGUI_FN_IF_GET_CHAR_INDEX     fnGetIndex*/            GetCharIndex_GB2312,
 	/*SGUI_FN_IF_GET_DATA           fnGetData*/             GB2312_GetFontData,
 	/*SGUI_FN_IF_STEP_NEXT          fnStepNext*/            StepNext_GB2312,

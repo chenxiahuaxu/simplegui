@@ -2,10 +2,8 @@
 /** Copyright.															**/
 /** FileName: List.c													**/
 /** Author: Polarix														**/
-/** Version: 1.0.0.0													**/
 /** Description: HMI demo for list control interface.					**/
 /*************************************************************************/
-
 //=======================================================================//
 //= Include files.													    =//
 //=======================================================================//
@@ -34,14 +32,14 @@ static HMI_ENGINE_RESULT	HMI_DemoList_PostProcess(SGUI_SCR_DEV* pstIFObj, HMI_EN
 //=======================================================================//
 static SGUI_ITEMS_ITEM		s_arrstListItems[] =		{	{"①Variable box", NULL},
 															{"②Real-time Graph", NULL},
-															{"③啊啊啊", NULL},
+															{"③Menu", NULL},
 															{"额滴神，终于好用了！", NULL},
 															{"ぁあぃいぅうぇえぉ", NULL},
 															{"ㄅㄆㄇㄈ", NULL},
 															{"！@#￥%……&*（）", NULL},
 															{"迷茫的项目君", NULL},
 														};
-static SGUI_LIST_CONTROL	s_stDemoListObject = 		{0x00};
+static SGUI_LIST_STRUCT		s_stDemoListObject = 		{0x00};
 
 //=======================================================================//
 //= Global variable declaration.									    =//
@@ -65,8 +63,7 @@ HMI_ENGINE_RESULT HMI_DemoList_Initialize(SGUI_SCR_DEV* pstIFObj)
 	/* Process							*/
 	/*----------------------------------*/
     // Initialize list data.
-    SGUI_SystemIF_MemorySet(&s_stDemoListObject, 0x00, sizeof(SGUI_LIST_CONTROL));
-    SGUI_SystemIF_MemorySet(&s_stDemoListObject, 0x00, sizeof(SGUI_LIST_CONTROL));
+    SGUI_SystemIF_MemorySet(&s_stDemoListObject, 0x00, sizeof(SGUI_LIST_STRUCT));
     // Title and font size must set before initialize list object.
     s_stDemoListObject.stLayout.iPosX = 0;
     s_stDemoListObject.stLayout.iPosY = 0;
@@ -189,6 +186,11 @@ HMI_ENGINE_RESULT HMI_DemoList_PostProcess(SGUI_SCR_DEV* pstIFObj, HMI_ENGINE_RE
 			case 1:
 			{
 				HMI_SwitchScreen(HMI_SCREEN_ID_DEMO_REAL_TIME_GRAPH, NULL);
+				break;
+			}
+			case 2:
+			{
+				HMI_SwitchScreen(HMI_SCREEN_ID_DEMO_MENU, NULL);
 				break;
 			}
 			default:

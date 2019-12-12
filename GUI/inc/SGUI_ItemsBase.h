@@ -26,16 +26,17 @@ typedef struct
 	SGUI_INT					iPageEndIndex;					// Read only
 	SGUI_INT					iVisibleItems;
 	SGUI_INT					iItemPaintOffset;
-	SGUI_SIZE					SelectIndex;					// Control
 	const SGUI_FONT_RES*        pstFontRes;
 }SGUI_ITEMS_BASE;
 
 //=======================================================================//
 //= Public function declaration.									    =//
 //=======================================================================//
-void			SGUI_ItemsBase_Initialize(SGUI_ITEMS_BASE* pstObj, const SGUI_FONT_RES* pstFontRes);
-void			SGUI_ItemsBase_BindItemsData(SGUI_ITEMS_BASE* pstList, SGUI_ITEMS_ITEM* pstItemsData, SGUI_INT iItemsCount);
-void			SGUI_ItemsBase_Repaint(SGUI_SCR_DEV* pstDeviceIF, SGUI_ITEMS_BASE* pstObj);
-void			SGUI_ItemsBase_GetItemExtent(SGUI_ITEMS_BASE* pstObj, SGUI_INT iSelection, SGUI_RECT_AREA* pstItemExtent);
+void				SGUI_ItemsBase_Initialize(SGUI_ITEMS_BASE* pstObj, const SGUI_FONT_RES* pstFontRes);
+void				SGUI_ItemsBase_BindItemsData(SGUI_ITEMS_BASE* pstList, SGUI_ITEMS_ITEM* pstItemsData, SGUI_INT iItemsCount);
+void				SGUI_ItemsBase_Repaint(SGUI_SCR_DEV* pstDeviceIF, SGUI_ITEMS_BASE* pstObj);
+SGUI_ITEMS_ITEM*	SGUI_ItemsBase_GetItem(SGUI_ITEMS_BASE* pstObj, SGUI_INT iSelection);
+void				SGUI_ItemsBase_GetItemExtent(SGUI_ITEMS_BASE* pstObj, SGUI_INT iSelection, SGUI_RECT_AREA* pstItemExtent);
+void				SGUI_ItemsBase_FitLayout(SGUI_ITEMS_BASE* pstObj);
 
 #endif // _INCLUDE_SGUI_ITEMS_BASE_H_
