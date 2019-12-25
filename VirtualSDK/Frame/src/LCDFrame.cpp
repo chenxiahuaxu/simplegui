@@ -65,7 +65,7 @@ LCDFrame::LCDFrame(wxWindow* pclsParent, wxWindowID iID, const wxString& strTitl
 	SetEvtHandlerEnabled(false);
 	SetSizeHints( wxDefaultSize, wxDefaultSize );
 	// Set frame icon.
-	SetIcon(wxIcon(_T("ID_ICON_MAIN"), wxBITMAP_TYPE_ICO_RESOURCE));
+	SetIcon(wxIcon(_T("ID_ICON_MAIN_FRAME"), wxBITMAP_TYPE_ICO_RESOURCE));
 	// Create tools bar and tool button.
     _createToolbar();
     // Create status bar.

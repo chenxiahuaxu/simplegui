@@ -31,6 +31,7 @@ HMI_SCREEN_OBJECT*			g_arrpstScreenObjs[] =
 								&g_stHMIDemo_VariableBox,
 								&g_stHMIDemo_RealtimeGraph,
 								&g_stHMIDemo_Menu,
+								&g_stHMIDemo_Notice
 							};
 HMI_ENGINE_OBJECT			g_stDemoEngine;
 

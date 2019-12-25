@@ -26,7 +26,7 @@
 /**					given data, make sure the display area is within	**/
 /**					the screen area.									**/
 /*************************************************************************/
-void SGUI_Common_AdaptDisplayInfo(SGUI_RECT_AREA* pstDisplayArea, SGUI_POINT* pstInnerPos)
+void SGUI_Common_AdaptDisplayInfo(SGUI_RECT* pstDisplayArea, SGUI_POINT* pstInnerPos)
 {
 	if((NULL != pstDisplayArea) && (NULL != pstInnerPos))
 	{

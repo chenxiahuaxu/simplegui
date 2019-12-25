@@ -21,23 +21,23 @@
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
-static HMI_ENGINE_RESULT	HMI_DemoList_Initialize(SGUI_SCR_DEV* pstIFObj);
-static HMI_ENGINE_RESULT	HMI_DemoList_Prepare(SGUI_SCR_DEV* pstIFObj, const void* pstParameters);
-static HMI_ENGINE_RESULT	HMI_DemoList_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const void* pstParameters);
-static HMI_ENGINE_RESULT	HMI_DemoList_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent, SGUI_INT* piActionID);
-static HMI_ENGINE_RESULT	HMI_DemoList_PostProcess(SGUI_SCR_DEV* pstIFObj, HMI_ENGINE_RESULT eProcResult, SGUI_INT iActionID);
+static HMI_ENGINE_RESULT	HMI_DemoList_Initialize(SGUI_SCR_DEV* pstDeviceIF);
+static HMI_ENGINE_RESULT	HMI_DemoList_Prepare(SGUI_SCR_DEV* pstDeviceIF, const void* pstParameters);
+static HMI_ENGINE_RESULT	HMI_DemoList_RefreshScreen(SGUI_SCR_DEV* pstDeviceIF, const void* pstParameters);
+static HMI_ENGINE_RESULT	HMI_DemoList_ProcessEvent(SGUI_SCR_DEV* pstDeviceIF, const HMI_EVENT_BASE* pstEvent, SGUI_INT* piActionID);
+static HMI_ENGINE_RESULT	HMI_DemoList_PostProcess(SGUI_SCR_DEV* pstDeviceIF, HMI_ENGINE_RESULT eProcResult, SGUI_INT iActionID);
 
 //=======================================================================//
 //= Static variable declaration.									    =//
 //=======================================================================//
-static SGUI_ITEMS_ITEM		s_arrstListItems[] =		{	{"①Variable box", NULL},
-															{"②Real-time Graph", NULL},
-															{"③Menu", NULL},
-															{"额滴神，终于好用了！", NULL},
-															{"ぁあぃいぅうぇえぉ", NULL},
-															{"ㄅㄆㄇㄈ", NULL},
-															{"！@#￥%……&*（）", NULL},
-															{"迷茫的项目君", NULL},
+static SGUI_ITEMS_ITEM		s_arrstListItems[] =		{	{"输入框组件", NULL},
+															{"实时曲线组件", NULL},
+															{"菜单组件", NULL},
+															{"提示框组件", NULL},
+															{"还没安排2", NULL},
+															{"还没安排3", NULL},
+															{"还没安排4", NULL},
+															{"还没安排5", NULL},
 														};
 static SGUI_LIST_STRUCT		s_stDemoListObject = 		{0x00};
 
@@ -57,7 +57,7 @@ HMI_SCREEN_OBJECT       g_stHMIDemo_List =				{	HMI_SCREEN_ID_DEMO_LIST,
 //=======================================================================//
 //= Function define.										            =//
 //=======================================================================//
-HMI_ENGINE_RESULT HMI_DemoList_Initialize(SGUI_SCR_DEV* pstIFObj)
+HMI_ENGINE_RESULT HMI_DemoList_Initialize(SGUI_SCR_DEV* pstDeviceIF)
 {
 	/*----------------------------------*/
 	/* Process							*/
@@ -71,30 +71,29 @@ HMI_ENGINE_RESULT HMI_DemoList_Initialize(SGUI_SCR_DEV* pstIFObj)
     s_stDemoListObject.stLayout.iHeight = 64;
     s_stDemoListObject.szTitle = "列表组件";
      //Initialize list object.
-	SGUI_List_Initialize(&s_stDemoListObject, &GB2312_FZXS12);
-	SGUI_List_BindItemsData(&s_stDemoListObject, s_arrstListItems, sizeof(s_arrstListItems)/sizeof(SGUI_ITEMS_ITEM));
+	SGUI_List_Initialize(&s_stDemoListObject, &GB2312_FZXS12, s_arrstListItems, sizeof(s_arrstListItems)/sizeof(SGUI_ITEMS_ITEM));
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoList_Prepare (SGUI_SCR_DEV* pstIFObj, const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoList_Prepare (SGUI_SCR_DEV* pstDeviceIF, const void* pstParameters)
 {
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	SGUI_List_Repaint(pstIFObj, &s_stDemoListObject);
+	SGUI_List_Repaint(pstDeviceIF, &s_stDemoListObject);
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoList_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoList_RefreshScreen(SGUI_SCR_DEV* pstDeviceIF, const void* pstParameters)
 {
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	SGUI_List_Repaint(pstIFObj, &s_stDemoListObject);
+	SGUI_List_Repaint(pstDeviceIF, &s_stDemoListObject);
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoList_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent, SGUI_INT* piActionID)
+HMI_ENGINE_RESULT HMI_DemoList_ProcessEvent(SGUI_SCR_DEV* pstDeviceIF, const HMI_EVENT_BASE* pstEvent, SGUI_INT* piActionID)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -145,7 +144,7 @@ HMI_ENGINE_RESULT HMI_DemoList_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EV
 					{
 						s_stDemoListObject.stItems.iSelection -= 1;
 					}
-					SGUI_List_Repaint(pstIFObj, &s_stDemoListObject);
+					SGUI_List_Repaint(pstDeviceIF, &s_stDemoListObject);
 					break;
 				}
 				case KEY_VALUE_DOWN:
@@ -154,7 +153,7 @@ HMI_ENGINE_RESULT HMI_DemoList_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EV
 					{
 						s_stDemoListObject.stItems.iSelection += 1;
 					}
-					SGUI_List_Repaint(pstIFObj, &s_stDemoListObject);
+					SGUI_List_Repaint(pstDeviceIF, &s_stDemoListObject);
 					break;
 				}
 				default:
@@ -172,7 +171,7 @@ HMI_ENGINE_RESULT HMI_DemoList_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EV
 	return eProcessResult;
 }
 
-HMI_ENGINE_RESULT HMI_DemoList_PostProcess(SGUI_SCR_DEV* pstIFObj, HMI_ENGINE_RESULT eProcResult, SGUI_INT iActionID)
+HMI_ENGINE_RESULT HMI_DemoList_PostProcess(SGUI_SCR_DEV* pstDeviceIF, HMI_ENGINE_RESULT eProcResult, SGUI_INT iActionID)
 {
 	if(HMI_DEMO_PROC_CONFIRM == iActionID)
 	{
@@ -191,6 +190,11 @@ HMI_ENGINE_RESULT HMI_DemoList_PostProcess(SGUI_SCR_DEV* pstIFObj, HMI_ENGINE_RE
 			case 2:
 			{
 				HMI_SwitchScreen(HMI_SCREEN_ID_DEMO_MENU, NULL);
+				break;
+			}
+			case 3:
+			{
+				HMI_SwitchScreen(HMI_SCREEN_ID_DEMO_TEXT_NOTICE, "This is a test notice text.");
 				break;
 			}
 			default:

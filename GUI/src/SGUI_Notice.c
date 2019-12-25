@@ -23,22 +23,22 @@
 /** Purpose:		Show a notice box.									**/
 /** Params:																**/
 /** Params:																**/
-/**	@ pstIFObj[in]:		SimpleGUI object pointer.						**/
+/**	@ pstDeviceIF[in]:		SimpleGUI object pointer.						**/
 /**	@ pstObject[in]:	Object structure pointer.						**/
 /** @ pstFontRes[in]:	Text font resource.								**/
 /**	@ uiTextOffset[in]:	Text top offset.								**/
 /** Return:			Remaining text height display.						**/
 /** Notice:			None.												**/
 /*************************************************************************/
-SGUI_SIZE SGUI_Notice_Repaint(SGUI_SCR_DEV* pstIFObj, SGUI_NOTICT_BOX* pstObject, const SGUI_FONT_RES* pstFontRes, SGUI_INT uiTextOffset)
+SGUI_SIZE SGUI_Notice_Repaint(SGUI_SCR_DEV* pstDeviceIF, SGUI_NOTICT_BOX* pstObject, const SGUI_FONT_RES* pstFontRes, SGUI_INT uiTextOffset)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	SGUI_SIZE					uiTextLines;
-	SGUI_RECT_AREA				stIconDisplayArea;
-	SGUI_POINT					stIconPosition;
-	SGUI_RECT_AREA				stTextDisplayArea;
+	SGUI_SIZE				uiTextLines;
+	SGUI_RECT				stIconDisplayArea;
+	SGUI_POINT				stIconPosition;
+	SGUI_RECT				stTextDisplayArea;
 
 	/*----------------------------------*/
 	/* Process							*/
@@ -46,7 +46,7 @@ SGUI_SIZE SGUI_Notice_Repaint(SGUI_SCR_DEV* pstIFObj, SGUI_NOTICT_BOX* pstObject
 	if((NULL != pstObject) && (NULL != pstObject->cszNoticeText))
 	{
 		// Draw edgeNOTICE_BOX_MARGIN
-		SGUI_Basic_DrawRectangle(pstIFObj, pstObject->stLayout.iPosX, pstObject->stLayout.iPosY, pstObject->stLayout.iWidth, pstObject->stLayout.iHeight, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
+		SGUI_Basic_DrawRectangle(pstDeviceIF, pstObject->stLayout.iPosX, pstObject->stLayout.iPosY, pstObject->stLayout.iWidth, pstObject->stLayout.iHeight, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
 
 		stTextDisplayArea.iPosY = pstObject->stLayout.iPosY+2;
 		stTextDisplayArea.iHeight = pstObject->stLayout.iHeight-4;
@@ -67,24 +67,24 @@ SGUI_SIZE SGUI_Notice_Repaint(SGUI_SCR_DEV* pstIFObj, SGUI_NOTICT_BOX* pstObject
 			stIconPosition.iPosX = 0;
 			stIconPosition.iPosY = 0;
 			// Paint icon.
-			SGUI_Basic_DrawBitMap(pstIFObj, &stIconDisplayArea, &stIconPosition, pstObject->pstIcon, SGUI_DRAW_NORMAL);
+			SGUI_Basic_DrawBitMap(pstDeviceIF, &stIconDisplayArea, &stIconPosition, pstObject->pstIcon, SGUI_DRAW_NORMAL);
 		}
 		// Draw text;
-		uiTextLines = SGUI_Text_DrawMultipleLinesText(pstIFObj, pstObject->cszNoticeText, pstFontRes, &stTextDisplayArea, uiTextOffset, SGUI_DRAW_NORMAL);
+		uiTextLines = SGUI_Text_DrawMultipleLinesText(pstDeviceIF, pstObject->cszNoticeText, pstFontRes, &stTextDisplayArea, uiTextOffset, SGUI_DRAW_NORMAL);
 	}
     return uiTextLines;
 }
 
-void SGUI_Notice_FitArea(SGUI_SCR_DEV* pstIFObj, SGUI_RECT_AREA* pstFitArea)
+void SGUI_Notice_FitArea(SGUI_SCR_DEV* pstDeviceIF, SGUI_RECT* pstFitArea)
 {
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if((NULL != pstIFObj) && (NULL != pstFitArea))
+	if((NULL != pstDeviceIF) && (NULL != pstFitArea))
 	{
 		pstFitArea->iPosX = SGUI_NOTICE_MARGIN;
 		pstFitArea->iPosY = SGUI_NOTICE_MARGIN;
-		pstFitArea->iWidth = pstIFObj->stSize.iWidth-(SGUI_NOTICE_MARGIN<<1);
-		pstFitArea->iHeight = pstIFObj->stSize.iHeight-(SGUI_NOTICE_MARGIN<<1);
+		pstFitArea->iWidth = pstDeviceIF->stSize.iWidth-(SGUI_NOTICE_MARGIN<<1);
+		pstFitArea->iHeight = pstDeviceIF->stSize.iHeight-(SGUI_NOTICE_MARGIN<<1);
 	}
 }

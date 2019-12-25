@@ -34,7 +34,7 @@
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_List_Initialize(SGUI_LIST_STRUCT* pstObj, const SGUI_FONT_RES* pstFontRes)
+void SGUI_List_Initialize(SGUI_LIST_STRUCT* pstObj, const SGUI_FONT_RES* pstFontRes, SGUI_ITEMS_ITEM* pstItemsData, SGUI_INT iItemsCount)
 {
 	/*----------------------------------*/
 	/* Process							*/
@@ -56,28 +56,7 @@ void SGUI_List_Initialize(SGUI_LIST_STRUCT* pstObj, const SGUI_FONT_RES* pstFont
 			pstObj->stItems.stLayout.iPosY = pstObj->stLayout.iPosY+LIST_TITLE_HEIGHT(pstObj->pstFontRes)+2;
 			pstObj->stItems.stLayout.iHeight = pstObj->stLayout.iHeight-LIST_TITLE_HEIGHT(pstObj->pstFontRes)-3;
 		}
-		SGUI_ItemsBase_Initialize(&(pstObj->stItems), pstObj->pstFontRes);
-	}
-}
-
-/*************************************************************************/
-/** Function Name:	SGUI_List_BindItemsData								**/
-/** Purpose:		Bind list item data to object.						**/
-/** Params:																**/
-/**	@ pstObj[in]:	Pointer of list object.								**/
-/** @ pstItemsData[in]: List items data array.							**/
-/** @ iItemsCount[in]: Number of list item data.						**/
-/** Return:			None.												**/
-/** Notice:			None.												**/
-/*************************************************************************/
-void SGUI_List_BindItemsData(SGUI_LIST_STRUCT* pstObj, SGUI_ITEMS_ITEM* pstItemsData, SGUI_INT iItemsCount)
-{
-	/*----------------------------------*/
-	/* Process							*/
-	/*----------------------------------*/
-	if((NULL != pstObj) && (NULL != pstItemsData) && (iItemsCount > 0))
-	{
-		SGUI_ItemsBase_BindItemsData(&(pstObj->stItems), pstItemsData, iItemsCount);
+		SGUI_ItemsBase_Initialize(&(pstObj->stItems), pstObj->pstFontRes, pstItemsData, iItemsCount);
 		// Initialize scroll bar.
         pstObj->stScrollBar.eDirection = SGUI_SCROLLBAR_VERTICAL;
 		pstObj->stScrollBar.iPosX = pstObj->stItems.stLayout.iPosX+pstObj->stItems.stLayout.iWidth+1;
@@ -103,8 +82,8 @@ void SGUI_List_Repaint(SGUI_SCR_DEV* pstDeviceIF, SGUI_LIST_STRUCT* pstObj)
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	SGUI_RECT_AREA				stTitleTextDisplayArea;
-	SGUI_POINT					stInnerPos;
+	SGUI_RECT				stTitleTextDisplayArea;
+	SGUI_POINT				stInnerPos;
 
 	/*----------------------------------*/
 	/* Process							*/

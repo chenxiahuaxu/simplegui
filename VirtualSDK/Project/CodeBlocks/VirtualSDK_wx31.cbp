@@ -14,10 +14,10 @@
 				<Option compiler="gcc" />
 				<Option projectLinkerOptionsRelation="2" />
 				<Compiler>
-					<Add directory="$(#wxBin)/lib/gcc_dll/mswu" />
+					<Add directory="$(#wxBin)/lib/gcc_x86_dll/mswu" />
 				</Compiler>
 				<ResourceCompiler>
-					<Add directory="$(#wxBin)/lib/gcc_dll/mswu" />
+					<Add directory="$(#wxBin)/lib/gcc_x86_dll/mswu" />
 				</ResourceCompiler>
 				<Linker>
 					<Add library="libwxmsw31u_core.a" />
@@ -28,6 +28,7 @@
 					<Add library="libwxtiff.a" />
 					<Add library="libiconv.a" />
 					<Add directory="../../Library/lib32" />
+					<Add directory="$(#wxBin)/lib/gcc_x86_dll" />
 				</Linker>
 			</Target>
 			<Target title="x64">
@@ -38,10 +39,10 @@
 				<Option compiler="gcc" />
 				<Option projectLinkerOptionsRelation="2" />
 				<Compiler>
-					<Add directory="$(#wxBin)/lib/gcc_dll/mswu" />
+					<Add directory="$(#wxBin)/lib/gcc_x64_dll/mswu" />
 				</Compiler>
 				<ResourceCompiler>
-					<Add directory="$(#wxBin)/lib/gcc_dll/mswu" />
+					<Add directory="$(#wxBin)/lib/gcc_x64_dll/mswu" />
 				</ResourceCompiler>
 				<Linker>
 					<Add library="libwxmsw31u_core.a" />
@@ -52,6 +53,7 @@
 					<Add library="libwxtiff.a" />
 					<Add library="libiconv64.a" />
 					<Add directory="../../Library/lib64" />
+					<Add directory="$(#wxBin)/lib/gcc_x64_dll" />
 				</Linker>
 			</Target>
 		</Build>
@@ -67,7 +69,6 @@
 			<Add option="-DWXUSINGDLL" />
 			<Add option="-DwxUSE_UNICODE" />
 			<Add directory="$(#wxBin)/include" />
-			<Add directory="$(#wxBin)/lib/gcc_dll/mswu" />
 			<Add directory="../../Application/inc" />
 			<Add directory="../../Common/inc" />
 			<Add directory="../../Library/inc" />
@@ -87,7 +88,6 @@
 		<Linker>
 			<Add option="-O3" />
 			<Add option="-mthreads" />
-			<Add directory="$(#wxBin)/lib/gcc_dll" />
 		</Linker>
 		<Unit filename="../../../DemoProc/inc/DemoActions.h" />
 		<Unit filename="../../../DemoProc/inc/DemoProc.h" />
@@ -109,6 +109,12 @@
 		<Unit filename="../../../DemoProc/src/Menu.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="../../../DemoProc/src/Notice.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../DemoProc/src/Polyline.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="../../../DemoProc/src/RealtimeGraph.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -121,6 +127,7 @@
 		<Unit filename="../../../GUI/inc/SGUI_Basic.h" />
 		<Unit filename="../../../GUI/inc/SGUI_Common.h" />
 		<Unit filename="../../../GUI/inc/SGUI_Config.h" />
+		<Unit filename="../../../GUI/inc/SGUI_Curve.h" />
 		<Unit filename="../../../GUI/inc/SGUI_FontResource.h" />
 		<Unit filename="../../../GUI/inc/SGUI_IconResource.h" />
 		<Unit filename="../../../GUI/inc/SGUI_Interface.h" />
@@ -138,6 +145,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../../../GUI/src/SGUI_Common.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../GUI/src/SGUI_Curve.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../../../GUI/src/SGUI_FontResource.c">

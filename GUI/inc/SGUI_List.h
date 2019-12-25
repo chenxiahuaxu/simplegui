@@ -14,7 +14,7 @@
 //=======================================================================//
 typedef struct
 {
-	SGUI_RECT_AREA				stLayout;
+	SGUI_RECT					stLayout;
 	SGUI_ITEMS_BASE				stItems;
 	SGUI_CSZSTR					szTitle;
 	SGUI_SCROLLBAR_STRUCT		stScrollBar;
@@ -24,8 +24,7 @@ typedef struct
 //=======================================================================//
 //= Public function declaration.									    =//
 //=======================================================================//
-void			SGUI_List_Initialize(SGUI_LIST_STRUCT* pstObj, const SGUI_FONT_RES* pstFontRes);
-void			SGUI_List_BindItemsData(SGUI_LIST_STRUCT* pstObj, SGUI_ITEMS_ITEM* pstItemsData, SGUI_INT iItemsCount);
+void			SGUI_List_Initialize(SGUI_LIST_STRUCT* pstObj, const SGUI_FONT_RES* pstFontRes, SGUI_ITEMS_ITEM* pstItemsData, SGUI_INT iItemsCount);
 void			SGUI_List_Repaint(SGUI_SCR_DEV* pstDeviceIF, SGUI_LIST_STRUCT* pstObj);
 
 #endif // __INCLUDE_SGUI_List_H__

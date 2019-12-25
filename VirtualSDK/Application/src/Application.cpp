@@ -15,48 +15,51 @@
 //=======================================================================//
 IMPLEMENT_APP(Application);
 
-BEGIN_EVENT_TABLE(Application, wxApp)
-    EVT_KEY_DOWN (Application::OnKeyDown)
-END_EVENT_TABLE()
 bool Application::OnInit(void)
 {
     /*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-    bool                        bReturn;
+    bool					bReturn;
 
     /*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	bReturn =                   true;
+	bReturn =				true;
 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-    // Register image media handle.
-    wxInitAllImageHandlers();
-    // Read virtual device parameter.
-    SetDefaultParameterData(&g_stParameters);
-    // Create main frame instance.
+	// Register image media handle.
+	wxInitAllImageHandlers();
+	// Read virtual device parameter.
+	SetDefaultParameterData(&g_stParameters);
+	// Create main frame instance.
 	m_pclsMainFrame = LCDFrame::GetInstance();
-
 	if(NULL != m_pclsMainFrame)
-    {
-        SetTopWindow(m_pclsMainFrame);
-        m_pclsMainFrame->Show();
-    }
-    else
-    {
-        // Create instance failed.
-        bReturn = false;
-    }
+	{
+		SetTopWindow(m_pclsMainFrame);
+		m_pclsMainFrame->Show();
+	}
+	else
+	{
+		// Create instance failed.
+		bReturn = false;
+	}
+
     return bReturn;
 }
 
 int Application::OnRun(void)
 {
+	/*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
 	int				iStartRet;
 
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
 	if(false == m_pclsMainFrame->StartDummyMain())
 	{
 		iStartRet = APP_PROC_FAILURE;
@@ -70,23 +73,18 @@ int Application::OnRun(void)
 	return iStartRet;
 }
 
-
 int Application::OnExit()
 {
+	/*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
 	int				iTerminateRet;
 
-	iTerminateRet = wxApp::OnExit();
-
-    return iTerminateRet;
-}
-
-
-void Application::OnKeyDown(wxKeyEvent& clsEvent)
-{
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	//clsEvent.ResumePropagation(1);
-	//clsEvent.Skip();
+	iTerminateRet = wxApp::OnExit();
+
+    return iTerminateRet;
 }
 

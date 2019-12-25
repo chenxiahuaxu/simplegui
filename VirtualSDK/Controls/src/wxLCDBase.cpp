@@ -7,6 +7,7 @@
 //=======================================================================//
 //= Include files.													    =//
 //=======================================================================//
+#include <wx/log.h>
 #include <wx/msgdlg.h>
 #include <wx/clipbrd.h>
 #include "wxLCDBase.h"
@@ -88,7 +89,7 @@ bool wxLCDBase::_initialize(void)
 		// Set pixel size.
 		SetPixelUnitSize(wxDefaultLCDPixelUnitSize);
 		// Set grid visible.
-		SetGridVisibled(WX_LCD_DEFAULT_GRID_VISIBLE);
+		SetGridVisibled(WX_LCD_DEFAULT_GRID_VISIBLE, false);
 		// Set grid color.
 		SetBorderWidth(WX_LCD_BORDER_WIDTH);
 	}

@@ -12,7 +12,7 @@
 //=======================================================================//
 typedef struct
 {
-	SGUI_RECT_AREA				stLayout;
+	SGUI_RECT					stLayout;
 	SGUI_ITEMS_BASE				stItems;
 	const SGUI_FONT_RES*        pstFontRes;
 }SGUI_MENU_STRUCT;
@@ -20,8 +20,7 @@ typedef struct
 //=======================================================================//
 //= Public function declaration.									    =//
 //=======================================================================//
-void SGUI_Menu_Initialize(SGUI_MENU_STRUCT* pstObj, const SGUI_FONT_RES* pstFontRes);
-void SGUI_Menu_BindItemsData(SGUI_MENU_STRUCT* pstObj, SGUI_ITEMS_ITEM* pstItemsData, SGUI_INT iItemsCount);
+void SGUI_Menu_Initialize(SGUI_MENU_STRUCT* pstObj, const SGUI_FONT_RES* pstFontRes, SGUI_ITEMS_ITEM* pstItemsData, SGUI_INT iItemsCount);
 void SGUI_Menu_Repaint(SGUI_SCR_DEV* pstDeviceIF, SGUI_MENU_STRUCT* pstObj);
 
 

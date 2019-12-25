@@ -16,17 +16,17 @@
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
-static HMI_ENGINE_RESULT	HMI_DemoRealGraph_Initialize(SGUI_SCR_DEV* pstIFObj);
-static HMI_ENGINE_RESULT	HMI_DemoRealGraph_Prepare(SGUI_SCR_DEV* pstIFObj, const void* pstParameters);
-static HMI_ENGINE_RESULT	HMI_DemoRealGraph_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const void* pstParameters);
-static HMI_ENGINE_RESULT	HMI_DemoRealGraph_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent, SGUI_INT* piActionID);
-static HMI_ENGINE_RESULT	HMI_DemoRealGraph_PostProcess(SGUI_SCR_DEV* pstIFObj, HMI_ENGINE_RESULT eProcResult, SGUI_INT iActionID);
+static HMI_ENGINE_RESULT	HMI_DemoRealGraph_Initialize(SGUI_SCR_DEV* pstDeviceIF);
+static HMI_ENGINE_RESULT	HMI_DemoRealGraph_Prepare(SGUI_SCR_DEV* pstDeviceIF, const void* pstParameters);
+static HMI_ENGINE_RESULT	HMI_DemoRealGraph_RefreshScreen(SGUI_SCR_DEV* pstDeviceIF, const void* pstParameters);
+static HMI_ENGINE_RESULT	HMI_DemoRealGraph_ProcessEvent(SGUI_SCR_DEV* pstDeviceIF, const HMI_EVENT_BASE* pstEvent, SGUI_INT* piActionID);
+static HMI_ENGINE_RESULT	HMI_DemoRealGraph_PostProcess(SGUI_SCR_DEV* pstDeviceIF, HMI_ENGINE_RESULT eProcResult, SGUI_INT iActionID);
 
 //=======================================================================//
 //= Static variable declaration.									    =//
 //=======================================================================//
 SGUI_RTGRAPH_CONTROL		s_stRealtimeGraphControl =	{50, -50, SGUI_TRUE, 3, 0};
-SGUI_RTGRAPH_DATA			s_stRealtimeGraphData =		{{1, 9, 126, 46}, {0}, {0}, {0}, 0, 0};
+SGUI_RTGRAPH_DATA			s_stRealtimeGraphData =		{{1, 9, 126, 49}, {0}, {0}, {0}, 0, 0};
 SGUI_RTGRAPH				s_stRealtimeGraph =			{&s_stRealtimeGraphData, &s_stRealtimeGraphControl};
 static HMI_SCREEN_ACTION	s_stDemoRealtimeGraphActions =	{	HMI_DemoRealGraph_Initialize,
 														HMI_DemoRealGraph_Prepare,
@@ -46,56 +46,56 @@ HMI_SCREEN_OBJECT			g_stHMIDemo_RealtimeGraph =		{	HMI_SCREEN_ID_DEMO_REAL_TIME_
 //=======================================================================//
 //= Function define.										            =//
 //=======================================================================//
-HMI_ENGINE_RESULT HMI_DemoRealGraph_Initialize(SGUI_SCR_DEV* pstIFObj)
+HMI_ENGINE_RESULT HMI_DemoRealGraph_Initialize(SGUI_SCR_DEV* pstDeviceIF)
 {
 	//SGUI_RealtimeGraph_Initialize(&s_stRealtimeGraph);
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoRealGraph_Prepare(SGUI_SCR_DEV* pstIFObj, const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoRealGraph_Prepare(SGUI_SCR_DEV* pstDeviceIF, const void* pstParameters)
 {
 	// Reinitialize data.
 	SGUI_RealtimeGraph_Initialize(&s_stRealtimeGraph);
 	// Paint frame.
-	SGUI_Basic_DrawRectangle(pstIFObj, 0, 0, RECT_WIDTH(pstIFObj->stSize), RECT_HEIGHT(pstIFObj->stSize), SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
+	SGUI_Basic_DrawRectangle(pstDeviceIF, 0, 0, RECT_WIDTH(pstDeviceIF->stSize), RECT_HEIGHT(pstDeviceIF->stSize), SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
 	// Update screen display.
-	SGUI_RealtimeGraph_Repaint(pstIFObj, &s_stRealtimeGraph);
+	SGUI_RealtimeGraph_Repaint(pstDeviceIF, &s_stRealtimeGraph);
 	// Start dummy heart-beat timer.
 	SysTickTimerEnable(true);
 
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoRealGraph_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoRealGraph_RefreshScreen(SGUI_SCR_DEV* pstDeviceIF, const void* pstParameters)
 {
 	SGUI_CHAR			szTextBuffer[16];
-	SGUI_RECT_AREA		stTextDisplayArea;
+	SGUI_RECT			stTextDisplayArea;
 	SGUI_POINT			stInnerPos;
 
 	// Paint frame.
-	SGUI_Basic_DrawRectangle(pstIFObj, 0, 0, RECT_WIDTH(pstIFObj->stSize), RECT_HEIGHT(pstIFObj->stSize), SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
+	SGUI_Basic_DrawRectangle(pstDeviceIF, 0, 0, RECT_WIDTH(pstDeviceIF->stSize), RECT_HEIGHT(pstDeviceIF->stSize), SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
 	// Paint title
 	stTextDisplayArea.iPosX = 1;
 	stTextDisplayArea.iPosY = 1;
-	stTextDisplayArea.iWidth = RECT_WIDTH(pstIFObj->stSize)-2;
+	stTextDisplayArea.iWidth = RECT_WIDTH(pstDeviceIF->stSize)-2;
 	stTextDisplayArea.iHeight = 8;
 	stInnerPos.iPosX = 0;
 	stInnerPos.iPosY = 0;
-	SGUI_Text_DrawText(pstIFObj, "Real-time graph", &SGUI_DEFAULT_FONT_8, &stTextDisplayArea, &stInnerPos, SGUI_DRAW_NORMAL);
+	SGUI_Text_DrawText(pstDeviceIF, "Real-time graph", &SGUI_DEFAULT_FONT_8, &stTextDisplayArea, &stInnerPos, SGUI_DRAW_NORMAL);
 	// Paint value.
 	SGUI_Common_IntegerToString(s_stRealtimeGraph.Data->ValueArray[s_stRealtimeGraph.Data->ValueCount-1], szTextBuffer, 10, -15, ' ');
 	stTextDisplayArea.iPosX = 1;
-	stTextDisplayArea.iPosY = RECT_HEIGHT(pstIFObj->stSize)-9;
-	stTextDisplayArea.iWidth = RECT_WIDTH(pstIFObj->stSize)-2;
-	stTextDisplayArea.iHeight = 8;
+	stTextDisplayArea.iPosY = RECT_HEIGHT(pstDeviceIF->stSize)-6;
+	stTextDisplayArea.iWidth = RECT_WIDTH(pstDeviceIF->stSize)-2;
+	stTextDisplayArea.iHeight = 5;
 	stInnerPos.iPosX = 0;
 	stInnerPos.iPosY = 0;
-	SGUI_Text_DrawText(pstIFObj, szTextBuffer, &SGUI_DEFAULT_FONT_8, &stTextDisplayArea, &stInnerPos, SGUI_DRAW_NORMAL);
-	SGUI_RealtimeGraph_Repaint(pstIFObj, &s_stRealtimeGraph);
+	SGUI_Text_DrawText(pstDeviceIF, szTextBuffer, &SGUI_DEFAULT_FONT_MiniNum, &stTextDisplayArea, &stInnerPos, SGUI_DRAW_NORMAL);
+	SGUI_RealtimeGraph_Repaint(pstDeviceIF, &s_stRealtimeGraph);
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoRealGraph_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent, SGUI_INT* piActionID)
+HMI_ENGINE_RESULT HMI_DemoRealGraph_ProcessEvent(SGUI_SCR_DEV* pstDeviceIF, const HMI_EVENT_BASE* pstEvent, SGUI_INT* piActionID)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -150,8 +150,8 @@ HMI_ENGINE_RESULT HMI_DemoRealGraph_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const H
 			else
 			{
 				iNewValue = pstDataEvent->Data.iValue;
-				SGUI_RealtimeGraph_AppendValue(pstIFObj, &s_stRealtimeGraph, iNewValue);
-				HMI_DemoRealGraph_RefreshScreen(pstIFObj, NULL);
+				SGUI_RealtimeGraph_AppendValue(pstDeviceIF, &s_stRealtimeGraph, iNewValue);
+				HMI_DemoRealGraph_RefreshScreen(pstDeviceIF, NULL);
 			}
 			break;
 		}
@@ -170,7 +170,7 @@ HMI_ENGINE_RESULT HMI_DemoRealGraph_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const H
 	return eProcessResult;
 }
 
-HMI_ENGINE_RESULT HMI_DemoRealGraph_PostProcess(SGUI_SCR_DEV* pstIFObj, HMI_ENGINE_RESULT eProcResult, SGUI_INT iActionID)
+HMI_ENGINE_RESULT HMI_DemoRealGraph_PostProcess(SGUI_SCR_DEV* pstDeviceIF, HMI_ENGINE_RESULT eProcResult, SGUI_INT iActionID)
 {
 	/*----------------------------------*/
 	/* Process							*/

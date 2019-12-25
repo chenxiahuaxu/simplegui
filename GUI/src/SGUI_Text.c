@@ -68,7 +68,7 @@ void SGUI_Text_GetTextExtent(SGUI_CSZSTR cszText, const SGUI_FONT_RES* pstFontRe
 /** Function Name:	SGUI_Text_DrawSingleLineText						**/
 /** Purpose:		Write a single line text in a fixed area.			**/
 /** Params:																**/
-/**	@ pstIFObj[in]:	SimpleGUI object pointer.							**/
+/**	@ pstDeviceIF[in]:	SimpleGUI object pointer.							**/
 /**	@ cszText[in]:	Text array pointer.									**/
 /**	@ pstFontRes[in]: Font resource object.								**/
 /**	@ pstDisplayArea[in]: Display area size.							**/
@@ -76,7 +76,7 @@ void SGUI_Text_GetTextExtent(SGUI_CSZSTR cszText, const SGUI_FONT_RES* pstFontRe
 /**	@ eFontMode[in]	Character display mode(normal or reverse color).	**/
 /** Return:			None.												**/
 /*************************************************************************/
-void SGUI_Text_DrawText(SGUI_SCR_DEV* pstIFObj, SGUI_CSZSTR cszText, const SGUI_FONT_RES* pstFontRes, SGUI_RECT_AREA* pstDisplayArea, SGUI_POINT* pstInnerPos, SGUI_DRAW_MODE eFontMode)
+void SGUI_Text_DrawText(SGUI_SCR_DEV* pstDeviceIF, SGUI_CSZSTR cszText, const SGUI_FONT_RES* pstFontRes, SGUI_RECT* pstDisplayArea, SGUI_POINT* pstInnerPos, SGUI_DRAW_MODE eFontMode)
 {
 
 	/*----------------------------------*/
@@ -98,19 +98,19 @@ void SGUI_Text_DrawText(SGUI_SCR_DEV* pstIFObj, SGUI_CSZSTR cszText, const SGUI_
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if((NULL != pcChar) && (RECT_X_START(*pstDisplayArea) < RECT_WIDTH(pstIFObj->stSize)))
+	if((NULL != pcChar) && (RECT_X_START(*pstDisplayArea) < RECT_WIDTH(pstDeviceIF->stSize)))
     {
         // Adapt text display area and data area.
         SGUI_Common_AdaptDisplayInfo(pstDisplayArea, pstInnerPos);
 		// Clear text area.
-        SGUI_Basic_DrawRectangle(pstIFObj, RECT_X_START(*pstDisplayArea), RECT_Y_START(*pstDisplayArea),
+        SGUI_Basic_DrawRectangle(pstDeviceIF, RECT_X_START(*pstDisplayArea), RECT_Y_START(*pstDisplayArea),
 						RECT_WIDTH(*pstDisplayArea), RECT_HEIGHT(*pstDisplayArea),
 						eBackColor, eBackColor);
 		// Initialize drawing area data.
 		RECT_X_START(stPaintPos) = RECT_X_START(*pstInnerPos);
 		RECT_Y_START(stPaintPos) = RECT_Y_START(*pstInnerPos);
 		RECT_HEIGHT(stCharBitmap) = pstFontRes->iHeight;
-		stCharBitmap.pData = pstIFObj->arrBmpDataBuffer;
+		stCharBitmap.pData = pstDeviceIF->arrBmpDataBuffer;
 
 		// Loop for Each char.
 		while(((NULL != pcChar) && ('\0' != *pcChar)) && (RECT_X_START(stPaintPos) < RECT_WIDTH(*pstDisplayArea)))
@@ -120,10 +120,10 @@ void SGUI_Text_DrawText(SGUI_SCR_DEV* pstIFObj, SGUI_CSZSTR cszText, const SGUI_
             //if(SGUI_IS_VISIBLE_CHAR(uiCharacterCode))
 			{
 				RECT_WIDTH(stCharBitmap) = pstFontRes->fnIsFullWidth(uiCharacterCode)?pstFontRes->iFullWidth:pstFontRes->iHalfWidth;
-				if(RECT_X_END(stCharBitmap, stPaintPos) >= 0)
+				if((stPaintPos.iPosX+stCharBitmap.iWidth-1) >= 0)
 				{
-					SGUI_Text_GetCharacterData(pstFontRes, uiCharacterCode, pstIFObj->arrBmpDataBuffer, SGUI_BMP_DATA_BUFFER_SIZE);
-					SGUI_Basic_DrawBitMap(pstIFObj, pstDisplayArea, &stPaintPos, &stCharBitmap, eFontMode);
+					SGUI_Text_GetCharacterData(pstFontRes, uiCharacterCode, pstDeviceIF->arrBmpDataBuffer, SGUI_BMP_DATA_BUFFER_SIZE);
+					SGUI_Basic_DrawBitMap(pstDeviceIF, pstDisplayArea, &stPaintPos, &stCharBitmap, eFontMode);
 				}
 				RECT_X_START(stPaintPos) += RECT_WIDTH(stCharBitmap);
 			}
@@ -135,7 +135,7 @@ void SGUI_Text_DrawText(SGUI_SCR_DEV* pstIFObj, SGUI_CSZSTR cszText, const SGUI_
 /** Function Name:	GUI_DrawMultipleLinesText							**/
 /** Purpose:		Write a mulitiplt line text in a rectangular area.	**/
 /** Params:																**/
-/**	@ pstIFObj[in]:	SimpleGUI object pointer.							**/
+/**	@ pstDeviceIF[in]:	SimpleGUI object pointer.							**/
 /**	@ cszText[in]:	Text array pointer.									**/
 /**	@ pstFontRes[in]: Font resource object.								**/
 /**	@ pstDisplayArea[in]: Display area size.							**/
@@ -144,7 +144,7 @@ void SGUI_Text_DrawText(SGUI_SCR_DEV* pstIFObj, SGUI_CSZSTR cszText, const SGUI_
 /** Return:			Used line count.									**/
 /** Notice:			None.												**/
 /*************************************************************************/
-SGUI_SIZE SGUI_Text_DrawMultipleLinesText(SGUI_SCR_DEV* pstIFObj, SGUI_CSZSTR cszText, const SGUI_FONT_RES* pstFontRes, SGUI_RECT_AREA* pstDisplayArea, SGUI_INT iTopOffset, SGUI_DRAW_MODE eFontMode)
+SGUI_SIZE SGUI_Text_DrawMultipleLinesText(SGUI_SCR_DEV* pstDeviceIF, SGUI_CSZSTR cszText, const SGUI_FONT_RES* pstFontRes, SGUI_RECT* pstDisplayArea, SGUI_INT iTopOffset, SGUI_DRAW_MODE eFontMode)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -168,7 +168,7 @@ SGUI_SIZE SGUI_Text_DrawMultipleLinesText(SGUI_SCR_DEV* pstIFObj, SGUI_CSZSTR cs
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if((cszText != NULL) && (RECT_X_START(*pstDisplayArea) < RECT_WIDTH(pstIFObj->stSize)))
+	if((cszText != NULL) && (RECT_X_START(*pstDisplayArea) < RECT_WIDTH(pstDeviceIF->stSize)))
 	{
 		// Initialize drawing position.
 		RECT_X_START(stPaintPos) = 0;
@@ -177,14 +177,14 @@ SGUI_SIZE SGUI_Text_DrawMultipleLinesText(SGUI_SCR_DEV* pstIFObj, SGUI_CSZSTR cs
         SGUI_Common_AdaptDisplayInfo(pstDisplayArea, &stPaintPos);
         iStartOffsetX = stPaintPos.iPosX;
 		// Clear text area.
-        SGUI_Basic_DrawRectangle(pstIFObj,
+        SGUI_Basic_DrawRectangle(pstDeviceIF,
 						RECT_X_START(*pstDisplayArea), RECT_Y_START(*pstDisplayArea),
 						RECT_WIDTH(*pstDisplayArea), RECT_HEIGHT(*pstDisplayArea),
 						eBackColor, eBackColor);
 
 		RECT_HEIGHT(stCharBitmap) = pstFontRes->iHeight;
 		uiLines = 1;
-		stCharBitmap.pData = pstIFObj->arrBmpDataBuffer;
+		stCharBitmap.pData = pstDeviceIF->arrBmpDataBuffer;
 		// Loop for each word in display area.
 		while(((NULL != pcChar) && ('\0' != *pcChar)))
 		{
@@ -204,7 +204,7 @@ SGUI_SIZE SGUI_Text_DrawMultipleLinesText(SGUI_SCR_DEV* pstIFObj, SGUI_CSZSTR cs
 			RECT_WIDTH(stCharBitmap) = pstFontRes->fnIsFullWidth(uiCharacterCode)?pstFontRes->iFullWidth:pstFontRes->iHalfWidth;
 
 			// Judge change line
-			if(RECT_X_END(stCharBitmap, stPaintPos) >= RECT_WIDTH(*pstDisplayArea))
+			if((stPaintPos.iPosX+stCharBitmap.iWidth-1) >= RECT_WIDTH(*pstDisplayArea))
 			{
 				// Change lines.
 				RECT_X_START(stPaintPos) = iStartOffsetX;
@@ -212,11 +212,11 @@ SGUI_SIZE SGUI_Text_DrawMultipleLinesText(SGUI_SCR_DEV* pstIFObj, SGUI_CSZSTR cs
 				uiLines ++;
 			}
 			// Draw characters.
-			if((RECT_Y_END(stCharBitmap, stPaintPos) >= 0) && (RECT_Y_START(stPaintPos) < RECT_HEIGHT(*pstDisplayArea)))
+			if(((stPaintPos.iPosX+stCharBitmap.iWidth-1) >= 0) && (RECT_Y_START(stPaintPos) < RECT_HEIGHT(*pstDisplayArea)))
 			{
 				// Draw character.
-				SGUI_Text_GetCharacterData(pstFontRes, uiCharacterCode, pstIFObj->arrBmpDataBuffer, SGUI_BMP_DATA_BUFFER_SIZE);
-                SGUI_Basic_DrawBitMap(pstIFObj, pstDisplayArea, &stPaintPos, &stCharBitmap, eFontMode);
+				SGUI_Text_GetCharacterData(pstFontRes, uiCharacterCode, pstDeviceIF->arrBmpDataBuffer, SGUI_BMP_DATA_BUFFER_SIZE);
+                SGUI_Basic_DrawBitMap(pstDeviceIF, pstDisplayArea, &stPaintPos, &stCharBitmap, eFontMode);
 			}
 			else
 			{

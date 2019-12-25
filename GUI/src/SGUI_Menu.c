@@ -32,10 +32,12 @@ static SGUI_MENU_ICON_DEFINE(SGUI_MENU_ICON_MOVEDOWN, 5, 3,
 /** Params:																**/
 /**	@ pstObj[in]:	Pointer of menu data will be initialized.			**/
 /** @ pstFontRes[in]: Font resource object pointer.						**/
+/** @ pstItemsData[in]: List items data array.							**/
+/** @ iItemsCount[in]: Number of list item data.						**/
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_Menu_Initialize(SGUI_MENU_STRUCT* pstObj, const SGUI_FONT_RES* pstFontRes)
+void SGUI_Menu_Initialize(SGUI_MENU_STRUCT* pstObj, const SGUI_FONT_RES* pstFontRes, SGUI_ITEMS_ITEM* pstItemsData, SGUI_INT iItemsCount)
 {
 	/*----------------------------------*/
 	/* Process							*/
@@ -49,28 +51,7 @@ void SGUI_Menu_Initialize(SGUI_MENU_STRUCT* pstObj, const SGUI_FONT_RES* pstFont
 		pstObj->stItems.stLayout.iPosY = pstObj->stLayout.iPosY+4;
 		pstObj->stItems.stLayout.iWidth = pstObj->stLayout.iWidth-2;
 		pstObj->stItems.stLayout.iHeight = pstObj->stLayout.iHeight-2-6;
-		SGUI_ItemsBase_Initialize(&(pstObj->stItems), pstObj->pstFontRes);
-	}
-}
-
-/*************************************************************************/
-/** Function Name:	SGUI_Menu_BindItemsData								**/
-/** Purpose:		Bind list item data to object.						**/
-/** Params:																**/
-/**	@ pstObj[in]:	Pointer of list object.								**/
-/** @ pstItemsData[in]: List items data array.							**/
-/** @ iItemsCount[in]: Number of list item data.						**/
-/** Return:			None.												**/
-/** Notice:			None.												**/
-/*************************************************************************/
-void SGUI_Menu_BindItemsData(SGUI_MENU_STRUCT* pstObj, SGUI_ITEMS_ITEM* pstItemsData, SGUI_INT iItemsCount)
-{
-	/*----------------------------------*/
-	/* Process							*/
-	/*----------------------------------*/
-	if((NULL != pstObj) && (NULL != pstItemsData) && (iItemsCount > 0))
-	{
-		SGUI_ItemsBase_BindItemsData(&(pstObj->stItems), pstItemsData, iItemsCount);
+		SGUI_ItemsBase_Initialize(&(pstObj->stItems), pstObj->pstFontRes, pstItemsData, iItemsCount);
 	}
 }
 
@@ -89,8 +70,8 @@ void SGUI_Menu_Repaint(SGUI_SCR_DEV* pstDeviceIF, SGUI_MENU_STRUCT* pstObj)
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	SGUI_RECT_AREA				stIconArea;
-	SGUI_POINT					stIconInnerPos;
+	SGUI_RECT				stIconArea;
+	SGUI_POINT				stIconInnerPos;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -109,18 +90,17 @@ void SGUI_Menu_Repaint(SGUI_SCR_DEV* pstDeviceIF, SGUI_MENU_STRUCT* pstObj)
 		SGUI_ItemsBase_FitLayout(&(pstObj->stItems));
 		SGUI_ItemsBase_Repaint(pstDeviceIF, &(pstObj->stItems));
 		/* Paint arrow icon. */
-		stIconArea.iPosX = pstObj->stLayout.iPosX+1;
 		stIconArea.iWidth = 5;
 		stIconArea.iHeight = 3;
-
+		stIconArea.iPosX = pstObj->stLayout.iPosX+((pstObj->stLayout.iWidth-stIconArea.iWidth)/2);
 		if(pstObj->stItems.iPageStartIndex != 0)
 		{
 			stIconArea.iPosY = pstObj->stLayout.iPosY+1;
             SGUI_Basic_DrawBitMap(pstDeviceIF, &stIconArea, &stIconInnerPos, &SGUI_MENU_ICON_MOVEUP, SGUI_DRAW_NORMAL);
 		}
-		if(pstObj->stItems.iPageEndIndex != (pstObj->stItems.iCount-1))
+		if(pstObj->stItems.iPageEndIndex < (pstObj->stItems.iCount-1))
 		{
-			stIconArea.iPosY = RECT_Y_END(pstObj->stItems.stLayout, pstObj->stItems.stLayout)+1;
+			stIconArea.iPosY = RECT_Y_END(pstObj->stItems.stLayout)+1;
 			SGUI_Basic_DrawBitMap(pstDeviceIF, &stIconArea, &stIconInnerPos, &SGUI_MENU_ICON_MOVEDOWN, SGUI_DRAW_NORMAL);
 		}
 	}

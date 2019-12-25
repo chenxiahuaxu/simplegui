@@ -18,7 +18,7 @@ typedef struct _st_sgui_items_item_
 
 typedef struct
 {
-	SGUI_RECT_AREA				stLayout;
+	SGUI_RECT					stLayout;
 	SGUI_ITEMS_ITEM*			pstItems;						// Read only
 	SGUI_INT					iCount;
 	SGUI_INT					iSelection;						// Read only
@@ -32,11 +32,10 @@ typedef struct
 //=======================================================================//
 //= Public function declaration.									    =//
 //=======================================================================//
-void				SGUI_ItemsBase_Initialize(SGUI_ITEMS_BASE* pstObj, const SGUI_FONT_RES* pstFontRes);
-void				SGUI_ItemsBase_BindItemsData(SGUI_ITEMS_BASE* pstList, SGUI_ITEMS_ITEM* pstItemsData, SGUI_INT iItemsCount);
+void				SGUI_ItemsBase_Initialize(SGUI_ITEMS_BASE* pstObj, const SGUI_FONT_RES* pstFontRes, SGUI_ITEMS_ITEM* pstItemsData, SGUI_INT iItemsCount);
 void				SGUI_ItemsBase_Repaint(SGUI_SCR_DEV* pstDeviceIF, SGUI_ITEMS_BASE* pstObj);
 SGUI_ITEMS_ITEM*	SGUI_ItemsBase_GetItem(SGUI_ITEMS_BASE* pstObj, SGUI_INT iSelection);
-void				SGUI_ItemsBase_GetItemExtent(SGUI_ITEMS_BASE* pstObj, SGUI_INT iSelection, SGUI_RECT_AREA* pstItemExtent);
+void				SGUI_ItemsBase_GetItemExtent(SGUI_ITEMS_BASE* pstObj, SGUI_INT iSelection, SGUI_RECT* pstItemExtent);
 void				SGUI_ItemsBase_FitLayout(SGUI_ITEMS_BASE* pstObj);
 
 #endif // _INCLUDE_SGUI_ITEMS_BASE_H_

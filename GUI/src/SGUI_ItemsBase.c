@@ -30,46 +30,25 @@
 /** Params:																**/
 /** @ pstObj[in]:	Pointer of items-base object will be initialized.	**/
 /** @ pstFontRes[in]: Font resource object pointer.						**/
+/** @ pstItemsData[in]: Items data array.								**/
+/** @ iItemsCount[in]: Number of list item data.						**/
 /** Return:			None.												**/
 /*************************************************************************/
-void SGUI_ItemsBase_Initialize(SGUI_ITEMS_BASE* pstObj, const SGUI_FONT_RES* pstFontRes)
+void SGUI_ItemsBase_Initialize(SGUI_ITEMS_BASE* pstObj, const SGUI_FONT_RES* pstFontRes, SGUI_ITEMS_ITEM* pstItemsData, SGUI_INT iItemsCount)
 {
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
 	if((NULL != pstObj) && (NULL != pstFontRes))
 	{
+		pstObj->pstItems = pstItemsData;
+		pstObj->iCount = iItemsCount;
 		pstObj->pstFontRes = pstFontRes;
 		pstObj->iSelection = 0;
 		pstObj->iVisibleItems = (pstObj->stLayout.iHeight-1)/ITEM_HEIGHT(pstObj->pstFontRes)+1;
 		pstObj->iPageStartIndex = 0;
-		pstObj->iPageEndIndex = 0;
-		pstObj->iItemPaintOffset = 0;
-	}
-}
-
-/*************************************************************************/
-/** Function Name:	SGUI_ItemsBase_BindItemsData						**/
-/** Purpose:		Bind items data to object.							**/
-/** Params:																**/
-/** @ pstObj[in]:	Pointer of items-base object will be initialized.	**/
-/** @ pstItemsData[in]: Items data array.								**/
-/** @ iItemsCount[in]: Number of list item data.						**/
-/** Return:			None.												**/
-/*************************************************************************/
-void SGUI_ItemsBase_BindItemsData(SGUI_ITEMS_BASE* pstObj, SGUI_ITEMS_ITEM* pstItemsData, SGUI_INT iItemsCount)
-{
-	/*----------------------------------*/
-	/* Process							*/
-	/*----------------------------------*/
-	if((NULL != pstObj) && (NULL != pstItemsData) && (iItemsCount > 0))
-	{
-		pstObj->iSelection = 0;
-		pstObj->iVisibleItems = (pstObj->stLayout.iHeight-1)/ITEM_HEIGHT(pstObj->pstFontRes)+1;
-		pstObj->iPageStartIndex = 0;
 		pstObj->iPageEndIndex = pstObj->iVisibleItems - 1;
-		pstObj->pstItems = pstItemsData;
-		pstObj->iCount = iItemsCount;
+		pstObj->iItemPaintOffset = 0;
 	}
 }
 
@@ -86,10 +65,10 @@ void SGUI_ItemsBase_Repaint(SGUI_SCR_DEV* pstDeviceIF, SGUI_ITEMS_BASE* pstObj)
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	SGUI_RECT_AREA				stItemPaintArea;
-	SGUI_POINT					stItemTextPos;
-	SGUI_INT					iItemIndex;
-	SGUI_CSZSTR					cszItemText;
+	SGUI_RECT				stItemPaintArea;
+	SGUI_POINT				stItemTextPos;
+	SGUI_INT				iItemIndex;
+	SGUI_CSZSTR				cszItemText;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -209,7 +188,7 @@ SGUI_ITEMS_ITEM* SGUI_ItemsBase_GetItem(SGUI_ITEMS_BASE* pstObj, SGUI_INT iIndex
 /** Notice:			This function only used for the visible item, if	**/
 /**					selection is invisible, output size will be (0, 0).	**/
 /*************************************************************************/
-void SGUI_ItemsBase_GetItemExtent(SGUI_ITEMS_BASE* pstObj, SGUI_INT iSelection, SGUI_RECT_AREA* pstItemExtent)
+void SGUI_ItemsBase_GetItemExtent(SGUI_ITEMS_BASE* pstObj, SGUI_INT iSelection, SGUI_RECT* pstItemExtent)
 {
 	/*----------------------------------*/
 	/* Process							*/

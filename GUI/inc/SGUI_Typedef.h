@@ -11,9 +11,9 @@
 //= User Macro definition.											    =//
 //=======================================================================//
 #define 	RECT_X_START(ST)			((ST).iPosX)
-#define 	RECT_X_END(RC, POS)			(((POS).iPosX + (RC).iWidth - 1))
+#define 	RECT_X_END(RECT)			(((RECT).iPosX + (RECT).iWidth - 1))
 #define 	RECT_Y_START(ST)			((ST).iPosY)
-#define 	RECT_Y_END(RC, POS)			(((POS).iPosY + (RC).iHeight - 1))
+#define 	RECT_Y_END(RECT)			(((RECT).iPosY + (RECT).iHeight - 1))
 #define 	RECT_WIDTH(ST)				((ST).iWidth)
 #define 	RECT_HEIGHT(ST)				((ST).iHeight)
 #define 	RECT_VALID_WIDTH(DATA, POS)	((RECT_X_START(POS)>0)?RECT_WIDTH(DATA):(RECT_WIDTH(DATA)+RECT_X_START(POS)))
@@ -61,7 +61,7 @@ typedef struct
 	SGUI_INT							iPosY;
 	SGUI_INT							iWidth;
 	SGUI_INT							iHeight;
-}SGUI_RECT_AREA;
+}SGUI_RECT;
 
 typedef struct
 {
@@ -74,6 +74,12 @@ typedef struct
 	SGUI_INT							iPosX;
 	SGUI_INT							iPosY;
 }SGUI_POINT;
+
+typedef struct
+{
+	SGUI_INT							iMin;
+	SGUI_INT							iMax;
+}SGUI_RANGE;
 
 typedef struct
 {

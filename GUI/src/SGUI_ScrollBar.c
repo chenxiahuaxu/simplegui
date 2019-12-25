@@ -22,7 +22,7 @@
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_ScrollBar_Repaint(SGUI_SCR_DEV* pstIFObj, SGUI_SCROLLBAR_STRUCT* pstScrollBar)
+void SGUI_ScrollBar_Repaint(SGUI_SCR_DEV* pstDeviceIF, SGUI_SCROLLBAR_STRUCT* pstScrollBar)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -56,7 +56,7 @@ void SGUI_ScrollBar_Repaint(SGUI_SCR_DEV* pstIFObj, SGUI_SCROLLBAR_STRUCT* pstSc
 		if(SGUI_SCROLLBAR_VERTICAL == pstScrollBar->eDirection)
 		{
 			// Draw scroll bar edge.
-			SGUI_Basic_DrawRectangle(pstIFObj, pstScrollBar->iPosX, pstScrollBar->iPosY,
+			SGUI_Basic_DrawRectangle(pstDeviceIF, pstScrollBar->iPosX, pstScrollBar->iPosY,
 									pstScrollBar->iWidth, pstScrollBar->iHeight,
 									SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
 			// Value lower limit is 0, scroll blocks must be greater then 0.
@@ -64,19 +64,19 @@ void SGUI_ScrollBar_Repaint(SGUI_SCR_DEV* pstIFObj, SGUI_SCROLLBAR_STRUCT* pstSc
 			{
 				uiScrollBlockPos = pstScrollBar->iPosY+1+((pstScrollBar->iHeight-uiScrollBlockSize-2)*pstScrollBar->sIndex/pstScrollBar->sMaxIndex);
 				// Redraw process block
-				SGUI_Basic_DrawRectangle(pstIFObj, pstScrollBar->iPosX+1, uiScrollBlockPos,
+				SGUI_Basic_DrawRectangle(pstDeviceIF, pstScrollBar->iPosX+1, uiScrollBlockPos,
 										uiScrollBlockSize, uiScrollBlockSize, SGUI_COLOR_FRGCLR, SGUI_COLOR_FRGCLR);
 			}
 			else
 			{
-				SGUI_Basic_DrawRectangle(pstIFObj, pstScrollBar->iPosX+1, pstScrollBar->iPosY+1,
+				SGUI_Basic_DrawRectangle(pstDeviceIF, pstScrollBar->iPosX+1, pstScrollBar->iPosY+1,
 										uiScrollBlockSize, uiScrollBlockSize, SGUI_COLOR_FRGCLR, SGUI_COLOR_FRGCLR);
 			}
 		}
 		else // Horizontal
 		{
 			// Draw scroll bar edge.
-			SGUI_Basic_DrawRectangle(pstIFObj, pstScrollBar->iPosX, pstScrollBar->iPosY,
+			SGUI_Basic_DrawRectangle(pstDeviceIF, pstScrollBar->iPosX, pstScrollBar->iPosY,
 									pstScrollBar->iWidth, pstScrollBar->iHeight,
 									SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
 			// Value lower limit is 0, scroll blocks must be greater then 0.
@@ -84,12 +84,12 @@ void SGUI_ScrollBar_Repaint(SGUI_SCR_DEV* pstIFObj, SGUI_SCROLLBAR_STRUCT* pstSc
 			{
 				uiScrollBlockPos = pstScrollBar->iPosX+1+((pstScrollBar->iWidth-uiScrollBlockSize-2)*pstScrollBar->sIndex/pstScrollBar->sMaxIndex);
 				// Redraw process block
-				SGUI_Basic_DrawRectangle(pstIFObj, uiScrollBlockPos, pstScrollBar->iPosY+1,
+				SGUI_Basic_DrawRectangle(pstDeviceIF, uiScrollBlockPos, pstScrollBar->iPosY+1,
 										uiScrollBlockSize, uiScrollBlockSize, SGUI_COLOR_FRGCLR, SGUI_COLOR_FRGCLR);
 			}
 			else
 			{
-				SGUI_Basic_DrawRectangle(pstIFObj, pstScrollBar->iPosX+1, pstScrollBar->iPosY+1,
+				SGUI_Basic_DrawRectangle(pstDeviceIF, pstScrollBar->iPosX+1, pstScrollBar->iPosY+1,
 										uiScrollBlockSize, uiScrollBlockSize, SGUI_COLOR_FRGCLR, SGUI_COLOR_FRGCLR);
 			}
 		}

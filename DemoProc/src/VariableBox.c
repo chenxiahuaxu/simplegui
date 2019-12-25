@@ -28,12 +28,12 @@
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
-static HMI_ENGINE_RESULT    HMI_DemoVariableBox_Initialize(SGUI_SCR_DEV* pstIFObj);
-static HMI_ENGINE_RESULT	HMI_DemoVariableBox_Prepare(SGUI_SCR_DEV* pstIFObj, const void* pstParameters);
-static HMI_ENGINE_RESULT	HMI_DemoVariableBox_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const void* pstParameters);
-static HMI_ENGINE_RESULT    HMI_DemoVariableBox_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent, SGUI_INT* piActionID);
-static HMI_ENGINE_RESULT	HMI_DemoVariableBox_PostProcess(SGUI_SCR_DEV* pstIFObj, HMI_ENGINE_RESULT eProcResult, SGUI_INT iActionID);
-static void				    HMI_DemoVariableBox_DrawFrame(SGUI_SCR_DEV* pstIFObj, SGUI_SZSTR szTitle);
+static HMI_ENGINE_RESULT    HMI_DemoVariableBox_Initialize(SGUI_SCR_DEV* pstDeviceIF);
+static HMI_ENGINE_RESULT	HMI_DemoVariableBox_Prepare(SGUI_SCR_DEV* pstDeviceIF, const void* pstParameters);
+static HMI_ENGINE_RESULT	HMI_DemoVariableBox_RefreshScreen(SGUI_SCR_DEV* pstDeviceIF, const void* pstParameters);
+static HMI_ENGINE_RESULT    HMI_DemoVariableBox_ProcessEvent(SGUI_SCR_DEV* pstDeviceIF, const HMI_EVENT_BASE* pstEvent, SGUI_INT* piActionID);
+static HMI_ENGINE_RESULT	HMI_DemoVariableBox_PostProcess(SGUI_SCR_DEV* pstDeviceIF, HMI_ENGINE_RESULT eProcResult, SGUI_INT iActionID);
+static void				    HMI_DemoVariableBox_DrawFrame(SGUI_SCR_DEV* pstDeviceIF, SGUI_SZSTR szTitle);
 
 //=======================================================================//
 //= Static variable declaration.									    =//
@@ -74,13 +74,13 @@ HMI_SCREEN_OBJECT       		g_stHMIDemo_VariableBox =	{	HMI_SCREEN_ID_DEMO_VARIABL
 //=======================================================================//
 //= Function define.										            =//
 //=======================================================================//
-HMI_ENGINE_RESULT HMI_DemoVariableBox_Initialize(SGUI_SCR_DEV* pstIFObj)
+HMI_ENGINE_RESULT HMI_DemoVariableBox_Initialize(SGUI_SCR_DEV* pstDeviceIF)
 {
 	s_uiFocusedFlag = 0;
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoVariableBox_Prepare(SGUI_SCR_DEV* pstIFObj, const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoVariableBox_Prepare(SGUI_SCR_DEV* pstDeviceIF, const void* pstParameters)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -97,37 +97,37 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_Prepare(SGUI_SCR_DEV* pstIFObj, const void
 	/*----------------------------------*/
 	// Draw frame
 	s_szFrameTitle = s_szDefaultFrameTitle;
-	HMI_DemoVariableBox_DrawFrame(pstIFObj, (SGUI_SZSTR)s_szFrameTitle);
+	HMI_DemoVariableBox_DrawFrame(pstDeviceIF, (SGUI_SZSTR)s_szFrameTitle);
 	// Show notice
-	SGUI_Notice_FitArea(pstIFObj, &(stNoticeBox.stLayout));
+	SGUI_Notice_FitArea(pstDeviceIF, &(stNoticeBox.stLayout));
 #ifdef _SIMPLE_GUI_NON_ASCII_
-	SGUI_Notice_Repaint(pstIFObj, &stNoticeBox, &SGUI_DEFAULT_FONT_8, 0);
+	SGUI_Notice_Repaint(pstDeviceIF, &stNoticeBox, &SGUI_DEFAULT_FONT_8, 0);
 #else
-	SGUI_Notice_Repaint(pstIFObj, &stNoticeBox, &SGUI_DEFAULT_FONT_8, 0);
+	SGUI_Notice_Repaint(pstDeviceIF, &stNoticeBox, &SGUI_DEFAULT_FONT_8, 0);
 #endif //_SIMPLE_GUI_NON_ASCII_
 	// Start RTC
 	RTCTimerEnable(true);
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoVariableBox_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoVariableBox_RefreshScreen(SGUI_SCR_DEV* pstDeviceIF, const void* pstParameters)
 {
     /*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
 	// Draw frame
-    HMI_DemoVariableBox_DrawFrame(pstIFObj, (SGUI_SZSTR)s_szFrameTitle);
+    HMI_DemoVariableBox_DrawFrame(pstDeviceIF, (SGUI_SZSTR)s_szFrameTitle);
     // Draw number box
-    SGUI_Basic_DrawRectangle(pstIFObj, VARIABLE_BOX_POSX, VARIABLE_BOX_NUMBER_POSY, VARIABLE_BOX_WIDTH+4, VARIABLE_NUMBER_BOX_HEIGHT+4, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
-    SGUI_NumberVariableBox_Paint(pstIFObj, &s_stNumberVariableBox, SGUI_CENTER, (0 == s_uiFocusedFlag)?SGUI_DRAW_REVERSE:SGUI_DRAW_NORMAL);
+    SGUI_Basic_DrawRectangle(pstDeviceIF, VARIABLE_BOX_POSX, VARIABLE_BOX_NUMBER_POSY, VARIABLE_BOX_WIDTH+4, VARIABLE_NUMBER_BOX_HEIGHT+4, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
+    SGUI_NumberVariableBox_Paint(pstDeviceIF, &s_stNumberVariableBox, SGUI_CENTER, (0 == s_uiFocusedFlag)?SGUI_DRAW_REVERSE:SGUI_DRAW_NORMAL);
     // Draw text box
-    SGUI_Basic_DrawRectangle(pstIFObj, VARIABLE_BOX_POSX, VARIABLE_BOX_TEXT_POSY, VARIABLE_BOX_WIDTH+4, VARIABLE_TEXT_BOX_HEIGHT+4, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
-    SGUI_TextVariableBox_Paint(pstIFObj, &s_stTextVariableBox, (0 == s_uiFocusedFlag)?SGUI_DRAW_NORMAL:SGUI_DRAW_REVERSE);
+    SGUI_Basic_DrawRectangle(pstDeviceIF, VARIABLE_BOX_POSX, VARIABLE_BOX_TEXT_POSY, VARIABLE_BOX_WIDTH+4, VARIABLE_TEXT_BOX_HEIGHT+4, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
+    SGUI_TextVariableBox_Paint(pstDeviceIF, &s_stTextVariableBox, (0 == s_uiFocusedFlag)?SGUI_DRAW_NORMAL:SGUI_DRAW_REVERSE);
 
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoVariableBox_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent, SGUI_INT* piActionID)
+HMI_ENGINE_RESULT HMI_DemoVariableBox_ProcessEvent(SGUI_SCR_DEV* pstDeviceIF, const HMI_EVENT_BASE* pstEvent, SGUI_INT* piActionID)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -174,7 +174,7 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const
         // Redraw screen if time out.
         if(0 == s_uiAutoConfirmTimer)
         {
-            eProcessResult = HMI_DemoVariableBox_RefreshScreen(pstIFObj, NULL);
+            eProcessResult = HMI_DemoVariableBox_RefreshScreen(pstDeviceIF, NULL);
             RTCTimerEnable(false);
         }
     }
@@ -192,13 +192,13 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const
 					s_uiFocusedFlag = ((s_uiFocusedFlag+1)%2);
 					if(0 == s_uiFocusedFlag)
 					{
-						SGUI_NumberVariableBox_Paint(pstIFObj, &s_stNumberVariableBox, SGUI_CENTER, SGUI_DRAW_REVERSE);
-						SGUI_TextVariableBox_Paint(pstIFObj, &s_stTextVariableBox, SGUI_DRAW_NORMAL);
+						SGUI_NumberVariableBox_Paint(pstDeviceIF, &s_stNumberVariableBox, SGUI_CENTER, SGUI_DRAW_REVERSE);
+						SGUI_TextVariableBox_Paint(pstDeviceIF, &s_stTextVariableBox, SGUI_DRAW_NORMAL);
 					}
 					else
 					{
-						SGUI_NumberVariableBox_Paint(pstIFObj, &s_stNumberVariableBox, SGUI_CENTER, SGUI_DRAW_NORMAL);
-						SGUI_TextVariableBox_Paint(pstIFObj, &s_stTextVariableBox, SGUI_DRAW_REVERSE);
+						SGUI_NumberVariableBox_Paint(pstDeviceIF, &s_stNumberVariableBox, SGUI_CENTER, SGUI_DRAW_NORMAL);
+						SGUI_TextVariableBox_Paint(pstDeviceIF, &s_stTextVariableBox, SGUI_DRAW_REVERSE);
 					}
 					break;
 				}
@@ -214,7 +214,7 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const
 						if(s_stTextVariableBox.sFocusIndex > 0)
 						{
 							s_stTextVariableBox.sFocusIndex--;
-							SGUI_TextVariableBox_ChangeCharacter(pstIFObj, &s_stTextVariableBox, SGUI_DRAW_REVERSE, SGUI_TEXT_ASCII, SGUI_TXT_VARBOX_OPT_NONE);
+							SGUI_TextVariableBox_ChangeCharacter(pstDeviceIF, &s_stTextVariableBox, SGUI_DRAW_REVERSE, SGUI_TEXT_ASCII, SGUI_TXT_VARBOX_OPT_NONE);
 						}
 					}
 					break;
@@ -223,12 +223,12 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const
 				{
 					if(1 == s_uiFocusedFlag)
 					{
-						SGUI_TextVariableBox_ChangeCharacter(pstIFObj, &s_stTextVariableBox, SGUI_DRAW_REVERSE, SGUI_TEXT_ASCII, SGUI_TXT_VARBOX_OPT_PREV);
+						SGUI_TextVariableBox_ChangeCharacter(pstDeviceIF, &s_stTextVariableBox, SGUI_DRAW_REVERSE, SGUI_TEXT_ASCII, SGUI_TXT_VARBOX_OPT_PREV);
 					}
 					else
 					{
 						s_stNumberVariableBox.Value++;
-						SGUI_NumberVariableBox_Paint(pstIFObj, &s_stNumberVariableBox, SGUI_CENTER, SGUI_DRAW_REVERSE);
+						SGUI_NumberVariableBox_Paint(pstDeviceIF, &s_stNumberVariableBox, SGUI_CENTER, SGUI_DRAW_REVERSE);
 					}
 					break;
 				}
@@ -239,7 +239,7 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const
 						if(s_stTextVariableBox.sFocusIndex < (s_stTextVariableBox.sMaxTextLength-1))
 						{
 							s_stTextVariableBox.sFocusIndex++;
-							SGUI_TextVariableBox_ChangeCharacter(pstIFObj, &s_stTextVariableBox, SGUI_DRAW_REVERSE, SGUI_TEXT_ASCII, SGUI_TXT_VARBOX_OPT_NONE);
+							SGUI_TextVariableBox_ChangeCharacter(pstDeviceIF, &s_stTextVariableBox, SGUI_DRAW_REVERSE, SGUI_TEXT_ASCII, SGUI_TXT_VARBOX_OPT_NONE);
 						}
 					}
 					break;
@@ -248,12 +248,12 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const
 				{
 					if(1 == s_uiFocusedFlag)
 					{
-						SGUI_TextVariableBox_ChangeCharacter(pstIFObj, &s_stTextVariableBox, SGUI_DRAW_REVERSE, SGUI_TEXT_ASCII, SGUI_TXT_VARBOX_OPT_NEXT);
+						SGUI_TextVariableBox_ChangeCharacter(pstDeviceIF, &s_stTextVariableBox, SGUI_DRAW_REVERSE, SGUI_TEXT_ASCII, SGUI_TXT_VARBOX_OPT_NEXT);
 					}
 					else
 					{
 						s_stNumberVariableBox.Value--;
-						SGUI_NumberVariableBox_Paint(pstIFObj, &s_stNumberVariableBox, SGUI_CENTER, SGUI_DRAW_REVERSE);
+						SGUI_NumberVariableBox_Paint(pstDeviceIF, &s_stNumberVariableBox, SGUI_CENTER, SGUI_DRAW_REVERSE);
 					}
 					break;
 				}
@@ -262,13 +262,13 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const
 					if(1 == s_uiFocusedFlag)
 					{
 						s_szFrameTitle = s_stTextVariableBox.szValue;
-						HMI_DemoVariableBox_DrawFrame(pstIFObj, (SGUI_SZSTR)s_szFrameTitle);
+						HMI_DemoVariableBox_DrawFrame(pstDeviceIF, (SGUI_SZSTR)s_szFrameTitle);
 						// Draw number box
-						SGUI_Basic_DrawRectangle(pstIFObj, VARIABLE_BOX_POSX, VARIABLE_BOX_NUMBER_POSY, VARIABLE_BOX_WIDTH+4, VARIABLE_NUMBER_BOX_HEIGHT+4, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
-						SGUI_NumberVariableBox_Paint(pstIFObj, &s_stNumberVariableBox, SGUI_CENTER, SGUI_DRAW_NORMAL);
+						SGUI_Basic_DrawRectangle(pstDeviceIF, VARIABLE_BOX_POSX, VARIABLE_BOX_NUMBER_POSY, VARIABLE_BOX_WIDTH+4, VARIABLE_NUMBER_BOX_HEIGHT+4, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
+						SGUI_NumberVariableBox_Paint(pstDeviceIF, &s_stNumberVariableBox, SGUI_CENTER, SGUI_DRAW_NORMAL);
 						// Draw text box
-						SGUI_Basic_DrawRectangle(pstIFObj, VARIABLE_BOX_POSX, VARIABLE_BOX_TEXT_POSY, VARIABLE_BOX_WIDTH+4, VARIABLE_TEXT_BOX_HEIGHT+4, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
-						SGUI_TextVariableBox_Paint(pstIFObj, &s_stTextVariableBox, SGUI_DRAW_REVERSE);
+						SGUI_Basic_DrawRectangle(pstDeviceIF, VARIABLE_BOX_POSX, VARIABLE_BOX_TEXT_POSY, VARIABLE_BOX_WIDTH+4, VARIABLE_TEXT_BOX_HEIGHT+4, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
+						SGUI_TextVariableBox_Paint(pstDeviceIF, &s_stTextVariableBox, SGUI_DRAW_REVERSE);
 					}
 					break;
 				}
@@ -289,7 +289,7 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const
 	return eProcessResult;
 }
 
-HMI_ENGINE_RESULT HMI_DemoVariableBox_PostProcess(SGUI_SCR_DEV* pstIFObj, HMI_ENGINE_RESULT eProcResult, SGUI_INT iActionID)
+HMI_ENGINE_RESULT HMI_DemoVariableBox_PostProcess(SGUI_SCR_DEV* pstDeviceIF, HMI_ENGINE_RESULT eProcResult, SGUI_INT iActionID)
 {
 	if(HMI_PROCESS_SUCCESSFUL(eProcResult))
 	{
@@ -303,13 +303,13 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_PostProcess(SGUI_SCR_DEV* pstIFObj, HMI_EN
 	return HMI_RET_NORMAL;
 }
 
-void HMI_DemoVariableBox_DrawFrame(SGUI_SCR_DEV* pstIFObj, SGUI_SZSTR szTitle)
+void HMI_DemoVariableBox_DrawFrame(SGUI_SCR_DEV* pstDeviceIF, SGUI_SZSTR szTitle)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	SGUI_RECT_AREA				stTextDisplayArea;
-	SGUI_POINT					stInnerPos;
+	SGUI_RECT				stTextDisplayArea;
+	SGUI_POINT				stInnerPos;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -323,12 +323,12 @@ void HMI_DemoVariableBox_DrawFrame(SGUI_SCR_DEV* pstIFObj, SGUI_SZSTR szTitle)
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if(NULL != pstIFObj)
+	if(NULL != pstDeviceIF)
 	{
-		stTextDisplayArea.iWidth = pstIFObj->stSize.iWidth-8;
-		SGUI_Basic_DrawRectangle(pstIFObj, 0, 0, RECT_WIDTH(pstIFObj->stSize), RECT_HEIGHT(pstIFObj->stSize), SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
-		SGUI_Basic_DrawRectangle(pstIFObj, 2, 2, RECT_WIDTH(pstIFObj->stSize)-4, RECT_HEIGHT(pstIFObj->stSize)-4, SGUI_COLOR_FRGCLR, SGUI_COLOR_TRANS);
-		SGUI_Basic_DrawLine(pstIFObj, 3, 17, 124, 17, SGUI_COLOR_FRGCLR);
-		SGUI_Text_DrawText(pstIFObj, szTitle, &SGUI_DEFAULT_FONT_12, &stTextDisplayArea, &stInnerPos, SGUI_DRAW_NORMAL);
+		stTextDisplayArea.iWidth = pstDeviceIF->stSize.iWidth-8;
+		SGUI_Basic_DrawRectangle(pstDeviceIF, 0, 0, RECT_WIDTH(pstDeviceIF->stSize), RECT_HEIGHT(pstDeviceIF->stSize), SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
+		SGUI_Basic_DrawRectangle(pstDeviceIF, 2, 2, RECT_WIDTH(pstDeviceIF->stSize)-4, RECT_HEIGHT(pstDeviceIF->stSize)-4, SGUI_COLOR_FRGCLR, SGUI_COLOR_TRANS);
+		SGUI_Basic_DrawLine(pstDeviceIF, 3, 17, 124, 17, SGUI_COLOR_FRGCLR);
+		SGUI_Text_DrawText(pstDeviceIF, szTitle, &SGUI_DEFAULT_FONT_12, &stTextDisplayArea, &stInnerPos, SGUI_DRAW_NORMAL);
 	}
 }

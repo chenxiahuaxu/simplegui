@@ -33,9 +33,11 @@
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
+static SGUI_INT			SGUI_Resource_GetCharIndex_MiniNum(SGUI_UINT32 uiCode);
 static SGUI_INT         SGUI_Resource_GetCharIndex_Default(SGUI_UINT32 uiCode);
 static SGUI_CSZSTR      SGUI_Resource_StepNext_Default(SGUI_CSZSTR cszSrc, SGUI_UINT32* puiCode);
 static SGUI_BOOL        SGUI_Resource_IsFullWidth_Default(SGUI_UINT32 uiCode);
+static 					SGUI_FONT_RES_DECLARE(MiniNum);
 static 					SGUI_FONT_RES_DECLARE(8);
 static					SGUI_FONT_RES_DECLARE(12);
 static					SGUI_FONT_RES_DECLARE(16);
@@ -43,37 +45,73 @@ static					SGUI_FONT_RES_DECLARE(16);
 //=======================================================================//
 //= Static variable declaration.									    =//
 //=======================================================================//
+const SGUI_FONT_RES SGUI_DEFAULT_FONT_MiniNum =
+{
+    /*SGUI_INT                      iHalfWidth*/		4,
+    /*SGUI_INT                      iFullWidth*/		0,
+    /*SGUI_INT                      iHeight*/			5,
+	/*SGUI_FN_IF_GET_CHAR_INDEX     fnGetIndex*/		SGUI_Resource_GetCharIndex_MiniNum,
+	/*SGUI_FN_IF_GET_DATA           fnGetData*/			SGUI_FONT_RES_DATA_FUNC_NAME(MiniNum),
+	/*SGUI_FN_IF_STEP_NEXT          fnStepNext*/		SGUI_Resource_StepNext_Default,
+	/*SGUI_FN_IF_IS_FULL_WIDTH      fnIsFullWidth*/		SGUI_Resource_IsFullWidth_Default
+};
+
 const SGUI_FONT_RES SGUI_DEFAULT_FONT_8 =
 {
-    /*SGUI_INT                      iHalfWidth*/            6,
-    /*SGUI_INT                      iFullWidth*/            0,
-    /*SGUI_INT                      iHeight*/               8,
-	/*SGUI_FN_IF_GET_CHAR_INDEX     fnGetIndex*/            SGUI_Resource_GetCharIndex_Default,
-	/*SGUI_FN_IF_GET_DATA           fnGetData*/             SGUI_FONT_RES_DATA_FUNC_NAME(8),
-	/*SGUI_FN_IF_STEP_NEXT          fnStepNext*/            SGUI_Resource_StepNext_Default,
-	/*SGUI_FN_IF_IS_FULL_WIDTH      fnIsFullWidth*/         SGUI_Resource_IsFullWidth_Default
+    /*SGUI_INT                      iHalfWidth*/		6,
+    /*SGUI_INT                      iFullWidth*/		0,
+    /*SGUI_INT                      iHeight*/			8,
+	/*SGUI_FN_IF_GET_CHAR_INDEX     fnGetIndex*/		SGUI_Resource_GetCharIndex_Default,
+	/*SGUI_FN_IF_GET_DATA           fnGetData*/			SGUI_FONT_RES_DATA_FUNC_NAME(8),
+	/*SGUI_FN_IF_STEP_NEXT          fnStepNext*/		SGUI_Resource_StepNext_Default,
+	/*SGUI_FN_IF_IS_FULL_WIDTH      fnIsFullWidth*/		SGUI_Resource_IsFullWidth_Default
 };
 
 const SGUI_FONT_RES SGUI_DEFAULT_FONT_12 =
 {
-    /*SGUI_INT                      iHalfWidth*/            6,
-    /*SGUI_INT                      iFullWidth*/            0,
-    /*SGUI_INT                      iHeight*/               12,
-	/*SGUI_FN_IF_GET_CHAR_INDEX     fnGetIndex*/            SGUI_Resource_GetCharIndex_Default,
-	/*SGUI_FN_IF_GET_DATA           fnGetData*/             SGUI_FONT_RES_DATA_FUNC_NAME(12),
-	/*SGUI_FN_IF_STEP_NEXT          fnStepNext*/            SGUI_Resource_StepNext_Default,
-	/*SGUI_FN_IF_IS_FULL_WIDTH      fnIsFullWidth*/         SGUI_Resource_IsFullWidth_Default
+    /*SGUI_INT                      iHalfWidth*/		6,
+    /*SGUI_INT                      iFullWidth*/		0,
+    /*SGUI_INT                      iHeight*/			12,
+	/*SGUI_FN_IF_GET_CHAR_INDEX     fnGetIndex*/		SGUI_Resource_GetCharIndex_Default,
+	/*SGUI_FN_IF_GET_DATA           fnGetData*/			SGUI_FONT_RES_DATA_FUNC_NAME(12),
+	/*SGUI_FN_IF_STEP_NEXT          fnStepNext*/		SGUI_Resource_StepNext_Default,
+	/*SGUI_FN_IF_IS_FULL_WIDTH      fnIsFullWidth*/		SGUI_Resource_IsFullWidth_Default
 };
 
 const SGUI_FONT_RES SGUI_DEFAULT_FONT_16 =
 {
-    /*SGUI_INT                      iHalfWidth*/            8,
-    /*SGUI_INT                      iFullWidth*/            0,
-    /*SGUI_INT                      iHeight*/               16,
-	/*SGUI_FN_IF_GET_CHAR_INDEX     fnGetIndex*/            SGUI_Resource_GetCharIndex_Default,
-	/*SGUI_FN_IF_GET_DATA           fnGetData*/             SGUI_FONT_RES_DATA_FUNC_NAME(16),
-	/*SGUI_FN_IF_STEP_NEXT          fnStepNext*/            SGUI_Resource_StepNext_Default,
-	/*SGUI_FN_IF_IS_FULL_WIDTH      fnIsFullWidth*/         SGUI_Resource_IsFullWidth_Default
+    /*SGUI_INT                      iHalfWidth*/		8,
+    /*SGUI_INT                      iFullWidth*/		0,
+    /*SGUI_INT                      iHeight*/			16,
+	/*SGUI_FN_IF_GET_CHAR_INDEX     fnGetIndex*/		SGUI_Resource_GetCharIndex_Default,
+	/*SGUI_FN_IF_GET_DATA           fnGetData*/			SGUI_FONT_RES_DATA_FUNC_NAME(16),
+	/*SGUI_FN_IF_STEP_NEXT          fnStepNext*/		SGUI_Resource_StepNext_Default,
+	/*SGUI_FN_IF_IS_FULL_WIDTH      fnIsFullWidth*/		SGUI_Resource_IsFullWidth_Default
+};
+
+//======================================================================//
+//= 8 Pix font library.													//
+//======================================================================//
+const SGUI_CBYTE SGUI_FONT_H6[] =
+{
+    0x1F, 0x11, 0x1F, 0x00,	//0
+    0x00, 0x1F, 0x00, 0x00,	//1
+    0x1D, 0x15, 0x17, 0x00,	//2
+    0x15, 0x15, 0x1F, 0x00,	//3
+    0x07, 0x04, 0x1F, 0x00,	//4
+    0x17, 0x15, 0x1D, 0x00,	//5
+    0x1F, 0x15, 0x1D, 0x00,	//6
+    0x19, 0x05, 0x03, 0x00,	//7
+    0x1F, 0x15, 0x1F, 0x00,	//8
+    0x17, 0x15, 0x1F, 0x00,	//9
+    0x00, 0x10, 0x00, 0x00,	//.
+    0x04, 0x0E, 0x04, 0x00,	//+
+    0x04, 0x04, 0x04, 0x00,	//-
+    0x0A, 0x04, 0x0A, 0x00,	//**
+    0x18, 0x04, 0x03, 0x00, ///
+    0x00, 0x0E, 0x11, 0x00, //(
+    0x11, 0x0E, 0x00, 0x00, //)
+    0x00, 0x00, 0x00, 0x00, //space
 };
 
 //======================================================================//
@@ -377,6 +415,86 @@ const SGUI_CBYTE SGUI_FONT_H16[] = {
 0x00,0x06,0x01,0x01,0x02,0x02,0x04,0x04,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,	//"~"		Index 94
 };
 
+SGUI_INT SGUI_Resource_GetCharIndex_MiniNum(SGUI_UINT32 uiCode)
+{
+    /*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+	SGUI_INT					iIndex;
+
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	switch(uiCode)
+	{
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9':
+		{
+			iIndex = uiCode - '0';
+			break;
+		}
+		case '.':
+		{
+			iIndex = 10;
+			break;
+		}
+		case '+':
+		{
+			iIndex = 11;
+			break;
+		}
+		case '-':
+		{
+			iIndex = 12;
+			break;
+		}
+		case '*':
+		{
+			iIndex = 13;
+			break;
+		}
+		case '/':
+		{
+			iIndex = 14;
+			break;
+		}
+		case '(':
+		{
+			iIndex = 15;
+			break;
+		}
+		case ')':
+		{
+			iIndex = 16;
+			break;
+		}
+		case ' ': // Space.
+		{
+			iIndex = 17;
+			break;
+		}
+		case '%':
+		{
+			iIndex = 18;
+			break;
+		}
+		default:
+		{
+			iIndex = SGUI_INVALID_INDEX;
+			break;
+		}
+	}
+	return iIndex;
+}
+
 SGUI_INT SGUI_Resource_GetCharIndex_Default(SGUI_UINT32 uiCode)
 {
     /*----------------------------------*/
@@ -429,6 +547,7 @@ SGUI_BOOL SGUI_Resource_IsFullWidth_Default(SGUI_UINT32 uiCode)
     return SGUI_FALSE;
 }
 
+SGUI_FONT_RES_DEFINE(MiniNum, SGUI_FONT_H6);
 SGUI_FONT_RES_DEFINE(8, SGUI_FONT_H8);
 SGUI_FONT_RES_DEFINE(12, SGUI_FONT_H12);
 SGUI_FONT_RES_DEFINE(16, SGUI_FONT_H16);

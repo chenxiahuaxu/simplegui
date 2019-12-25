@@ -20,20 +20,19 @@
 // Start screen definition
 #define		HMI_SCREEN_START								(0)
 
-#define		HMI_EVENT_TYPE_DECLARE(NAME, DATA)				\
-typedef struct												\
-{															\
-	HMI_EVENT_BASE Head;									\
-	DATA Data;												\
-}NAME;
+#define		HMI_EVENT_TYPE_DECLARE(NAME, DATA)				typedef struct												\
+															{															\
+																HMI_EVENT_BASE Head;									\
+																DATA Data;												\
+															}NAME;
 
 #define		HMI_EVENT_DATA_MEMSET(EVENT)					SGUI_SystemIF_MemorySet(&EVENT, 0x00, sizeof(EVENT))
-#define		HMI_EVENT_INIT(EVENT)							\
-{															\
-	HMI_EVENT_DATA_MEMSET(EVENT);							\
-	EVENT.Head.iSize = sizeof(EVENT);						\
-	EVENT.Head.iType = EVENT_TYPE_ANY;						\
-}
+
+#define		HMI_EVENT_INIT(EVENT)							{															\
+																HMI_EVENT_DATA_MEMSET(EVENT);							\
+																EVENT.Head.iSize = sizeof(EVENT);						\
+																EVENT.Head.iType = EVENT_TYPE_ANY;						\
+															}
 
 #define		HMI_EVENT_SIZE_CHK(EVENT, TYPE)					(((EVENT).Head.iSize == sizeof(TYPE))?SGUI_TRUE:SGUI_FALSE)
 

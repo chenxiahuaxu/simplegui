@@ -16,40 +16,13 @@
 #define SGUI_MAX_VAL(A, B)			(((A)<(B)?(B):(A)))
 
 //=======================================================================//
-//= Static variable declaration.									    =//
-//=======================================================================//
-//   Here is the 4*6 pixel font data definition, only number characters
-// and plug(+), subtract(-), multiply(*), divide(/), brackets and space.
-SGUI_CBYTE SGUI_BASIC_FONT_H6[] =
-{
-    0x1F, 0x11, 0x1F, 0x00,	//0
-    0x00, 0x1F, 0x00, 0x00,	//1
-    0x1D, 0x15, 0x17, 0x00,	//2
-    0x15, 0x15, 0x1F, 0x00,	//3
-    0x07, 0x04, 0x1F, 0x00,	//4
-    0x17, 0x15, 0x1D, 0x00,	//5
-    0x1F, 0x15, 0x1D, 0x00,	//6
-    0x19, 0x05, 0x03, 0x00,	//7
-    0x1F, 0x15, 0x1F, 0x00,	//8
-    0x17, 0x15, 0x1F, 0x00,	//9
-    0x00, 0x10, 0x00, 0x00,	//.
-    0x04, 0x0E, 0x04, 0x00,	//+
-    0x04, 0x04, 0x04, 0x00,	//-
-    0x0A, 0x04, 0x0A, 0x00,	//**
-    0x18, 0x04, 0x03, 0x00, ///
-    0x00, 0x0E, 0x11, 0x00, //(
-    0x11, 0x0E, 0x00, 0x00, //)
-    0x00, 0x00, 0x00, 0x00, //space
-};
-
-//=======================================================================//
 //= Function define.										            =//
 //=======================================================================//
 /*************************************************************************/
 /** Function Name:	SGUI_Basic_DrawPoint								**/
 /** Purpose:		Set a pixel color or draw a point.					**/
 /** Params:																**/
-/**	@ pstIFObj[in]:	SimpleGUI object pointer.							**/
+/**	@ pstDeviceIF[in]:	SimpleGUI object pointer.						**/
 /**	@ uiCoordinateX[in]: X coordinate of point by pixels.				**/
 /**	@ uiCoordinateY[in]: Y coordinate of point by pixels.				**/
 /**	@ eColor[in]:		Point color, GUI_COLOR_BKGCLR means clear pix, 	**/
@@ -57,24 +30,24 @@ SGUI_CBYTE SGUI_BASIC_FONT_H6[] =
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_Basic_DrawPoint(SGUI_SCR_DEV* pstIFObj, SGUI_UINT uiCoordinateX, SGUI_UINT uiCoordinateY, SGUI_COLOR eColor)
+void SGUI_Basic_DrawPoint(SGUI_SCR_DEV* pstDeviceIF, SGUI_UINT uiCoordinateX, SGUI_UINT uiCoordinateY, SGUI_COLOR eColor)
 {
     /*----------------------------------*/
     /* Process							*/
     /*----------------------------------*/
-    if((NULL != pstIFObj) && (uiCoordinateX < RECT_WIDTH(pstIFObj->stSize)) && (uiCoordinateY < RECT_HEIGHT(pstIFObj->stSize)))
+    if((NULL != pstDeviceIF) && (uiCoordinateX < RECT_WIDTH(pstDeviceIF->stSize)) && (uiCoordinateY < RECT_HEIGHT(pstDeviceIF->stSize)))
     {
-    	if(NULL == pstIFObj->fnSetPixel)
+    	if(NULL == pstDeviceIF->fnSetPixel)
 		{
 			/* Action function is unspecified, no actions. */
 		}
         else if(SGUI_COLOR_FRGCLR == eColor)
         {
-            pstIFObj->fnSetPixel(uiCoordinateX, uiCoordinateY, 1);
+            pstDeviceIF->fnSetPixel(uiCoordinateX, uiCoordinateY, 1);
         }
         else if(SGUI_COLOR_BKGCLR == eColor)
         {
-            pstIFObj->fnSetPixel(uiCoordinateX, uiCoordinateY, 0);
+            pstDeviceIF->fnSetPixel(uiCoordinateX, uiCoordinateY, 0);
         }
     }
 }
@@ -83,13 +56,13 @@ void SGUI_Basic_DrawPoint(SGUI_SCR_DEV* pstIFObj, SGUI_UINT uiCoordinateX, SGUI_
 /** Function Name:	SGUI_Basic_GetPoint									**/
 /** Purpose:		Get a pixel color .									**/
 /** Params:																**/
-/**	@ pstIFObj[in]:	SimpleGUI object pointer.							**/
+/**	@ pstDeviceIF[in]:	SimpleGUI object pointer.						**/
 /**	@ uiCoordinateX[in]: X coordinate of point by pixels.				**/
 /**	@ uiCoordinateY[in]: Y coordinate of point by pixels.				**/
 /** Return:			SGUI_COLOR type enumerated for point color.			**/
 /** Notice:			None.												**/
 /*************************************************************************/
-SGUI_COLOR SGUI_Basic_GetPoint(SGUI_SCR_DEV* pstIFObj, SGUI_UINT uiCoordinateX, SGUI_UINT uiCoordinateY)
+SGUI_COLOR SGUI_Basic_GetPoint(SGUI_SCR_DEV* pstDeviceIF, SGUI_UINT uiCoordinateX, SGUI_UINT uiCoordinateY)
 {
     /*----------------------------------*/
     /* Variable Declaration				*/
@@ -106,15 +79,15 @@ SGUI_COLOR SGUI_Basic_GetPoint(SGUI_SCR_DEV* pstIFObj, SGUI_UINT uiCoordinateX, 
     /*----------------------------------*/
     /* Process							*/
     /*----------------------------------*/
-    if((NULL != pstIFObj) && (uiCoordinateX < RECT_WIDTH(pstIFObj->stSize)) && (uiCoordinateY < RECT_HEIGHT(pstIFObj->stSize)))
+    if((NULL != pstDeviceIF) && (uiCoordinateX < RECT_WIDTH(pstDeviceIF->stSize)) && (uiCoordinateY < RECT_HEIGHT(pstDeviceIF->stSize)))
     {
-    	if(NULL == pstIFObj->fnSetPixel)
+    	if(NULL == pstDeviceIF->fnSetPixel)
 		{
 			/* Action function is unspecified, no actions. */
 		}
 		else
 		{
-			uiPixValue = pstIFObj->fnGetPixel(uiCoordinateX, uiCoordinateY);
+			uiPixValue = pstDeviceIF->fnGetPixel(uiCoordinateX, uiCoordinateY);
 			if(0 == uiPixValue)
 			{
 				eColor = SGUI_COLOR_BKGCLR;
@@ -133,26 +106,26 @@ SGUI_COLOR SGUI_Basic_GetPoint(SGUI_SCR_DEV* pstIFObj, SGUI_UINT uiCoordinateX, 
 /** Function Name:	SGUI_Basic_ClearScreen								**/
 /** Purpose:		Clean LCD screen display.							**/
 /** Params:																**/
-/**	@ pstIFObj[in]:	SimpleGUI object pointer.							**/
+/**	@ pstDeviceIF[in]:	SimpleGUI object pointer.						**/
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_Basic_ClearScreen(SGUI_SCR_DEV* pstIFObj)
+void SGUI_Basic_ClearScreen(SGUI_SCR_DEV* pstDeviceIF)
 {
     /*----------------------------------*/
     /* Process							*/
     /*----------------------------------*/
-    if(NULL != pstIFObj)
+    if(NULL != pstDeviceIF)
 	{
 		/* Clear screen. */
-        if((NULL != pstIFObj->fnClear) && (NULL != pstIFObj->fnSyncBuffer))
+        if((NULL != pstDeviceIF->fnClear) && (NULL != pstDeviceIF->fnSyncBuffer))
 		{
-			pstIFObj->fnClear();
+			pstDeviceIF->fnClear();
 		}
 		else
 		{
 		    /* Draw a blank rectangle for clean screen when clean function is not supposed. */
-			SGUI_Basic_DrawRectangle(pstIFObj, 0, 0, RECT_WIDTH(pstIFObj->stSize), RECT_HEIGHT(pstIFObj->stSize), SGUI_COLOR_BKGCLR, SGUI_COLOR_BKGCLR);
+			SGUI_Basic_DrawRectangle(pstDeviceIF, 0, 0, RECT_WIDTH(pstDeviceIF->stSize), RECT_HEIGHT(pstDeviceIF->stSize), SGUI_COLOR_BKGCLR, SGUI_COLOR_BKGCLR);
 		}
 	}
 }
@@ -161,7 +134,7 @@ void SGUI_Basic_ClearScreen(SGUI_SCR_DEV* pstIFObj)
 /** Function Name:	SGUI_Basic_DrawLine									**/
 /** Purpose:		Draw a line by the Bresenham algorithm.				**/
 /** Params:																**/
-/**	@ pstIFObj[in]:	SimpleGUI object pointer.							**/
+/**	@ pstDeviceIF[in]:	SimpleGUI object pointer.						**/
 /**	@ iStartX[in]:		X coordinate of start point of line.			**/
 /**	@ iStartY[in]:		Y coordinate of start point of line.			**/
 /**	@ iEndX[in]:		X coordinate of end point of line.				**/
@@ -170,7 +143,7 @@ void SGUI_Basic_ClearScreen(SGUI_SCR_DEV* pstIFObj)
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_Basic_DrawLine(SGUI_SCR_DEV* pstIFObj, SGUI_INT iStartX, SGUI_INT iStartY, SGUI_INT iEndX, SGUI_INT iEndY, SGUI_COLOR eColor)
+void SGUI_Basic_DrawLine(SGUI_SCR_DEV* pstDeviceIF, SGUI_INT iStartX, SGUI_INT iStartY, SGUI_INT iEndX, SGUI_INT iEndY, SGUI_COLOR eColor)
 {
     /*----------------------------------*/
     /* Variable Declaration				*/
@@ -239,7 +212,112 @@ void SGUI_Basic_DrawLine(SGUI_SCR_DEV* pstIFObj, SGUI_INT iStartX, SGUI_INT iSta
     /*----------------------------------*/
     for(i = 0; i <= iDs+1; i++)
     {
-        SGUI_Basic_DrawPoint(pstIFObj, iCurrentPosX,iCurrentPosY, eColor);
+        SGUI_Basic_DrawPoint(pstDeviceIF, iCurrentPosX,iCurrentPosY, eColor);
+        iErrX += iDx;
+        if(iErrX > iDs)
+        {
+            iErrX -= iDs;
+            iCurrentPosX += iIncX;
+        }
+        iErrY += iDy;
+        if(iErrY > iDs)
+        {
+            iErrY -= iDs;
+            iCurrentPosY += iIncY;
+        }
+    }
+}
+
+/*************************************************************************/
+/** Function Name:	SGUI_Basic_DrawLine									**/
+/** Purpose:		Draw a line by the Bresenham algorithm.				**/
+/** Params:																**/
+/**	@ pstDeviceIF[in]:	SimpleGUI object pointer.						**/
+/**	@ pstStartPoint[in]: Start point coordinate.						**/
+/**	@ pstEndPoint[in]: End point coordinate.							**/
+/**	@ pstArea[in]:	Visible area.										**/
+/**	@ eColor[in]:	Line color.											**/
+/** Return:			None.												**/
+/** Notice:			Only paint in visible area order by pstArea, point	**/
+/**					out of range will be ignore.						**/
+/*************************************************************************/
+void SGUI_Basic_DrawLineInArea(SGUI_SCR_DEV* pstDeviceIF, SGUI_POINT* pstStartPoint, SGUI_POINT* pstEndPoint, SGUI_RECT* pstArea, SGUI_COLOR eColor)
+{
+	/*----------------------------------*/
+    /* Variable Declaration				*/
+    /*----------------------------------*/
+    SGUI_INT					iDx, iDy;
+    SGUI_INT					iIncX, iIncY;
+    SGUI_INT					iErrX = 0, iErrY = 0;
+    SGUI_INT					i, iDs;
+    SGUI_INT					iCurrentPosX, iCurrentPosY;
+
+    /*----------------------------------*/
+    /* Initialize						*/
+    /*----------------------------------*/
+    iErrX = 0;
+    iErrY = 0;
+    iDx = pstEndPoint->iPosX - pstStartPoint->iPosX;
+    iDy = pstEndPoint->iPosY - pstStartPoint->iPosY;
+    iCurrentPosX = pstStartPoint->iPosX;
+    iCurrentPosY = pstStartPoint->iPosY;
+
+    if(iDx > 0)
+    {
+        iIncX = 1;
+    }
+    else
+    {
+        if(iDx == 0)
+        {
+            iIncX = 0;
+        }
+        else
+        {
+            iIncX = -1;
+            iDx = -iDx;
+        }
+    }
+
+    if(iDy > 0)
+    {
+        iIncY = 1;
+    }
+    else
+    {
+        if(iDy == 0)
+        {
+            iIncY = 0;
+        }
+        else
+        {
+            iIncY = -1;
+            iDy = -iDy;
+        }
+    }
+
+    if(iDx > iDy)
+    {
+        iDs = iDx;
+    }
+    else
+    {
+        iDs = iDy;
+    }
+
+    /*----------------------------------*/
+    /* Process							*/
+    /*----------------------------------*/
+    for(i = 0; i <= iDs+1; i++)
+    {
+    	/* Only paint in visible area. */
+    	if(	(iCurrentPosX >= RECT_X_START(*pstArea)) &&
+			(iCurrentPosX <= RECT_X_END(*pstArea)) &&
+			(iCurrentPosY >= RECT_Y_START(*pstArea)) &&
+			(iCurrentPosY <= RECT_Y_END(*pstArea)))
+		{
+			SGUI_Basic_DrawPoint(pstDeviceIF, iCurrentPosX,iCurrentPosY, eColor);
+		}
         iErrX += iDx;
         if(iErrX > iDs)
         {
@@ -259,7 +337,7 @@ void SGUI_Basic_DrawLine(SGUI_SCR_DEV* pstIFObj, SGUI_INT iStartX, SGUI_INT iSta
 /** Function Name:	SGUI_Basic_DrawRectangle							**/
 /** Purpose:		Draw a rectangle on screen. 						**/
 /** Params:																**/
-/**	@ pstIFObj[in]:	SimpleGUI object pointer.							**/
+/**	@ pstDeviceIF[in]:	SimpleGUI object pointer.						**/
 /**	@ uiStartX[in]:		X coordinate of the upper-left corner.			**/
 /**	@ uiStartY[in]:		Y coordinate of the upper-left corner.			**/
 /**	@ uiWidth[in]: .	Width of rectangle.								**/
@@ -269,7 +347,7 @@ void SGUI_Basic_DrawLine(SGUI_SCR_DEV* pstIFObj, SGUI_INT iStartX, SGUI_INT iSta
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_Basic_DrawRectangle(SGUI_SCR_DEV* pstIFObj, SGUI_UINT uiStartX, SGUI_UINT uiStartY, SGUI_UINT uiWidth, SGUI_UINT uiHeight, SGUI_COLOR eEdgeColor, SGUI_COLOR eFillColor)
+void SGUI_Basic_DrawRectangle(SGUI_SCR_DEV* pstDeviceIF, SGUI_UINT uiStartX, SGUI_UINT uiStartY, SGUI_UINT uiWidth, SGUI_UINT uiHeight, SGUI_COLOR eEdgeColor, SGUI_COLOR eFillColor)
 {
     /*----------------------------------*/
     /* Variable Declaration				*/
@@ -283,30 +361,30 @@ void SGUI_Basic_DrawRectangle(SGUI_SCR_DEV* pstIFObj, SGUI_UINT uiStartX, SGUI_U
     {
         if((uiWidth == 1) && (uiHeight == 1))
         {
-            SGUI_Basic_DrawPoint(pstIFObj, uiStartX, uiStartY, eEdgeColor);
+            SGUI_Basic_DrawPoint(pstDeviceIF, uiStartX, uiStartY, eEdgeColor);
         }
         else if(uiWidth == 1)
         {
-            SGUI_Basic_DrawLine(pstIFObj, uiStartX, uiStartY, uiStartX, uiStartY+uiHeight-1, eEdgeColor);
+            SGUI_Basic_DrawLine(pstDeviceIF, uiStartX, uiStartY, uiStartX, uiStartY+uiHeight-1, eEdgeColor);
         }
         else if(uiHeight == 1)
         {
-            SGUI_Basic_DrawLine(pstIFObj, uiStartX, uiStartY, uiStartX+uiWidth-1, uiStartY, eEdgeColor);
+            SGUI_Basic_DrawLine(pstDeviceIF, uiStartX, uiStartY, uiStartX+uiWidth-1, uiStartY, eEdgeColor);
         }
         else
         {
             // Draw edge.
             // Check and set changed page and column index is in edge display action.
-            SGUI_Basic_DrawLine(pstIFObj, uiStartX, uiStartY, uiStartX, uiStartY+uiHeight-1, eEdgeColor);
-            SGUI_Basic_DrawLine(pstIFObj, uiStartX+uiWidth-1, uiStartY, uiStartX+uiWidth-1, uiStartY+uiHeight-1, eEdgeColor);
-            SGUI_Basic_DrawLine(pstIFObj, uiStartX, uiStartY, uiStartX+uiWidth-1, uiStartY, eEdgeColor);
-            SGUI_Basic_DrawLine(pstIFObj, uiStartX, uiStartY+uiHeight-1, uiStartX+uiWidth-1, uiStartY+uiHeight-1, eEdgeColor);
+            SGUI_Basic_DrawLine(pstDeviceIF, uiStartX, uiStartY, uiStartX, uiStartY+uiHeight-1, eEdgeColor);
+            SGUI_Basic_DrawLine(pstDeviceIF, uiStartX+uiWidth-1, uiStartY, uiStartX+uiWidth-1, uiStartY+uiHeight-1, eEdgeColor);
+            SGUI_Basic_DrawLine(pstDeviceIF, uiStartX, uiStartY, uiStartX+uiWidth-1, uiStartY, eEdgeColor);
+            SGUI_Basic_DrawLine(pstDeviceIF, uiStartX, uiStartY+uiHeight-1, uiStartX+uiWidth-1, uiStartY+uiHeight-1, eEdgeColor);
             // Fill area.
             if((eFillColor != SGUI_COLOR_TRANS) && (uiWidth > 2) && (uiHeight > 2))
             {
                 for(uiColumnIndex=(uiStartX+1); uiColumnIndex<(uiStartX+uiWidth-1); uiColumnIndex++)
                 {
-                    SGUI_Basic_DrawLine(pstIFObj, uiColumnIndex, uiStartY+1, uiColumnIndex, uiStartY+uiHeight-2, eFillColor);
+                    SGUI_Basic_DrawLine(pstDeviceIF, uiColumnIndex, uiStartY+1, uiColumnIndex, uiStartY+uiHeight-2, eFillColor);
                 }
             }
         }
@@ -317,7 +395,7 @@ void SGUI_Basic_DrawRectangle(SGUI_SCR_DEV* pstIFObj, SGUI_UINT uiStartX, SGUI_U
 /** Function Name:	SGUI_Basic_DrawCircle								**/
 /** Purpose:		Draw a circle by center coordinate and radius.		**/
 /** Params:																**/
-/**	@ pstIFObj[in]:	SimpleGUI object pointer.							**/
+/**	@ pstDeviceIF[in]:	SimpleGUI object pointer.							**/
 /**	@ uiCx[in]:			Circle center X coordinate.						**/
 /**	@ uiCy[in]:			Circle center Y coordinate.						**/
 /**	@ uiRadius[in]:		Circle radius.									**/
@@ -326,7 +404,7 @@ void SGUI_Basic_DrawRectangle(SGUI_SCR_DEV* pstIFObj, SGUI_UINT uiStartX, SGUI_U
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_Basic_DrawCircle(SGUI_SCR_DEV* pstIFObj, SGUI_UINT uiCx, SGUI_UINT uiCy, SGUI_UINT uiRadius, SGUI_COLOR eEdgeColor, SGUI_COLOR eFillColor)
+void SGUI_Basic_DrawCircle(SGUI_SCR_DEV* pstDeviceIF, SGUI_UINT uiCx, SGUI_UINT uiCy, SGUI_UINT uiRadius, SGUI_COLOR eEdgeColor, SGUI_COLOR eFillColor)
 {
     /*----------------------------------*/
     /* Variable Declaration				*/
@@ -351,7 +429,7 @@ void SGUI_Basic_DrawCircle(SGUI_SCR_DEV* pstIFObj, SGUI_UINT uiCx, SGUI_UINT uiC
     /*----------------------------------*/
     if(uiRadius < 1)
     {
-        SGUI_Basic_DrawPoint(pstIFObj, uiCx, uiCy, eEdgeColor);
+        SGUI_Basic_DrawPoint(pstDeviceIF, uiCx, uiCy, eEdgeColor);
     }
     else
     {
@@ -363,23 +441,23 @@ void SGUI_Basic_DrawCircle(SGUI_SCR_DEV* pstIFObj, SGUI_UINT uiCx, SGUI_UINT uiC
                 if((uiRadius > 1) && (eFillColor != SGUI_COLOR_TRANS) && (uiPosXOffset_Old != uiPosXOffset))
                 {
 
-                    SGUI_Basic_DrawLine(pstIFObj, uiCx-uiPosXOffset, uiCy-uiPosYOffset+1, uiCx-uiPosXOffset, uiCy+uiPosYOffset-1, eFillColor);
-                    SGUI_Basic_DrawLine(pstIFObj, uiCx+uiPosXOffset, uiCy-uiPosYOffset+1, uiCx+uiPosXOffset, uiCy+uiPosYOffset-1, eFillColor);
+                    SGUI_Basic_DrawLine(pstDeviceIF, uiCx-uiPosXOffset, uiCy-uiPosYOffset+1, uiCx-uiPosXOffset, uiCy+uiPosYOffset-1, eFillColor);
+                    SGUI_Basic_DrawLine(pstDeviceIF, uiCx+uiPosXOffset, uiCy-uiPosYOffset+1, uiCx+uiPosXOffset, uiCy+uiPosYOffset-1, eFillColor);
                     uiPosXOffset_Old = uiPosXOffset;
                 }
-                SGUI_Basic_DrawLine(pstIFObj, uiCx-uiPosYOffset, uiCy-uiPosXOffset+1, uiCx-uiPosYOffset, uiCy+uiPosXOffset-1, eFillColor);
-                SGUI_Basic_DrawLine(pstIFObj, uiCx+uiPosYOffset, uiCy-uiPosXOffset+1, uiCx+uiPosYOffset, uiCy+uiPosXOffset-1, eFillColor);
+                SGUI_Basic_DrawLine(pstDeviceIF, uiCx-uiPosYOffset, uiCy-uiPosXOffset+1, uiCx-uiPosYOffset, uiCy+uiPosXOffset-1, eFillColor);
+                SGUI_Basic_DrawLine(pstDeviceIF, uiCx+uiPosYOffset, uiCy-uiPosXOffset+1, uiCx+uiPosYOffset, uiCy+uiPosXOffset-1, eFillColor);
                 uiPosYOffset_Old = uiPosYOffset;
 
                 // Draw edge.
-                SGUI_Basic_DrawPoint(pstIFObj, uiCx+uiPosXOffset, uiCy+uiPosYOffset, eEdgeColor);
-                SGUI_Basic_DrawPoint(pstIFObj, uiCx-uiPosXOffset, uiCy+uiPosYOffset, eEdgeColor);
-                SGUI_Basic_DrawPoint(pstIFObj, uiCx-uiPosXOffset, uiCy-uiPosYOffset, eEdgeColor);
-                SGUI_Basic_DrawPoint(pstIFObj, uiCx+uiPosXOffset, uiCy-uiPosYOffset, eEdgeColor);
-                SGUI_Basic_DrawPoint(pstIFObj, uiCx+uiPosYOffset, uiCy+uiPosXOffset, eEdgeColor);
-                SGUI_Basic_DrawPoint(pstIFObj, uiCx-uiPosYOffset, uiCy+uiPosXOffset, eEdgeColor);
-                SGUI_Basic_DrawPoint(pstIFObj, uiCx-uiPosYOffset, uiCy-uiPosXOffset, eEdgeColor);
-                SGUI_Basic_DrawPoint(pstIFObj, uiCx+uiPosYOffset, uiCy-uiPosXOffset, eEdgeColor);
+                SGUI_Basic_DrawPoint(pstDeviceIF, uiCx+uiPosXOffset, uiCy+uiPosYOffset, eEdgeColor);
+                SGUI_Basic_DrawPoint(pstDeviceIF, uiCx-uiPosXOffset, uiCy+uiPosYOffset, eEdgeColor);
+                SGUI_Basic_DrawPoint(pstDeviceIF, uiCx-uiPosXOffset, uiCy-uiPosYOffset, eEdgeColor);
+                SGUI_Basic_DrawPoint(pstDeviceIF, uiCx+uiPosXOffset, uiCy-uiPosYOffset, eEdgeColor);
+                SGUI_Basic_DrawPoint(pstDeviceIF, uiCx+uiPosYOffset, uiCy+uiPosXOffset, eEdgeColor);
+                SGUI_Basic_DrawPoint(pstDeviceIF, uiCx-uiPosYOffset, uiCy+uiPosXOffset, eEdgeColor);
+                SGUI_Basic_DrawPoint(pstDeviceIF, uiCx-uiPosYOffset, uiCy-uiPosXOffset, eEdgeColor);
+                SGUI_Basic_DrawPoint(pstDeviceIF, uiCx+uiPosYOffset, uiCy-uiPosXOffset, eEdgeColor);
             }
             uiPosYOffset++;
             iRadiusError += iYChange;
@@ -398,7 +476,7 @@ void SGUI_Basic_DrawCircle(SGUI_SCR_DEV* pstIFObj, SGUI_UINT uiCx, SGUI_UINT uiC
 /** Function Name:	SGUI_Basic_ReverseBlockColor						**/
 /** Purpose:		Reverse all pixel color in a rectangle area.		**/
 /** Params:																**/
-/**	@ pstIFObj[in]:	SimpleGUI object pointer.							**/
+/**	@ pstDeviceIF[in]:	SimpleGUI object pointer.							**/
 /**	@ uiStartX[in]:		X coordinate of the upper-left corner.			**/
 /**	@ uiStartY[in]:		Y coordinate of the upper-left corner.			**/
 /**	@ uiWidth[in]: .	Width of rectangle.								**/
@@ -406,7 +484,7 @@ void SGUI_Basic_DrawCircle(SGUI_SCR_DEV* pstIFObj, SGUI_UINT uiCx, SGUI_UINT uiC
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_Basic_ReverseBlockColor(SGUI_SCR_DEV* pstIFObj, SGUI_UINT uiStartX, SGUI_UINT uiStartY, SGUI_UINT uiWidth, SGUI_UINT uiHeight)
+void SGUI_Basic_ReverseBlockColor(SGUI_SCR_DEV* pstDeviceIF, SGUI_UINT uiStartX, SGUI_UINT uiStartY, SGUI_UINT uiWidth, SGUI_UINT uiHeight)
 {
     /*----------------------------------*/
     /* Variable Declaration				*/
@@ -420,13 +498,13 @@ void SGUI_Basic_ReverseBlockColor(SGUI_SCR_DEV* pstIFObj, SGUI_UINT uiStartX, SG
     {
         for(i_H=0; i_H<uiHeight; i_H++)
         {
-            if(SGUI_Basic_GetPoint(pstIFObj, uiStartX+i_W, uiStartY+i_H) == SGUI_COLOR_FRGCLR)
+            if(SGUI_Basic_GetPoint(pstDeviceIF, uiStartX+i_W, uiStartY+i_H) == SGUI_COLOR_FRGCLR)
             {
-                SGUI_Basic_DrawPoint(pstIFObj, uiStartX+i_W, uiStartY+i_H, SGUI_COLOR_BKGCLR);
+                SGUI_Basic_DrawPoint(pstDeviceIF, uiStartX+i_W, uiStartY+i_H, SGUI_COLOR_BKGCLR);
             }
             else
             {
-                SGUI_Basic_DrawPoint(pstIFObj, uiStartX+i_W, uiStartY+i_H, SGUI_COLOR_FRGCLR);
+                SGUI_Basic_DrawPoint(pstDeviceIF, uiStartX+i_W, uiStartY+i_H, SGUI_COLOR_FRGCLR);
             }
         }
     }
@@ -436,7 +514,7 @@ void SGUI_Basic_ReverseBlockColor(SGUI_SCR_DEV* pstIFObj, SGUI_UINT uiStartX, SG
 /** Function Name:	SGUI_Basic_DrawBitMap								**/
 /** Purpose:		Draw a rectangular area bit map on LCD screen.		**/
 /** Params:																**/
-/**	@ pstIFObj[in]:	SimpleGUI object pointer.							**/
+/**	@ pstDeviceIF[in]:	SimpleGUI object pointer.						**/
 /**	@ pstDisplayArea[in]: Display area position and size.				**/
 /**	@ pstInnerPos[in]:	Data area size and display offset.				**/
 /**	@ pstBitmapData[in]: Bitmap object, include size and data.			**/
@@ -444,7 +522,7 @@ void SGUI_Basic_ReverseBlockColor(SGUI_SCR_DEV* pstIFObj, SGUI_UINT uiStartX, SG
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_Basic_DrawBitMap(SGUI_SCR_DEV* pstIFObj, SGUI_RECT_AREA* pstDisplayArea, SGUI_POINT* pstInnerPos, const SGUI_BMP_RES* pstBitmapData, SGUI_DRAW_MODE eDrawMode)
+void SGUI_Basic_DrawBitMap(SGUI_SCR_DEV* pstDeviceIF, SGUI_RECT* pstDisplayArea, SGUI_POINT* pstInnerPos, const SGUI_BMP_RES* pstBitmapData, SGUI_DRAW_MODE eDrawMode)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -465,8 +543,8 @@ void SGUI_Basic_DrawBitMap(SGUI_SCR_DEV* pstIFObj, SGUI_RECT_AREA* pstDisplayAre
 	/* Process							*/
 	/*----------------------------------*/
 	// Only draw in visible area of screen.
-	if(	(RECT_X_START(*pstDisplayArea) < RECT_WIDTH(pstIFObj->stSize)) && (RECT_Y_START(*pstDisplayArea) < RECT_HEIGHT(pstIFObj->stSize)) &&
-		(RECT_X_END(*pstDisplayArea, *pstDisplayArea) > 0) && (RECT_Y_END(*pstDisplayArea, *pstDisplayArea) > 0))
+	if(	(RECT_X_START(*pstDisplayArea) < RECT_WIDTH(pstDeviceIF->stSize)) && (RECT_Y_START(*pstDisplayArea) < RECT_HEIGHT(pstDeviceIF->stSize)) &&
+		(RECT_X_END(*pstDisplayArea) > 0) && (RECT_Y_END(*pstDisplayArea) > 0))
 	{
 		// Adapt text display area and data area.
         SGUI_Common_AdaptDisplayInfo(pstDisplayArea, pstInnerPos);
@@ -486,7 +564,7 @@ void SGUI_Basic_DrawBitMap(SGUI_SCR_DEV* pstIFObj, SGUI_RECT_AREA* pstDisplayAre
 			}
 			uiDrawnWidthIndex = iBmpPixX;
 			// Loop for x coordinate;
-			while((uiDrawnWidthIndex<RECT_WIDTH(*pstBitmapData)) && (iDrawPixX<=RECT_X_END(*pstDisplayArea, *pstDisplayArea)) && (iDrawPixX<RECT_WIDTH(pstIFObj->stSize)))
+			while((uiDrawnWidthIndex<RECT_WIDTH(*pstBitmapData)) && (iDrawPixX<=RECT_X_END(*pstDisplayArea)) && (iDrawPixX<RECT_WIDTH(pstDeviceIF->stSize)))
 			{
 				// Redirect to data array for column.
 				pData = pstBitmapData->pData+iBmpPixX;
@@ -505,7 +583,7 @@ void SGUI_Basic_DrawBitMap(SGUI_SCR_DEV* pstIFObj, SGUI_RECT_AREA* pstDisplayAre
 				uiPixIndex = iBmpPixY % 8;
 				pData += (iBmpPixY / 8) * RECT_WIDTH(*pstBitmapData);
 				// Loop for y coordinate;
-				while((uiDrawnHeightIndex<RECT_HEIGHT(*pstBitmapData)) && (iDrawPixY<=RECT_Y_END(*pstDisplayArea, *pstDisplayArea)) && (iDrawPixY<RECT_HEIGHT(pstIFObj->stSize)))
+				while((uiDrawnHeightIndex<RECT_HEIGHT(*pstBitmapData)) && (iDrawPixY<=RECT_Y_END(*pstDisplayArea)) && (iDrawPixY<RECT_HEIGHT(pstDeviceIF->stSize)))
 				{
 					if(uiPixIndex == 8)
 					{
@@ -514,11 +592,11 @@ void SGUI_Basic_DrawBitMap(SGUI_SCR_DEV* pstIFObj, SGUI_RECT_AREA* pstDisplayAre
 					}
 					if(SGUI_GET_PAGE_BIT(*pData, uiPixIndex) != eDrawMode)
 					{
-						SGUI_Basic_DrawPoint(pstIFObj, iDrawPixX, iDrawPixY, SGUI_COLOR_FRGCLR);
+						SGUI_Basic_DrawPoint(pstDeviceIF, iDrawPixX, iDrawPixY, SGUI_COLOR_FRGCLR);
 					}
 					else
 					{
-						SGUI_Basic_DrawPoint(pstIFObj, iDrawPixX, iDrawPixY, SGUI_COLOR_BKGCLR);
+						SGUI_Basic_DrawPoint(pstDeviceIF, iDrawPixX, iDrawPixY, SGUI_COLOR_BKGCLR);
 					}
 					uiDrawnHeightIndex ++;
 					uiPixIndex ++;
@@ -531,4 +609,46 @@ void SGUI_Basic_DrawBitMap(SGUI_SCR_DEV* pstIFObj, SGUI_RECT_AREA* pstDisplayAre
 			}
 		}
 	}
+}
+
+/*************************************************************************/
+/** Function Name:	SGUI_Basic_PointIsInArea							**/
+/** Purpose:		Judge point is in the specified rectangular area.	**/
+/** Params:																**/
+/**	@ pstArea[in]:	Specified rectangular area.							**/
+/**	@ pstPoint[in]:	Point coordinate.									**/
+/** Return:			SGUI_TRUE for the point is in the rectangular area.	**/
+/**					SGUI_FALSE for the point is out of range.			**/
+/** Notice:			None.												**/
+/*************************************************************************/
+SGUI_BOOL SGUI_Basic_PointIsInArea(const SGUI_RECT* pstArea, const SGUI_POINT* pstPoint)
+{
+	/*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+	SGUI_BOOL					bReturn;
+
+	/*----------------------------------*/
+	/* Initialize						*/
+	/*----------------------------------*/
+	bReturn						= SGUI_TRUE;
+
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	if((NULL == pstArea) || (NULL == pstPoint))
+	{
+		bReturn = SGUI_FALSE;
+	}
+	else
+	{
+        if(	(pstPoint->iPosX < RECT_X_START(*pstArea)) ||
+			(pstPoint->iPosX > RECT_X_END(*pstArea)) ||
+			(pstPoint->iPosY < RECT_Y_START(*pstArea)) ||
+			(pstPoint->iPosY > RECT_Y_END(*pstArea)))
+		{
+			bReturn = SGUI_FALSE;
+		}
+	}
+	return bReturn;
 }

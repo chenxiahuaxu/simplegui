@@ -1,8 +1,7 @@
 /*************************************************************************/
 /** Copyright.															**/
-/** FileName: HMI_Demo03_Notice2.c										**/
+/** FileName: Notice.c													**/
 /** Author: Polarix														**/
-/** Version: 1.0.0.0													**/
 /** Description: HMI demo for notice box interface.						**/
 /*************************************************************************/
 //=======================================================================//
@@ -10,7 +9,7 @@
 //=======================================================================//
 #include "DemoProc.h"
 #include "SGUI_Notice.h"
-#include "string.h"
+#include "SGUI_FontResource.h"
 
 //=======================================================================//
 //= User Macro definition.											    =//
@@ -20,41 +19,45 @@
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
-static HMI_ENGINE_RESULT	HMI_DemoTextNotice_Initialize(SGUI_SCR_DEV* pstIFObj);
-static HMI_ENGINE_RESULT	HMI_DemoTextNotice_Prepare(SGUI_SCR_DEV* pstIFObj, const void* pstParameters);
-static HMI_ENGINE_RESULT	HMI_DemoTextNotice_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const void* pstParameters);
-static HMI_ENGINE_RESULT	HMI_DemoTextNotice_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent, SGUI_INT* piActionID);
-static HMI_ENGINE_RESULT	HMI_DemoTextNotice_PostProcess(SGUI_SCR_DEV* pstIFObj, HMI_ENGINE_RESULT eProcResult, SGUI_INT iActionID);
+static HMI_ENGINE_RESULT	HMI_DemoNotice_Initialize(SGUI_SCR_DEV* pstIFObj);
+static HMI_ENGINE_RESULT	HMI_DemoNotice_Prepare(SGUI_SCR_DEV* pstIFObj, const void* pstParameters);
+static HMI_ENGINE_RESULT	HMI_DemoNotice_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const void* pstParameters);
+static HMI_ENGINE_RESULT	HMI_DemoNotice_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent, SGUI_INT* piActionID);
+static HMI_ENGINE_RESULT	HMI_DemoNotice_PostProcess(SGUI_SCR_DEV* pstIFObj, HMI_ENGINE_RESULT eProcResult, SGUI_INT iActionID);
 
 //=======================================================================//
 //= Static variable declaration.									    =//
 //=======================================================================//
+static SGUI_NOTICT_BOX	s_stDemoNoticeBox =				{0x00};
 static SGUI_CHAR		s_szDemoNoticeText[NOTICE_TEXT_BUFFER_SIZE+1] = {0x00};
 
-HMI_SCREEN_ACTION		s_stDemoTextNoticeActions =		{	HMI_DemoTextNotice_Initialize,
-															HMI_DemoTextNotice_Prepare,
-															HMI_DemoTextNotice_RefreshScreen,
-															HMI_DemoTextNotice_ProcessEvent,
-															HMI_DemoTextNotice_PostProcess,
+HMI_SCREEN_ACTION		s_stDemoNoticeActions =			{	HMI_DemoNotice_Initialize,
+															HMI_DemoNotice_Prepare,
+															HMI_DemoNotice_RefreshScreen,
+															HMI_DemoNotice_ProcessEvent,
+															HMI_DemoNotice_PostProcess,
 														};
 
 //=======================================================================//
 //= Global variable declaration.									    =//
 //=======================================================================//
-HMI_SCREEN_OBJECT       g_stHMIDemo_TextNotice =		{	HMI_SCREEN_ID_DEMO_TEXT_NOTICE,
-															&s_stDemoTextNoticeActions
+HMI_SCREEN_OBJECT       g_stHMIDemo_Notice =			{	HMI_SCREEN_ID_DEMO_TEXT_NOTICE,
+															&s_stDemoNoticeActions
 														};
 
 //=======================================================================//
 //= Function define.										            =//
 //=======================================================================//
-HMI_ENGINE_RESULT HMI_DemoTextNotice_Initialize(SGUI_SCR_DEV* pstIFObj)
+HMI_ENGINE_RESULT HMI_DemoNotice_Initialize(SGUI_SCR_DEV* pstIFObj)
 {
 	SGUI_SystemIF_MemorySet(s_szDemoNoticeText, 0x00, sizeof(SGUI_CHAR)*(NOTICE_TEXT_BUFFER_SIZE+1));
+	s_stDemoNoticeBox.cszNoticeText = s_szDemoNoticeText;
+	s_stDemoNoticeBox.pstIcon = NULL;
+	SGUI_Notice_FitArea(pstIFObj, &(s_stDemoNoticeBox.stLayout));
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoTextNotice_Prepare(SGUI_SCR_DEV* pstIFObj, const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoNotice_Prepare(SGUI_SCR_DEV* pstIFObj, const void* pstParameters)
 {
 	/*----------------------------------*/
 	/* Process							*/
@@ -68,17 +71,17 @@ HMI_ENGINE_RESULT HMI_DemoTextNotice_Prepare(SGUI_SCR_DEV* pstIFObj, const void*
 		SGUI_SystemIF_StringLengthCopy(s_szDemoNoticeText, (SGUI_SZSTR)pstParameters, NOTICE_TEXT_BUFFER_SIZE);
 		s_szDemoNoticeText[NOTICE_TEXT_BUFFER_SIZE] = '\0';
 	}
-	SGUI_Notice_Repaint(pstIFObj, s_szDemoNoticeText, SGUI_FONT_SIZE_H12, 0, SGUI_ICON_INFORMATION);
+	SGUI_Notice_Repaint(pstIFObj, &s_stDemoNoticeBox, &SGUI_DEFAULT_FONT_16, 0);
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoTextNotice_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoNotice_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const void* pstParameters)
 {
-	SGUI_Notice_Repaint(pstIFObj, s_szDemoNoticeText, SGUI_FONT_SIZE_H12, 0, SGUI_ICON_INFORMATION);
+	SGUI_Notice_Repaint(pstIFObj, &s_stDemoNoticeBox, &SGUI_DEFAULT_FONT_16, 0);
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoTextNotice_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent, SGUI_INT* piActionID)
+HMI_ENGINE_RESULT HMI_DemoNotice_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent, SGUI_INT* piActionID)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -123,7 +126,7 @@ HMI_ENGINE_RESULT HMI_DemoTextNotice_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const 
 	return eProcessResult;
 }
 
-HMI_ENGINE_RESULT HMI_DemoTextNotice_PostProcess(SGUI_SCR_DEV* pstIFObj, HMI_ENGINE_RESULT eProcResult, SGUI_INT iActionID)
+HMI_ENGINE_RESULT HMI_DemoNotice_PostProcess(SGUI_SCR_DEV* pstIFObj, HMI_ENGINE_RESULT eProcResult, SGUI_INT iActionID)
 {
 	/*----------------------------------*/
 	/* Process							*/

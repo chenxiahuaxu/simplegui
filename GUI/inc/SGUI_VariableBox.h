@@ -12,7 +12,7 @@
 //=======================================================================//
 typedef struct
 {
-	SGUI_RECT_AREA			stLayout;
+	SGUI_RECT				stLayout;
 	const SGUI_FONT_RES*	pstFontRes;
 	SGUI_INT				Min;
 	SGUI_INT				Max;
@@ -21,7 +21,7 @@ typedef struct
 
 typedef struct
 {
-	SGUI_RECT_AREA			stLayout;
+	SGUI_RECT				stLayout;
 	const SGUI_FONT_RES*	pstFontRes;
 	SGUI_SIZE				sFocusIndex;
 	SGUI_SIZE				sMaxTextLength;
@@ -65,9 +65,9 @@ typedef enum
 //=======================================================================//
 //= Public function declaration.									    =//
 //=======================================================================//
-void			SGUI_NumberVariableBox_Paint(SGUI_SCR_DEV* pstIFObj, SGUI_NUM_VARBOX_STRUCT* pstValue, SGUI_ALIG_MODE eAlignment, SGUI_DRAW_MODE eMode);
-void			SGUI_TextVariableBox_Paint(SGUI_SCR_DEV* pstIFObj, SGUI_TEXT_VARBOX_STRUCT* pstTextValue, SGUI_DRAW_MODE eMode);
-void			SGUI_TextVariableBox_ChangeCharacter(SGUI_SCR_DEV* pstIFObj, SGUI_TEXT_VARBOX_STRUCT* pstTextValue, SGUI_DRAW_MODE eMode, SGUI_UINT uiCharacterSet, SGUI_TEXT_VARBOX_OPT eOpt);
+void			SGUI_NumberVariableBox_Paint(SGUI_SCR_DEV* pstDeviceIF, SGUI_NUM_VARBOX_STRUCT* pstValue, SGUI_ALIG_MODE eAlignment, SGUI_DRAW_MODE eMode);
+void			SGUI_TextVariableBox_Paint(SGUI_SCR_DEV* pstDeviceIF, SGUI_TEXT_VARBOX_STRUCT* pstTextValue, SGUI_DRAW_MODE eMode);
+void			SGUI_TextVariableBox_ChangeCharacter(SGUI_SCR_DEV* pstDeviceIF, SGUI_TEXT_VARBOX_STRUCT* pstTextValue, SGUI_DRAW_MODE eMode, SGUI_UINT uiCharacterSet, SGUI_TEXT_VARBOX_OPT eOpt);
 
 
 

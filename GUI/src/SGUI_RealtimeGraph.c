@@ -81,12 +81,12 @@ void SGUI_RealtimeGraph_Initialize(SGUI_RTGRAPH* pstRTGraph)
 /** Purpose:		Refresh graph map display.							**/
 /** Resources:		Graph data.											**/
 /** Params:																**/
-/**	@ pstIFObj[in]:		SimpleGUI object pointer.						**/
+/**	@ pstDeviceIF[in]:		SimpleGUI object pointer.						**/
 /**	@ pstRTGraph[in]:	Graph map data used refreshed.					**/
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_RealtimeGraph_Repaint(SGUI_SCR_DEV* pstIFObj, SGUI_RTGRAPH* pstRTGraph)
+void SGUI_RealtimeGraph_Repaint(SGUI_SCR_DEV* pstDeviceIF, SGUI_RTGRAPH* pstRTGraph)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -100,19 +100,19 @@ void SGUI_RealtimeGraph_Repaint(SGUI_SCR_DEV* pstIFObj, SGUI_RTGRAPH* pstRTGraph
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if((NULL != pstRTGraph) && (NULL != pstIFObj))
+	if((NULL != pstRTGraph) && (NULL != pstDeviceIF))
 	{
 		pstData = pstRTGraph->Data;
 		pstControl = pstRTGraph->Control;
 
 		// Draw frame
-		SGUI_Basic_DrawRectangle(pstIFObj, RECT_X_START(pstData->Rect), RECT_Y_START(pstData->Rect),
+		SGUI_Basic_DrawRectangle(pstDeviceIF, RECT_X_START(pstData->Rect), RECT_Y_START(pstData->Rect),
 									RECT_WIDTH(pstData->Rect), RECT_HEIGHT(pstData->Rect), SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
 
 		if(SGUI_TRUE == pstControl->EnableBaseline)
 		{
 			iBaseLineCoordinateY = SGUI_RealtimeGraph_GetValuePointYCoordinate(pstRTGraph, pstData->BaseLineValue);
-			SGUI_Basic_DrawLine(pstIFObj, 1, iBaseLineCoordinateY, RECT_WIDTH(pstIFObj->stSize)-2, iBaseLineCoordinateY, SGUI_COLOR_FRGCLR);
+			SGUI_Basic_DrawLine(pstDeviceIF, 1, iBaseLineCoordinateY, RECT_WIDTH(pstDeviceIF->stSize)-2, iBaseLineCoordinateY, SGUI_COLOR_FRGCLR);
 		}
 
 		if(pstData->ValueCount > 1)
@@ -121,7 +121,7 @@ void SGUI_RealtimeGraph_Repaint(SGUI_SCR_DEV* pstIFObj, SGUI_RTGRAPH* pstRTGraph
 			{
 				iPixelCoordinateStartX = 1 + ((iValueIndex-1) * pstControl->xAxisStepPixel) + RECT_X_START(pstData->Rect);
 				iPixelCoordinateEndX = 1 + (iValueIndex * pstControl->xAxisStepPixel) + RECT_X_START(pstData->Rect);
-				SGUI_Basic_DrawLine(pstIFObj, iPixelCoordinateStartX, pstData->PointYCoordinateArray[iValueIndex-1],
+				SGUI_Basic_DrawLine(pstDeviceIF, iPixelCoordinateStartX, pstData->PointYCoordinateArray[iValueIndex-1],
 										iPixelCoordinateEndX, pstData->PointYCoordinateArray[iValueIndex], SGUI_COLOR_FRGCLR);
 			}
 		}
@@ -132,13 +132,13 @@ void SGUI_RealtimeGraph_Repaint(SGUI_SCR_DEV* pstIFObj, SGUI_RTGRAPH* pstRTGraph
 /** Function Name:	SGUI_RealtimeGraph_AppendValue						**/
 /** Purpose:		Append a new value to graph.						**/
 /** Params:																**/
-/**	@ pstIFObj[in]:		SimpleGUI object pointer.						**/
+/**	@ pstDeviceIF[in]:		SimpleGUI object pointer.						**/
 /**	@ pstRTGraph[in]:	Real-time graph object pointer.					**/
 /**	@ iNewValue[in]:	New value will be appended.						**/
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_RealtimeGraph_AppendValue(SGUI_SCR_DEV* pstIFObj, SGUI_RTGRAPH* pstRTGraph, SGUI_INT iNewValue)
+void SGUI_RealtimeGraph_AppendValue(SGUI_SCR_DEV* pstDeviceIF, SGUI_RTGRAPH* pstRTGraph, SGUI_INT iNewValue)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/

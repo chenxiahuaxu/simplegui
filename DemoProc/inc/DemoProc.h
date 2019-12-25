@@ -88,7 +88,7 @@ extern HMI_ENGINE_OBJECT        g_stDemoEngine;
 extern HMI_SCREEN_OBJECT        g_stHMIDemo_ScrollingText;
 extern HMI_SCREEN_OBJECT		g_stHMIDemo_ItemsBase;
 extern HMI_SCREEN_OBJECT		g_stHMIDemo_List;
-extern HMI_SCREEN_OBJECT		g_stHMIDemo_TextNotice;
+extern HMI_SCREEN_OBJECT		g_stHMIDemo_Notice;
 extern HMI_SCREEN_OBJECT		g_stHMIDemo_RTCNotice;
 extern HMI_SCREEN_OBJECT        g_stHMIDemo_VariableBox;
 extern HMI_SCREEN_OBJECT		g_stHMIDemo_RealtimeGraph;

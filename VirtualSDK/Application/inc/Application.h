@@ -13,8 +13,9 @@
 //=======================================================================//
 //= Include files.													    =//
 //=======================================================================//
-#include <wx\dialog.h>
-#include <wx\app.h>
+#include <wx/dialog.h>
+#include <wx/app.h>
+#include <wx/log.h>
 #include "LCDFrame.h"
 
 enum
@@ -29,13 +30,8 @@ enum
 //=======================================================================//
 class Application : public wxApp
 {
-	DECLARE_EVENT_TABLE();
-
     private:
         LCDFrame*					m_pclsMainFrame;
-
-	protected:
-		virtual void				OnKeyDown(wxKeyEvent& clsEvent);
 
     public:
 		bool						OnInit(void);

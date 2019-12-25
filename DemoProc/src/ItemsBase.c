@@ -22,11 +22,11 @@
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
-static HMI_ENGINE_RESULT	HMI_DemoItemsBase_Initialize(SGUI_SCR_DEV* pstIFObj);
-static HMI_ENGINE_RESULT	HMI_DemoItemsBase_Prepare(SGUI_SCR_DEV* pstIFObj, const void* pstParameters);
-static HMI_ENGINE_RESULT	HMI_DemoItemsBase_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const void* pstParameters);
-static HMI_ENGINE_RESULT	HMI_DemoItemsBase_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent, SGUI_INT* piActionID);
-static HMI_ENGINE_RESULT	HMI_DemoItemsBase_PostProcess(SGUI_SCR_DEV* pstIFObj, HMI_ENGINE_RESULT eProcResult, SGUI_INT iActionID);
+static HMI_ENGINE_RESULT	HMI_DemoItemsBase_Initialize(SGUI_SCR_DEV* pstDeviceIF);
+static HMI_ENGINE_RESULT	HMI_DemoItemsBase_Prepare(SGUI_SCR_DEV* pstDeviceIF, const void* pstParameters);
+static HMI_ENGINE_RESULT	HMI_DemoItemsBase_RefreshScreen(SGUI_SCR_DEV* pstDeviceIF, const void* pstParameters);
+static HMI_ENGINE_RESULT	HMI_DemoItemsBase_ProcessEvent(SGUI_SCR_DEV* pstDeviceIF, const HMI_EVENT_BASE* pstEvent, SGUI_INT* piActionID);
+static HMI_ENGINE_RESULT	HMI_DemoItemsBase_PostProcess(SGUI_SCR_DEV* pstDeviceIF, HMI_ENGINE_RESULT eProcResult, SGUI_INT iActionID);
 
 //=======================================================================//
 //= Static variable declaration.									    =//
@@ -59,7 +59,7 @@ HMI_SCREEN_OBJECT       g_stHMIDemo_ItemsBase =			{	HMI_SCREEN_ID_DEMO_ITEMS_BAS
 //=======================================================================//
 //= Function define.										            =//
 //=======================================================================//
-HMI_ENGINE_RESULT HMI_DemoItemsBase_Initialize(SGUI_SCR_DEV* pstIFObj)
+HMI_ENGINE_RESULT HMI_DemoItemsBase_Initialize(SGUI_SCR_DEV* pstDeviceIF)
 {
 	/*----------------------------------*/
 	/* Process							*/
@@ -72,33 +72,32 @@ HMI_ENGINE_RESULT HMI_DemoItemsBase_Initialize(SGUI_SCR_DEV* pstIFObj)
     s_stDemoItemsBaseObject.stLayout.iWidth = 118;
     s_stDemoItemsBaseObject.stLayout.iHeight = 54;
      //Initialize list object.
-	SGUI_ItemsBase_Initialize(&s_stDemoItemsBaseObject, &SGUI_DEFAULT_FONT_8);
-	SGUI_ItemsBase_BindItemsData(&s_stDemoItemsBaseObject, s_arrstTestItems, sizeof(s_arrstTestItems)/sizeof(SGUI_ITEMS_ITEM));
+	SGUI_ItemsBase_Initialize(&s_stDemoItemsBaseObject, &SGUI_DEFAULT_FONT_8, s_arrstTestItems, sizeof(s_arrstTestItems)/sizeof(SGUI_ITEMS_ITEM));
 
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoItemsBase_Prepare (SGUI_SCR_DEV* pstIFObj, const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoItemsBase_Prepare (SGUI_SCR_DEV* pstDeviceIF, const void* pstParameters)
 {
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	SGUI_Basic_DrawRectangle(pstIFObj, 4, 4, 120, 56, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
-	SGUI_ItemsBase_Repaint(pstIFObj, &s_stDemoItemsBaseObject);
+	SGUI_Basic_DrawRectangle(pstDeviceIF, 4, 4, 120, 56, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
+	SGUI_ItemsBase_Repaint(pstDeviceIF, &s_stDemoItemsBaseObject);
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoItemsBase_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoItemsBase_RefreshScreen(SGUI_SCR_DEV* pstDeviceIF, const void* pstParameters)
 {
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	SGUI_Basic_DrawRectangle(pstIFObj, 4, 4, 62, 22, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
-	SGUI_ItemsBase_Repaint(pstIFObj, &s_stDemoItemsBaseObject);
+	SGUI_Basic_DrawRectangle(pstDeviceIF, 4, 4, 62, 22, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
+	SGUI_ItemsBase_Repaint(pstDeviceIF, &s_stDemoItemsBaseObject);
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoItemsBase_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent, SGUI_INT* piActionID)
+HMI_ENGINE_RESULT HMI_DemoItemsBase_ProcessEvent(SGUI_SCR_DEV* pstDeviceIF, const HMI_EVENT_BASE* pstEvent, SGUI_INT* piActionID)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -149,7 +148,7 @@ HMI_ENGINE_RESULT HMI_DemoItemsBase_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const H
 					{
 						s_stDemoItemsBaseObject.iSelection -= 1;
 					}
-					SGUI_ItemsBase_Repaint(pstIFObj, &s_stDemoItemsBaseObject);
+					SGUI_ItemsBase_Repaint(pstDeviceIF, &s_stDemoItemsBaseObject);
 					break;
 				}
 				case KEY_VALUE_DOWN:
@@ -158,7 +157,7 @@ HMI_ENGINE_RESULT HMI_DemoItemsBase_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const H
 					{
 						s_stDemoItemsBaseObject.iSelection += 1;
 					}
-					SGUI_ItemsBase_Repaint(pstIFObj, &s_stDemoItemsBaseObject);
+					SGUI_ItemsBase_Repaint(pstDeviceIF, &s_stDemoItemsBaseObject);
 					break;
 				}
 				default:
@@ -176,7 +175,7 @@ HMI_ENGINE_RESULT HMI_DemoItemsBase_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const H
 	return eProcessResult;
 }
 
-HMI_ENGINE_RESULT HMI_DemoItemsBase_PostProcess(SGUI_SCR_DEV* pstIFObj, HMI_ENGINE_RESULT eProcResult, SGUI_INT iActionID)
+HMI_ENGINE_RESULT HMI_DemoItemsBase_PostProcess(SGUI_SCR_DEV* pstDeviceIF, HMI_ENGINE_RESULT eProcResult, SGUI_INT iActionID)
 {
 	if(HMI_DEMO_PROC_CONFIRM == iActionID)
 	{
