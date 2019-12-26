@@ -10,7 +10,6 @@
 #include "DemoProc.h"
 #include "SGUI_List.h"
 #include "SGUI_FontResource.h"
-#include "HMI_Engine.h"
 #include "Resource.h"
 
 //=======================================================================//
@@ -30,14 +29,12 @@ static HMI_ENGINE_RESULT	HMI_DemoList_PostProcess(SGUI_SCR_DEV* pstDeviceIF, HMI
 //=======================================================================//
 //= Static variable declaration.									    =//
 //=======================================================================//
-static SGUI_ITEMS_ITEM		s_arrstListItems[] =		{	{"输入框组件", NULL},
+static SGUI_ITEMS_ITEM		s_arrstListItems[] =		{	{"基础绘图", NULL},
+															{"文字显示", NULL},
+															{"输入框组件", NULL},
 															{"实时曲线组件", NULL},
 															{"菜单组件", NULL},
-															{"提示框组件", NULL},
-															{"还没安排2", NULL},
-															{"还没安排3", NULL},
-															{"还没安排4", NULL},
-															{"还没安排5", NULL},
+															{"提示框组件", NULL}
 														};
 static SGUI_LIST_STRUCT		s_stDemoListObject = 		{0x00};
 
@@ -177,22 +174,32 @@ HMI_ENGINE_RESULT HMI_DemoList_PostProcess(SGUI_SCR_DEV* pstDeviceIF, HMI_ENGINE
 	{
         switch(s_stDemoListObject.stItems.iSelection)
         {
-			case 0:
+        	case 0:
 			{
-				HMI_SwitchScreen(HMI_SCREEN_ID_DEMO_VARIABLE_BOX, NULL);
+				HMI_SwitchScreen(HMI_SCREEN_ID_DEMO_BASIC_PAINT, NULL);
 				break;
 			}
 			case 1:
 			{
-				HMI_SwitchScreen(HMI_SCREEN_ID_DEMO_REAL_TIME_GRAPH, NULL);
+				HMI_SwitchScreen(HMI_SCREEN_ID_DEMO_PAINT_TEXT, NULL);
 				break;
 			}
 			case 2:
 			{
-				HMI_SwitchScreen(HMI_SCREEN_ID_DEMO_MENU, NULL);
+				HMI_SwitchScreen(HMI_SCREEN_ID_DEMO_VARIABLE_BOX, NULL);
 				break;
 			}
 			case 3:
+			{
+				HMI_SwitchScreen(HMI_SCREEN_ID_DEMO_REAL_TIME_GRAPH, NULL);
+				break;
+			}
+			case 4:
+			{
+				HMI_SwitchScreen(HMI_SCREEN_ID_DEMO_MENU, NULL);
+				break;
+			}
+			case 5:
 			{
 				HMI_SwitchScreen(HMI_SCREEN_ID_DEMO_TEXT_NOTICE, "This is a test notice text.");
 				break;

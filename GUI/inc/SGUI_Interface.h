@@ -48,6 +48,5 @@ void                    SGUI_SystemIF_MemorySet(SGUI_PTR pMemoryPtr, SGUI_BYTE i
 SGUI_SIZE               SGUI_SystemIF_StringLength(SGUI_CSZSTR szString);
 SGUI_SZSTR				SGUI_SystemIF_StringCopy(SGUI_SZSTR szDest, SGUI_CSZSTR szSrc);
 SGUI_SZSTR				SGUI_SystemIF_StringLengthCopy(SGUI_SZSTR szDest, SGUI_CSZSTR szSrc, SGUI_SIZE sSize);
-void                    SGUI_SystemIF_GetNowTime(SGUI_TIME* pstTime);
 
 #endif // __INCLUDED_SGUI_INTERFACE_H__

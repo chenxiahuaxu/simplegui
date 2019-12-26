@@ -27,11 +27,12 @@ SGUI_SCR_DEV				g_stDeviceInterface;
 HMI_SCREEN_OBJECT*			g_arrpstScreenObjs[] =
 							{
 								&g_stHMIDemo_List,
-								&g_stHMIDemo_ItemsBase,
+								&g_stHMIDemo_TextPaint,
 								&g_stHMIDemo_VariableBox,
 								&g_stHMIDemo_RealtimeGraph,
 								&g_stHMIDemo_Menu,
-								&g_stHMIDemo_Notice
+								&g_stHMIDemo_Notice,
+								&g_stHMIDemo_BasicPaint
 							};
 HMI_ENGINE_OBJECT			g_stDemoEngine;
 

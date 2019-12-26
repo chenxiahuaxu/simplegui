@@ -19,11 +19,11 @@
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
-static HMI_ENGINE_RESULT	HMI_DemoNotice_Initialize(SGUI_SCR_DEV* pstIFObj);
-static HMI_ENGINE_RESULT	HMI_DemoNotice_Prepare(SGUI_SCR_DEV* pstIFObj, const void* pstParameters);
-static HMI_ENGINE_RESULT	HMI_DemoNotice_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const void* pstParameters);
-static HMI_ENGINE_RESULT	HMI_DemoNotice_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent, SGUI_INT* piActionID);
-static HMI_ENGINE_RESULT	HMI_DemoNotice_PostProcess(SGUI_SCR_DEV* pstIFObj, HMI_ENGINE_RESULT eProcResult, SGUI_INT iActionID);
+static HMI_ENGINE_RESULT	HMI_DemoNotice_Initialize(SGUI_SCR_DEV* pstDeviceIF);
+static HMI_ENGINE_RESULT	HMI_DemoNotice_Prepare(SGUI_SCR_DEV* pstDeviceIF, const void* pstParameters);
+static HMI_ENGINE_RESULT	HMI_DemoNotice_RefreshScreen(SGUI_SCR_DEV* pstDeviceIF, const void* pstParameters);
+static HMI_ENGINE_RESULT	HMI_DemoNotice_ProcessEvent(SGUI_SCR_DEV* pstDeviceIF, const HMI_EVENT_BASE* pstEvent, SGUI_INT* piActionID);
+static HMI_ENGINE_RESULT	HMI_DemoNotice_PostProcess(SGUI_SCR_DEV* pstDeviceIF, HMI_ENGINE_RESULT eProcResult, SGUI_INT iActionID);
 
 //=======================================================================//
 //= Static variable declaration.									    =//
@@ -48,16 +48,16 @@ HMI_SCREEN_OBJECT       g_stHMIDemo_Notice =			{	HMI_SCREEN_ID_DEMO_TEXT_NOTICE,
 //=======================================================================//
 //= Function define.										            =//
 //=======================================================================//
-HMI_ENGINE_RESULT HMI_DemoNotice_Initialize(SGUI_SCR_DEV* pstIFObj)
+HMI_ENGINE_RESULT HMI_DemoNotice_Initialize(SGUI_SCR_DEV* pstDeviceIF)
 {
 	SGUI_SystemIF_MemorySet(s_szDemoNoticeText, 0x00, sizeof(SGUI_CHAR)*(NOTICE_TEXT_BUFFER_SIZE+1));
 	s_stDemoNoticeBox.cszNoticeText = s_szDemoNoticeText;
 	s_stDemoNoticeBox.pstIcon = NULL;
-	SGUI_Notice_FitArea(pstIFObj, &(s_stDemoNoticeBox.stLayout));
+	SGUI_Notice_FitArea(pstDeviceIF, &(s_stDemoNoticeBox.stLayout));
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoNotice_Prepare(SGUI_SCR_DEV* pstIFObj, const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoNotice_Prepare(SGUI_SCR_DEV* pstDeviceIF, const void* pstParameters)
 {
 	/*----------------------------------*/
 	/* Process							*/
@@ -71,17 +71,17 @@ HMI_ENGINE_RESULT HMI_DemoNotice_Prepare(SGUI_SCR_DEV* pstIFObj, const void* pst
 		SGUI_SystemIF_StringLengthCopy(s_szDemoNoticeText, (SGUI_SZSTR)pstParameters, NOTICE_TEXT_BUFFER_SIZE);
 		s_szDemoNoticeText[NOTICE_TEXT_BUFFER_SIZE] = '\0';
 	}
-	SGUI_Notice_Repaint(pstIFObj, &s_stDemoNoticeBox, &SGUI_DEFAULT_FONT_16, 0);
+	SGUI_Notice_Repaint(pstDeviceIF, &s_stDemoNoticeBox, &SGUI_DEFAULT_FONT_16, 0);
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoNotice_RefreshScreen(SGUI_SCR_DEV* pstIFObj, const void* pstParameters)
+HMI_ENGINE_RESULT HMI_DemoNotice_RefreshScreen(SGUI_SCR_DEV* pstDeviceIF, const void* pstParameters)
 {
-	SGUI_Notice_Repaint(pstIFObj, &s_stDemoNoticeBox, &SGUI_DEFAULT_FONT_16, 0);
+	SGUI_Notice_Repaint(pstDeviceIF, &s_stDemoNoticeBox, &SGUI_DEFAULT_FONT_16, 0);
 	return HMI_RET_NORMAL;
 }
 
-HMI_ENGINE_RESULT HMI_DemoNotice_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_EVENT_BASE* pstEvent, SGUI_INT* piActionID)
+HMI_ENGINE_RESULT HMI_DemoNotice_ProcessEvent(SGUI_SCR_DEV* pstDeviceIF, const HMI_EVENT_BASE* pstEvent, SGUI_INT* piActionID)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -126,7 +126,7 @@ HMI_ENGINE_RESULT HMI_DemoNotice_ProcessEvent(SGUI_SCR_DEV* pstIFObj, const HMI_
 	return eProcessResult;
 }
 
-HMI_ENGINE_RESULT HMI_DemoNotice_PostProcess(SGUI_SCR_DEV* pstIFObj, HMI_ENGINE_RESULT eProcResult, SGUI_INT iActionID)
+HMI_ENGINE_RESULT HMI_DemoNotice_PostProcess(SGUI_SCR_DEV* pstDeviceIF, HMI_ENGINE_RESULT eProcResult, SGUI_INT iActionID)
 {
 	/*----------------------------------*/
 	/* Process							*/

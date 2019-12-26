@@ -81,16 +81,6 @@ typedef struct
 	SGUI_INT							iMax;
 }SGUI_RANGE;
 
-typedef struct
-{
-	SGUI_UINT16							Year;
-	SGUI_UINT16							Month;
-	SGUI_UINT16							Day;
-	SGUI_UINT16							Hour;
-	SGUI_UINT16							Minute;
-	SGUI_UINT16							Second;
-}SGUI_TIME;
-
 typedef enum
 {
 	SGUI_COLOR_BKGCLR =					0,

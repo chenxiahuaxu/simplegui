@@ -41,9 +41,9 @@ SimpleGUI Virtual SDK 使用说明
       │     ├─ [DIR]
       │     └─ *.h
       └─ lib  
-         ├─ gcc_dll  
-         ├─ mswu  
-         └─ *.a(库文件) 
+         └─ gcc_x86_dll(如果使用64位编译器，此文件夹名应为gcc_x64_dll)  
+             ├─ mswu  
+             └─ *.a(库文件) 
 ```
  
 
