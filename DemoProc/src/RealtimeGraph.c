@@ -83,7 +83,7 @@ HMI_ENGINE_RESULT HMI_DemoRealGraph_RefreshScreen(SGUI_SCR_DEV* pstDeviceIF, con
 	stInnerPos.iPosY = 0;
 	SGUI_Text_DrawText(pstDeviceIF, "Real-time graph", &SGUI_DEFAULT_FONT_8, &stTextDisplayArea, &stInnerPos, SGUI_DRAW_NORMAL);
 	// Paint value.
-	SGUI_Common_IntegerToString(s_stRealtimeGraph.Data->ValueArray[s_stRealtimeGraph.Data->ValueCount-1], szTextBuffer, 10, -15, ' ');
+	SGUI_Common_IntegerToString(s_stRealtimeGraph.Data->ValueArray[s_stRealtimeGraph.Data->ValueCount-1], szTextBuffer, 10, 4, ' ');
 	stTextDisplayArea.iPosX = 1;
 	stTextDisplayArea.iPosY = RECT_HEIGHT(pstDeviceIF->stSize)-6;
 	stTextDisplayArea.iWidth = RECT_WIDTH(pstDeviceIF->stSize)-2;
