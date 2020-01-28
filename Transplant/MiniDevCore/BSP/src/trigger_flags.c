@@ -1,0 +1,79 @@
+#include "trigger_flags.h"
+
+static bool			s_bBaseTimerTrigger = false;
+static bool			s_bRTCTimerTrigger = false;
+static USART_INPUT	s_stUsartInput = {0x00};
+
+void USARTReceiveProc(USART_INT_REASON eReason, uint8_t uiReceiveData)
+{
+	if(USART_INT_REASON_IDLE == eReason)
+	{
+		s_stUsartInput.bIsTriggered = true;
+	}
+	else if(USART_INT_REASON_REV == eReason)
+	{
+		if(true == s_stUsartInput.bHalfRev)
+		{
+			s_stUsartInput.unKeyValue.uiByte[0] = uiReceiveData;
+			s_stUsartInput.bIsTriggered = true;
+		}
+		else
+		{
+			s_stUsartInput.unKeyValue.uiByte[1] = uiReceiveData;
+			s_stUsartInput.bHalfRev = true;
+		}
+	}
+}
+
+void KeyEventProc(uint16_t uiKeyCode, KEY_EVENT eEvent)
+{
+
+}
+
+void TimerInterruptProc(void)
+{
+	s_bBaseTimerTrigger = true;
+}
+
+void RTCInterruptProc(uint32_t uiTimeStamp)
+{
+	s_bRTCTimerTrigger = true;
+}
+
+bool BaseTimerIsTrigger(void)
+{
+	return s_bBaseTimerTrigger;
+}
+
+void BaseTimerTriggerReset(void)
+{
+	s_bBaseTimerTrigger = false;
+}
+
+bool UsartIsReceived(void)
+{
+	return s_stUsartInput.bIsTriggered;
+}
+
+uint16_t GetReceivedCode(void)
+{
+	return s_stUsartInput.unKeyValue.uiKeyCode;
+}
+
+void UsartTriggerReset(void)
+{
+	s_stUsartInput.bIsTriggered = false;
+	s_stUsartInput.bHalfRev = false;
+	s_stUsartInput.unKeyValue.uiKeyCode = 0;
+}
+
+bool RTCTimerIsTrigger(void)
+{
+	return s_bRTCTimerTrigger;
+}
+
+void RTCTimerTriggerReset(void)
+{
+	s_bRTCTimerTrigger = false;
+}
+

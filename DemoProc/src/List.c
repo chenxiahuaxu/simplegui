@@ -29,12 +29,12 @@ static HMI_ENGINE_RESULT	HMI_DemoList_PostProcess(SGUI_SCR_DEV* pstDeviceIF, HMI
 //=======================================================================//
 //= Static variable declaration.									    =//
 //=======================================================================//
-static SGUI_ITEMS_ITEM		s_arrstListItems[] =		{	{"基础绘图", NULL},
-															{"文字显示", NULL},
-															{"输入框组件", NULL},
-															{"实时曲线组件", NULL},
-															{"菜单组件", NULL},
-															{"提示框组件", NULL}
+static SGUI_ITEMS_ITEM		s_arrstListItems[] =		{	{SCR1_LIST_ITEM1, NULL},
+															{SCR1_LIST_ITEM2, NULL},
+															{SCR1_LIST_ITEM3, NULL},
+															{SCR1_LIST_ITEM4, NULL},
+															{SCR1_LIST_ITEM5, NULL},
+															{SCR1_LIST_ITEM6, NULL}
 														};
 static SGUI_LIST_STRUCT		s_stDemoListObject = 		{0x00};
 
@@ -66,7 +66,7 @@ HMI_ENGINE_RESULT HMI_DemoList_Initialize(SGUI_SCR_DEV* pstDeviceIF)
     s_stDemoListObject.stLayout.iPosY = 0;
     s_stDemoListObject.stLayout.iWidth = 128;
     s_stDemoListObject.stLayout.iHeight = 64;
-    s_stDemoListObject.szTitle = "列表组件";
+    s_stDemoListObject.szTitle = SCR1_TITLE;
      //Initialize list object.
 	SGUI_List_Initialize(&s_stDemoListObject, &GB2312_FZXS12, s_arrstListItems, sizeof(s_arrstListItems)/sizeof(SGUI_ITEMS_ITEM));
 	return HMI_RET_NORMAL;
@@ -201,7 +201,7 @@ HMI_ENGINE_RESULT HMI_DemoList_PostProcess(SGUI_SCR_DEV* pstDeviceIF, HMI_ENGINE
 			}
 			case 5:
 			{
-				HMI_SwitchScreen(HMI_SCREEN_ID_DEMO_TEXT_NOTICE, "This is a test notice text.");
+				HMI_SwitchScreen(HMI_SCREEN_ID_DEMO_TEXT_NOTICE, SCR7_NOTICE_TEXT);
 				break;
 			}
 			default:

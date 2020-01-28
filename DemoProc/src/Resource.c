@@ -117,6 +117,7 @@ const SGUI_CBYTE GB2312_H12[] = {
 0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0F, 0x00, 0x00,	// |
 0x00, 0x02, 0x9E, 0x60, 0x00, 0x00, 0x00, 0x04, 0x07, 0x00, 0x00, 0x00,	// }
 0x04, 0x02, 0x02, 0x04, 0x04, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,	// ~		Index 94
+#ifndef _SIMPLE_GUI_DEMO_ONLY_ASCII_
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, /* [　 ][0   ][0] */
 0x00, 0x00, 0x00, 0x40, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, /* [、 ][1   ][2] */
 0x00, 0x00, 0xC0, 0x20, 0x20, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, /* [。 ][2   ][4] */
@@ -7731,7 +7732,7 @@ const SGUI_CBYTE GB2312_H12[] = {
 0xF8, 0xAE, 0xFB, 0xAE, 0xF8, 0x08, 0xFF, 0x08, 0xF8, 0x00, 0x00, 0x00, 0x0A, 0x06, 0x02, 0x0E, 0x0A, 0x04, 0x03, 0x00, 0x07, 0x08, 0x0E, 0x00, /* [鼽 ][6765][13530] */
 0x00, 0xF8, 0xAE, 0xFB, 0xAE, 0xF8, 0x40, 0x42, 0xFE, 0x42, 0x40, 0x00, 0x02, 0x0A, 0x06, 0x02, 0x0E, 0x02, 0x02, 0x00, 0x0F, 0x00, 0x00, 0x00, /* [鼾 ][6766][13532] */
 0xF8, 0xAE, 0xFB, 0xAE, 0xF8, 0x12, 0xEA, 0xA6, 0xBF, 0xA6, 0xEA, 0x00, 0x0A, 0x06, 0x02, 0x0E, 0x02, 0x08, 0x0B, 0x0A, 0x0A, 0x0A, 0x0B, 0x00, /* [齄 ][6767][13534] */
-
+#endif
 };
 
 const SGUI_FONT_RES GB2312_FZXS12 =
@@ -7795,6 +7796,16 @@ SGUI_INT GetCharIndex_GB2312(SGUI_UINT32 uiCode)
 	return iIndex;
 }
 
+/*************************************************************************/
+/** Function Name:	StepNext_GB2312									    **/
+/** Purpose:		Read current character code order by input pointer  **/
+/**                 and step to next character start pointer.			**/
+/** Resources:		None.												**/
+/** Params:																**/
+/**	@ cszSrc[in]:	Current char pointer.								**/
+/**	@ puiCode[in]:	Character code.										**/
+/** Return:			Next character start pointer.   					**/
+/*************************************************************************/
 SGUI_CSZSTR StepNext_GB2312(SGUI_CSZSTR cszSrc, SGUI_UINT32* puiCode)
 {
     /*----------------------------------*/
@@ -7830,6 +7841,17 @@ SGUI_CSZSTR StepNext_GB2312(SGUI_CSZSTR cszSrc, SGUI_UINT32* puiCode)
     return pcNextChar;
 }
 
+/*************************************************************************/
+/** Function Name:	GB2312_GetFontData								    **/
+/** Purpose:		Read character data form font data.         		**/
+/** Resources:		None.												**/
+/** Params:																**/
+/**	@ sStartAddr[in]: Read start address in memory.						**/
+/**	@ pDataBuffer[in]: Character data dump buffer pointer.				**/
+/**	@ sReadSize[in]: Size of data will be read, always mean the buffer  **/
+/**                 size.                               				**/
+/** Return:			Data in process was be read.        				**/
+/*************************************************************************/
 SGUI_SIZE GB2312_GetFontData(SGUI_SIZE sStartAddr, SGUI_BYTE* pDataBuffer, SGUI_SIZE sReadSize)
 {
 	/*----------------------------------*/
@@ -7858,6 +7880,17 @@ SGUI_SIZE GB2312_GetFontData(SGUI_SIZE sStartAddr, SGUI_BYTE* pDataBuffer, SGUI_
 	return sReadCount;
 }
 
+/*************************************************************************/
+/** Function Name:	GB2312_GetFontData								    **/
+/** Purpose:		Read character data form font data.         		**/
+/** Resources:		None.												**/
+/** Params:																**/
+/**	@ sStartAddr[in]: Read start address in memory.						**/
+/**	@ pDataBuffer[in]: Character data dump buffer pointer.				**/
+/**	@ sReadSize[in]: Size of data will be read, always mean the buffer  **/
+/**                 size.                               				**/
+/** Return:			Data in process was be read.        				**/
+/*************************************************************************/
 SGUI_BOOL GB2312_IsFullWidth(SGUI_UINT32 uiCode)
 {
     /*----------------------------------*/

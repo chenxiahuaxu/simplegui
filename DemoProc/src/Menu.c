@@ -25,19 +25,19 @@ static HMI_ENGINE_RESULT	HMI_DemoMenu_PostProcess(SGUI_SCR_DEV* pstDeviceIF, HMI
 //=======================================================================//
 //= Static variable declaration.									    =//
 //=======================================================================//
-static SGUI_ITEMS_ITEM		s_arrstMenuItems[] =		{	{"Item 1", NULL},
-															{"Item 2", NULL},
-															{"Item 3", NULL},
-															{"Item 4", NULL},
-															{"Item 5", NULL},
-															{"Item 6", NULL},
-															{"Item 7", NULL},
-															{"Item 8", NULL},
+static SGUI_ITEMS_ITEM		s_arrstMenuItems[] =		{	{SCR6_MENU_ITEM1, NULL},
+															{SCR6_MENU_ITEM2, NULL},
+															{SCR6_MENU_ITEM3, NULL},
+															{SCR6_MENU_ITEM4, NULL},
+															{SCR6_MENU_ITEM5, NULL},
+															{SCR6_MENU_ITEM6, NULL},
+															{SCR6_MENU_ITEM7, NULL},
+															{SCR6_MENU_ITEM8, NULL},
 														};
 
-static SGUI_ITEMS_ITEM		s_arrstSubMenuItems[] =		{	{"Sub 1", NULL},
-															{"Sub 2", NULL},
-															{"Sub 3", NULL}
+static SGUI_ITEMS_ITEM		s_arrstSubMenuItems[] =		{	{SCR6_SUB_MENU_ITEM1, NULL},
+															{SCR6_SUB_MENU_ITEM2, NULL},
+															{SCR6_SUB_MENU_ITEM3, NULL}
 														};
 
 static SGUI_MENU_STRUCT		s_stDemoMenuObject = 		{0x00};

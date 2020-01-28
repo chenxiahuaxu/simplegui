@@ -80,28 +80,28 @@ HMI_ENGINE_RESULT HMI_DemoText_RefreshScreen(SGUI_SCR_DEV* pstDeviceIF, const vo
 	stDisplayArea.iPosY = 1;
 	stDisplayArea.iWidth = 62;
 	stDisplayArea.iHeight = SGUI_DEFAULT_FONT_MiniNum.iHeight+1;
-	SGUI_Text_DrawText(pstDeviceIF, "1234567890", &SGUI_DEFAULT_FONT_MiniNum, &stDisplayArea, &stInnerPos, SGUI_DRAW_NORMAL);
+	SGUI_Text_DrawText(pstDeviceIF, SCR3_TEXT_MIN_NUM, &SGUI_DEFAULT_FONT_MiniNum, &stDisplayArea, &stInnerPos, SGUI_DRAW_NORMAL);
 
 	stDisplayArea.iPosY += stDisplayArea.iHeight;
 	stDisplayArea.iWidth = 62;
 	stDisplayArea.iHeight = SGUI_DEFAULT_FONT_8.iHeight+1;
-	SGUI_Text_DrawText(pstDeviceIF, "8PIX ASCII CHAR", &SGUI_DEFAULT_FONT_8, &stDisplayArea, &stInnerPos, SGUI_DRAW_NORMAL);
+	SGUI_Text_DrawText(pstDeviceIF, SCR3_TEXT_INNER_8, &SGUI_DEFAULT_FONT_8, &stDisplayArea, &stInnerPos, SGUI_DRAW_NORMAL);
 
 	stDisplayArea.iPosY += stDisplayArea.iHeight;
 	stDisplayArea.iWidth = 62;
 	stDisplayArea.iHeight = SGUI_DEFAULT_FONT_12.iHeight+1;
-	SGUI_Text_DrawText(pstDeviceIF, "12Pixel FZXS Default", &SGUI_DEFAULT_FONT_12, &stDisplayArea, &stInnerPos, SGUI_DRAW_REVERSE);
+	SGUI_Text_DrawText(pstDeviceIF, SCR3_TEXT_INNER_12, &SGUI_DEFAULT_FONT_12, &stDisplayArea, &stInnerPos, SGUI_DRAW_REVERSE);
 
 	stDisplayArea.iPosY += stDisplayArea.iHeight;
 	stDisplayArea.iWidth = 62;
 	stDisplayArea.iHeight = SGUI_DEFAULT_FONT_12.iHeight+1;
-	SGUI_Text_DrawText(pstDeviceIF, "自定义中文资源", &GB2312_FZXS12, &stDisplayArea, &stInnerPos, SGUI_DRAW_NORMAL);
+	SGUI_Text_DrawText(pstDeviceIF, SCR3_TEXT_EXTEN_12, &GB2312_FZXS12, &stDisplayArea, &stInnerPos, SGUI_DRAW_NORMAL);
 
 	stDisplayArea.iPosX = 64;
 	stDisplayArea.iPosY = 1;
 	stDisplayArea.iWidth = 62;
 	stDisplayArea.iHeight = 62;
-	SGUI_Text_DrawMultipleLinesText(pstDeviceIF, "多行文字显示接口演示12345678ABCD", &GB2312_FZXS12, &stDisplayArea, 0, SGUI_DRAW_NORMAL);
+	SGUI_Text_DrawMultipleLinesText(pstDeviceIF, SCR3_TEXT_MULTILINE_12, &GB2312_FZXS12, &stDisplayArea, 0, SGUI_DRAW_NORMAL);
 	return HMI_RET_NORMAL;
 }
 

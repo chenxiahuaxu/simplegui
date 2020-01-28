@@ -1,4 +1,5 @@
-#include "OLED.h"
+#include "ssd1306_softspi.h"
+#include "oled.h"
 
 static struct
 {
@@ -9,31 +10,11 @@ static struct
 		uint16_t		uiEndPageIndex;
 		uint16_t		uiEndColumnIndex;
 	}stUpdateArea;
-	uint16_t		auiDisplayCache[LCD_SIZE_PAGES][LCD_SIZE_WIDTH];
+	uint16_t		auiDisplayCache[LCD_SIZE_WIDTH][LCD_SIZE_PAGES];
 }s_stLCDBuffer;
 
-static void	OLED_SetPosition(uint8_t uiPosPage, uint8_t uiPosColumn);
 static void OLED_UpdateChangedBufferAreaRecord(uint8_t uiPageIndex, uint8_t uiColumnIndex);
 static void OLED_ClearDisplayBuffer(void);
-
-/*************************************************************************/
-/** Function Name:	OLED_SetPosition                                    **/
-/** Purpose:        Set current position referring page and column.     **/
-/** Resources:		None.												**/
-/** Params:																**/
-/**	@ ui_PosColumn:		Set column of position.							**/
-/**	@ ui_PosPage:		Set page of position.							**/
-/** Return:			None.												**/
-/** Limitation:		None.												**/
-/*************************************************************************/
-void OLED_SetPosition(uint8_t uiPosPage, uint8_t uiPosColumn)
-{
-	/* Page position check */
-	if((LCD_SIZE_WIDTH > uiPosColumn) && (LCD_SIZE_PAGES > uiPosPage))
-	{
-		SSD1306_SPI_SetPosition(uiPosColumn, uiPosPage);
-	}
-}
 
 /*************************************************************************/
 /** Function Name:	OLED_UpdateChangedBufferAreaRecord                  **/
@@ -82,13 +63,13 @@ void OLED_ClearDisplayBuffer(void)
 	{
 		for(uiCurrentColumnIndex = 0; uiCurrentColumnIndex < LCD_SIZE_WIDTH; uiCurrentColumnIndex++)
 		{
-			s_stLCDBuffer.auiDisplayCache[uiCurrentPageIndex][uiCurrentColumnIndex] = 0x00;
+			s_stLCDBuffer.auiDisplayCache[uiCurrentColumnIndex][uiCurrentPageIndex] = 0x00;
 		}
 	}
-	s_stLCDBuffer.stUpdateArea.uiStartPageIndex		= 0;
-	s_stLCDBuffer.stUpdateArea.uiEndPageIndex		= LCD_SIZE_PAGES - 1;
-	s_stLCDBuffer.stUpdateArea.uiStartColumnIndex	= 0;
-	s_stLCDBuffer.stUpdateArea.uiEndColumnIndex		= LCD_SIZE_WIDTH - 1;
+	s_stLCDBuffer.stUpdateArea.uiStartPageIndex		= (LCD_SIZE_HEIGHT/8) - 1;
+	s_stLCDBuffer.stUpdateArea.uiEndPageIndex		= 0;
+	s_stLCDBuffer.stUpdateArea.uiStartColumnIndex	= LCD_SIZE_WIDTH - 1;
+	s_stLCDBuffer.stUpdateArea.uiEndColumnIndex		= 0;
 }
 
 /*************************************************************************/
@@ -108,15 +89,15 @@ void OLED_SetPixel(int iPosX, int iPosY, int iColor)
 	if((iPosX < LCD_SIZE_WIDTH) && (iPosY < LCD_SIZE_HEIGHT))
 	{
 		// Check and set page and column index.
-		OLED_UpdateChangedBufferAreaRecord(iPosX, iPosX);
+		OLED_UpdateChangedBufferAreaRecord(iPosY/8, iPosX);
 		// Set point data.
 		if(OLED_COLOR_FRG == iColor)
 		{
-			SET_PAGE_BIT(s_stLCDBuffer.auiDisplayCache[iPosY/8][iPosX], iPosY%8);
+			SET_PAGE_BIT(s_stLCDBuffer.auiDisplayCache[iPosX][iPosY/8], iPosY%8);
 		}
 		else
 		{
-			CLR_PAGE_BIT(s_stLCDBuffer.auiDisplayCache[iPosY/8][iPosX], iPosY%8);
+			CLR_PAGE_BIT(s_stLCDBuffer.auiDisplayCache[iPosX][iPosY/8], iPosY%8);
 		}
 	}
 }
@@ -136,7 +117,7 @@ int OLED_GetPixel(int iPosX, int iPosY)
 	// Operating position check.
 	if((iPosX < LCD_SIZE_WIDTH) && (iPosY < LCD_SIZE_HEIGHT))
 	{
-		return GET_PAGE_BIT(s_stLCDBuffer.auiDisplayCache[iPosY/8][iPosX], iPosY%8);
+		return GET_PAGE_BIT(s_stLCDBuffer.auiDisplayCache[iPosX][iPosY/8], iPosY%8);
 	}
 	else
 	{
@@ -154,7 +135,7 @@ int OLED_GetPixel(int iPosX, int iPosY)
 /*************************************************************************/
 void OLED_Initialize(void)
 {
-	SSD1306_SPI_Initialize();
+	SSD1306_Initialize();
 	OLED_ClearDisplayBuffer();
 }
 
@@ -183,22 +164,22 @@ void OLED_RefreshScreen(void)
 	while(uiChangedPageIndex <= s_stLCDBuffer.stUpdateArea.uiEndPageIndex)
 	{
 		uiChangedColumnIndex = s_stLCDBuffer.stUpdateArea.uiStartColumnIndex;
-		OLED_SetPosition(uiChangedPageIndex, s_stLCDBuffer.stUpdateArea.uiStartColumnIndex);
+		SSD1306_SetPosition(s_stLCDBuffer.stUpdateArea.uiStartColumnIndex, uiChangedPageIndex);
 		// Loop for each changed column data in current page.
 		while(uiChangedColumnIndex <= s_stLCDBuffer.stUpdateArea.uiEndColumnIndex)
 		{
 			// Write data to screen controler.
-			SSD1306_SPI_WriteData(s_stLCDBuffer.auiDisplayCache[uiChangedPageIndex][uiChangedColumnIndex]);
+			SSD1306_WriteData(s_stLCDBuffer.auiDisplayCache[uiChangedColumnIndex][uiChangedPageIndex]);
 			uiChangedColumnIndex++;
 		}
 		uiChangedPageIndex++;
 	}
 
 	// Reset global variable.
-	s_stLCDBuffer.stUpdateArea.uiStartPageIndex		= 0;
-	s_stLCDBuffer.stUpdateArea.uiEndPageIndex		= (LCD_SIZE_HEIGHT/8) - 1;
-	s_stLCDBuffer.stUpdateArea.uiStartColumnIndex	= 0;
-	s_stLCDBuffer.stUpdateArea.uiEndColumnIndex		= LCD_SIZE_WIDTH - 1;
+	s_stLCDBuffer.stUpdateArea.uiStartPageIndex		= (LCD_SIZE_HEIGHT/8) - 1;
+	s_stLCDBuffer.stUpdateArea.uiEndPageIndex		= 0;
+	s_stLCDBuffer.stUpdateArea.uiStartColumnIndex	= LCD_SIZE_WIDTH - 1;
+	s_stLCDBuffer.stUpdateArea.uiEndColumnIndex		= 0;
 }
 
 /*************************************************************************/
@@ -212,6 +193,6 @@ void OLED_RefreshScreen(void)
 void OLED_ClearDisplay(void)
 {
 	OLED_ClearDisplayBuffer();
-	SSD1306_SPI_Clear();
+	SSD1306_Fill(0x00);
 }
 

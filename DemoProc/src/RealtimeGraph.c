@@ -28,7 +28,7 @@ static HMI_ENGINE_RESULT	HMI_DemoRealGraph_PostProcess(SGUI_SCR_DEV* pstDeviceIF
 SGUI_RTGRAPH_CONTROL		s_stRealtimeGraphControl =	{50, -50, SGUI_TRUE, 3, 0};
 SGUI_RTGRAPH_DATA			s_stRealtimeGraphData =		{{1, 9, 126, 49}, {0}, {0}, {0}, 0, 0};
 SGUI_RTGRAPH				s_stRealtimeGraph =			{&s_stRealtimeGraphData, &s_stRealtimeGraphControl};
-static HMI_SCREEN_ACTION	s_stDemoRealtimeGraphActions =	{	HMI_DemoRealGraph_Initialize,
+static HMI_SCREEN_ACTION	s_stDemoRealtimeGraphActions = { HMI_DemoRealGraph_Initialize,
 														HMI_DemoRealGraph_Prepare,
 														HMI_DemoRealGraph_RefreshScreen,
 														HMI_DemoRealGraph_ProcessEvent,
@@ -81,7 +81,7 @@ HMI_ENGINE_RESULT HMI_DemoRealGraph_RefreshScreen(SGUI_SCR_DEV* pstDeviceIF, con
 	stTextDisplayArea.iHeight = 8;
 	stInnerPos.iPosX = 0;
 	stInnerPos.iPosY = 0;
-	SGUI_Text_DrawText(pstDeviceIF, "Real-time graph", &SGUI_DEFAULT_FONT_8, &stTextDisplayArea, &stInnerPos, SGUI_DRAW_NORMAL);
+	SGUI_Text_DrawText(pstDeviceIF, SCR5_RT_GRAPH_TITLE, &SGUI_DEFAULT_FONT_8, &stTextDisplayArea, &stInnerPos, SGUI_DRAW_NORMAL);
 	// Paint value.
 	SGUI_Common_IntegerToString(s_stRealtimeGraph.Data->ValueArray[s_stRealtimeGraph.Data->ValueCount-1], szTextBuffer, 10, 4, ' ');
 	stTextDisplayArea.iPosX = 1;

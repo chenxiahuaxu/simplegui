@@ -14,12 +14,6 @@
 //=======================================================================//
 //= Used for SimpleGUI interface.									    =//
 //=======================================================================//
-#define _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
-#define _SIMPLE_GUI_ENABLE_BASIC_FONT_
-
-//=======================================================================//
-//= Used for SimpleGUI demo process.								    =//
-//=======================================================================//
-//#define _SIMPLE_GUI_NON_ASCII_
+//#define _SIMPLE_GUI_ENABLE_DYNAMIC_MEMORY_
 
 #endif // _INCLUDE_SIMPLE_GUI_CONFIG_H_

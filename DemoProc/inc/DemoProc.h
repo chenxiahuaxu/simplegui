@@ -9,15 +9,7 @@
 #include "SGUI_Common.h"
 #include "HMI_Engine.h"
 #include "DemoActions.h"
-#ifdef _SIMPLE_GUI_NON_ASCII_
-#ifdef _SIMPLE_GUI_ENCODE_TEXT_
-#include "DemoResource_UTF8.h"
-#else
-#include "DemoResource_GB2312.h"
-#endif // _SIMPLE_GUI_ENCODE_TEXT_
-#else
-#include "DemoResource_ASCII.h"
-#endif
+#include "Resource.h"
 #ifdef _SIMPLE_GUI_IN_VIRTUAL_SDK_
 #include "SDKInterface.h"
 #endif

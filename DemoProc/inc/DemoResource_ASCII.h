@@ -1,50 +1,49 @@
-#ifndef _INCLUDE_DEMO_RESOURCE_UTF8_H_
+﻿#ifndef _INCLUDE_DEMO_RESOURCE_UTF8_H_
 #define _INCLUDE_DEMO_RESOURCE_UTF8_H_
 
-/* Screen 1: Multiple lines text. */
-/* Start screen scroll text. */
-#define     DEMO_START_NOTICE           (\
-"Welcom to SimpleGUI demo process, it will show you how \
-to use GUI to show and deal some user action with HMI \
-interfacce.\n\
-This program uses a uart port to simulate user interaction. \
-The serial format is 115200/N/8/1.\
-Send \"SPACE\" to start process."\
-)
+/* Screen 1: List Components. */
+/* Start screen with list. */
+#define SCR1_TITLE						("List Components")
+#define SCR1_LIST_ITEM1					("Basic Paint")
+#define SCR1_LIST_ITEM2					("Text")
+#define SCR1_LIST_ITEM3					("Variable box")
+#define SCR1_LIST_ITEM4					("Realtime graph")
+#define SCR1_LIST_ITEM5					("Menu")
+#define SCR1_LIST_ITEM6					("Notice box")
 
-/* Screen 2: List*/
-/* Demo list title. */
-#define     DEMO_LIST_TITLE             ("Test list")
-/* Enumed list item choice type. */
-#define     DEMO_LIST_ITEM_NOTICE_TEXT  ("Text message")
-#define     DEMO_LIST_ITEM_NOTICE_TIME  ("RTC time")
-#define     DEMO_LIST_ITEM_ENUM_VALUE1  ("Enumeration1")
-#define     DEMO_LIST_ITEM_ENUM_VALUE2  ("Enumeration2")
-#define     DEMO_LIST_ITEM_ENUM_VALUE3  ("Enumeration3")
+/* Screen 2: Basic Paint*/
+/* No text used. */
 
+/* Screen 3: Text demo*/
+/* For internal font resources. */
+#define SCR3_TEXT_MIN_NUM				("1+2+8/4*5=13")
+#define SCR3_TEXT_INNER_8				("Hello Simple GUI.")
+#define SCR3_TEXT_INNER_12            	("Welcome!")
+#define SCR3_TEXT_EXTEN_12				("I don't like this.")
+#define SCR3_TEXT_MULTILINE_12			("Multiline demo text with 12-pixel font.")
 
-/* List items data.						Sign	ListText						List item type			List value					Decimal point				Enumed text list    */
-/*																										 init.  min.   max.          init.  min.   max.								*/
-#define     DEMO_LIST_ITEM_0            {0,     "Simple Item",					LIST_ITEM_NORMAL,		{0,     0,     0     },		{0,     0,     0     },		NULL}
-#define     DEMO_LIST_ITEM_1			{1,     "Enum item",					LIST_ITEM_ENUM,			{0,     0,     1     },		{0,     0,     0     },		s_arrszNoticeType}
-#define     DEMO_LIST_ITEM_2            {2,     "Integer item",					LIST_ITEM_DIGIT,		{0,     -50,   50    },		{0,     0,     3     },		NULL}
-#define     DEMO_LIST_ITEM_3			{3,     "Float item",					LIST_ITEM_DIGIT,		{1,     -50,   50    },		{2,     0,     5     },		NULL}
-#define     DEMO_LIST_ITEM_4            {4,     "Looooong text item",			LIST_ITEM_NORMAL,		{0,     0,     0     },		{0,     0,     0     },		NULL}
-#define     DEMO_LIST_ITEM_5            {5,     "Edit box",						LIST_ITEM_NORMAL,		{0,     0,     0     },		{0,     0,     0     },		NULL}
-#define     DEMO_LIST_ITEM_6			{6,     "Real time graph",				LIST_ITEM_NORMAL,		{0,     0,     0     },		{0,     0,     0     },		NULL}
-#define     DEMO_LIST_ITEM_7            {7,     "Test item 1",				    LIST_ITEM_NORMAL,		{0,     0,     0     },		{0,     0,     0     },		NULL}
-#define     DEMO_LIST_ITEM_8            {8,     "Test item 2",				    LIST_ITEM_ENUM,			{0,     0,     2     },		{0,     0,     0     },		s_arrszEnumedValue}
-#define     DEMO_LIST_ITEM_9			{9,     "Test item 3",				    LIST_ITEM_DIGIT,		{0,     -50,   50    },		{0,     0,     3     },		NULL}
+/* Screen 4: Variable box. */
+#define SCR4_VAR_BOX_TITLE				("Variable box")
+#define SCR4_HELP_NOTICE				("Press TAB to switch focus.\nUp&Down to change value。\nSend \"SPACE\" to continue.")
 
-/* Screen 3: Text notice box. */
-/* List notice text format. */
-#define     DEMO_LIST_NOTICE_TEXT_FMT   ("Select index %u.")
+/* Screen 5: Realtime graph. */
+#define SCR5_RT_GRAPH_TITLE				("Realtime graph")
 
-/* Screen 4: RTC notice box. */
-#define     DEMO_RTC_NOTICE_TEXT_FMT    ("Now time:\n%04u-%02u-%02u\n%02u:%02u:%02u")
+/* Screen 6: Variable box. */
+#define SCR6_MENU_ITEM1					("Item 1")
+#define SCR6_MENU_ITEM2					("Item 2")
+#define SCR6_MENU_ITEM3					("Item 3")
+#define SCR6_MENU_ITEM4					("Item 4")
+#define SCR6_MENU_ITEM5					("Item 5")
+#define SCR6_MENU_ITEM6					("Item 6")
+#define SCR6_MENU_ITEM7					("Item 7")
+#define SCR6_MENU_ITEM8					("Item 8")
+#define SCR6_SUB_MENU_ITEM1				("Sub 1")
+#define SCR6_SUB_MENU_ITEM2				("Sub 2")
+#define SCR6_SUB_MENU_ITEM3				("Sub 3")
+#define SCR6_SUB_MENU_ITEM4				("Sub 4")
 
-/* Screen 5: Variable box. */
-#define     DEMO_VARIABLE_BOX_TITLE     ("Edit box demo")
-#define     DEMO_VARIABLE_BOX_HELPER    ("Press TAB to switch focus.\nUp&Down to change value.\nSend \"SPACE\" to continue.")
+/* Screen 7: Notice box. */
+#define SCR7_NOTICE_TEXT			    ("This is a test notice.")
 
 #endif // _INCLUDE_DEMO_RESOURCE_UTF8_H_

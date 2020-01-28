@@ -1,5 +1,4 @@
-#include "RTC.h"
-
+#include "rtc.h"
 #include <time.h>
 #include <stddef.h>
 #include <string.h>
@@ -9,7 +8,7 @@
 #define FREQUENCY_DIVISION	(32767)
 #define START_YEAR          (1900)
 
-RTC_STATE g_eRTCRefreshedFlag = RTC_HOLD;
+static RTC_INT_FP RTC_INIT_CALLBACK = NULL;
 
 RTC_CALENDAR_STRUCT	g_stCleandar;
 
@@ -17,21 +16,23 @@ void		RTC_RefreshCalendar(void);
 time_t		RTC_ConvertToTimestamp(RTC_CALENDAR_STRUCT* pstCalendar);
 
 /*****************************************************************************/
-/** Function Name:	RTC_NVICConfig.										    **/
-/** Purpose:		Configure RTC NVIC.									    **/
-/** Resources:		None.												    **/
-/** Params:			None.												    **/
+/** Function Name:	RTC_ConfigReceiveInterrupt.								**/
+/** Purpose:        Update date and time to RTC controler.				    **/
+/** Params:																    **/
+/**	@uiTimeStamp:	None.												    **/
 /** Return:			None.												    **/
-/** Notice:		    None.												    **/
+/** Notice:		    Non-thread-safe function, Please pay attention to deal  **/
+/**					with multi-thread calls.						        **/
 /*****************************************************************************/
-static void RTC_NVICConfig(void)
+void RTC_ConfigReceiveInterrupt(RTC_INT_FP pfCallBack, int iPreemptionPriority, int SubPriority)
 {
-    NVIC_InitTypeDef NVIC_InitStructure;
+	NVIC_InitTypeDef NVIC_InitStructure;
 	NVIC_InitStructure.NVIC_IRQChannel = RTC_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = iPreemptionPriority;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = SubPriority;
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
+	RTC_INIT_CALLBACK = pfCallBack;
 }
 
 /*****************************************************************************/
@@ -78,7 +79,6 @@ void RTC_Initialize(void)
 		RTC_ITConfig(RTC_IT_SEC, ENABLE);
 		RTC_WaitForLastTask();
 	}
-	RTC_NVICConfig();
 	RTC_RefreshCalendar();
 }
 
@@ -96,7 +96,10 @@ void RTC_IRQHandler(void)
 	if (RTC_GetITStatus(RTC_IT_SEC) != RESET)
 	{
 		RTC_RefreshCalendar();	// Update time date.
-		g_eRTCRefreshedFlag = RTC_REFRESHED;
+		if(NULL != RTC_INIT_CALLBACK)
+		{
+			RTC_INIT_CALLBACK(RTC_GetCounter());
+		}
  	}
 	// Alarm interrupt
 	if(RTC_GetITStatus(RTC_IT_ALR)!= RESET)
@@ -203,10 +206,6 @@ uint32_t RTC_GetTimeStamp(void)
 
 	return uiTimestamp;
 }
-
-
-
-
 
 
 

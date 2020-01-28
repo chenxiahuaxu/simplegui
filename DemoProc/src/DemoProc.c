@@ -13,11 +13,13 @@
 #include "SDKInterface.h"
 #include "SGUI_FontResource.h"
 #else
-#include "OLED.h"
-#include "Usart.h"
-#include "RTC.h"
-#include "Timer.h"
+#include "oled.h"
+#include "usart.h"
+#include "rtc.h"
+#include "base_timer.h"
 #include "DemoActions.h"
+#include "trigger_flags.h"
+#include "keyboard.h"
 #endif
 
 //=======================================================================//
@@ -329,10 +331,10 @@ bool SysTickTimerTriggered(void)
 	return CheckEventFlag(ENV_FLAG_IDX_SDK_TIM_EVENT);
 #else
 	// Dummy sys-tick Timer interrupt triggered process.
-	bIsTriggered = GetTimerTriggered();
+	bIsTriggered = BaseTimerIsTrigger();
 	if(true == bIsTriggered)
 	{
-		ResetTimerTriggered();
+		BaseTimerTriggerReset();
 	}
 
 	return bIsTriggered;
@@ -361,10 +363,10 @@ bool RTCTimerTriggered(void)
 	return CheckEventFlag(ENV_FLAG_IDX_SDK_RTC_EVENT);
 #else
 	// RTC interrupt triggered process.
-	bIsTriggered = (g_eRTCRefreshedFlag == RTC_REFRESHED);
+	bIsTriggered = RTCTimerIsTrigger();
 	if(true == bIsTriggered)
 	{
-		g_eRTCRefreshedFlag = RTC_HOLD;
+		RTCTimerTriggerReset();
 	}
 
 	return bIsTriggered;
@@ -384,14 +386,8 @@ bool UserEventTriggered(void)
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	uint8_t				szReceivedData[2];
 	bool				bIsTriggered;
 
-	/*----------------------------------*/
-    /* Initialize						*/
-    /*----------------------------------*/
-	szReceivedData[0] =	0;
-	szReceivedData[1] =	0;
 #endif
 	/*----------------------------------*/
     /* Process							*/
@@ -400,17 +396,12 @@ bool UserEventTriggered(void)
 	return CheckEventFlag(ENV_FLAG_IDX_SDK_KEY_EVENT);
 #else
 	// User event triggered process.
-	bIsTriggered = IsNewTarget();
+	bIsTriggered = UsartIsReceived();
 	if(true == bIsTriggered)
 	{
-		s_uiKeyValue = 0;
-		(void)GetReveivedByte(szReceivedData, 2);
-		s_uiKeyValue = szReceivedData[0];
-		s_uiKeyValue <<= 8;
-		s_uiKeyValue |= szReceivedData[1];
-		ResetReveivedByte();
+		s_uiKeyValue = GetReceivedCode();
+		UsartTriggerReset();
 	}
-
 	return bIsTriggered;
 #endif
 }
@@ -432,7 +423,7 @@ void SysTickTimerEnable(bool bEnable)
 	(void)SGUI_SDK_ConfigHearBeatTimer(bEnable?DEMO_HEART_BEAT_INTERVAL_MS:0);
 #else
 	// Add Dummy sys-tick timer interrupt enable change operation here.
-	TIM_Cmd(TIM3, bEnable?ENABLE:DISABLE);
+	BASE_TIMER_ActiveInterrupt(TIM3, bEnable);
 #endif
 }
 

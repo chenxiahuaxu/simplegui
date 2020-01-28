@@ -113,6 +113,7 @@ const SGUI_CBYTE SGUI_FONT_H6[] =
     0x11, 0x0E, 0x00, 0x00, //)
     0x00, 0x00, 0x00, 0x00, //space
     0x1A, 0x04, 0x0B, 0x00, //%
+    0x0A, 0x0A, 0x0A, 0x00, //=
 };
 
 //======================================================================//
@@ -485,6 +486,11 @@ SGUI_INT SGUI_Resource_GetCharIndex_MiniNum(SGUI_UINT32 uiCode)
 		case '%':
 		{
 			iIndex = 18;
+			break;
+		}
+		case '=':
+		{
+			iIndex = 19;
 			break;
 		}
 		default:

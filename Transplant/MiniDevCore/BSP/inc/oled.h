@@ -1,6 +1,5 @@
 #ifndef __INCLUDE_OLED_H__
 #define __INCLUDE_OLED_H__
-#include "SSD1306_SPI.h"
 
 #define LCD_SIZE_WIDTH      (128)
 #define LCD_SIZE_HEIGHT     (64)

@@ -302,7 +302,7 @@ SGUI_SIZE SGUI_Text_GetCharacterData(const SGUI_FONT_RES* pstFontRes, SGUI_UINT3
 	SGUI_SIZE                   sGetDataSize;
 	SGUI_SIZE					sReadDataSize;
 	SGUI_SIZE                   sDataBlockSize;
-	SGUI_SIZE                   sCharIndex;
+	SGUI_INT                   	iCharIndex;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -314,12 +314,12 @@ SGUI_SIZE SGUI_Text_GetCharacterData(const SGUI_FONT_RES* pstFontRes, SGUI_UINT3
 	/*----------------------------------*/
 	if((NULL != pstFontRes) && (NULL != pDataBuffer) && (0 != sBufferSize))
     {
-		sCharIndex = pstFontRes->fnGetIndex(uiCode);
-        if(SGUI_INVALID_INDEX != sCharIndex)
+		iCharIndex = pstFontRes->fnGetIndex(uiCode);
+        if(SGUI_INVALID_INDEX != iCharIndex)
         {
             sDataBlockSize = SGUI_USED_BYTE(pstFontRes->iHeight)*(pstFontRes->iHalfWidth);
             sReadDataSize = pstFontRes->fnIsFullWidth(uiCode)?(sDataBlockSize*2):sDataBlockSize;
-            sGetDataSize = pstFontRes->fnGetData(sCharIndex*sDataBlockSize, pDataBuffer, sReadDataSize>sBufferSize?sBufferSize:sReadDataSize);
+            sGetDataSize = pstFontRes->fnGetData(iCharIndex*sDataBlockSize, pDataBuffer, sReadDataSize>sBufferSize?sBufferSize:sReadDataSize);
         }
     }
 

@@ -9,6 +9,7 @@
 //= Include files.													    =//
 //=======================================================================//
 #include "DemoProc.h"
+#include "Resource.h"
 #include "SGUI_Notice.h"
 #include "SGUI_VariableBox.h"
 #include "SGUI_FontResource.h"
@@ -51,10 +52,10 @@ static SGUI_TEXT_VARBOX_STRUCT	s_stTextVariableBox =		{	{VARIABLE_BOX_POSX+2, VA
 																TEXT_VARIABLE_LENGTH,
 																s_szTextVariableBuffer,
 															};
-static SGUI_CHAR				s_szDefaultFrameTitle[] =	DEMO_VARIABLE_BOX_TITLE;
+static SGUI_CHAR				s_szDefaultFrameTitle[] =	SCR4_VAR_BOX_TITLE;
 static SGUI_SZSTR				s_szFrameTitle =			s_szDefaultFrameTitle;
 static SGUI_INT					s_uiFocusedFlag;
-static SGUI_CSZSTR				s_szHelpNoticeText =		DEMO_VARIABLE_BOX_HELPER;
+static SGUI_CSZSTR				s_szHelpNoticeText =		SCR4_HELP_NOTICE;
 static SGUI_INT					s_uiAutoConfirmTimer =		5;
 HMI_SCREEN_ACTION				s_stDemoVariableBoxActions = {
 																HMI_DemoVariableBox_Initialize,
@@ -100,11 +101,7 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_Prepare(SGUI_SCR_DEV* pstDeviceIF, const v
 	HMI_DemoVariableBox_DrawFrame(pstDeviceIF, (SGUI_SZSTR)s_szFrameTitle);
 	// Show notice
 	SGUI_Notice_FitArea(pstDeviceIF, &(stNoticeBox.stLayout));
-#ifdef _SIMPLE_GUI_NON_ASCII_
 	SGUI_Notice_Repaint(pstDeviceIF, &stNoticeBox, &SGUI_DEFAULT_FONT_8, 0);
-#else
-	SGUI_Notice_Repaint(pstDeviceIF, &stNoticeBox, &SGUI_DEFAULT_FONT_8, 0);
-#endif //_SIMPLE_GUI_NON_ASCII_
 	// Start RTC
 	RTCTimerEnable(true);
 	return HMI_RET_NORMAL;
@@ -329,6 +326,6 @@ void HMI_DemoVariableBox_DrawFrame(SGUI_SCR_DEV* pstDeviceIF, SGUI_SZSTR szTitle
 		SGUI_Basic_DrawRectangle(pstDeviceIF, 0, 0, RECT_WIDTH(pstDeviceIF->stSize), RECT_HEIGHT(pstDeviceIF->stSize), SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
 		SGUI_Basic_DrawRectangle(pstDeviceIF, 2, 2, RECT_WIDTH(pstDeviceIF->stSize)-4, RECT_HEIGHT(pstDeviceIF->stSize)-4, SGUI_COLOR_FRGCLR, SGUI_COLOR_TRANS);
 		SGUI_Basic_DrawLine(pstDeviceIF, 3, 17, 124, 17, SGUI_COLOR_FRGCLR);
-		SGUI_Text_DrawText(pstDeviceIF, szTitle, &SGUI_DEFAULT_FONT_12, &stTextDisplayArea, &stInnerPos, SGUI_DRAW_NORMAL);
+		SGUI_Text_DrawText(pstDeviceIF, szTitle, &GB2312_FZXS12, &stTextDisplayArea, &stInnerPos, SGUI_DRAW_NORMAL);
 	}
 }
