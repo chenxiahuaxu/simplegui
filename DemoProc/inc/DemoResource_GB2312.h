@@ -1,56 +1,49 @@
-#ifndef __INCLUDE_DEMO_RESOURCE_UTF8_H__
-#define __INCLUDE_DEMO_RESOURCE_UTF8_H__
+#ifndef _INCLUDE_DEMO_RESOURCE_UTF8_H_
+#define _INCLUDE_DEMO_RESOURCE_UTF8_H_
 
-#if defined ( __CC_ARM )
-	//#pragma	diag_suppress	177							// Disabled "declared but never referenced." warning.
-#endif
+/* Screen 1: List Components. */
+/* Start screen with list. */
+#define SCR1_TITLE						("列表组件")
+#define SCR1_LIST_ITEM1					("基础绘图接口")
+#define SCR1_LIST_ITEM2					("文本")
+#define SCR1_LIST_ITEM3					("输入框")
+#define SCR1_LIST_ITEM4					("实时曲线")
+#define SCR1_LIST_ITEM5					("菜单")
+#define SCR1_LIST_ITEM6					("消息框")
 
+/* Screen 2: Basic Paint*/
+/* No text used. */
 
-/* Screen 1: Multiple lines text. */
-/* Start screen scroll text. */
-#define     DEMO_START_NOTICE           (\
-"  欢迎来到SimpleGUI演示工程，本工程用于演示GUI绘图及HMI模型交互的使用方法\
-以及运作机理。演示程序使用串口模拟键盘操作，串口数格式为115200/N/8/1，每次\
-发送两字节模拟一次键盘动作，键码请参考DemoActions.h文件。\n\
-  发送空格键码(0x0020)开始演示。"\
-)
+/* Screen 3: Text demo*/
+/* For internal font resources. */
+#define SCR3_TEXT_MIN_NUM				("1+2+8/4*5=13")
+#define SCR3_TEXT_INNER_8				("Hello Simple GUI.")
+#define SCR3_TEXT_INNER_12            	("Welcome!")
+#define SCR3_TEXT_EXTEN_12				("我不喜欢这个。")
+#define SCR3_TEXT_MULTILINE_12			("这里是12像素的多行文本演示。")
 
-/* Screen 2: List*/
-/* Demo list title. */
-#define     DEMO_LIST_TITLE             ("测试列表")
-/* Enumed list item choice type. */
-#define     DEMO_LIST_ITEM_NOTICE_TEXT  ("文字消息")
-#define     DEMO_LIST_ITEM_NOTICE_TIME  ("系统时间")
-#define     DEMO_LIST_ITEM_ENUM_VALUE1  ("枚举项1")
-#define     DEMO_LIST_ITEM_ENUM_VALUE2  ("枚举项2")
-#define     DEMO_LIST_ITEM_ENUM_VALUE3  ("枚举项3")
+/* Screen 4: Variable box. */
+#define SCR4_VAR_BOX_TITLE				("输入框")
+#define SCR4_HELP_NOTICE				("Press TAB to switch focus.\nUp&Down to change value。\nSend \"SPACE\" to continue.")
 
+/* Screen 5: Realtime graph. */
+#define SCR5_RT_GRAPH_TITLE				("Realtime graph")
 
-/* List items data.                      Sign   ListText                            List item type           List value                 Decimal point           Enumed text list    */
-/*                                                                                                           init.  min.   max.         init.  min.   max.                          */
-#define     DEMO_LIST_ITEM_0            {0,     "简单列表项",                       LIST_ITEM_NORMAL,		{0,     0,     0     },    {0,     0,     0     },  NULL}
-#define     DEMO_LIST_ITEM_1			{1,     "枚举类型列表项",		            LIST_ITEM_ENUM,			{0,     0,     1     },    {0,     0,     0     },  s_arrszNoticeType}
-#define     DEMO_LIST_ITEM_2            {2,     "数字列表项",			            LIST_ITEM_DIGIT,		{0,     -50,   50    },    {0,     0,     3     },  NULL}
-#define     DEMO_LIST_ITEM_3			{3,     "带小数的数字列表项",               LIST_ITEM_DIGIT,		{1,     -50,   50    },    {2,     0,     5     },  NULL}
-#define     DEMO_LIST_ITEM_4            {4,     "超长文字的简单列表项",             LIST_ITEM_NORMAL,		{0,     0,     0     },    {0,     0,     0     },  NULL}
-#define     DEMO_LIST_ITEM_5            {5,     "编辑框",				            LIST_ITEM_NORMAL,		{0,     0,     0     },    {0,     0,     0     },  NULL}
-#define     DEMO_LIST_ITEM_6			{6,     "实时曲线",				            LIST_ITEM_NORMAL,		{0,     0,     0     },    {0,     0,     0     },  NULL}
-#define     DEMO_LIST_ITEM_7            {7,     "测试项目1",				        LIST_ITEM_NORMAL,		{0,     0,     0     },    {0,     0,     0     },  NULL}
-#define     DEMO_LIST_ITEM_8            {8,     "测试项目2",				        LIST_ITEM_ENUM,			{0,     0,     2     },    {0,     0,     0     },  s_arrszEnumedValue}
-#define     DEMO_LIST_ITEM_9			{9,     "测试项目3",				        LIST_ITEM_DIGIT,		{0,     -50,   50    },    {0,     0,     3     },  NULL}
+/* Screen 6: Variable box. */
+#define SCR6_MENU_ITEM1					("Item 1")
+#define SCR6_MENU_ITEM2					("Item 2")
+#define SCR6_MENU_ITEM3					("Item 3")
+#define SCR6_MENU_ITEM4					("Item 4")
+#define SCR6_MENU_ITEM5					("Item 5")
+#define SCR6_MENU_ITEM6					("Item 6")
+#define SCR6_MENU_ITEM7					("Item 7")
+#define SCR6_MENU_ITEM8					("Item 8")
+#define SCR6_SUB_MENU_ITEM1				("Sub 1")
+#define SCR6_SUB_MENU_ITEM2				("Sub 2")
+#define SCR6_SUB_MENU_ITEM3				("Sub 3")
+#define SCR6_SUB_MENU_ITEM4				("Sub 4")
 
-/* Screen 3: Text notice box. */
-/* List notice text format. */
-#define     DEMO_LIST_NOTICE_TEXT_FMT   ("选择列表项%u.")
+/* Screen 7: Notice box. */
+#define SCR7_NOTICE_TEXT			    ("这是一条中文消息提示，没有图标。")
 
-/* Screen 4: RTC notice box. */
-#define     DEMO_RTC_NOTICE_TEXT_FMT    ("系统时间\n%04u-%02u-%02u\n%02u:%02u:%02u")
-
-/* Screen 5: Variable box. */
-#define     DEMO_VARIABLE_BOX_TITLE     ("数值/文本编辑演示")
-#define     DEMO_VARIABLE_BOX_HELPER    ("TAB键切换焦点编辑框。\n上下箭头调整数值。\n左右箭头调整焦点字符。\n按空格键继续。")
-
-/* Others */
-#define     DEMO_TEST_TEXT              ("测试文字")
-
-#endif // __INCLUDE_DEMO_RESOURCE_UTF8_H__
+#endif // _INCLUDE_DEMO_RESOURCE_UTF8_H_

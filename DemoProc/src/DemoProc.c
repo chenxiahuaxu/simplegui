@@ -13,7 +13,7 @@
 #include "SDKInterface.h"
 #include "SGUI_FontResource.h"
 #else
-#include "oled.h"
+#include "screen.h"
 #include "usart.h"
 #include "rtc.h"
 #include "base_timer.h"
@@ -38,10 +38,6 @@ HMI_SCREEN_OBJECT*			g_arrpstScreenObjs[] =
 							};
 HMI_ENGINE_OBJECT			g_stDemoEngine;
 
-#ifndef _SIMPLE_GUI_IN_VIRTUAL_SDK_
-static unsigned int			s_uiKeyValue;
-#endif
-
 //=======================================================================//
 //= Static function declare.								            =//
 //=======================================================================//
@@ -50,7 +46,7 @@ static void					RTCEventProc(void);
 static void					SysTickTimerEventProc(void);
 #ifdef _SIMPLE_GUI_IN_VIRTUAL_SDK_
 static bool					CheckEventFlag(ENV_FLAG_INDEX eIndex);
-#endif // _SIMPLE_GUI_VIRTUAL_ENVIRONMENT_SIMULATOR_
+#endif //_SIMPLE_GUI_IN_VIRTUAL_SDK_
 
 //=======================================================================//
 //= Function define.										            =//
@@ -93,14 +89,7 @@ HMI_ENGINE_RESULT InitializeHMIEngineObj(void)
 	g_stDeviceInterface.fnClear = SGUI_SDK_ClearDisplay;
 	g_stDeviceInterface.fnSyncBuffer = SGUI_SDK_RefreshDisplay;
 #else
-	/* Initialize display size. */
-	g_stDeviceInterface.stSize.iWidth = 128;
-	g_stDeviceInterface.stSize.iHeight = 64;
-	/* Initialize interface object. */
-	g_stDeviceInterface.fnSetPixel = OLED_SetPixel;
-	g_stDeviceInterface.fnGetPixel = OLED_GetPixel;
-	g_stDeviceInterface.fnClear = OLED_ClearDisplay;
-	g_stDeviceInterface.fnSyncBuffer = OLED_RefreshScreen;
+	#error Add screen device object initialize process here.
 #endif
 	do
 	{
@@ -246,7 +235,7 @@ void KeyPressEventProc(void)
 #ifdef _SIMPLE_GUI_IN_VIRTUAL_SDK_
 	stEvent.Data.uiKeyValue = SGUI_SDK_GetKeyEventData();
 #else
-	stEvent.Data.uiKeyValue = s_uiKeyValue;
+	#error Add key event data prepare process here.
 #endif
 	// Post key press event.
 	HMI_ProcessEvent((HMI_EVENT_BASE*)(&stEvent));
@@ -318,26 +307,13 @@ void RTCEventProc(void)
 /*****************************************************************************/
 bool SysTickTimerTriggered(void)
 {
-#ifndef _SIMPLE_GUI_IN_VIRTUAL_SDK_
-	/*----------------------------------*/
-	/* Variable Declaration				*/
-	/*----------------------------------*/
-	bool				bIsTriggered;
-#endif
 	/*----------------------------------*/
     /* Process							*/
     /*----------------------------------*/
 #ifdef _SIMPLE_GUI_IN_VIRTUAL_SDK_
 	return CheckEventFlag(ENV_FLAG_IDX_SDK_TIM_EVENT);
 #else
-	// Dummy sys-tick Timer interrupt triggered process.
-	bIsTriggered = BaseTimerIsTrigger();
-	if(true == bIsTriggered)
-	{
-		BaseTimerTriggerReset();
-	}
-
-	return bIsTriggered;
+	#error Add sys-tick timer trigger process here.
 #endif
 }
 
@@ -350,26 +326,13 @@ bool SysTickTimerTriggered(void)
 /*****************************************************************************/
 bool RTCTimerTriggered(void)
 {
-#ifndef _SIMPLE_GUI_IN_VIRTUAL_SDK_
-	/*----------------------------------*/
-	/* Variable Declaration				*/
-	/*----------------------------------*/
-	bool				bIsTriggered;
-#endif
 	/*----------------------------------*/
     /* Process							*/
     /*----------------------------------*/
 #ifdef _SIMPLE_GUI_IN_VIRTUAL_SDK_
 	return CheckEventFlag(ENV_FLAG_IDX_SDK_RTC_EVENT);
 #else
-	// RTC interrupt triggered process.
-	bIsTriggered = RTCTimerIsTrigger();
-	if(true == bIsTriggered)
-	{
-		RTCTimerTriggerReset();
-	}
-
-	return bIsTriggered;
+	#error Add RTC timer trigger process here.
 #endif
 }
 
@@ -382,27 +345,13 @@ bool RTCTimerTriggered(void)
 /*****************************************************************************/
 bool UserEventTriggered(void)
 {
-#ifndef _SIMPLE_GUI_IN_VIRTUAL_SDK_
-	/*----------------------------------*/
-	/* Variable Declaration				*/
-	/*----------------------------------*/
-	bool				bIsTriggered;
-
-#endif
 	/*----------------------------------*/
     /* Process							*/
     /*----------------------------------*/
 #ifdef _SIMPLE_GUI_IN_VIRTUAL_SDK_
 	return CheckEventFlag(ENV_FLAG_IDX_SDK_KEY_EVENT);
 #else
-	// User event triggered process.
-	bIsTriggered = UsartIsReceived();
-	if(true == bIsTriggered)
-	{
-		s_uiKeyValue = GetReceivedCode();
-		UsartTriggerReset();
-	}
-	return bIsTriggered;
+	#error Add user event trigger process here.
 #endif
 }
 
@@ -422,8 +371,7 @@ void SysTickTimerEnable(bool bEnable)
 #ifdef _SIMPLE_GUI_IN_VIRTUAL_SDK_
 	(void)SGUI_SDK_ConfigHearBeatTimer(bEnable?DEMO_HEART_BEAT_INTERVAL_MS:0);
 #else
-	// Add Dummy sys-tick timer interrupt enable change operation here.
-	BASE_TIMER_ActiveInterrupt(TIM3, bEnable);
+	#error Add sys-tick timer enable/disable process here.
 #endif
 }
 
@@ -444,10 +392,7 @@ void RTCTimerEnable(bool bEnable)
 #ifdef _SIMPLE_GUI_IN_VIRTUAL_SDK_
 	(void)SGUI_SDK_EnableRTCInterrupt(bEnable);
 #else
-	// Add RTC interrupt enable change operation here.
-	RTC_WaitForSynchro();
-	RTC_ITConfig(RTC_IT_SEC, bEnable?ENABLE:DISABLE);
-	RTC_WaitForLastTask();
+	#error Add RTC timer enable/disable process here.
 #endif
 }
 

@@ -1,4 +1,5 @@
 #include "trigger_flags.h"
+#include <stdio.h>
 
 static bool			s_bBaseTimerTrigger = false;
 static bool			s_bRTCTimerTrigger = false;
@@ -27,7 +28,11 @@ void USARTReceiveProc(USART_INT_REASON eReason, uint8_t uiReceiveData)
 
 void KeyEventProc(uint16_t uiKeyCode, KEY_EVENT eEvent)
 {
-
+	if(KEY_EVENT_DOWN == eEvent)
+	{
+		printf("Key 0x%02X is down.", uiKeyCode);
+		printf("\r\n");
+	}
 }
 
 void TimerInterruptProc(void)

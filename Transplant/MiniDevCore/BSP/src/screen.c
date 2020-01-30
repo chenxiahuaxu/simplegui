@@ -1,5 +1,6 @@
-#include "ssd1306_softspi.h"
-#include "oled.h"
+//#include "ssd1306_softspi.h"
+#include "uc1604c_softspi.h"
+#include "screen.h"
 
 static struct
 {
@@ -13,11 +14,11 @@ static struct
 	uint16_t		auiDisplayCache[LCD_SIZE_WIDTH][LCD_SIZE_PAGES];
 }s_stLCDBuffer;
 
-static void OLED_UpdateChangedBufferAreaRecord(uint8_t uiPageIndex, uint8_t uiColumnIndex);
-static void OLED_ClearDisplayBuffer(void);
+static void SCREEN_UpdateChangedBufferAreaRecord(uint8_t uiPageIndex, uint8_t uiColumnIndex);
+static void SCREEN_ClearDisplayBuffer(void);
 
 /*************************************************************************/
-/** Function Name:	OLED_UpdateChangedBufferAreaRecord                  **/
+/** Function Name:	SCREEN_UpdateChangedBufferAreaRecord                  **/
 /** Purpose:        Check changed area recodr and update.				**/
 /** Resources:		None.												**/
 /** Params:																**/
@@ -26,7 +27,7 @@ static void OLED_ClearDisplayBuffer(void);
 /** Return:			None.												**/
 /** Limitation:		None.												**/
 /*************************************************************************/
-void OLED_UpdateChangedBufferAreaRecord(uint8_t uiPageIndex, uint8_t uiColumnIndex)
+void SCREEN_UpdateChangedBufferAreaRecord(uint8_t uiPageIndex, uint8_t uiColumnIndex)
 {
 	// Check and set page and column index.
 	if(uiPageIndex < s_stLCDBuffer.stUpdateArea.uiStartPageIndex)
@@ -55,7 +56,7 @@ void OLED_UpdateChangedBufferAreaRecord(uint8_t uiPageIndex, uint8_t uiColumnInd
 /** Return:			None.												**/
 /** Limitation:		None.												**/
 /*************************************************************************/
-void OLED_ClearDisplayBuffer(void)
+void SCREEN_ClearDisplayBuffer(void)
 {
 	uint16_t uiCurrentPageIndex, uiCurrentColumnIndex;
 
@@ -73,7 +74,7 @@ void OLED_ClearDisplayBuffer(void)
 }
 
 /*************************************************************************/
-/** Function Name:	OLED_SetPixel										**/
+/** Function Name:	SCREEN_SetPixel										**/
 /** Purpose:		Set a pixel color or draw a point.              	**/
 /** Resources:		None.												**/
 /** Params:																**/
@@ -83,15 +84,15 @@ void OLED_ClearDisplayBuffer(void)
 /** Return:			None.												**/
 /** Limitation:		None.												**/
 /*************************************************************************/
-void OLED_SetPixel(int iPosX, int iPosY, int iColor)
+void SCREEN_SetPixel(int iPosX, int iPosY, int iColor)
 {
 	// Operating position check.
 	if((iPosX < LCD_SIZE_WIDTH) && (iPosY < LCD_SIZE_HEIGHT))
 	{
 		// Check and set page and column index.
-		OLED_UpdateChangedBufferAreaRecord(iPosY/8, iPosX);
+		SCREEN_UpdateChangedBufferAreaRecord(iPosY/8, iPosX);
 		// Set point data.
-		if(OLED_COLOR_FRG == iColor)
+		if(SCREEN_COLOR_FRG == iColor)
 		{
 			SET_PAGE_BIT(s_stLCDBuffer.auiDisplayCache[iPosX][iPosY/8], iPosY%8);
 		}
@@ -103,7 +104,7 @@ void OLED_SetPixel(int iPosX, int iPosY, int iColor)
 }
 
 /*************************************************************************/
-/** Function Name:	OLED_GetPixel										**/
+/** Function Name:	SCREEN_GetPixel										**/
 /** Purpose:		Get a pixel from buffer.							**/
 /** Resources:		None.												**/
 /** Params:																**/
@@ -112,7 +113,7 @@ void OLED_SetPixel(int iPosX, int iPosY, int iColor)
 /** Return:			None.												**/
 /** Limitation:		None.												**/
 /*************************************************************************/
-int OLED_GetPixel(int iPosX, int iPosY)
+int SCREEN_GetPixel(int iPosX, int iPosY)
 {
 	// Operating position check.
 	if((iPosX < LCD_SIZE_WIDTH) && (iPosY < LCD_SIZE_HEIGHT))
@@ -126,17 +127,17 @@ int OLED_GetPixel(int iPosX, int iPosY)
 }
 
 /*************************************************************************/
-/** Function Name:	OLED_Initialize										**/
+/** Function Name:	SCREEN_Initialize										**/
 /** Purpose:			Simple delay function for KS0108 controler.     **/
 /** Resources:		None.												**/
 /** Params:			None.												**/
 /** Return:			None.												**/
 /** Limitation:		None.												**/
 /*************************************************************************/
-void OLED_Initialize(void)
+void SCREEN_Initialize(void)
 {
-	SSD1306_Initialize();
-	OLED_ClearDisplayBuffer();
+	UC1604C_Initialize();
+	SCREEN_ClearDisplayBuffer();
 }
 
 /*************************************************************************/
@@ -147,7 +148,7 @@ void OLED_Initialize(void)
 /** Return:			None.												**/
 /** Limitation:		None.												**/
 /*************************************************************************/
-void OLED_RefreshScreen(void)
+void SCREEN_RefreshScreen(void)
 {
 	uint8_t uiChangedPageIndex, uiChangedColumnIndex;
 
@@ -164,12 +165,12 @@ void OLED_RefreshScreen(void)
 	while(uiChangedPageIndex <= s_stLCDBuffer.stUpdateArea.uiEndPageIndex)
 	{
 		uiChangedColumnIndex = s_stLCDBuffer.stUpdateArea.uiStartColumnIndex;
-		SSD1306_SetPosition(s_stLCDBuffer.stUpdateArea.uiStartColumnIndex, uiChangedPageIndex);
+		UC1604C_SetPosition(s_stLCDBuffer.stUpdateArea.uiStartColumnIndex, uiChangedPageIndex);
 		// Loop for each changed column data in current page.
 		while(uiChangedColumnIndex <= s_stLCDBuffer.stUpdateArea.uiEndColumnIndex)
 		{
 			// Write data to screen controler.
-			SSD1306_WriteData(s_stLCDBuffer.auiDisplayCache[uiChangedColumnIndex][uiChangedPageIndex]);
+			UC1604C_WriteData(s_stLCDBuffer.auiDisplayCache[uiChangedColumnIndex][uiChangedPageIndex]);
 			uiChangedColumnIndex++;
 		}
 		uiChangedPageIndex++;
@@ -183,16 +184,16 @@ void OLED_RefreshScreen(void)
 }
 
 /*************************************************************************/
-/** Function Name:	OLED_ClearDisplay			    					**/
+/** Function Name:	SCREEN_ClearDisplay			    					**/
 /** Purpose:		Clean display buffer.					    		**/
 /** Resources:		None.												**/
 /** Params:			None.												**/
 /** Return:			None.												**/
 /** Limitation:		None.												**/
 /*************************************************************************/
-void OLED_ClearDisplay(void)
+void SCREEN_ClearDisplay(void)
 {
-	OLED_ClearDisplayBuffer();
-	SSD1306_Fill(0x00);
+	SCREEN_ClearDisplayBuffer();
+	UC1604C_Fill(0x00);
 }
 

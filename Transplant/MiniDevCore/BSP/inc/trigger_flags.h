@@ -17,8 +17,8 @@ typedef union
 typedef struct
 {
 	KEY_VALUE	unKeyValue;
-	bool		bIsTriggered;
-	bool		bHalfRev;
+	__IO bool	bIsTriggered;
+	__IO bool	bHalfRev;
 }USART_INPUT;
 
 
@@ -34,6 +34,8 @@ void BaseTimerTriggerReset(void);
 void RTCInterruptProc(uint32_t uiTimeStamp);
 bool RTCTimerIsTrigger(void);
 void RTCTimerTriggerReset(void);
+
+void KeyEventProc(uint16_t uiKeyCode, KEY_EVENT eEvent);
 
 #endif
 

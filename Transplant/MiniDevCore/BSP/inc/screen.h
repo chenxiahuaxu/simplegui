@@ -1,5 +1,5 @@
-#ifndef __INCLUDE_OLED_H__
-#define __INCLUDE_OLED_H__
+#ifndef _INCLUDE_SCREEN_H__
+#define _INCLUDE_SCREEN_H__
 
 #define LCD_SIZE_WIDTH      (128)
 #define LCD_SIZE_HEIGHT     (64)
@@ -8,20 +8,20 @@
 
 typedef enum
 {
-	OLED_COLOR_BKG = 0,
-	OLED_COLOR_FRG = 1,
-	OLED_COLOR_TRS = 2,
-}OLED_COLOR;
+	SCREEN_COLOR_BKG = 0,
+	SCREEN_COLOR_FRG = 1,
+	SCREEN_COLOR_TRS = 2,
+}SCREEN_COLOR;
 
 //Common operation
 #define SET_PAGE_BIT(PAGE, Bit)		((PAGE) = (PAGE) | (0x01 << (Bit)))
 #define CLR_PAGE_BIT(PAGE, Bit)		((PAGE) = (PAGE) & (~(0x01 << (Bit))))
 #define GET_PAGE_BIT(PAGE, Bit)		((((PAGE) & (0x01 << (Bit)))>0)?1:0)
 
-void        OLED_SetPixel(int iPosX, int iPosY, int iColor);
-int			OLED_GetPixel(int iPosX, int iPosY);
-void        OLED_Initialize(void);
-void        OLED_ClearDisplay(void);
-void        OLED_RefreshScreen(void);
+void	SCREEN_SetPixel(int iPosX, int iPosY, int iColor);
+int		SCREEN_GetPixel(int iPosX, int iPosY);
+void	SCREEN_Initialize(void);
+void	SCREEN_ClearDisplay(void);
+void	SCREEN_RefreshScreen(void);
 
-#endif /* __INCLUDE_OLED_H__ */
+#endif /* _INCLUDE_SCREEN_H__ */
