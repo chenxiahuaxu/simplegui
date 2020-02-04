@@ -12,9 +12,9 @@
 //=======================================================================//
 #define _TRANS_TEXT(STR)								_(STR)
 
-#define LCD_COLOR_OBJ_PIX						    	(0xFF5B805A)
-#define LCD_COLOR_OBJ_BKG						    	(0xFFF9ECE4)
-#define LCD_COLOR_OBJ_GRID						    	(0xFF383834)
+#define LCD_COLOR_OBJ_PIX						    	(0xFFF8FE99)
+#define LCD_COLOR_OBJ_BKG						    	(0xFF2C1916)
+#define LCD_COLOR_OBJ_GRID						    	(0xFF482F0C)
 
 #define PARAM_DEFAULT_PIXEL_NUM_H                       (128)
 #define PARAM_DEFAULT_PIXEL_NUM_V                       (64)

@@ -10,12 +10,6 @@
 #include "SGUI_IconResource.h"
 
 //=======================================================================//
-//= User Macro definition.											    =//
-//=======================================================================//
-#define	SGUI_BMP_RESOURCE_DEFINE(NAME, W, H, ...)	const SGUI_BYTE NAME##DATA[] = {__VA_ARGS__};\
-													const SGUI_BMP_RES NAME = {W, H, NAME##DATA}
-
-//=======================================================================//
 //= Static variable define.												=//
 //=======================================================================//
 SGUI_BMP_RESOURCE_DEFINE(SGUI_RES_ICON_ERROR_16, 16, 16,

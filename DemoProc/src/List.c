@@ -64,8 +64,8 @@ HMI_ENGINE_RESULT HMI_DemoList_Initialize(SGUI_SCR_DEV* pstDeviceIF)
     // Title and font size must set before initialize list object.
     s_stDemoListObject.stLayout.iPosX = 0;
     s_stDemoListObject.stLayout.iPosY = 0;
-    s_stDemoListObject.stLayout.iWidth = 128;
-    s_stDemoListObject.stLayout.iHeight = 64;
+    s_stDemoListObject.stLayout.iWidth = pstDeviceIF->stSize.iWidth;
+    s_stDemoListObject.stLayout.iHeight = pstDeviceIF->stSize.iHeight;
     s_stDemoListObject.szTitle = SCR1_TITLE;
      //Initialize list object.
 	SGUI_List_Initialize(&s_stDemoListObject, &GB2312_FZXS12, s_arrstListItems, sizeof(s_arrstListItems)/sizeof(SGUI_ITEMS_ITEM));

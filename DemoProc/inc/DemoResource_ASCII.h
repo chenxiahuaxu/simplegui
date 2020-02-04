@@ -24,7 +24,7 @@
 
 /* Screen 4: Variable box. */
 #define SCR4_VAR_BOX_TITLE				("Variable box")
-#define SCR4_HELP_NOTICE				("Press TAB to switch focus.\nUp&Down to change value。\nSend \"SPACE\" to continue.")
+#define SCR4_HELP_NOTICE				("Press TAB to switch focus.\nUp&Down to change value.\nSend \"SPACE\" to continue.")
 
 /* Screen 5: Realtime graph. */
 #define SCR5_RT_GRAPH_TITLE				("Realtime graph")

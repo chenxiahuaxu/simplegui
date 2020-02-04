@@ -10,18 +10,21 @@
 //=======================================================================//
 //= User Macro definition.											    =//
 //=======================================================================//
-#define 	RECT_X_START(ST)			((ST).iPosX)
-#define 	RECT_X_END(RECT)			(((RECT).iPosX + (RECT).iWidth - 1))
-#define 	RECT_Y_START(ST)			((ST).iPosY)
-#define 	RECT_Y_END(RECT)			(((RECT).iPosY + (RECT).iHeight - 1))
-#define 	RECT_WIDTH(ST)				((ST).iWidth)
-#define 	RECT_HEIGHT(ST)				((ST).iHeight)
-#define 	RECT_VALID_WIDTH(DATA, POS)	((RECT_X_START(POS)>0)?RECT_WIDTH(DATA):(RECT_WIDTH(DATA)+RECT_X_START(POS)))
-#define		RECT_VALID_HEIGHT(DATA, POS) ((RECT_Y_START(POS)>0)?RECT_HEIGHT(DATA):(RECT_HEIGHT(DATA)+RECT_Y_START(POS)))
+#define 	RECT_X_START(ST)						((ST).iPosX)
+#define 	RECT_X_END(RECT)						(((RECT).iPosX + (RECT).iWidth - 1))
+#define 	RECT_Y_START(ST)						((ST).iPosY)
+#define 	RECT_Y_END(RECT)						(((RECT).iPosY + (RECT).iHeight - 1))
+#define 	RECT_WIDTH(ST)							((ST).iWidth)
+#define 	RECT_HEIGHT(ST)							((ST).iHeight)
+#define 	RECT_VALID_WIDTH(DATA, POS)				((RECT_X_START(POS)>0)?RECT_WIDTH(DATA):(RECT_WIDTH(DATA)+RECT_X_START(POS)))
+#define		RECT_VALID_HEIGHT(DATA, POS)			((RECT_Y_START(POS)>0)?RECT_HEIGHT(DATA):(RECT_HEIGHT(DATA)+RECT_Y_START(POS)))
 
-#define		SGUI_DEVPF_IF_DEFINE(R, FN, PARAM) typedef R(*FN)PARAM
-#define		SGUI_BMP_DATA_BUFFER_SIZE	(512)
+#define		SGUI_DEVPF_IF_DEFINE(R, FN, PARAM)		typedef R(*FN)PARAM
+#define		SGUI_BMP_DATA_BUFFER_SIZE				(512)
 
+#define	SGUI_BMP_RESOURCE_DECLARE(NAME)				extern const SGUI_BMP_RES NAME
+#define	SGUI_BMP_RESOURCE_DEFINE(NAME, W, H, ...)	const SGUI_BYTE NAME##DATA[] = {__VA_ARGS__};\
+													const SGUI_BMP_RES NAME = {W, H, NAME##DATA}
 //=======================================================================//
 //= Data type definition.											    =//
 //=======================================================================//

@@ -39,9 +39,9 @@ static HMI_SCREEN_ACTION	s_stDemoRealtimeGraphActions = { HMI_DemoRealGraph_Init
 //= Global variable declaration.									    =//
 //=======================================================================//
 
-HMI_SCREEN_OBJECT			g_stHMIDemo_RealtimeGraph =		{	HMI_SCREEN_ID_DEMO_REAL_TIME_GRAPH,
+HMI_SCREEN_OBJECT			g_stHMIDemo_RealtimeGraph =	{HMI_SCREEN_ID_DEMO_REAL_TIME_GRAPH,
                                                         &s_stDemoRealtimeGraphActions
-                                                    };
+														};
 
 //=======================================================================//
 //= Function define.										            =//
@@ -49,6 +49,8 @@ HMI_SCREEN_OBJECT			g_stHMIDemo_RealtimeGraph =		{	HMI_SCREEN_ID_DEMO_REAL_TIME_
 HMI_ENGINE_RESULT HMI_DemoRealGraph_Initialize(SGUI_SCR_DEV* pstDeviceIF)
 {
 	//SGUI_RealtimeGraph_Initialize(&s_stRealtimeGraph);
+	s_stRealtimeGraph.Data->Rect.iWidth = pstDeviceIF->stSize.iWidth-2;
+	s_stRealtimeGraph.Data->Rect.iHeight = pstDeviceIF->stSize.iHeight-15;
 	return HMI_RET_NORMAL;
 }
 

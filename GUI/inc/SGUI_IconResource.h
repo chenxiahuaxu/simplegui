@@ -6,11 +6,6 @@
 #include "SGUI_Typedef.h"
 
 //=======================================================================//
-//= User Macro definition.											    =//
-//=======================================================================//
-#define	SGUI_BMP_RESOURCE_DECLARE(NAME)				extern const SGUI_BMP_RES NAME
-
-//=======================================================================//
 //= Public variable declaration.									    =//
 //=======================================================================//
 SGUI_BMP_RESOURCE_DECLARE(SGUI_RES_ICON_ERROR_16);
