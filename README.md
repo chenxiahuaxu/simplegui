@@ -36,17 +36,18 @@ SimpleGUI发布已经有很长时间了，在发布后很多人都来询问一�
 
 另外，我正在致力于开发一款文字取模的工具，类似PCtoLCD2002那种，以方便开发者可以定制最符合自身需求的字库。
 
-#### 改进计划  
+#### 视频讲解  
 
-在此感谢所有对SimpleGUI提出宝贵意见和建议的朋友。  
+为了方便大家进一步了解SimpleGUI并快速上手，我录制了一些视频供大家参考。  
 
-
-|功能划分|进行状态|描述|  
-|:- |:- |:- |  
-|模拟器|进行中|修改模拟器的处理方式，使更贴近单片机的程序结构。|  
-|本体/位图绘制部分|进行中|修改位图绘制方式，减小内存开销。|  
-|本体/接口部分|已完成|修改驱动接口函数的调用模式为注册式。|  
-|本体/接口部分|计划中|完善外部Flash读取操作的接口。|  
+|内容|地址|  
+|:- |----|  
+|概述|https://www.bilibili.com/video/av86593220/|  
+|基础绘图|https://www.bilibili.com/video/av86890300/|  
+|文本文字|https://www.bilibili.com/video/av87098997/|  
+|组件|https://www.bilibili.com/video/av87432375/|  
+|HMI引擎|https://www.bilibili.com/video/av87530421/|  
+|VirtualSDK|https://www.bilibili.com/video/av87713369/|  
 
 #### 参与讨论
 如果您有意参与SimpleGUI的讨论与改进，可以在以下地方留言：
