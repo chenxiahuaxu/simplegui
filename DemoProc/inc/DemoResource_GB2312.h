@@ -24,7 +24,7 @@
 
 /* Screen 4: Variable box. */
 #define SCR4_VAR_BOX_TITLE				("输入框")
-#define SCR4_HELP_NOTICE				("Press TAB to switch focus.\nUp&Down to change value。\nSend \"SPACE\" to continue.")
+#define SCR4_HELP_NOTICE				("Press TAB to switch focus.\nUp&Down to change value.\nSend \"SPACE\" to continue.")
 
 /* Screen 5: Realtime graph. */
 #define SCR5_RT_GRAPH_TITLE				("Realtime graph")
@@ -44,6 +44,6 @@
 #define SCR6_SUB_MENU_ITEM4				("Sub 4")
 
 /* Screen 7: Notice box. */
-#define SCR7_NOTICE_TEXT			    ("这是一条中文消息提示，没有图标。")
+#define SCR7_NOTICE_TEXT			    ("欢迎使用SimpleGUI！")
 
 #endif // _INCLUDE_DEMO_RESOURCE_UTF8_H_

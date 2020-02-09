@@ -56,7 +56,7 @@ void SGUI_Text_GetTextExtent(SGUI_CSZSTR cszText, const SGUI_FONT_RES* pstFontRe
 		{
 			uiCharacterCode = 0;
 			pcChar = pstFontRes->fnStepNext(pcChar, &uiCharacterCode);
-			if(SGUI_IS_VISIBLE_CHAR(uiCharacterCode))
+			if('\0' !=uiCharacterCode)
 			{
                 pstTextExtent->iWidth+=(pstFontRes->fnIsFullWidth(uiCharacterCode)?pstFontRes->iFullWidth:pstFontRes->iHalfWidth);
 			}

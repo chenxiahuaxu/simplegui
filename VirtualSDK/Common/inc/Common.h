@@ -12,9 +12,17 @@
 //=======================================================================//
 #define _TRANS_TEXT(STR)								_(STR)
 
+// OLED
+/*
 #define LCD_COLOR_OBJ_PIX						    	(0xFFF8FE99)
 #define LCD_COLOR_OBJ_BKG						    	(0xFF2C1916)
 #define LCD_COLOR_OBJ_GRID						    	(0xFF482F0C)
+*/
+
+#define LCD_COLOR_OBJ_PIX						    	(0xFFFEF159)
+#define LCD_COLOR_OBJ_BKG						    	(0xFFFF3C24)
+#define LCD_COLOR_OBJ_GRID						    	(0xFFCC1209)
+
 
 #define PARAM_DEFAULT_PIXEL_NUM_H                       (128)
 #define PARAM_DEFAULT_PIXEL_NUM_V                       (64)

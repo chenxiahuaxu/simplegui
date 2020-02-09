@@ -2,9 +2,12 @@
 #define _INCLUDE_RESOURCE_H_
 
 #include "SGUI_Typedef.h"
-#include "DemoResource_UTF8.h"
-//#include "DemoResource_ASCII.h"
+#ifdef _SIMPLE_GUI_DEMO_ONLY_ASCII_
+#include "DemoResource_ASCII.h"
+#else
 //#include "DemoResource_GB2312.h"
+#include "DemoResource_UTF8.h"
+#endif
 
 extern const SGUI_FONT_RES GB2312_FZXS12;
 
