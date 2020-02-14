@@ -1,8 +1,8 @@
-#include "ssd1306_softspi.h"
+#include "ssd1306_spi.h"
 
-#define SPI_SSD1306_CTRL				SPI2
-#define SPI_SSD1306_APBxClock_FUN		RCC_APB1PeriphClockCmd
-#define SPI_SSD1306_CLK					RCC_APB1Periph_SPI2
+#define SPI_SSD1306_SPI					SPI2
+#define SPI_SSD1306_SPI_APBxClock_FUN	RCC_APB1PeriphClockCmd
+#define SPI_SSD1306_SPI_CLK				RCC_APB1Periph_SPI2
 
 #define SPI_SSD1306_GPIO_APBxClock_FUN	RCC_APB2PeriphClockCmd
 #define SPI_SSD1306_GPIO_CLK			RCC_APB2Periph_GPIOB
@@ -18,12 +18,10 @@
 #define SPI_SSD1306_DC_HIGH()			GPIO_SetBits(SPI_SSD1306_GPIO_PORT, SPI_SSD1306_DC_PIN)
 #define	SPI_SSD1306_MODE_CMD()         	SPI_SSD1306_DC_LOW()
 #define	SPI_SSD1306_MODE_DAT()         	SPI_SSD1306_DC_HIGH()
-
 //CS(NSS)
 #define SPI_SSD1306_CS_PIN				GPIO_Pin_12
 #define SPI_SSD1306_CS_LOW()			GPIO_ResetBits(SPI_SSD1306_GPIO_PORT, SPI_SSD1306_CS_PIN)
 #define SPI_SSD1306_CS_HIGH()			GPIO_SetBits(SPI_SSD1306_GPIO_PORT, SPI_SSD1306_CS_PIN)
-
 //SCLK
 #define SPI_SSD1306_SCLK_PIN			GPIO_Pin_13
 #define SPI_SSD1306_SCLK_LOW()			GPIO_ResetBits(SPI_SSD1306_GPIO_PORT, SPI_SSD1306_SCLK_PIN)
@@ -33,10 +31,13 @@
 #define SPI_SSD1306_MOSI_LOW()			GPIO_ResetBits(SPI_SSD1306_GPIO_PORT, SPI_SSD1306_MOSI_PIN)
 #define SPI_SSD1306_MOSI_HIGH()			GPIO_SetBits(SPI_SSD1306_GPIO_PORT, SPI_SSD1306_MOSI_PIN)
 
+#define SPI_SSD1306_DUMMY_BYTE			(0xFF)
 
 static void SSD1306_InitializeGPIO(void);
+#ifndef SSD1306_SOFT_SPI
+static void SSD1306_InitializeSPI(void);
+#endif
 static void SSD1306_WriteByte(uint8_t uiData);
-
 
 /*****************************************************************************/
 /** Function Name:	SSD1306_InitializeGPIO.									**/
@@ -49,15 +50,54 @@ void SSD1306_InitializeGPIO(void)
 {
 	// Initialize data structure.
 	GPIO_InitTypeDef GPIO_InitStructure;
+	
 	// Initialize GPIO.
 	SPI_SSD1306_GPIO_APBxClock_FUN(SPI_SSD1306_GPIO_CLK, ENABLE);
+
 	// Enable GPIO.
-	GPIO_InitStructure.GPIO_Pin =	SPI_SSD1306_RST_PIN|SPI_SSD1306_DC_PIN|SPI_SSD1306_CS_PIN|SPI_SSD1306_SCLK_PIN|SPI_SSD1306_MOSI_PIN;
-	GPIO_InitStructure.GPIO_Mode =	GPIO_Mode_Out_PP;
 	GPIO_InitStructure.GPIO_Speed =	GPIO_Speed_2MHz;
+#ifndef SSD1306_SOFT_SPI
+	GPIO_InitStructure.GPIO_Pin =	SPI_SSD1306_SCLK_PIN|SPI_SSD1306_MOSI_PIN;
+	GPIO_InitStructure.GPIO_Mode =	GPIO_Mode_AF_PP;
 	GPIO_Init(SPI_SSD1306_GPIO_PORT, &GPIO_InitStructure);
-	GPIO_SetBits(SPI_SSD1306_GPIO_PORT, SPI_SSD1306_DC_PIN|SPI_SSD1306_CS_PIN|SPI_SSD1306_SCLK_PIN|SPI_SSD1306_MOSI_PIN);
-	GPIO_ResetBits(SPI_SSD1306_GPIO_PORT, SPI_SSD1306_RST_PIN);
+#endif
+
+#ifdef SSD1306_SOFT_SPI
+	GPIO_InitStructure.GPIO_Pin =	SPI_SSD1306_RST_PIN|SPI_SSD1306_DC_PIN|SPI_SSD1306_CS_PIN|SPI_SSD1306_SCLK_PIN|SPI_SSD1306_MOSI_PIN;
+#else
+	GPIO_InitStructure.GPIO_Pin =	SPI_SSD1306_RST_PIN|SPI_SSD1306_DC_PIN|SPI_SSD1306_CS_PIN;
+#endif
+	GPIO_InitStructure.GPIO_Mode =	GPIO_Mode_Out_PP;
+	GPIO_Init(SPI_SSD1306_GPIO_PORT, &GPIO_InitStructure);
+}
+
+/*****************************************************************************/
+/** Function Name:	SSD1306_InitializeSPI.                             		**/
+/** Purpose:		Initialize hardware SPI controler for OLED.				**/
+/** Params:			None.													**/
+/** Return:			None.													**/
+/*****************************************************************************/
+void SSD1306_InitializeSPI(void)
+{
+	// Initialize data structure.
+	SPI_InitTypeDef SPI_InitStructure;
+	
+	// Initialize GPIO.
+	SPI_SSD1306_SPI_APBxClock_FUN(SPI_SSD1306_SPI_CLK, ENABLE);
+	
+	// Config SPI control.
+	SPI_InitStructure.SPI_Direction = SPI_Direction_1Line_Tx;
+	SPI_InitStructure.SPI_Mode = SPI_Mode_Master;
+	SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;
+	SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;
+	SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;
+	SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;
+	SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_2;
+	SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;
+	SPI_InitStructure.SPI_CRCPolynomial = 7;
+	SPI_Init(SPI_SSD1306_SPI, &SPI_InitStructure);
+
+	SPI_Cmd(SPI_SSD1306_SPI, ENABLE);
 }
 
 /*****************************************************************************/
@@ -71,14 +111,17 @@ void SSD1306_InitializeGPIO(void)
 /*****************************************************************************/
 void SSD1306_WriteByte(uint8_t uiByte)
 {
+#ifdef SSD1306_SOFT_SPI
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
 	uint16_t                i;
-
+#endif
+	
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
+#ifdef SSD1306_SOFT_SPI
 	for(i=0;i<8;i++)
 	{
 		if((uiByte << i) & 0x80)
@@ -92,6 +135,11 @@ void SSD1306_WriteByte(uint8_t uiByte)
 		SPI_SSD1306_SCLK_LOW();
 		SPI_SSD1306_SCLK_HIGH();
 	}
+#else
+	while (SPI_I2S_GetFlagStatus(SPI_SSD1306_SPI, SPI_I2S_FLAG_TXE) == RESET);
+	SPI_I2S_SendData(SPI_SSD1306_SPI, uiByte);
+	while (SPI_I2S_GetFlagStatus(SPI_SSD1306_SPI, SPI_I2S_FLAG_TXE) == RESET);
+#endif
 }
 
 /*****************************************************************************/
@@ -197,6 +245,10 @@ void SSD1306_Initialize(void)
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
+#ifndef SSD1306_SOFT_SPI
+	// Initialize SPI control.
+	SSD1306_InitializeSPI();
+#endif
 	// Initialize GPIO
 	SSD1306_InitializeGPIO();
 	/* Clear reset singal. */

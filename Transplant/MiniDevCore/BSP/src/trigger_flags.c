@@ -1,9 +1,9 @@
 #include "trigger_flags.h"
 #include <stdio.h>
 
-static bool			s_bBaseTimerTrigger = false;
-static bool			s_bRTCTimerTrigger = false;
-static USART_INPUT	s_stUsartInput = {0x00};
+static bool __IO		s_bBaseTimerTrigger = false;
+static bool	__IO		s_bRTCTimerTrigger = false;
+static USART_INPUT __IO	s_stUsartInput = {0x00};
 
 void USARTReceiveProc(USART_INT_REASON eReason, uint8_t uiReceiveData)
 {

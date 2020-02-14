@@ -18,6 +18,7 @@ void BSP_Initialize(void)
 	RTC_ConfigReceiveInterrupt(RTCInterruptProc, 0, 0);
 	printf("RTC timer initialized.\r\n");
 	
-	OLED_Initialize();
-	printf("OLED device initialized.\r\n");
+	SCREEN_Initialize();
+	SCREEN_ClearDisplay();
+	printf("Screen device initialized.\r\n");
 }

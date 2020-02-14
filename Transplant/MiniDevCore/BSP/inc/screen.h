@@ -20,7 +20,7 @@ typedef enum
 
 void	SCREEN_SetPixel(int iPosX, int iPosY, int iColor);
 int		SCREEN_GetPixel(int iPosX, int iPosY);
-void	SCREEN_Initialize(void);
+int		SCREEN_Initialize(void);
 void	SCREEN_ClearDisplay(void);
 void	SCREEN_RefreshScreen(void);
 

@@ -1,5 +1,4 @@
-//#include "ssd1306_softspi.h"
-#include "uc1604c_softspi.h"
+#include "ssd1306_spi.h"
 #include "screen.h"
 
 static struct
@@ -134,10 +133,12 @@ int SCREEN_GetPixel(int iPosX, int iPosY)
 /** Return:			None.												**/
 /** Limitation:		None.												**/
 /*************************************************************************/
-void SCREEN_Initialize(void)
+int SCREEN_Initialize(void)
 {
-	UC1604C_Initialize();
+	SSD1306_Initialize();
 	SCREEN_ClearDisplayBuffer();
+	
+	return 0;
 }
 
 /*************************************************************************/
@@ -165,12 +166,12 @@ void SCREEN_RefreshScreen(void)
 	while(uiChangedPageIndex <= s_stLCDBuffer.stUpdateArea.uiEndPageIndex)
 	{
 		uiChangedColumnIndex = s_stLCDBuffer.stUpdateArea.uiStartColumnIndex;
-		UC1604C_SetPosition(s_stLCDBuffer.stUpdateArea.uiStartColumnIndex, uiChangedPageIndex);
+		SSD1306_SetPosition(s_stLCDBuffer.stUpdateArea.uiStartColumnIndex, uiChangedPageIndex);
 		// Loop for each changed column data in current page.
 		while(uiChangedColumnIndex <= s_stLCDBuffer.stUpdateArea.uiEndColumnIndex)
 		{
 			// Write data to screen controler.
-			UC1604C_WriteData(s_stLCDBuffer.auiDisplayCache[uiChangedColumnIndex][uiChangedPageIndex]);
+			SSD1306_WriteData(s_stLCDBuffer.auiDisplayCache[uiChangedColumnIndex][uiChangedPageIndex]);
 			uiChangedColumnIndex++;
 		}
 		uiChangedPageIndex++;
@@ -194,6 +195,6 @@ void SCREEN_RefreshScreen(void)
 void SCREEN_ClearDisplay(void)
 {
 	SCREEN_ClearDisplayBuffer();
-	UC1604C_Fill(0x00);
+	SSD1306_Fill(0x00);
 }
 

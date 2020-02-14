@@ -1,5 +1,5 @@
-#ifndef _INCLUDE_SSD1306_SOFT_SPI_H_
-#define _INCLUDE_SSD1306_SOFT_SPI_H_
+#ifndef _INCLUDE_SSD1306_SPI_H_
+#define _INCLUDE_SSD1306_SPI_H_
 #include <stm32f10x_gpio.h>
 
 #define SSD1306_Clear()			SSD1306_Fill(0x00)

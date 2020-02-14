@@ -3,7 +3,7 @@
 
 #include "usart_stdio.h"
 #include "usart.h"
-#include "oled.h"
+#include "screen.h"
 #include "keyboard.h"
 #include "trigger_flags.h"
 #include "base_timer.h"
