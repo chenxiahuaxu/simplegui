@@ -25,7 +25,7 @@ typedef struct
 
 typedef struct
 {
-	SGUI_RECT				Rect;
+
 	SGUI_INT				ValueArray[SGUI_RTGRAPH_VALUE_ARRAY_SIZE];
 	SGUI_INT				LimitedValueArray[SGUI_RTGRAPH_VALUE_ARRAY_SIZE];
 	SGUI_INT				PointYCoordinateArray[SGUI_RTGRAPH_VALUE_ARRAY_SIZE];
@@ -35,6 +35,7 @@ typedef struct
 
 typedef struct
 {
+	SGUI_RECT				stLayout;
 	SGUI_RTGRAPH_DATA*		Data;
 	SGUI_RTGRAPH_CONTROL*	Control;
 }SGUI_RTGRAPH;

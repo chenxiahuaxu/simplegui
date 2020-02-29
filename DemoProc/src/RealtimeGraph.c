@@ -26,8 +26,8 @@ static HMI_ENGINE_RESULT	HMI_DemoRealGraph_PostProcess(SGUI_SCR_DEV* pstDeviceIF
 //= Static variable declaration.									    =//
 //=======================================================================//
 SGUI_RTGRAPH_CONTROL		s_stRealtimeGraphControl =	{50, -50, SGUI_TRUE, 3, 0};
-SGUI_RTGRAPH_DATA			s_stRealtimeGraphData =		{{1, 9, 126, 49}, {0}, {0}, {0}, 0, 0};
-SGUI_RTGRAPH				s_stRealtimeGraph =			{&s_stRealtimeGraphData, &s_stRealtimeGraphControl};
+SGUI_RTGRAPH_DATA			s_stRealtimeGraphData =		{{0}, {0}, {0}, 0, 0};
+SGUI_RTGRAPH				s_stRealtimeGraph =			{{1, 9, 126, 49}, &s_stRealtimeGraphData, &s_stRealtimeGraphControl};
 static HMI_SCREEN_ACTION	s_stDemoRealtimeGraphActions = { HMI_DemoRealGraph_Initialize,
 														HMI_DemoRealGraph_Prepare,
 														HMI_DemoRealGraph_RefreshScreen,
@@ -49,8 +49,8 @@ HMI_SCREEN_OBJECT			g_stHMIDemo_RealtimeGraph =	{HMI_SCREEN_ID_DEMO_REAL_TIME_GR
 HMI_ENGINE_RESULT HMI_DemoRealGraph_Initialize(SGUI_SCR_DEV* pstDeviceIF)
 {
 	//SGUI_RealtimeGraph_Initialize(&s_stRealtimeGraph);
-	s_stRealtimeGraph.Data->Rect.iWidth = pstDeviceIF->stSize.iWidth-2;
-	s_stRealtimeGraph.Data->Rect.iHeight = pstDeviceIF->stSize.iHeight-15;
+	s_stRealtimeGraph.stLayout.iWidth = pstDeviceIF->stSize.iWidth-2;
+	s_stRealtimeGraph.stLayout.iHeight = pstDeviceIF->stSize.iHeight-15;
 	return HMI_RET_NORMAL;
 }
 

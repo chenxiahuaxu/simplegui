@@ -12,11 +12,22 @@
 //=======================================================================//
 typedef struct
 {
-	SGUI_RECT				stLayout;
+	SGUI_INT				iMin;
+	SGUI_INT				iMax;
 	const SGUI_FONT_RES*	pstFontRes;
-	SGUI_INT				Min;
-	SGUI_INT				Max;
-	SGUI_INT				Value;
+	SGUI_ALIG_MODE			eAlignment;
+}SGUI_NUM_VARBOX_PARAM;
+
+typedef struct
+{
+	SGUI_INT				iValue;
+}SGUI_NUM_VARBOX_DATA;
+
+typedef struct
+{
+	SGUI_RECT				stLayout;
+	SGUI_NUM_VARBOX_PARAM	stParam;
+	SGUI_NUM_VARBOX_DATA	stData;
 }SGUI_NUM_VARBOX_STRUCT;
 
 typedef struct
@@ -65,9 +76,12 @@ typedef enum
 //=======================================================================//
 //= Public function declaration.									    =//
 //=======================================================================//
-void			SGUI_NumberVariableBox_Paint(SGUI_SCR_DEV* pstDeviceIF, SGUI_NUM_VARBOX_STRUCT* pstValue, SGUI_ALIG_MODE eAlignment, SGUI_DRAW_MODE eMode);
-void			SGUI_TextVariableBox_Paint(SGUI_SCR_DEV* pstDeviceIF, SGUI_TEXT_VARBOX_STRUCT* pstTextValue, SGUI_DRAW_MODE eMode);
-void			SGUI_TextVariableBox_ChangeCharacter(SGUI_SCR_DEV* pstDeviceIF, SGUI_TEXT_VARBOX_STRUCT* pstTextValue, SGUI_DRAW_MODE eMode, SGUI_UINT uiCharacterSet, SGUI_TEXT_VARBOX_OPT eOpt);
+void		SGUI_NumberVariableBox_Initialize(SGUI_NUM_VARBOX_STRUCT* pstObj, const SGUI_RECT* pcstLayout, const SGUI_NUM_VARBOX_PARAM* pcstParam);
+void		SGUI_NumberVariableBox_SetValue(SGUI_NUM_VARBOX_STRUCT* pstObj, const SGUI_INT iNewValue);
+SGUI_INT	SGUI_NumberVariableBox_GetValue(SGUI_NUM_VARBOX_STRUCT* pstObj);
+void		SGUI_NumberVariableBox_Repaint(SGUI_SCR_DEV* pstDeviceIF, SGUI_NUM_VARBOX_STRUCT* pstValue, SGUI_DRAW_MODE eMode);
+void		SGUI_TextVariableBox_Paint(SGUI_SCR_DEV* pstDeviceIF, SGUI_TEXT_VARBOX_STRUCT* pstTextValue, SGUI_DRAW_MODE eMode);
+void		SGUI_TextVariableBox_ChangeCharacter(SGUI_SCR_DEV* pstDeviceIF, SGUI_TEXT_VARBOX_STRUCT* pstTextValue, SGUI_DRAW_MODE eMode, SGUI_UINT uiCharacterSet, SGUI_TEXT_VARBOX_OPT eOpt);
 
 
 

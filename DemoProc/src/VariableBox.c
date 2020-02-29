@@ -39,12 +39,7 @@ static void				    HMI_DemoVariableBox_DrawFrame(SGUI_SCR_DEV* pstDeviceIF, SGUI
 //=======================================================================//
 //= Static variable declaration.									    =//
 //=======================================================================//
-static SGUI_NUM_VARBOX_STRUCT	s_stNumberVariableBox =		{	{VARIABLE_BOX_POSX+2, VARIABLE_BOX_NUMBER_POSY+2, VARIABLE_BOX_WIDTH, VARIABLE_NUMBER_BOX_HEIGHT},
-																&SGUI_DEFAULT_FONT_8,
-																-50,
-																100,
-																0
-															};
+static SGUI_NUM_VARBOX_STRUCT	s_stNumberVariableBox =		{0x00};
 static SGUI_CHAR				s_szTextVariableBuffer[TEXT_VARIABLE_LENGTH+1] = {"ABCDEFG1234567890"};
 static SGUI_TEXT_VARBOX_STRUCT	s_stTextVariableBox =		{	{VARIABLE_BOX_POSX+2, VARIABLE_BOX_TEXT_POSY+2, VARIABLE_BOX_WIDTH, VARIABLE_TEXT_BOX_HEIGHT},
 																&SGUI_DEFAULT_FONT_12,
@@ -77,7 +72,34 @@ HMI_SCREEN_OBJECT       		g_stHMIDemo_VariableBox =	{	HMI_SCREEN_ID_DEMO_VARIABL
 //=======================================================================//
 HMI_ENGINE_RESULT HMI_DemoVariableBox_Initialize(SGUI_SCR_DEV* pstDeviceIF)
 {
+	/*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+	SGUI_NUM_VARBOX_PARAM	stNumBoxInitParam;
+	SGUI_RECT				stInitLayout;
+
+	/*----------------------------------*/
+	/* Initialize						*/
+	/*----------------------------------*/
+
+
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
 	s_uiFocusedFlag = 0;
+
+	stNumBoxInitParam.eAlignment = SGUI_CENTER;
+	stNumBoxInitParam.iMin = -50;
+	stNumBoxInitParam.iMax = 100;
+	stNumBoxInitParam.pstFontRes = &SGUI_DEFAULT_FONT_8;
+
+	stInitLayout.iPosX = VARIABLE_BOX_POSX+2;
+	stInitLayout.iPosY = VARIABLE_BOX_NUMBER_POSY+2;
+	stInitLayout.iWidth = VARIABLE_BOX_WIDTH;
+	stInitLayout.iHeight = VARIABLE_NUMBER_BOX_HEIGHT;
+
+	SGUI_NumberVariableBox_Initialize(&s_stNumberVariableBox, &stInitLayout, &stNumBoxInitParam);
+
 	return HMI_RET_NORMAL;
 }
 
@@ -116,7 +138,7 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_RefreshScreen(SGUI_SCR_DEV* pstDeviceIF, c
     HMI_DemoVariableBox_DrawFrame(pstDeviceIF, (SGUI_SZSTR)s_szFrameTitle);
     // Draw number box
     SGUI_Basic_DrawRectangle(pstDeviceIF, VARIABLE_BOX_POSX, VARIABLE_BOX_NUMBER_POSY, VARIABLE_BOX_WIDTH+4, VARIABLE_NUMBER_BOX_HEIGHT+4, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
-    SGUI_NumberVariableBox_Paint(pstDeviceIF, &s_stNumberVariableBox, SGUI_CENTER, (0 == s_uiFocusedFlag)?SGUI_DRAW_REVERSE:SGUI_DRAW_NORMAL);
+    SGUI_NumberVariableBox_Repaint(pstDeviceIF, &s_stNumberVariableBox, (0 == s_uiFocusedFlag)?SGUI_DRAW_REVERSE:SGUI_DRAW_NORMAL);
     // Draw text box
     SGUI_Basic_DrawRectangle(pstDeviceIF, VARIABLE_BOX_POSX, VARIABLE_BOX_TEXT_POSY, VARIABLE_BOX_WIDTH+4, VARIABLE_TEXT_BOX_HEIGHT+4, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
     SGUI_TextVariableBox_Paint(pstDeviceIF, &s_stTextVariableBox, (0 == s_uiFocusedFlag)?SGUI_DRAW_NORMAL:SGUI_DRAW_REVERSE);
@@ -189,12 +211,12 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_ProcessEvent(SGUI_SCR_DEV* pstDeviceIF, co
 					s_uiFocusedFlag = ((s_uiFocusedFlag+1)%2);
 					if(0 == s_uiFocusedFlag)
 					{
-						SGUI_NumberVariableBox_Paint(pstDeviceIF, &s_stNumberVariableBox, SGUI_CENTER, SGUI_DRAW_REVERSE);
+						SGUI_NumberVariableBox_Repaint(pstDeviceIF, &s_stNumberVariableBox, SGUI_DRAW_REVERSE);
 						SGUI_TextVariableBox_Paint(pstDeviceIF, &s_stTextVariableBox, SGUI_DRAW_NORMAL);
 					}
 					else
 					{
-						SGUI_NumberVariableBox_Paint(pstDeviceIF, &s_stNumberVariableBox, SGUI_CENTER, SGUI_DRAW_NORMAL);
+						SGUI_NumberVariableBox_Repaint(pstDeviceIF, &s_stNumberVariableBox, SGUI_DRAW_NORMAL);
 						SGUI_TextVariableBox_Paint(pstDeviceIF, &s_stTextVariableBox, SGUI_DRAW_REVERSE);
 					}
 					break;
@@ -224,8 +246,8 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_ProcessEvent(SGUI_SCR_DEV* pstDeviceIF, co
 					}
 					else
 					{
-						s_stNumberVariableBox.Value++;
-						SGUI_NumberVariableBox_Paint(pstDeviceIF, &s_stNumberVariableBox, SGUI_CENTER, SGUI_DRAW_REVERSE);
+						SGUI_NumberVariableBox_SetValue(&s_stNumberVariableBox, SGUI_NumberVariableBox_GetValue(&s_stNumberVariableBox)+1);
+						SGUI_NumberVariableBox_Repaint(pstDeviceIF, &s_stNumberVariableBox, SGUI_DRAW_REVERSE);
 					}
 					break;
 				}
@@ -249,8 +271,8 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_ProcessEvent(SGUI_SCR_DEV* pstDeviceIF, co
 					}
 					else
 					{
-						s_stNumberVariableBox.Value--;
-						SGUI_NumberVariableBox_Paint(pstDeviceIF, &s_stNumberVariableBox, SGUI_CENTER, SGUI_DRAW_REVERSE);
+						SGUI_NumberVariableBox_SetValue(&s_stNumberVariableBox, SGUI_NumberVariableBox_GetValue(&s_stNumberVariableBox)-1);
+						SGUI_NumberVariableBox_Repaint(pstDeviceIF, &s_stNumberVariableBox, SGUI_DRAW_REVERSE);
 					}
 					break;
 				}
@@ -262,7 +284,7 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_ProcessEvent(SGUI_SCR_DEV* pstDeviceIF, co
 						HMI_DemoVariableBox_DrawFrame(pstDeviceIF, (SGUI_SZSTR)s_szFrameTitle);
 						// Draw number box
 						SGUI_Basic_DrawRectangle(pstDeviceIF, VARIABLE_BOX_POSX, VARIABLE_BOX_NUMBER_POSY, VARIABLE_BOX_WIDTH+4, VARIABLE_NUMBER_BOX_HEIGHT+4, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
-						SGUI_NumberVariableBox_Paint(pstDeviceIF, &s_stNumberVariableBox, SGUI_CENTER, SGUI_DRAW_NORMAL);
+						SGUI_NumberVariableBox_Repaint(pstDeviceIF, &s_stNumberVariableBox, SGUI_DRAW_NORMAL);
 						// Draw text box
 						SGUI_Basic_DrawRectangle(pstDeviceIF, VARIABLE_BOX_POSX, VARIABLE_BOX_TEXT_POSY, VARIABLE_BOX_WIDTH+4, VARIABLE_TEXT_BOX_HEIGHT+4, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
 						SGUI_TextVariableBox_Paint(pstDeviceIF, &s_stTextVariableBox, SGUI_DRAW_REVERSE);

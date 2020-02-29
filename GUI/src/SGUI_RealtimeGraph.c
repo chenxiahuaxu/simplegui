@@ -66,7 +66,7 @@ void SGUI_RealtimeGraph_Initialize(SGUI_RTGRAPH* pstRTGraph)
 			pstData->BaseLineValue = pstControl->yAxisMin;
 		}
 		// Calculate the number of value points that can be used.
-		pstData->ValueCount = (RECT_WIDTH(pstData->Rect)-2)/pstControl->xAxisStepPixel;
+		pstData->ValueCount = (RECT_WIDTH(pstRTGraph->stLayout)-2)/pstControl->xAxisStepPixel;
 
 		// Initialize value array.
 		for(iValueIndex=0; iValueIndex<pstData->ValueCount; iValueIndex++)
@@ -106,8 +106,8 @@ void SGUI_RealtimeGraph_Repaint(SGUI_SCR_DEV* pstDeviceIF, SGUI_RTGRAPH* pstRTGr
 		pstControl = pstRTGraph->Control;
 
 		// Draw frame
-		SGUI_Basic_DrawRectangle(pstDeviceIF, RECT_X_START(pstData->Rect), RECT_Y_START(pstData->Rect),
-									RECT_WIDTH(pstData->Rect), RECT_HEIGHT(pstData->Rect), SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
+		SGUI_Basic_DrawRectangle(pstDeviceIF, RECT_X_START(pstRTGraph->stLayout), RECT_Y_START(pstRTGraph->stLayout),
+									RECT_WIDTH(pstRTGraph->stLayout), RECT_HEIGHT(pstRTGraph->stLayout), SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
 
 		if(SGUI_TRUE == pstControl->EnableBaseline)
 		{
@@ -119,8 +119,8 @@ void SGUI_RealtimeGraph_Repaint(SGUI_SCR_DEV* pstDeviceIF, SGUI_RTGRAPH* pstRTGr
 		{
 			for(iValueIndex=1; iValueIndex<pstData->ValueCount; iValueIndex++)
 			{
-				iPixelCoordinateStartX = 1 + ((iValueIndex-1) * pstControl->xAxisStepPixel) + RECT_X_START(pstData->Rect);
-				iPixelCoordinateEndX = 1 + (iValueIndex * pstControl->xAxisStepPixel) + RECT_X_START(pstData->Rect);
+				iPixelCoordinateStartX = 1 + ((iValueIndex-1) * pstControl->xAxisStepPixel) + RECT_X_START(pstRTGraph->stLayout);
+				iPixelCoordinateEndX = 1 + (iValueIndex * pstControl->xAxisStepPixel) + RECT_X_START(pstRTGraph->stLayout);
 				SGUI_Basic_DrawLine(pstDeviceIF, iPixelCoordinateStartX, pstData->PointYCoordinateArray[iValueIndex-1],
 										iPixelCoordinateEndX, pstData->PointYCoordinateArray[iValueIndex], SGUI_COLOR_FRGCLR);
 			}
@@ -195,7 +195,6 @@ SGUI_INT SGUI_RealtimeGraph_GetValuePointYCoordinate(SGUI_RTGRAPH* pstRTGraph, S
 	/*----------------------------------*/
 	/* Variable Declaration				*/
 	/*----------------------------------*/
-	SGUI_RTGRAPH_DATA*			pstData;
 	SGUI_RTGRAPH_CONTROL*		pstControl;
 	SGUI_INT					iDisplayValuePointAreaHeight;
 	SGUI_INT					iAbsoluteValue;
@@ -210,10 +209,9 @@ SGUI_INT SGUI_RealtimeGraph_GetValuePointYCoordinate(SGUI_RTGRAPH* pstRTGraph, S
 	/*----------------------------------*/
 	if(NULL != pstRTGraph)
 	{
-		pstData = pstRTGraph->Data;
 		pstControl = pstRTGraph->Control;
 
-		iDisplayValuePointAreaHeight = RECT_HEIGHT(pstData->Rect);
+		iDisplayValuePointAreaHeight = RECT_HEIGHT(pstRTGraph->stLayout);
 
 		//Make sure the value is within the valid range
 		if(iValue > pstControl->yAxisMax)
@@ -230,7 +228,7 @@ SGUI_INT SGUI_RealtimeGraph_GetValuePointYCoordinate(SGUI_RTGRAPH* pstRTGraph, S
 
 		iValuePointCoordinate = iDisplayValuePointAreaHeight-iValuePointCoordinate;
 
-		iValuePointCoordinate = iValuePointCoordinate + RECT_Y_START(pstData->Rect)-1;
+		iValuePointCoordinate = iValuePointCoordinate + RECT_Y_START(pstRTGraph->stLayout)-1;
 	}
 
 	return iValuePointCoordinate;

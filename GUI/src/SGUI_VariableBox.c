@@ -18,18 +18,95 @@
 //= Function define.										            =//
 //=======================================================================//
 /*************************************************************************/
+/** Function Name:	SGUI_NumberVariableBox_Initialize					**/
+/** Purpose:		Initialize a integer value edit box structure.		**/
+/** Params:																**/
+/**	@ pstObj[in]:	Number variable box object pointer.					**/
+/**	@ pcstLayout[in]: Object layout.									**/
+/**	@ pcstParam[in]: Initialize parameter for initialize.				**/
+/** Return:			None.												**/
+/** Notice:			iValue will be changed when more then max value or	**/
+/**					less then minimum value.							**/
+/*************************************************************************/
+void SGUI_NumberVariableBox_Initialize(SGUI_NUM_VARBOX_STRUCT* pstObj, const SGUI_RECT* pcstLayout, const SGUI_NUM_VARBOX_PARAM* pcstParam)
+{
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	if((NULL != pstObj) && (NULL != pcstLayout))
+	{
+		SGUI_SystemIF_MemorySet(pstObj, 0x00, sizeof(SGUI_NUM_VARBOX_STRUCT));
+		SGUI_SystemIF_MemoryCopy(&(pstObj->stLayout), (void*)pcstLayout, sizeof(SGUI_RECT));
+		SGUI_SystemIF_MemoryCopy(&(pstObj->stParam), (void*)pcstParam, sizeof(SGUI_NUM_VARBOX_PARAM));
+	}
+}
+
+/*************************************************************************/
+/** Function Name:	SGUI_NumberVariableBox_SetValue						**/
+/** Purpose:		Set a variable box structure value.					**/
+/** Params:																**/
+/**	@ pstObj[in]:	Number variable box object pointer.					**/
+/**	@ iNewValue[in]: New value will be set.								**/
+/** Return:			None.												**/
+/** Notice:			For update screen display, repaint function must be **/
+/**					called after this function.							**/
+/*************************************************************************/
+void SGUI_NumberVariableBox_SetValue(SGUI_NUM_VARBOX_STRUCT* pstObj, const SGUI_INT iNewValue)
+{
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	if(NULL != pstObj)
+	{
+		if((iNewValue <= pstObj->stParam.iMax) && (iNewValue >= pstObj->stParam.iMin))
+		{
+			pstObj->stData.iValue = iNewValue;
+		}
+	}
+}
+
+/*************************************************************************/
+/** Function Name:	SGUI_NumberVariableBox_GetValue						**/
+/** Purpose:		Get a variable box structure value.					**/
+/** Params:																**/
+/**	@ pstObj[in]:	Number variable box object pointer.					**/
+/** Return:			Current value of the variable box.					**/
+/*************************************************************************/
+SGUI_INT SGUI_NumberVariableBox_GetValue(SGUI_NUM_VARBOX_STRUCT* pstObj)
+{
+	/*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+	SGUI_INT				iReturn;
+
+	/*----------------------------------*/
+	/* Initialize						*/
+	/*----------------------------------*/
+	iReturn =				0;
+
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	if(NULL != pstObj)
+	{
+		iReturn = pstObj->stData.iValue;
+	}
+
+	return iReturn;
+}
+
+/*************************************************************************/
 /** Function Name:	GUI_RefreshVariableBox								**/
 /** Purpose:		Display or refresh a integer value edit box.		**/
 /** Params:																**/
-/**	@ pstDeviceIF[in]:	Device driver object pointer.						**/
-/**	@ pstValue[in]:	Value structure, include max value, min value and	**/
+/**	@ pstDeviceIF[in]:	Device driver object pointer.					**/
+/**	@ pstObj[in]:	Value structure, include max value, min value and	**/
 /**					current value.										**/
-/**	@ eAlignment[in]: Alignment mode, might be right, center or left.	**/
 /**	@ eMode[in]:	Display mode, normal or reveres.					**/
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_NumberVariableBox_Paint(SGUI_SCR_DEV* pstDeviceIF, SGUI_NUM_VARBOX_STRUCT* pstValue, SGUI_ALIG_MODE eAlignment, SGUI_DRAW_MODE eMode)
+void SGUI_NumberVariableBox_Repaint(SGUI_SCR_DEV* pstDeviceIF, SGUI_NUM_VARBOX_STRUCT* pstObj, SGUI_DRAW_MODE eMode)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -45,36 +122,27 @@ void SGUI_NumberVariableBox_Paint(SGUI_SCR_DEV* pstDeviceIF, SGUI_NUM_VARBOX_STR
 	SGUI_SystemIF_MemorySet(szTextBuffer, 0x00, VARBOX_TEXT_BUFFER_SIZE);
 	eBackColor =				((eMode==SGUI_DRAW_NORMAL)?SGUI_COLOR_BKGCLR:SGUI_COLOR_FRGCLR);
 	// Draw edge
-	SGUI_Basic_DrawRectangle(pstDeviceIF, pstValue->stLayout.iPosX, pstValue->stLayout.iPosY, pstValue->stLayout.iWidth, pstValue->stLayout.iHeight, eBackColor, eBackColor);
+	SGUI_Basic_DrawRectangle(pstDeviceIF, pstObj->stLayout.iPosX, pstObj->stLayout.iPosY, pstObj->stLayout.iWidth, pstObj->stLayout.iHeight, eBackColor, eBackColor);
 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
 
-	if(NULL != pstValue)
+	if(NULL != pstObj)
 	{
-		// Check value limited.
-		if(pstValue->Value > pstValue->Max)
-		{
-			pstValue->Value = pstValue->Max;
-		}
-		if(pstValue->Value < pstValue->Min)
-		{
-			pstValue->Value = pstValue->Min;
-		}
 		// Convert number to string
-		(void)SGUI_Common_IntegerToString(pstValue->Value, szTextBuffer, 10, -1, ' ');
-		SGUI_Text_GetTextExtent(szTextBuffer, pstValue->pstFontRes, &stTextExtentSize);
-		switch(eAlignment)
+		(void)SGUI_Common_IntegerToString(pstObj->stData.iValue, szTextBuffer, 10, -1, ' ');
+		SGUI_Text_GetTextExtent(szTextBuffer, pstObj->stParam.pstFontRes, &stTextExtentSize);
+		switch(pstObj->stParam.eAlignment)
 		{
 			case SGUI_RIGHT:
 			{
-				stTextInnerPos.iPosX = pstValue->stLayout.iWidth - stTextExtentSize.iWidth;
+				stTextInnerPos.iPosX = pstObj->stLayout.iWidth - stTextExtentSize.iWidth;
 				break;
 			}
 			case SGUI_CENTER:
 			{
-				stTextInnerPos.iPosX = (pstValue->stLayout.iWidth - stTextExtentSize.iWidth) / 2;
+				stTextInnerPos.iPosX = (pstObj->stLayout.iWidth - stTextExtentSize.iWidth) / 2;
 				break;
 			}
 			default:
@@ -83,7 +151,7 @@ void SGUI_NumberVariableBox_Paint(SGUI_SCR_DEV* pstDeviceIF, SGUI_NUM_VARBOX_STR
 			}
 		}
 		stTextInnerPos.iPosY = 0;
-		SGUI_Text_DrawText(pstDeviceIF, szTextBuffer, pstValue->pstFontRes, &(pstValue->stLayout), &stTextInnerPos, eMode);
+		SGUI_Text_DrawText(pstDeviceIF, szTextBuffer, pstObj->stParam.pstFontRes, &(pstObj->stLayout), &stTextInnerPos, eMode);
 	}
 }
 

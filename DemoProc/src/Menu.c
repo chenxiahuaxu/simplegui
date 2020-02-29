@@ -37,7 +37,8 @@ static SGUI_ITEMS_ITEM		s_arrstMenuItems[] =		{	{SCR6_MENU_ITEM1, NULL},
 
 static SGUI_ITEMS_ITEM		s_arrstSubMenuItems[] =		{	{SCR6_SUB_MENU_ITEM1, NULL},
 															{SCR6_SUB_MENU_ITEM2, NULL},
-															{SCR6_SUB_MENU_ITEM3, NULL}
+															{SCR6_SUB_MENU_ITEM3, NULL},
+															{SCR6_SUB_MENU_ITEM1, NULL}
 														};
 
 static SGUI_MENU_STRUCT		s_stDemoMenuObject = 		{0x00};
@@ -64,17 +65,25 @@ HMI_SCREEN_OBJECT       g_stHMIDemo_Menu =				{	HMI_SCREEN_ID_DEMO_MENU,
 HMI_ENGINE_RESULT HMI_DemoMenu_Initialize(SGUI_SCR_DEV* pstDeviceIF)
 {
 	/*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+	SGUI_RECT				stLayout;
+
+	/*----------------------------------*/
+	/* Initialize						*/
+	/*----------------------------------*/
+	stLayout.iPosX =		0;
+	stLayout.iPosY =		0;
+	stLayout.iWidth = 		48;
+	stLayout.iHeight =		60;
+
+	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
     // Initialize list data.
     SGUI_SystemIF_MemorySet(&s_stDemoMenuObject, 0x00, sizeof(SGUI_MENU_STRUCT));
-    // Title and font size must set before initialize list object.
-    s_stDemoMenuObject.stLayout.iPosX = 0;
-    s_stDemoMenuObject.stLayout.iPosY = 0;
-    s_stDemoMenuObject.stLayout.iWidth = 48;
-    s_stDemoMenuObject.stLayout.iHeight = 60;
      //Initialize list object.
-	SGUI_Menu_Initialize(&s_stDemoMenuObject, &SGUI_DEFAULT_FONT_8, s_arrstMenuItems, sizeof(s_arrstMenuItems)/sizeof(SGUI_ITEMS_ITEM));
+	SGUI_Menu_Initialize(&s_stDemoMenuObject, &SGUI_DEFAULT_FONT_8, &stLayout, s_arrstMenuItems, sizeof(s_arrstMenuItems)/sizeof(SGUI_ITEMS_ITEM));
 	return HMI_RET_NORMAL;
 }
 
@@ -138,21 +147,9 @@ HMI_ENGINE_RESULT HMI_DemoMenu_ProcessEvent(SGUI_SCR_DEV* pstDeviceIF, const HMI
 					if(&s_stDemoMenuObject == s_pstActivedMenu)
 					{
 						SGUI_ItemsBase_GetItemExtent(&(s_pstActivedMenu->stItems), s_pstActivedMenu->stItems.iSelection, &stItemArea);
-						s_stDemoSubMenuObject.stLayout.iPosX = RECT_X_END(s_pstActivedMenu->stLayout);
-						if(stItemArea.iPosY > (pstDeviceIF->stSize.iHeight/2))
-						{
-							s_stDemoSubMenuObject.stLayout.iPosY = 0;
-							s_stDemoSubMenuObject.stLayout.iHeight = stItemArea.iPosY+stItemArea.iHeight;
-						}
-						else
-						{
-							s_stDemoSubMenuObject.stLayout.iPosY = stItemArea.iPosY;
-							s_stDemoSubMenuObject.stLayout.iHeight = pstDeviceIF->stSize.iHeight-stItemArea.iPosY;
-
-						}
-						s_stDemoSubMenuObject.stLayout.iWidth = stItemArea.iWidth;
 						s_pstActivedMenu = &s_stDemoSubMenuObject;
-						SGUI_Menu_Initialize(&s_stDemoSubMenuObject, &SGUI_DEFAULT_FONT_8, s_arrstSubMenuItems, sizeof(s_arrstSubMenuItems)/sizeof(SGUI_ITEMS_ITEM));
+						SGUI_Menu_Initialize(&s_stDemoSubMenuObject, &SGUI_DEFAULT_FONT_8, &stItemArea, s_arrstSubMenuItems, sizeof(s_arrstSubMenuItems)/sizeof(SGUI_ITEMS_ITEM));
+						SGUI_Menu_PopupSubMenu(pstDeviceIF, &s_stDemoSubMenuObject, &stItemArea);
 						SGUI_Menu_Repaint(pstDeviceIF, s_pstActivedMenu);
 					}
 					iProcessAction = HMI_DEMO_PROC_CONFIRM;

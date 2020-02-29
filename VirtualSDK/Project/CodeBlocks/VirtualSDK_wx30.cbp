@@ -97,10 +97,10 @@
 		<Unit filename="../../../DemoProc/inc/Resource.h">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
-		<Unit filename="../../../DemoProc/src/DemoProc.c">
+		<Unit filename="../../../DemoProc/src/Basic.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="../../../DemoProc/src/ItemsBase.c">
+		<Unit filename="../../../DemoProc/src/DemoProc.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../../../DemoProc/src/List.c">
@@ -112,13 +112,13 @@
 		<Unit filename="../../../DemoProc/src/Notice.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="../../../DemoProc/src/Polyline.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="../../../DemoProc/src/RealtimeGraph.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../../../DemoProc/src/Resource.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../DemoProc/src/Text.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../../../DemoProc/src/VariableBox.c">
