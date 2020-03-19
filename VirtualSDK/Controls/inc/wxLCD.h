@@ -24,8 +24,8 @@ class wxLCD: public wxLCDBase
 		// Constructor/Destructor
 								wxLCD(wxWindow *pclsParent, wxWindowID iWinID = wxID_ANY, const wxPoint& clsPosition = wxDefaultPosition, const wxSize& clsSizeInPixel = wxDefaultSizeInPixel);
 								~wxLCD(void);
-		int						GetPixel(const int iPosX, const int iPosY);
-		void					SetPixel(const int iPosX, const int iPosY, const int iValue);
+		int						GetPixel(const int iX, const int iY);
+		void					SetPixel(const int iX, const int iY, const int iValue);
 		void					CleanScreen(void);
 		void					SetPanelColour(const wxColour& clsPanelColour, bool bRefreshNow = true);
 		void					SetPixelColour(const wxColour& clsPixelColour, bool bRefreshNow = true);

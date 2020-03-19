@@ -37,6 +37,15 @@
 void SGUI_List_Initialize(SGUI_LIST_STRUCT* pstObj, const SGUI_FONT_RES* pstFontRes, SGUI_ITEMS_ITEM* pstItemsData, SGUI_INT iItemsCount)
 {
 	/*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+	SGUI_SCROLLBAR_PARAM	stScrollBarParam;
+
+	/*----------------------------------*/
+	/* Initialize						*/
+	/*----------------------------------*/
+
+	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
 	if((NULL != pstObj) && (NULL != pstFontRes))
@@ -44,26 +53,27 @@ void SGUI_List_Initialize(SGUI_LIST_STRUCT* pstObj, const SGUI_FONT_RES* pstFont
 		// Initialize member object pointer.
 		pstObj->pstFontRes = pstFontRes;
 		pstObj->stItems.pstItems = NULL;
-		pstObj->stItems.stLayout.iPosX = pstObj->stLayout.iPosX+2;
+		pstObj->stItems.stLayout.iX = pstObj->stLayout.iX+2;
 		pstObj->stItems.stLayout.iWidth = pstObj->stLayout.iWidth-4-LIST_SCROLLBAR_WIDTH;
 		if(NULL == pstObj->szTitle)
 		{
-			pstObj->stItems.stLayout.iPosY = pstObj->stLayout.iPosY+2;
+			pstObj->stItems.stLayout.iY = pstObj->stLayout.iY+2;
 			pstObj->stItems.stLayout.iHeight = pstObj->stLayout.iHeight-4;
 		}
 		else
 		{
-			pstObj->stItems.stLayout.iPosY = pstObj->stLayout.iPosY+LIST_TITLE_HEIGHT(pstObj->pstFontRes)+2;
+			pstObj->stItems.stLayout.iY = pstObj->stLayout.iY+LIST_TITLE_HEIGHT(pstObj->pstFontRes)+2;
 			pstObj->stItems.stLayout.iHeight = pstObj->stLayout.iHeight-LIST_TITLE_HEIGHT(pstObj->pstFontRes)-3;
 		}
 		SGUI_ItemsBase_Initialize(&(pstObj->stItems), pstObj->pstFontRes, pstItemsData, iItemsCount);
 		// Initialize scroll bar.
-        pstObj->stScrollBar.eDirection = SGUI_SCROLLBAR_VERTICAL;
-		pstObj->stScrollBar.iPosX = pstObj->stItems.stLayout.iPosX+pstObj->stItems.stLayout.iWidth+1;
-		pstObj->stScrollBar.iPosY = pstObj->stItems.stLayout.iPosY;
-		pstObj->stScrollBar.iWidth = LIST_SCROLLBAR_WIDTH;
-		pstObj->stScrollBar.iHeight = pstObj->stItems.stLayout.iHeight;
-		pstObj->stScrollBar.sMaxIndex = (pstObj->stItems.iCount > pstObj->stItems.iVisibleItems)?(pstObj->stItems.iCount - pstObj->stItems.iVisibleItems):0;
+		stScrollBarParam.eDirection = SGUI_SCROLLBAR_VERTICAL;
+		stScrollBarParam.stLayout.iX = pstObj->stItems.stLayout.iX+pstObj->stItems.stLayout.iWidth+1;
+		stScrollBarParam.stLayout.iY = pstObj->stItems.stLayout.iY;
+		stScrollBarParam.stLayout.iWidth = LIST_SCROLLBAR_WIDTH;
+		stScrollBarParam.stLayout.iHeight = pstObj->stItems.stLayout.iHeight;
+		stScrollBarParam.sMaxValue = (pstObj->stItems.iCount > pstObj->stItems.iVisibleItems)?(pstObj->stItems.iCount - pstObj->stItems.iVisibleItems):0;
+		SGUI_ScrollBar_Initialize(&(pstObj->stScrollBar), &stScrollBarParam);
 	}
 }
 
@@ -91,23 +101,23 @@ void SGUI_List_Repaint(SGUI_SCR_DEV* pstDeviceIF, SGUI_LIST_STRUCT* pstObj)
 	if(NULL != pstObj)
 	{
 		// Clear list item display area.
-		SGUI_Basic_DrawRectangle(pstDeviceIF, pstObj->stLayout.iPosX, pstObj->stLayout.iPosY, pstObj->stLayout.iWidth, pstObj->stLayout.iHeight, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
+		SGUI_Basic_DrawRectangle(pstDeviceIF, pstObj->stLayout.iX, pstObj->stLayout.iY, pstObj->stLayout.iWidth, pstObj->stLayout.iHeight, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
 		// Paint title.
 		if(NULL != pstObj->szTitle)
 		{
-			stTitleTextDisplayArea.iPosX = pstObj->stLayout.iPosX+2;
-			stTitleTextDisplayArea.iPosY = pstObj->stLayout.iPosY+2;
+			stTitleTextDisplayArea.iX = pstObj->stLayout.iX+2;
+			stTitleTextDisplayArea.iY = pstObj->stLayout.iY+2;
 			stTitleTextDisplayArea.iWidth = pstObj->stLayout.iWidth-4;
 			stTitleTextDisplayArea.iHeight = pstObj->pstFontRes->iHeight;
-			stInnerPos.iPosX = 0;
-			stInnerPos.iPosY = 0;
+			stInnerPos.iX = 0;
+			stInnerPos.iY = 0;
 			SGUI_Text_DrawText(pstDeviceIF, pstObj->szTitle, pstObj->pstFontRes, &stTitleTextDisplayArea, &stInnerPos, SGUI_DRAW_NORMAL);
-			SGUI_Basic_DrawLine(pstDeviceIF, pstObj->stLayout.iPosX, pstObj->stLayout.iPosY+pstObj->pstFontRes->iHeight+3, pstObj->stLayout.iPosX+pstObj->stLayout.iWidth-1, pstObj->stLayout.iPosY+pstObj->pstFontRes->iHeight+3, SGUI_COLOR_FRGCLR);
+			SGUI_Basic_DrawLine(pstDeviceIF, pstObj->stLayout.iX, pstObj->stLayout.iY+pstObj->pstFontRes->iHeight+3, pstObj->stLayout.iX+pstObj->stLayout.iWidth-1, pstObj->stLayout.iY+pstObj->pstFontRes->iHeight+3, SGUI_COLOR_FRGCLR);
 		}
 		// Paint items.
 		SGUI_ItemsBase_Repaint(pstDeviceIF, &(pstObj->stItems));
 		// Paint scroll bar.
-		pstObj->stScrollBar.sIndex = pstObj->stItems.iPageStartIndex;
+		SGUI_ScrollBar_SetValue(&(pstObj->stScrollBar), pstObj->stItems.iPageStartIndex);
 		SGUI_ScrollBar_Repaint(pstDeviceIF, &(pstObj->stScrollBar));
 	}
 }

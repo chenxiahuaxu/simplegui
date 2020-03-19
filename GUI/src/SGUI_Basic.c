@@ -235,13 +235,13 @@ void SGUI_Basic_DrawLine(SGUI_SCR_DEV* pstDeviceIF, SGUI_INT iStartX, SGUI_INT i
 /**	@ pstDeviceIF[in]:	SimpleGUI object pointer.						**/
 /**	@ pstStartPoint[in]: Start point coordinate.						**/
 /**	@ pstEndPoint[in]: End point coordinate.							**/
-/**	@ pstArea[in]:	Visible area.										**/
+/**	@ pcstArea[in]:	Visible area.										**/
 /**	@ eColor[in]:	Line color.											**/
 /** Return:			None.												**/
-/** Notice:			Only paint in visible area order by pstArea, point	**/
+/** Notice:			Only paint in visible area order by pcstArea, point	**/
 /**					out of range will be ignore.						**/
 /*************************************************************************/
-void SGUI_Basic_DrawLineInArea(SGUI_SCR_DEV* pstDeviceIF, SGUI_POINT* pstStartPoint, SGUI_POINT* pstEndPoint, SGUI_RECT* pstArea, SGUI_COLOR eColor)
+void SGUI_Basic_DrawLineInArea(SGUI_SCR_DEV* pstDeviceIF, SGUI_POINT* pstStartPoint, SGUI_POINT* pstEndPoint, const SGUI_RECT* pcstArea, SGUI_COLOR eColor)
 {
 	/*----------------------------------*/
     /* Variable Declaration				*/
@@ -257,10 +257,10 @@ void SGUI_Basic_DrawLineInArea(SGUI_SCR_DEV* pstDeviceIF, SGUI_POINT* pstStartPo
     /*----------------------------------*/
     iErrX = 0;
     iErrY = 0;
-    iDx = pstEndPoint->iPosX - pstStartPoint->iPosX;
-    iDy = pstEndPoint->iPosY - pstStartPoint->iPosY;
-    iCurrentPosX = pstStartPoint->iPosX;
-    iCurrentPosY = pstStartPoint->iPosY;
+    iDx = pstEndPoint->iX - pstStartPoint->iX;
+    iDy = pstEndPoint->iY - pstStartPoint->iY;
+    iCurrentPosX = pstStartPoint->iX;
+    iCurrentPosY = pstStartPoint->iY;
 
     if(iDx > 0)
     {
@@ -311,10 +311,10 @@ void SGUI_Basic_DrawLineInArea(SGUI_SCR_DEV* pstDeviceIF, SGUI_POINT* pstStartPo
     for(i = 0; i <= iDs+1; i++)
     {
     	/* Only paint in visible area. */
-    	if(	(iCurrentPosX >= RECT_X_START(*pstArea)) &&
-			(iCurrentPosX <= RECT_X_END(*pstArea)) &&
-			(iCurrentPosY >= RECT_Y_START(*pstArea)) &&
-			(iCurrentPosY <= RECT_Y_END(*pstArea)))
+    	if(	(iCurrentPosX >= RECT_X_START(*pcstArea)) &&
+			(iCurrentPosX <= RECT_X_END(*pcstArea)) &&
+			(iCurrentPosY >= RECT_Y_START(*pcstArea)) &&
+			(iCurrentPosY <= RECT_Y_END(*pcstArea)))
 		{
 			SGUI_Basic_DrawPoint(pstDeviceIF, iCurrentPosX,iCurrentPosY, eColor);
 		}
@@ -409,17 +409,17 @@ void SGUI_Basic_DrawCircle(SGUI_SCR_DEV* pstDeviceIF, SGUI_UINT uiCx, SGUI_UINT 
     /*----------------------------------*/
     /* Variable Declaration				*/
     /*----------------------------------*/
-    SGUI_UINT					uiPosXOffset, uiPosYOffset;
-    SGUI_UINT					uiPosXOffset_Old, uiPosYOffset_Old;
+    SGUI_UINT					uiPosXOffset, uiYOffset;
+    SGUI_UINT					uiPosXOffset_Old, uiYOffset_Old;
     SGUI_INT					iXChange, iYChange, iRadiusError;
 
     /*----------------------------------*/
     /* Initialize						*/
     /*----------------------------------*/
     uiPosXOffset				= uiRadius;
-    uiPosYOffset				= 0;
+    uiYOffset				= 0;
     uiPosXOffset_Old			= 0xFFFF;
-    uiPosYOffset_Old			= 0xFFFF;
+    uiYOffset_Old			= 0xFFFF;
     iXChange					= 1 - 2 * uiRadius;
     iYChange					= 1;
     iRadiusError				= 0;
@@ -433,33 +433,33 @@ void SGUI_Basic_DrawCircle(SGUI_SCR_DEV* pstDeviceIF, SGUI_UINT uiCx, SGUI_UINT 
     }
     else
     {
-        while(uiPosXOffset >= uiPosYOffset)
+        while(uiPosXOffset >= uiYOffset)
         {
-            if((uiPosXOffset_Old != uiPosXOffset) || (uiPosYOffset_Old != uiPosYOffset) )
+            if((uiPosXOffset_Old != uiPosXOffset) || (uiYOffset_Old != uiYOffset) )
             {
                 // Fill the circle
                 if((uiRadius > 1) && (eFillColor != SGUI_COLOR_TRANS) && (uiPosXOffset_Old != uiPosXOffset))
                 {
 
-                    SGUI_Basic_DrawLine(pstDeviceIF, uiCx-uiPosXOffset, uiCy-uiPosYOffset+1, uiCx-uiPosXOffset, uiCy+uiPosYOffset-1, eFillColor);
-                    SGUI_Basic_DrawLine(pstDeviceIF, uiCx+uiPosXOffset, uiCy-uiPosYOffset+1, uiCx+uiPosXOffset, uiCy+uiPosYOffset-1, eFillColor);
+                    SGUI_Basic_DrawLine(pstDeviceIF, uiCx-uiPosXOffset, uiCy-uiYOffset+1, uiCx-uiPosXOffset, uiCy+uiYOffset-1, eFillColor);
+                    SGUI_Basic_DrawLine(pstDeviceIF, uiCx+uiPosXOffset, uiCy-uiYOffset+1, uiCx+uiPosXOffset, uiCy+uiYOffset-1, eFillColor);
                     uiPosXOffset_Old = uiPosXOffset;
                 }
-                SGUI_Basic_DrawLine(pstDeviceIF, uiCx-uiPosYOffset, uiCy-uiPosXOffset+1, uiCx-uiPosYOffset, uiCy+uiPosXOffset-1, eFillColor);
-                SGUI_Basic_DrawLine(pstDeviceIF, uiCx+uiPosYOffset, uiCy-uiPosXOffset+1, uiCx+uiPosYOffset, uiCy+uiPosXOffset-1, eFillColor);
-                uiPosYOffset_Old = uiPosYOffset;
+                SGUI_Basic_DrawLine(pstDeviceIF, uiCx-uiYOffset, uiCy-uiPosXOffset+1, uiCx-uiYOffset, uiCy+uiPosXOffset-1, eFillColor);
+                SGUI_Basic_DrawLine(pstDeviceIF, uiCx+uiYOffset, uiCy-uiPosXOffset+1, uiCx+uiYOffset, uiCy+uiPosXOffset-1, eFillColor);
+                uiYOffset_Old = uiYOffset;
 
                 // Draw edge.
-                SGUI_Basic_DrawPoint(pstDeviceIF, uiCx+uiPosXOffset, uiCy+uiPosYOffset, eEdgeColor);
-                SGUI_Basic_DrawPoint(pstDeviceIF, uiCx-uiPosXOffset, uiCy+uiPosYOffset, eEdgeColor);
-                SGUI_Basic_DrawPoint(pstDeviceIF, uiCx-uiPosXOffset, uiCy-uiPosYOffset, eEdgeColor);
-                SGUI_Basic_DrawPoint(pstDeviceIF, uiCx+uiPosXOffset, uiCy-uiPosYOffset, eEdgeColor);
-                SGUI_Basic_DrawPoint(pstDeviceIF, uiCx+uiPosYOffset, uiCy+uiPosXOffset, eEdgeColor);
-                SGUI_Basic_DrawPoint(pstDeviceIF, uiCx-uiPosYOffset, uiCy+uiPosXOffset, eEdgeColor);
-                SGUI_Basic_DrawPoint(pstDeviceIF, uiCx-uiPosYOffset, uiCy-uiPosXOffset, eEdgeColor);
-                SGUI_Basic_DrawPoint(pstDeviceIF, uiCx+uiPosYOffset, uiCy-uiPosXOffset, eEdgeColor);
+                SGUI_Basic_DrawPoint(pstDeviceIF, uiCx+uiPosXOffset, uiCy+uiYOffset, eEdgeColor);
+                SGUI_Basic_DrawPoint(pstDeviceIF, uiCx-uiPosXOffset, uiCy+uiYOffset, eEdgeColor);
+                SGUI_Basic_DrawPoint(pstDeviceIF, uiCx-uiPosXOffset, uiCy-uiYOffset, eEdgeColor);
+                SGUI_Basic_DrawPoint(pstDeviceIF, uiCx+uiPosXOffset, uiCy-uiYOffset, eEdgeColor);
+                SGUI_Basic_DrawPoint(pstDeviceIF, uiCx+uiYOffset, uiCy+uiPosXOffset, eEdgeColor);
+                SGUI_Basic_DrawPoint(pstDeviceIF, uiCx-uiYOffset, uiCy+uiPosXOffset, eEdgeColor);
+                SGUI_Basic_DrawPoint(pstDeviceIF, uiCx-uiYOffset, uiCy-uiPosXOffset, eEdgeColor);
+                SGUI_Basic_DrawPoint(pstDeviceIF, uiCx+uiYOffset, uiCy-uiPosXOffset, eEdgeColor);
             }
-            uiPosYOffset++;
+            uiYOffset++;
             iRadiusError += iYChange;
             iYChange += 2;
             if ((2 * iRadiusError + iXChange) > 0)
@@ -642,10 +642,10 @@ SGUI_BOOL SGUI_Basic_PointIsInArea(const SGUI_RECT* pstArea, const SGUI_POINT* p
 	}
 	else
 	{
-        if(	(pstPoint->iPosX < RECT_X_START(*pstArea)) ||
-			(pstPoint->iPosX > RECT_X_END(*pstArea)) ||
-			(pstPoint->iPosY < RECT_Y_START(*pstArea)) ||
-			(pstPoint->iPosY > RECT_Y_END(*pstArea)))
+        if(	(pstPoint->iX < RECT_X_START(*pstArea)) ||
+			(pstPoint->iX > RECT_X_END(*pstArea)) ||
+			(pstPoint->iY < RECT_Y_START(*pstArea)) ||
+			(pstPoint->iY > RECT_Y_END(*pstArea)))
 		{
 			bReturn = SGUI_FALSE;
 		}

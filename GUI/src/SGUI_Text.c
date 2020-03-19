@@ -120,7 +120,7 @@ void SGUI_Text_DrawText(SGUI_SCR_DEV* pstDeviceIF, SGUI_CSZSTR cszText, const SG
             //if(SGUI_IS_VISIBLE_CHAR(uiCharacterCode))
 			{
 				RECT_WIDTH(stCharBitmap) = pstFontRes->fnIsFullWidth(uiCharacterCode)?pstFontRes->iFullWidth:pstFontRes->iHalfWidth;
-				if((stPaintPos.iPosX+stCharBitmap.iWidth-1) >= 0)
+				if((stPaintPos.iX+stCharBitmap.iWidth-1) >= 0)
 				{
 					SGUI_Text_GetCharacterData(pstFontRes, uiCharacterCode, pstDeviceIF->arrBmpDataBuffer, SGUI_BMP_DATA_BUFFER_SIZE);
 					SGUI_Basic_DrawBitMap(pstDeviceIF, pstDisplayArea, &stPaintPos, &stCharBitmap, eFontMode);
@@ -175,7 +175,7 @@ SGUI_SIZE SGUI_Text_DrawMultipleLinesText(SGUI_SCR_DEV* pstDeviceIF, SGUI_CSZSTR
 		RECT_Y_START(stPaintPos) = iTopOffset;
 		// Adapt text display area and data area.
         SGUI_Common_AdaptDisplayInfo(pstDisplayArea, &stPaintPos);
-        iStartOffsetX = stPaintPos.iPosX;
+        iStartOffsetX = stPaintPos.iX;
 		// Clear text area.
         SGUI_Basic_DrawRectangle(pstDeviceIF,
 						RECT_X_START(*pstDisplayArea), RECT_Y_START(*pstDisplayArea),
@@ -204,7 +204,7 @@ SGUI_SIZE SGUI_Text_DrawMultipleLinesText(SGUI_SCR_DEV* pstDeviceIF, SGUI_CSZSTR
 			RECT_WIDTH(stCharBitmap) = pstFontRes->fnIsFullWidth(uiCharacterCode)?pstFontRes->iFullWidth:pstFontRes->iHalfWidth;
 
 			// Judge change line
-			if((stPaintPos.iPosX+stCharBitmap.iWidth-1) >= RECT_WIDTH(*pstDisplayArea))
+			if((stPaintPos.iX+stCharBitmap.iWidth-1) >= RECT_WIDTH(*pstDisplayArea))
 			{
 				// Change lines.
 				RECT_X_START(stPaintPos) = iStartOffsetX;
@@ -212,7 +212,7 @@ SGUI_SIZE SGUI_Text_DrawMultipleLinesText(SGUI_SCR_DEV* pstDeviceIF, SGUI_CSZSTR
 				uiLines ++;
 			}
 			// Draw characters.
-			if(((stPaintPos.iPosX+stCharBitmap.iWidth-1) >= 0) && (RECT_Y_START(stPaintPos) < RECT_HEIGHT(*pstDisplayArea)))
+			if(((stPaintPos.iX+stCharBitmap.iWidth-1) >= 0) && (RECT_Y_START(stPaintPos) < RECT_HEIGHT(*pstDisplayArea)))
 			{
 				// Draw character.
 				SGUI_Text_GetCharacterData(pstFontRes, uiCharacterCode, pstDeviceIF->arrBmpDataBuffer, SGUI_BMP_DATA_BUFFER_SIZE);

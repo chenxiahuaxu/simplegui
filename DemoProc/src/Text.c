@@ -70,35 +70,35 @@ HMI_ENGINE_RESULT HMI_DemoText_RefreshScreen(SGUI_SCR_DEV* pstDeviceIF, const vo
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	stInnerPos.iPosX =			0;
-	stInnerPos.iPosY =			0;
+	stInnerPos.iX =			0;
+	stInnerPos.iY =			0;
 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	stDisplayArea.iPosX = 1;
-	stDisplayArea.iPosY = 1;
+	stDisplayArea.iX = 1;
+	stDisplayArea.iY = 1;
 	stDisplayArea.iWidth = 62;
 	stDisplayArea.iHeight = SGUI_DEFAULT_FONT_MiniNum.iHeight+1;
 	SGUI_Text_DrawText(pstDeviceIF, SCR3_TEXT_MIN_NUM, &SGUI_DEFAULT_FONT_MiniNum, &stDisplayArea, &stInnerPos, SGUI_DRAW_NORMAL);
 
-	stDisplayArea.iPosY += stDisplayArea.iHeight;
+	stDisplayArea.iY += stDisplayArea.iHeight;
 	stDisplayArea.iWidth = 62;
 	stDisplayArea.iHeight = SGUI_DEFAULT_FONT_8.iHeight+1;
 	SGUI_Text_DrawText(pstDeviceIF, SCR3_TEXT_INNER_8, &SGUI_DEFAULT_FONT_8, &stDisplayArea, &stInnerPos, SGUI_DRAW_NORMAL);
 
-	stDisplayArea.iPosY += stDisplayArea.iHeight;
+	stDisplayArea.iY += stDisplayArea.iHeight;
 	stDisplayArea.iWidth = 62;
 	stDisplayArea.iHeight = SGUI_DEFAULT_FONT_12.iHeight+1;
 	SGUI_Text_DrawText(pstDeviceIF, SCR3_TEXT_INNER_12, &SGUI_DEFAULT_FONT_12, &stDisplayArea, &stInnerPos, SGUI_DRAW_REVERSE);
 
-	stDisplayArea.iPosY += stDisplayArea.iHeight;
+	stDisplayArea.iY += stDisplayArea.iHeight;
 	stDisplayArea.iWidth = 62;
 	stDisplayArea.iHeight = SGUI_DEFAULT_FONT_12.iHeight+1;
 	SGUI_Text_DrawText(pstDeviceIF, SCR3_TEXT_EXTEN_12, &GB2312_FZXS12, &stDisplayArea, &stInnerPos, SGUI_DRAW_NORMAL);
 
-	stDisplayArea.iPosX = 64;
-	stDisplayArea.iPosY = 1;
+	stDisplayArea.iX = 64;
+	stDisplayArea.iY = 1;
 	stDisplayArea.iWidth = 62;
 	stDisplayArea.iHeight = 62;
 	SGUI_Text_DrawMultipleLinesText(pstDeviceIF, SCR3_TEXT_MULTILINE_12, &GB2312_FZXS12, &stDisplayArea, 0, SGUI_DRAW_NORMAL);

@@ -24,8 +24,8 @@
 #define						VARIABLE_NUMBER_BOX_HEIGHT			(8)
 #define						VARIABLE_TEXT_BOX_HEIGHT			(12)
 #define						VARIABLE_BOX_POSX					(10)
-#define						VARIABLE_BOX_NUMBER_POSY			(19)
-#define						VARIABLE_BOX_TEXT_POSY				(38)
+#define						VARIABLE_BOX_NUMBER_POSY			(24)
+#define						VARIABLE_BOX_TEXT_POSY				(40)
 //=======================================================================//
 //= Static function declaration.									    =//
 //=======================================================================//
@@ -41,12 +41,7 @@ static void				    HMI_DemoVariableBox_DrawFrame(SGUI_SCR_DEV* pstDeviceIF, SGUI
 //=======================================================================//
 static SGUI_NUM_VARBOX_STRUCT	s_stNumberVariableBox =		{0x00};
 static SGUI_CHAR				s_szTextVariableBuffer[TEXT_VARIABLE_LENGTH+1] = {"ABCDEFG1234567890"};
-static SGUI_TEXT_VARBOX_STRUCT	s_stTextVariableBox =		{	{VARIABLE_BOX_POSX+2, VARIABLE_BOX_TEXT_POSY+2, VARIABLE_BOX_WIDTH, VARIABLE_TEXT_BOX_HEIGHT},
-																&SGUI_DEFAULT_FONT_12,
-																0,
-																TEXT_VARIABLE_LENGTH,
-																s_szTextVariableBuffer,
-															};
+static SGUI_TEXT_VARBOX_STRUCT	s_stTextVariableBox =		{0x00};
 static SGUI_CHAR				s_szDefaultFrameTitle[] =	SCR4_VAR_BOX_TITLE;
 static SGUI_SZSTR				s_szFrameTitle =			s_szDefaultFrameTitle;
 static SGUI_INT					s_uiFocusedFlag;
@@ -76,7 +71,7 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_Initialize(SGUI_SCR_DEV* pstDeviceIF)
 	/* Variable Declaration				*/
 	/*----------------------------------*/
 	SGUI_NUM_VARBOX_PARAM	stNumBoxInitParam;
-	SGUI_RECT				stInitLayout;
+	SGUI_TEXT_VARBOX_PARAM	stTextBoxInitParam;
 
 	/*----------------------------------*/
 	/* Initialize						*/
@@ -92,13 +87,22 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_Initialize(SGUI_SCR_DEV* pstDeviceIF)
 	stNumBoxInitParam.iMin = -50;
 	stNumBoxInitParam.iMax = 100;
 	stNumBoxInitParam.pstFontRes = &SGUI_DEFAULT_FONT_8;
+	stNumBoxInitParam.stLayout.iX = VARIABLE_BOX_POSX+2;
+	stNumBoxInitParam.stLayout.iY = VARIABLE_BOX_NUMBER_POSY+2;
+	stNumBoxInitParam.stLayout.iWidth = pstDeviceIF->stSize.iWidth - (VARIABLE_BOX_POSX*2)-4;
+	stNumBoxInitParam.stLayout.iHeight = SGUI_DEFAULT_FONT_8.iHeight;
 
-	stInitLayout.iPosX = VARIABLE_BOX_POSX+2;
-	stInitLayout.iPosY = VARIABLE_BOX_NUMBER_POSY+2;
-	stInitLayout.iWidth = VARIABLE_BOX_WIDTH;
-	stInitLayout.iHeight = VARIABLE_NUMBER_BOX_HEIGHT;
+	SGUI_NumberVariableBox_Initialize(&s_stNumberVariableBox, &stNumBoxInitParam);
 
-	SGUI_NumberVariableBox_Initialize(&s_stNumberVariableBox, &stInitLayout, &stNumBoxInitParam);
+
+	stTextBoxInitParam.pstFontRes = &SGUI_DEFAULT_FONT_12;
+	stTextBoxInitParam.stLayout.iX = VARIABLE_BOX_POSX+2;
+	stTextBoxInitParam.stLayout.iY = VARIABLE_BOX_TEXT_POSY+2;
+	stTextBoxInitParam.stLayout.iWidth = pstDeviceIF->stSize.iWidth-(VARIABLE_BOX_POSX*2)-4;
+	stTextBoxInitParam.stLayout.iHeight = SGUI_DEFAULT_FONT_12.iHeight;
+	stTextBoxInitParam.sTextLengthMax = TEXT_VARIABLE_LENGTH;
+
+	SGUI_TextVariableBox_Initialize(&s_stTextVariableBox, &stTextBoxInitParam, s_szTextVariableBuffer);
 
 	return HMI_RET_NORMAL;
 }
@@ -137,11 +141,15 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_RefreshScreen(SGUI_SCR_DEV* pstDeviceIF, c
 	// Draw frame
     HMI_DemoVariableBox_DrawFrame(pstDeviceIF, (SGUI_SZSTR)s_szFrameTitle);
     // Draw number box
-    SGUI_Basic_DrawRectangle(pstDeviceIF, VARIABLE_BOX_POSX, VARIABLE_BOX_NUMBER_POSY, VARIABLE_BOX_WIDTH+4, VARIABLE_NUMBER_BOX_HEIGHT+4, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
+    SGUI_Basic_DrawRectangle(pstDeviceIF, VARIABLE_BOX_POSX, VARIABLE_BOX_NUMBER_POSY,
+							s_stNumberVariableBox.stParam.stLayout.iWidth+4, s_stNumberVariableBox.stParam.stLayout.iHeight+4,
+							 SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
     SGUI_NumberVariableBox_Repaint(pstDeviceIF, &s_stNumberVariableBox, (0 == s_uiFocusedFlag)?SGUI_DRAW_REVERSE:SGUI_DRAW_NORMAL);
     // Draw text box
-    SGUI_Basic_DrawRectangle(pstDeviceIF, VARIABLE_BOX_POSX, VARIABLE_BOX_TEXT_POSY, VARIABLE_BOX_WIDTH+4, VARIABLE_TEXT_BOX_HEIGHT+4, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
-    SGUI_TextVariableBox_Paint(pstDeviceIF, &s_stTextVariableBox, (0 == s_uiFocusedFlag)?SGUI_DRAW_NORMAL:SGUI_DRAW_REVERSE);
+    SGUI_Basic_DrawRectangle(pstDeviceIF, VARIABLE_BOX_POSX, VARIABLE_BOX_TEXT_POSY,
+							s_stTextVariableBox.stParam.stLayout.iWidth+4, s_stTextVariableBox.stParam.stLayout.iHeight+4,
+							SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
+    SGUI_TextVariableBox_Repaint(pstDeviceIF, &s_stTextVariableBox, (0 == s_uiFocusedFlag)?SGUI_DRAW_NORMAL:SGUI_DRAW_REVERSE);
 
 	return HMI_RET_NORMAL;
 }
@@ -212,12 +220,12 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_ProcessEvent(SGUI_SCR_DEV* pstDeviceIF, co
 					if(0 == s_uiFocusedFlag)
 					{
 						SGUI_NumberVariableBox_Repaint(pstDeviceIF, &s_stNumberVariableBox, SGUI_DRAW_REVERSE);
-						SGUI_TextVariableBox_Paint(pstDeviceIF, &s_stTextVariableBox, SGUI_DRAW_NORMAL);
+						SGUI_TextVariableBox_Repaint(pstDeviceIF, &s_stTextVariableBox, SGUI_DRAW_NORMAL);
 					}
 					else
 					{
 						SGUI_NumberVariableBox_Repaint(pstDeviceIF, &s_stNumberVariableBox, SGUI_DRAW_NORMAL);
-						SGUI_TextVariableBox_Paint(pstDeviceIF, &s_stTextVariableBox, SGUI_DRAW_REVERSE);
+						SGUI_TextVariableBox_Repaint(pstDeviceIF, &s_stTextVariableBox, SGUI_DRAW_REVERSE);
 					}
 					break;
 				}
@@ -230,11 +238,7 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_ProcessEvent(SGUI_SCR_DEV* pstDeviceIF, co
 				{
 					if(1 == s_uiFocusedFlag)
 					{
-						if(s_stTextVariableBox.sFocusIndex > 0)
-						{
-							s_stTextVariableBox.sFocusIndex--;
-							SGUI_TextVariableBox_ChangeCharacter(pstDeviceIF, &s_stTextVariableBox, SGUI_DRAW_REVERSE, SGUI_TEXT_ASCII, SGUI_TXT_VARBOX_OPT_NONE);
-						}
+						SGUI_TextVariableBox_DecreaseIndex(&s_stTextVariableBox);
 					}
 					break;
 				}
@@ -242,7 +246,8 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_ProcessEvent(SGUI_SCR_DEV* pstDeviceIF, co
 				{
 					if(1 == s_uiFocusedFlag)
 					{
-						SGUI_TextVariableBox_ChangeCharacter(pstDeviceIF, &s_stTextVariableBox, SGUI_DRAW_REVERSE, SGUI_TEXT_ASCII, SGUI_TXT_VARBOX_OPT_PREV);
+						SGUI_TextVariableBox_IncreaseChar(&s_stTextVariableBox);
+						SGUI_TextVariableBox_Repaint(pstDeviceIF, &s_stTextVariableBox, SGUI_DRAW_REVERSE);
 					}
 					else
 					{
@@ -255,11 +260,7 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_ProcessEvent(SGUI_SCR_DEV* pstDeviceIF, co
 				{
 					if(1 == s_uiFocusedFlag)
 					{
-						if(s_stTextVariableBox.sFocusIndex < (s_stTextVariableBox.sMaxTextLength-1))
-						{
-							s_stTextVariableBox.sFocusIndex++;
-							SGUI_TextVariableBox_ChangeCharacter(pstDeviceIF, &s_stTextVariableBox, SGUI_DRAW_REVERSE, SGUI_TEXT_ASCII, SGUI_TXT_VARBOX_OPT_NONE);
-						}
+						SGUI_TextVariableBox_IncreaseIndex(&s_stTextVariableBox);
 					}
 					break;
 				}
@@ -267,7 +268,8 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_ProcessEvent(SGUI_SCR_DEV* pstDeviceIF, co
 				{
 					if(1 == s_uiFocusedFlag)
 					{
-						SGUI_TextVariableBox_ChangeCharacter(pstDeviceIF, &s_stTextVariableBox, SGUI_DRAW_REVERSE, SGUI_TEXT_ASCII, SGUI_TXT_VARBOX_OPT_NEXT);
+						SGUI_TextVariableBox_DecreaseChar(&s_stTextVariableBox);
+						SGUI_TextVariableBox_Repaint(pstDeviceIF, &s_stTextVariableBox, SGUI_DRAW_REVERSE);
 					}
 					else
 					{
@@ -280,14 +282,14 @@ HMI_ENGINE_RESULT HMI_DemoVariableBox_ProcessEvent(SGUI_SCR_DEV* pstDeviceIF, co
 				{
 					if(1 == s_uiFocusedFlag)
 					{
-						s_szFrameTitle = s_stTextVariableBox.szValue;
+						s_szFrameTitle = SGUI_TextVariableBox_GetText(&s_stTextVariableBox);
 						HMI_DemoVariableBox_DrawFrame(pstDeviceIF, (SGUI_SZSTR)s_szFrameTitle);
 						// Draw number box
 						SGUI_Basic_DrawRectangle(pstDeviceIF, VARIABLE_BOX_POSX, VARIABLE_BOX_NUMBER_POSY, VARIABLE_BOX_WIDTH+4, VARIABLE_NUMBER_BOX_HEIGHT+4, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
 						SGUI_NumberVariableBox_Repaint(pstDeviceIF, &s_stNumberVariableBox, SGUI_DRAW_NORMAL);
 						// Draw text box
 						SGUI_Basic_DrawRectangle(pstDeviceIF, VARIABLE_BOX_POSX, VARIABLE_BOX_TEXT_POSY, VARIABLE_BOX_WIDTH+4, VARIABLE_TEXT_BOX_HEIGHT+4, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
-						SGUI_TextVariableBox_Paint(pstDeviceIF, &s_stTextVariableBox, SGUI_DRAW_REVERSE);
+						SGUI_TextVariableBox_Repaint(pstDeviceIF, &s_stTextVariableBox, SGUI_DRAW_REVERSE);
 					}
 					break;
 				}
@@ -333,11 +335,11 @@ void HMI_DemoVariableBox_DrawFrame(SGUI_SCR_DEV* pstDeviceIF, SGUI_SZSTR szTitle
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	stTextDisplayArea.iPosX =	4;
-	stTextDisplayArea.iPosY =	4;
+	stTextDisplayArea.iX = 4;
+	stTextDisplayArea.iY = 4;
 	stTextDisplayArea.iHeight = 12;
-	stInnerPos.iPosX =			0;
-	stInnerPos.iPosY =			0;
+	stInnerPos.iX = 0;
+	stInnerPos.iY = 0;
 
 	/*----------------------------------*/
 	/* Process							*/

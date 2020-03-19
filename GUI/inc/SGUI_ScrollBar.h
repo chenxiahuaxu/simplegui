@@ -17,18 +17,28 @@ typedef enum
 
 typedef struct
 {
-	SGUI_INT					iPosX;
-	SGUI_INT					iPosY;
-	SGUI_INT					iWidth;
-	SGUI_INT					iHeight;
-	SGUI_SIZE					sMaxIndex;
-	SGUI_SIZE					sIndex;
-	SGUI_SCROLLBAR_DIRECTION	eDirection;
+	SGUI_RECT					stLayout;
+    SGUI_SIZE					sMaxValue;
+    SGUI_SCROLLBAR_DIRECTION	eDirection;
+}SGUI_SCROLLBAR_PARAM;
+
+typedef struct
+{
+	SGUI_SIZE					sValue;
+}SGUI_SCROLLBAR_DATA;
+
+typedef struct
+{
+	SGUI_SCROLLBAR_PARAM		stParam;
+	SGUI_SCROLLBAR_DATA			stData;
 }SGUI_SCROLLBAR_STRUCT;
 
 //=======================================================================//
 //= Public function declaration.									    =//
-//=======================================================================//												--
-void	SGUI_ScrollBar_Repaint(SGUI_SCR_DEV* pstDeviceIF, SGUI_SCROLLBAR_STRUCT* pstScrollBar);
+//=======================================================================//
+void		SGUI_ScrollBar_Initialize(SGUI_SCROLLBAR_STRUCT* pstObj, const SGUI_SCROLLBAR_PARAM* pcstInitParam);
+void		SGUI_ScrollBar_SetValue(SGUI_SCROLLBAR_STRUCT* pstObj, SGUI_SIZE sNewValue);
+SGUI_SIZE	SGUI_ScrollBar_GetValue(const SGUI_SCROLLBAR_STRUCT* pstObj);
+void		SGUI_ScrollBar_Repaint(SGUI_SCR_DEV* pstDeviceIF, SGUI_SCROLLBAR_STRUCT* pstObj);
 
 #endif // __INCLUDE_GUI_SCROLLBAR_STRUCT__

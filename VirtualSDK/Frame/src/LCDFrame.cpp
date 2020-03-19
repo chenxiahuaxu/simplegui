@@ -448,16 +448,16 @@ LCDFrame* LCDFrame::GetInstance(void)
 /** Purpose:		Set a pixel value.                                  **/
 /** Params:																**/
 /**	@ uiPosX[in]:       X-Coordinate of pixel.                          **/
-/**	@ uiPosY[in]:       Y-Coordinate of pixel.                          **/
+/**	@ uiY[in]:       Y-Coordinate of pixel.                          **/
 /**	@ strTitle[in]:     Pixel value, 0 for clear, 1 for set.            **/
 /** Return:			None.                                               **/
 /** Notice:			This function only change the pixel register, To    **/
 /**                 update the screen display, need to call RefreshLCD  **/
 /**                 function or Or use the DrawPixel function directly. **/
 /*************************************************************************/
-void LCDFrame::SetLCDPixel(uint32_t uiPosX, uint32_t uiPosY, uint32_t uiPixelValue)
+void LCDFrame::SetLCDPixel(uint32_t uiPosX, uint32_t uiY, uint32_t uiPixelValue)
 {
-    m_pclsCtrlPaintPanel->SetPixel(uiPosX, uiPosY, uiPixelValue);
+    m_pclsCtrlPaintPanel->SetPixel(uiPosX, uiY, uiPixelValue);
 }
 
 /*************************************************************************/
@@ -465,15 +465,15 @@ void LCDFrame::SetLCDPixel(uint32_t uiPosX, uint32_t uiPosY, uint32_t uiPixelVal
 /** Purpose:		Get a pixel value.                                  **/
 /** Params:																**/
 /**	@ uiPosX[in]:       X-Coordinate of pixel.                          **/
-/**	@ uiPosY[in]:       Y-Coordinate of pixel.                          **/
+/**	@ uiY[in]:       Y-Coordinate of pixel.                          **/
 /** Return:			None.                                               **/
 /** Notice:			The value is got form the display buffer.			**/
 /*************************************************************************/
-uint32_t LCDFrame::GetLCDPixel(uint32_t uiPosX, uint32_t uiPosY)
+uint32_t LCDFrame::GetLCDPixel(uint32_t uiPosX, uint32_t uiY)
 {
     uint32_t                uiPixelValue;
 
-    uiPixelValue = (uint32_t)m_pclsCtrlPaintPanel->GetPixel(uiPosX, uiPosY);
+    uiPixelValue = (uint32_t)m_pclsCtrlPaintPanel->GetPixel(uiPosX, uiY);
 
     return uiPixelValue;
 }

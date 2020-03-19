@@ -39,13 +39,13 @@ static wxCriticalSection	s_clsEventSyncCS;
 /** Function Name:	SGUI_SDK_SetPixel                                     **/
 /** Purpose:		Set virtual device pixel register data.             **/
 /** Params:																**/
-/**	@ iPosX[in]:		Pixel x-coordinate on display panel.			**/
-/**	@ iPosY[in]:		Pixel y-coordinate on display panel.			**/
+/**	@ iX[in]:		Pixel x-coordinate on display panel.			**/
+/**	@ iY[in]:		Pixel y-coordinate on display panel.			**/
 /**	@ iPixelValue[out]:	Pixel value, 0 for clear, 1 for set.			**/
 /** Return:			None.                                               **/
 /** Notice:			None.                                               **/
 /*************************************************************************/
-void SGUI_SDK_SetPixel(int iPosX, int iPosY, int iPixelValue)
+void SGUI_SDK_SetPixel(int iX, int iY, int iPixelValue)
 {
     /*----------------------------------*/
     /* Variable Declaration				*/
@@ -62,7 +62,7 @@ void SGUI_SDK_SetPixel(int iPosX, int iPosY, int iPixelValue)
     /*----------------------------------*/
     if(NULL != pclsMainFrameObjectPtr)
     {
-        pclsMainFrameObjectPtr->SetLCDPixel(iPosX, iPosY, iPixelValue);
+        pclsMainFrameObjectPtr->SetLCDPixel(iX, iY, iPixelValue);
     }
 }
 
@@ -70,12 +70,12 @@ void SGUI_SDK_SetPixel(int iPosX, int iPosY, int iPixelValue)
 /** Function Name:	SGUI_SDK_GetPixel									**/
 /** Purpose:		Get a pixel value form virtual device register.     **/
 /** Params:																**/
-/**	@ iPosX[in]:		Pixel x-coordinate on display panel.			**/
-/**	@ iPosY[in]:		Pixel y-coordinate on display panel.		    **/
+/**	@ iX[in]:		Pixel x-coordinate on display panel.			**/
+/**	@ iY[in]:		Pixel y-coordinate on display panel.		    **/
 /** Return:			Pixel state, 0 for cleared, 1 for set.              **/
 /** Notice:			None.                                               **/
 /*************************************************************************/
-int SGUI_SDK_GetPixel(int iPosX, int iPosY)
+int SGUI_SDK_GetPixel(int iX, int iY)
 {
     /*----------------------------------*/
     /* Variable Declaration				*/
@@ -93,7 +93,7 @@ int SGUI_SDK_GetPixel(int iPosX, int iPosY)
     /*----------------------------------*/
     if(NULL != pclsMainFrameObjectPtr)
     {
-        iPixelValue = pclsMainFrameObjectPtr->GetLCDPixel(iPosX, iPosY);
+        iPixelValue = pclsMainFrameObjectPtr->GetLCDPixel(iX, iY);
     }
     else
     {

@@ -56,11 +56,11 @@ void wxLCD::SetPixelColour(const wxColour& clsPixelColour, bool bRefreshNow)
 	}
 }
 
-int wxLCD::GetPixel(const int iPosX, const int iPosY)
+int wxLCD::GetPixel(const int iX, const int iY)
 {
 	int				iReturn;
 
-	if(WX_LCD_PIX_RGB(GetPixelUnitColor(iPosX, iPosY)) == WX_LCD_PIX_RGB(m_clsPixelHColour.GetRGBA()))
+	if(WX_LCD_PIX_RGB(GetPixelUnitColor(iX, iY)) == WX_LCD_PIX_RGB(m_clsPixelHColour.GetRGBA()))
 	{
 		iReturn = 1;
 	}
@@ -72,15 +72,15 @@ int wxLCD::GetPixel(const int iPosX, const int iPosY)
 	return iReturn;
 }
 
-void wxLCD::SetPixel(const int iPosX, const int iPosY, const int iValue)
+void wxLCD::SetPixel(const int iX, const int iY, const int iValue)
 {
 	if(1 == iValue)
 	{
-		SetPixelUnitColor(iPosX, iPosY, m_clsPixelHColour);
+		SetPixelUnitColor(iX, iY, m_clsPixelHColour);
 	}
 	else
 	{
-		SetPixelUnitColor(iPosX, iPosY, m_clsPixelLColour);
+		SetPixelUnitColor(iX, iY, m_clsPixelLColour);
 	}
 }
 

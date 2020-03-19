@@ -5,14 +5,17 @@
 //=======================================================================//
 // Key value definition.
 #define		KEY_VALUE_NONE									(0x0000)
+#define		KEY_VALUE_BACKSPACE								(0x0008)
 #define		KEY_VALUE_TAB									(0x0009)
 #define		KEY_VALUE_ENTER									(0x000D)
 #define		KEY_VALUE_ESC									(0x001B)
 #define		KEY_VALUE_SPACE									(0x0020)
+#define		KEY_VALUE_DEL									(0x007F)
 #define		KEY_VALUE_LEFT									(0x013A)
 #define		KEY_VALUE_UP									(0x013B)
 #define		KEY_VALUE_RIGHT									(0x013C)
 #define		KEY_VALUE_DOWN									(0x013D)
+#define		KEY_VALUE_INSERT								(0x0142)
 #define		KEY_VALUE_F1									(0x0154)
 #define		KEY_VALUE_F2									(0x0155)
 #define		KEY_VALUE_F3									(0x0156)

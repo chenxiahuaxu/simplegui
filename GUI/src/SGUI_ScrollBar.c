@@ -14,15 +14,87 @@
 //= Function define.										            =//
 //=======================================================================//
 /*************************************************************************/
+/** Function Name:	SGUI_ScrollBar_Initialize							**/
+/** Purpose:		Initialize a scroll bar structure.					**/
+/** Params:																**/
+/**	@ pstObj[in]:	Scroll bar object pointer.							**/
+/**	@ pcstInitParam[in]: Initialize parameter data.						**/
+/** Return:			None.												**/
+/*************************************************************************/
+void SGUI_ScrollBar_Initialize(SGUI_SCROLLBAR_STRUCT* pstObj, const SGUI_SCROLLBAR_PARAM* pcstInitParam)
+{
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	if((NULL != pstObj) && (NULL != pcstInitParam))
+	{
+		SGUI_SystemIF_MemorySet(pstObj, 0x00, sizeof(SGUI_SCROLLBAR_STRUCT));
+		SGUI_SystemIF_MemoryCopy(&(pstObj->stParam), (void*)pcstInitParam, sizeof(SGUI_SCROLLBAR_PARAM));
+	}
+}
+
+/*************************************************************************/
+/** Function Name:	SGUI_ScrollBar_SetValue								**/
+/** Purpose:		Initialize a scroll bar structure.					**/
+/** Params:																**/
+/**	@ pstObj[in]:	Scroll bar object pointer.							**/
+/**	@ sNewValue[in]: New value will be set.								**/
+/** Return:			None.												**/
+/*************************************************************************/
+void SGUI_ScrollBar_SetValue(SGUI_SCROLLBAR_STRUCT* pstObj, SGUI_SIZE sNewValue)
+{
+	if(NULL != pstObj)
+	{
+		if(sNewValue > pstObj->stParam.sMaxValue)
+		{
+			pstObj->stData.sValue = pstObj->stParam.sMaxValue;
+		}
+		else
+		{
+			pstObj->stData.sValue = sNewValue;
+		}
+	}
+}
+
+/*************************************************************************/
+/** Function Name:	SGUI_ScrollBar_GetValue								**/
+/** Purpose:		Get current scrolled value.							**/
+/** Params:																**/
+/**	@ pstObj[in]:	Scroll bar object pointer.							**/
+/** Return:			Current scrolled value.								**/
+/*************************************************************************/
+SGUI_SIZE SGUI_ScrollBar_GetValue(const SGUI_SCROLLBAR_STRUCT* pstObj)
+{
+	/*----------------------------------*/
+	/* Variable Declaration				*/
+	/*----------------------------------*/
+	SGUI_SIZE				sReturn;
+
+	/*----------------------------------*/
+	/* Process							*/
+	/*----------------------------------*/
+	if(NULL != pstObj)
+	{
+		sReturn = pstObj->stData.sValue;
+	}
+	else
+	{
+		sReturn = 0;
+	}
+
+	return sReturn;
+}
+
+/*************************************************************************/
 /** Function Name:	SGUI_ScrollBar_RefreshScrollBar						**/
 /** Purpose:		Display or update a scroll bar.						**/
 /** Resources:		Scroll bar data structure.							**/
 /** Params:																**/
-/** @pstScrollBar[in]:	Scroll bar data pointer.						**/
+/** @ pstObj[in]:	Scroll bar data structure pointer.					**/
 /** Return:			None.												**/
 /** Notice:			None.												**/
 /*************************************************************************/
-void SGUI_ScrollBar_Repaint(SGUI_SCR_DEV* pstDeviceIF, SGUI_SCROLLBAR_STRUCT* pstScrollBar)
+void SGUI_ScrollBar_Repaint(SGUI_SCR_DEV* pstDeviceIF, SGUI_SCROLLBAR_STRUCT* pstObj)
 {
 	/*----------------------------------*/
 	/* Variable Declaration				*/
@@ -33,63 +105,59 @@ void SGUI_ScrollBar_Repaint(SGUI_SCR_DEV* pstDeviceIF, SGUI_SCROLLBAR_STRUCT* ps
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	if(SGUI_SCROLLBAR_VERTICAL == pstScrollBar->eDirection)
+	if(SGUI_SCROLLBAR_VERTICAL == pstObj->stParam.eDirection)
 	{
-		uiScrollBlockSize	= pstScrollBar->iWidth-2;
+		uiScrollBlockSize = pstObj->stParam.stLayout.iWidth-2;
 	}
 	else
 	{
-		uiScrollBlockSize	= pstScrollBar->iHeight-2;
+		uiScrollBlockSize = pstObj->stParam.stLayout.iHeight-2;
 	}
 
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if(((pstScrollBar->iHeight > 2) && (pstScrollBar->iWidth > 2)) && (pstScrollBar->iHeight != pstScrollBar->iWidth))
+	if(((pstObj->stParam.stLayout.iHeight > 2) && (pstObj->stParam.stLayout.iWidth > 2)) && (pstObj->stParam.stLayout.iHeight != pstObj->stParam.stLayout.iWidth))
 	{
 		// Check new value must be less then max value.
-		if(pstScrollBar->sIndex > pstScrollBar->sMaxIndex)
+		if(pstObj->stData.sValue > pstObj->stParam.sMaxValue)
 		{
-			pstScrollBar->sIndex = pstScrollBar->sMaxIndex;
+			pstObj->stData.sValue = pstObj->stParam.sMaxValue;
 		}
-
-		if(SGUI_SCROLLBAR_VERTICAL == pstScrollBar->eDirection)
-		{
-			// Draw scroll bar edge.
-			SGUI_Basic_DrawRectangle(pstDeviceIF, pstScrollBar->iPosX, pstScrollBar->iPosY,
-									pstScrollBar->iWidth, pstScrollBar->iHeight,
+		// Draw scroll bar edge.
+		SGUI_Basic_DrawRectangle(pstDeviceIF, pstObj->stParam.stLayout.iX, pstObj->stParam.stLayout.iY,
+									pstObj->stParam.stLayout.iWidth, pstObj->stParam.stLayout.iHeight,
 									SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
+
+		if(SGUI_SCROLLBAR_VERTICAL == pstObj->stParam.eDirection)
+		{
 			// Value lower limit is 0, scroll blocks must be greater then 0.
-			if(pstScrollBar->sMaxIndex > 0)
+			if(pstObj->stParam.sMaxValue > 0)
 			{
-				uiScrollBlockPos = pstScrollBar->iPosY+1+((pstScrollBar->iHeight-uiScrollBlockSize-2)*pstScrollBar->sIndex/pstScrollBar->sMaxIndex);
+				uiScrollBlockPos = pstObj->stParam.stLayout.iY+1+((pstObj->stParam.stLayout.iHeight-uiScrollBlockSize-2)*pstObj->stData.sValue/pstObj->stParam.sMaxValue);
 				// Redraw process block
-				SGUI_Basic_DrawRectangle(pstDeviceIF, pstScrollBar->iPosX+1, uiScrollBlockPos,
+				SGUI_Basic_DrawRectangle(pstDeviceIF, pstObj->stParam.stLayout.iX+1, uiScrollBlockPos,
 										uiScrollBlockSize, uiScrollBlockSize, SGUI_COLOR_FRGCLR, SGUI_COLOR_FRGCLR);
 			}
 			else
 			{
-				SGUI_Basic_DrawRectangle(pstDeviceIF, pstScrollBar->iPosX+1, pstScrollBar->iPosY+1,
+				SGUI_Basic_DrawRectangle(pstDeviceIF, pstObj->stParam.stLayout.iX+1, pstObj->stParam.stLayout.iY+1,
 										uiScrollBlockSize, uiScrollBlockSize, SGUI_COLOR_FRGCLR, SGUI_COLOR_FRGCLR);
 			}
 		}
 		else // Horizontal
 		{
-			// Draw scroll bar edge.
-			SGUI_Basic_DrawRectangle(pstDeviceIF, pstScrollBar->iPosX, pstScrollBar->iPosY,
-									pstScrollBar->iWidth, pstScrollBar->iHeight,
-									SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
 			// Value lower limit is 0, scroll blocks must be greater then 0.
-			if(pstScrollBar->sMaxIndex > 0)
+			if(pstObj->stParam.sMaxValue > 0)
 			{
-				uiScrollBlockPos = pstScrollBar->iPosX+1+((pstScrollBar->iWidth-uiScrollBlockSize-2)*pstScrollBar->sIndex/pstScrollBar->sMaxIndex);
+				uiScrollBlockPos = pstObj->stParam.stLayout.iX+1+((pstObj->stParam.stLayout.iWidth-uiScrollBlockSize-2)*pstObj->stData.sValue/pstObj->stParam.sMaxValue);
 				// Redraw process block
-				SGUI_Basic_DrawRectangle(pstDeviceIF, uiScrollBlockPos, pstScrollBar->iPosY+1,
+				SGUI_Basic_DrawRectangle(pstDeviceIF, uiScrollBlockPos, pstObj->stParam.stLayout.iY+1,
 										uiScrollBlockSize, uiScrollBlockSize, SGUI_COLOR_FRGCLR, SGUI_COLOR_FRGCLR);
 			}
 			else
 			{
-				SGUI_Basic_DrawRectangle(pstDeviceIF, pstScrollBar->iPosX+1, pstScrollBar->iPosY+1,
+				SGUI_Basic_DrawRectangle(pstDeviceIF, pstObj->stParam.stLayout.iX+1, pstObj->stParam.stLayout.iY+1,
 										uiScrollBlockSize, uiScrollBlockSize, SGUI_COLOR_FRGCLR, SGUI_COLOR_FRGCLR);
 			}
 		}

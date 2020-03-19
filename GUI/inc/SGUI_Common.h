@@ -19,6 +19,8 @@
 #define		SGUI_TOUPPER(C)					(SGUI_ISUPPER(C)?(C):(C-32))
 #define		SGUI_SWAP(A, B)					{A=A^B; B=A^B; A=A^B;}
 
+#define		LAYOUT(POBJ)					((POBJ)->stParam.stLayout)
+
 //=======================================================================//
 //= Public function declaration.									    =//
 //=======================================================================//

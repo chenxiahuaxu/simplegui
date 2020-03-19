@@ -10,10 +10,13 @@
 //=======================================================================//
 //= User Macro definition.											    =//
 //=======================================================================//
-#define 	RECT_X_START(ST)						((ST).iPosX)
-#define 	RECT_X_END(RECT)						(((RECT).iPosX + (RECT).iWidth - 1))
-#define 	RECT_Y_START(ST)						((ST).iPosY)
-#define 	RECT_Y_END(RECT)						(((RECT).iPosY + (RECT).iHeight - 1))
+#define		SGUI_MAX_OF(A, B)						(A>B?A:B)
+#define		SGUI_MIN_OF(A, B)						(A<B?A:B)
+#define		RANGE_SIZE(RANGE)						((RANGE).iMax-(RANGE).iMin+1)
+#define 	RECT_X_START(ST)						((ST).iX)
+#define 	RECT_X_END(RECT)						(((RECT).iX + (RECT).iWidth - 1))
+#define 	RECT_Y_START(ST)						((ST).iY)
+#define 	RECT_Y_END(RECT)						(((RECT).iY + (RECT).iHeight - 1))
 #define 	RECT_WIDTH(ST)							((ST).iWidth)
 #define 	RECT_HEIGHT(ST)							((ST).iHeight)
 #define 	RECT_VALID_WIDTH(DATA, POS)				((RECT_X_START(POS)>0)?RECT_WIDTH(DATA):(RECT_WIDTH(DATA)+RECT_X_START(POS)))
@@ -60,8 +63,8 @@ typedef	SGUI_UINT32						SGUI_ROM_ADDRESS;
 
 typedef struct
 {
-	SGUI_INT							iPosX;
-	SGUI_INT							iPosY;
+	SGUI_INT							iX;
+	SGUI_INT							iY;
 	SGUI_INT							iWidth;
 	SGUI_INT							iHeight;
 }SGUI_RECT;
@@ -74,8 +77,8 @@ typedef struct
 
 typedef struct
 {
-	SGUI_INT							iPosX;
-	SGUI_INT							iPosY;
+	SGUI_INT							iX;
+	SGUI_INT							iY;
 }SGUI_POINT;
 
 typedef struct

@@ -381,36 +381,36 @@ void wxLCDBase::OnSetFocus(wxFocusEvent& clsEvent)
 	GetParent()->SetFocus();
 	clsEvent.Skip();
 }
-void wxLCDBase::_drawPointSinglePixel(wxDC& clsDCObject, int iPosX, int iPosY, const wxSize& clsPixelSize)
+void wxLCDBase::_drawPointSinglePixel(wxDC& clsDCObject, int iX, int iY, const wxSize& clsPixelSize)
 {
     /*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	clsDCObject.DrawPoint(wxPoint(iPosX+m_iBorderWidth, iPosY+m_iBorderWidth));
+	clsDCObject.DrawPoint(wxPoint(iX+m_iBorderWidth, iY+m_iBorderWidth));
 }
 
-void wxLCDBase::_drawPointMultiplePixel(wxDC& clsDCObject, int iPosX, int iPosY, const wxSize& clsPixelSize)
+void wxLCDBase::_drawPointMultiplePixel(wxDC& clsDCObject, int iX, int iY, const wxSize& clsPixelSize)
 {
     /*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	clsDCObject.DrawRectangle(wxPoint(iPosX*m_clsPixelUnitSize.GetWidth()+m_iBorderWidth, iPosY*m_clsPixelUnitSize.GetHeight()+m_iBorderWidth), clsPixelSize);
+	clsDCObject.DrawRectangle(wxPoint(iX*m_clsPixelUnitSize.GetWidth()+m_iBorderWidth, iY*m_clsPixelUnitSize.GetHeight()+m_iBorderWidth), clsPixelSize);
 }
 
-void wxLCDBase::_drawPointMultiplePixelWithGrid(wxDC& clsDCObject, int iPosX, int iPosY, const wxSize& clsPixelSize)
+void wxLCDBase::_drawPointMultiplePixelWithGrid(wxDC& clsDCObject, int iX, int iY, const wxSize& clsPixelSize)
 {
     /*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	clsDCObject.DrawRectangle(wxPoint(iPosX*m_clsPixelUnitSize.GetWidth()+m_iBorderWidth+1, iPosY*m_clsPixelUnitSize.GetHeight()+m_iBorderWidth+1), wxSize(clsPixelSize.GetWidth()-1, clsPixelSize.GetHeight()-1));
+	clsDCObject.DrawRectangle(wxPoint(iX*m_clsPixelUnitSize.GetWidth()+m_iBorderWidth+1, iY*m_clsPixelUnitSize.GetHeight()+m_iBorderWidth+1), wxSize(clsPixelSize.GetWidth()-1, clsPixelSize.GetHeight()-1));
 }
 
 /*************************************************************************/
 /** Function Name:	SetPixelUnitColor                                   **/
 /** Purpose:		Set a pixel RGBA color value.                       **/
 /** Params:																**/
-/**	@ iPosX[in]:		X-Coordinate of pixel.                          **/
-/**	@ iPosY[in]:		Y-Coordinate of pixel.                          **/
+/**	@ iX[in]:		X-Coordinate of pixel.                          **/
+/**	@ iY[in]:		Y-Coordinate of pixel.                          **/
 /**	@ clsColor[in]:     Color data object.                              **/
 /**	@ bRefreshNow[in]:  Refresh display at once, default to false.      **/
 /** Return:			None.                                               **/
@@ -421,18 +421,18 @@ void wxLCDBase::_drawPointMultiplePixelWithGrid(wxDC& clsDCObject, int iPosX, in
 /**                 only one pixel, please use the DrawPixel function   **/
 /**                 directly.                                           **/
 /*************************************************************************/
-void wxLCDBase::SetPixelUnitColor(int iPosX, int iPosY, const wxColor& clsColor, bool bRefreshNow)
+void wxLCDBase::SetPixelUnitColor(int iX, int iY, const wxColor& clsColor, bool bRefreshNow)
 {
     /*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if((iPosX < m_clsSizeInPixel.GetWidth()) && (iPosY < m_clsSizeInPixel.GetHeight()))
+	if((iX < m_clsSizeInPixel.GetWidth()) && (iY < m_clsSizeInPixel.GetHeight()))
 	{
 		_enterPaintCriticalSection();
 
 		if(nullptr != m_ppuiDisplayBuffer)
 		{
-		    *(*(m_ppuiDisplayBuffer+iPosY)+iPosX) = clsColor.GetRGBA();
+		    *(*(m_ppuiDisplayBuffer+iY)+iX) = clsColor.GetRGBA();
 		}
 		if(true == bRefreshNow)
 		{
@@ -448,11 +448,11 @@ void wxLCDBase::SetPixelUnitColor(int iPosX, int iPosY, const wxColor& clsColor,
 /** Purpose:		Get color of a pixel unit.                          **/
 /** Params:																**/
 /**	@ uiPosX[in]:       X-Coordinate of pixel.                          **/
-/**	@ uiPosY[in]:       Y-Coordinate of pixel.                          **/
+/**	@ uiY[in]:       Y-Coordinate of pixel.                          **/
 /** Return:			RGBA color value of the pixel unit.                 **/
 /** Notice:			None.                                               **/
 /*************************************************************************/
-unsigned int wxLCDBase::GetPixelUnitColor(int iPosX, int iPosY)
+unsigned int wxLCDBase::GetPixelUnitColor(int iX, int iY)
 {
     /*----------------------------------*/
 	/* Variable Declaration				*/
@@ -462,12 +462,12 @@ unsigned int wxLCDBase::GetPixelUnitColor(int iPosX, int iPosY)
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if((iPosX < m_clsSizeInPixel.GetWidth()) && (iPosY < m_clsSizeInPixel.GetHeight()))
+	if((iX < m_clsSizeInPixel.GetWidth()) && (iY < m_clsSizeInPixel.GetHeight()))
 	{
 		_enterPaintCriticalSection();
 		if(nullptr != m_ppuiDisplayBuffer)
 		{
-			uiReturnValue = *(*(m_ppuiDisplayBuffer+iPosY)+iPosX);
+			uiReturnValue = *(*(m_ppuiDisplayBuffer+iY)+iX);
 		}
 		_leavePaintCriticalSection();
 	}
@@ -479,18 +479,18 @@ unsigned int wxLCDBase::GetPixelUnitColor(int iPosX, int iPosY)
 /** Function Name:	DrawPixel                                           **/
 /** Purpose:		Draw a pixel.                                       **/
 /** Params:																**/
-/**	@ iPosX[in]:		X-Coordinate of pixel.                          **/
-/**	@ iPosY[in]:		Y-Coordinate of pixel.                          **/
+/**	@ iX[in]:		X-Coordinate of pixel.                          **/
+/**	@ iY[in]:		Y-Coordinate of pixel.                          **/
 /**	@ clsColor[in]:     Color data object.                              **/
 /** Return:			None.                                               **/
 /** Notice:			Draw only one pixel directly.                       **/
 /*************************************************************************/
-void wxLCDBase::DrawPixel(int iPosX, int iPosY, wxColor& clsColor)
+void wxLCDBase::DrawPixel(int iX, int iY, wxColor& clsColor)
 {
 	/*----------------------------------*/
 	/* Process							*/
 	/*----------------------------------*/
-	if((iPosX < m_clsSizeInPixel.GetWidth()) && (iPosY < m_clsSizeInPixel.GetHeight()) && (m_clsPixelUnitSize.GetWidth() != 0) && (m_clsPixelUnitSize.GetHeight() != 0))
+	if((iX < m_clsSizeInPixel.GetWidth()) && (iY < m_clsSizeInPixel.GetHeight()) && (m_clsPixelUnitSize.GetWidth() != 0) && (m_clsPixelUnitSize.GetHeight() != 0))
 	{
 		_enterPaintCriticalSection();
 
@@ -498,13 +498,13 @@ void wxLCDBase::DrawPixel(int iPosX, int iPosY, wxColor& clsColor)
 		_prepareDC(m_clsCDC);
 		if(nullptr != m_pfDrawPoint)
 		{
-			(this->*m_pfDrawPoint)(m_clsCDC, iPosX, iPosY, m_clsPixelUnitSize);
+			(this->*m_pfDrawPoint)(m_clsCDC, iX, iY, m_clsPixelUnitSize);
 		}
 		if(nullptr != m_ppuiDisplayBuffer)
         {
-            *(*(m_ppuiDisplayBuffer+iPosY)+iPosX) = clsColor.GetRGBA();
+            *(*(m_ppuiDisplayBuffer+iY)+iX) = clsColor.GetRGBA();
         }
-		SetPixelUnitColor(iPosX, iPosY, clsColor);
+		SetPixelUnitColor(iX, iY, clsColor);
 		_releaseDC(m_clsCDC);
 
 		_leavePaintCriticalSection();

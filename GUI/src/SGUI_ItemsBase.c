@@ -67,7 +67,7 @@ void SGUI_ItemsBase_Repaint(SGUI_SCR_DEV* pstDeviceIF, SGUI_ITEMS_BASE* pstObj)
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	stItemTextPos.iPosX =		1;
+	stItemTextPos.iX =		1;
 
 	/*----------------------------------*/
 	/* Process							*/
@@ -75,11 +75,11 @@ void SGUI_ItemsBase_Repaint(SGUI_SCR_DEV* pstDeviceIF, SGUI_ITEMS_BASE* pstObj)
 	if((NULL != pstDeviceIF) && (NULL != pstObj))
 	{
 		// Clear background
-		SGUI_Basic_DrawRectangle(pstDeviceIF, pstObj->stLayout.iPosX, pstObj->stLayout.iPosY, pstObj->stLayout.iWidth, pstObj->stLayout.iHeight, SGUI_COLOR_BKGCLR, SGUI_COLOR_BKGCLR);
+		SGUI_Basic_DrawRectangle(pstDeviceIF, pstObj->stLayout.iX, pstObj->stLayout.iY, pstObj->stLayout.iWidth, pstObj->stLayout.iHeight, SGUI_COLOR_BKGCLR, SGUI_COLOR_BKGCLR);
 		if((pstObj->iSelection > SGUI_INVALID_INDEX) && (pstObj->iSelection < pstObj->iCount))
 		{
-			stItemPaintArea.iPosX =	pstObj->stLayout.iPosX;
-			stItemPaintArea.iPosY = pstObj->stLayout.iPosY;
+			stItemPaintArea.iX =	pstObj->stLayout.iX;
+			stItemPaintArea.iY = pstObj->stLayout.iY;
 			stItemPaintArea.iWidth = pstObj->stLayout.iWidth;
 			/* Judge selected item is in visible area. */
 			if(pstObj->iSelection < pstObj->iPageStartIndex)
@@ -110,20 +110,20 @@ void SGUI_ItemsBase_Repaint(SGUI_SCR_DEV* pstDeviceIF, SGUI_ITEMS_BASE* pstObj)
 
 			/* Paint first visible item. */
 			iItemIndex=pstObj->iPageStartIndex;
-			stItemTextPos.iPosY = pstObj->iItemPaintOffset+1;
+			stItemTextPos.iY = pstObj->iItemPaintOffset+1;
 			cszItemText = (NULL==pstObj->pstItems[iItemIndex].szVariableText)?pstObj->pstItems[iItemIndex].cszLabelText:pstObj->pstItems[iItemIndex].szVariableText;
 			SGUI_Text_DrawText(pstDeviceIF, cszItemText, pstObj->pstFontRes, &stItemPaintArea, &stItemTextPos, iItemIndex==pstObj->iSelection?SGUI_DRAW_REVERSE:SGUI_DRAW_NORMAL);
 			iItemIndex++;
 			stItemPaintArea.iHeight = ITEM_HEIGHT(pstObj->pstFontRes);
 			if(pstObj->iVisibleItems > 1)
 			{
-				stItemPaintArea.iPosY += ITEM_HEIGHT(pstObj->pstFontRes)+(pstObj->iItemPaintOffset);
-				stItemTextPos.iPosY = 1;
+				stItemPaintArea.iY += ITEM_HEIGHT(pstObj->pstFontRes)+(pstObj->iItemPaintOffset);
+				stItemTextPos.iY = 1;
 				while((iItemIndex != pstObj->iPageEndIndex) && (iItemIndex < pstObj->iCount))
 				{
 					cszItemText = (NULL==pstObj->pstItems[iItemIndex].szVariableText)?pstObj->pstItems[iItemIndex].cszLabelText:pstObj->pstItems[iItemIndex].szVariableText;
 					SGUI_Text_DrawText(pstDeviceIF, cszItemText, pstObj->pstFontRes, &stItemPaintArea, &stItemTextPos, iItemIndex==pstObj->iSelection?SGUI_DRAW_REVERSE:SGUI_DRAW_NORMAL);
-					stItemPaintArea.iPosY += ITEM_HEIGHT(pstObj->pstFontRes);
+					stItemPaintArea.iY += ITEM_HEIGHT(pstObj->pstFontRes);
 					iItemIndex++;
 				}
 				if(iItemIndex < pstObj->iCount)
@@ -189,31 +189,31 @@ void SGUI_ItemsBase_GetItemExtent(SGUI_ITEMS_BASE* pstObj, SGUI_INT iSelection, 
 	/*----------------------------------*/
 	if((NULL != pstObj) && (iSelection > SGUI_INVALID_INDEX) && (iSelection < pstObj->iCount) && (NULL != pstItemExtent))
 	{
-		pstItemExtent->iPosX = pstObj->stLayout.iPosX;
+		pstItemExtent->iX = pstObj->stLayout.iX;
 		pstItemExtent->iWidth = pstObj->stLayout.iWidth;
 		/* Item is not visible. */
         if((iSelection < pstObj->iPageStartIndex) || (iSelection > pstObj->iPageEndIndex))
 		{
-			pstItemExtent->iPosY = 0;
+			pstItemExtent->iY = 0;
 			pstItemExtent->iHeight = 0;
 		}
 		else
 		{
 			if((0 == pstObj->iItemPaintOffset) && (iSelection == pstObj->iPageEndIndex))
 			{
-				pstItemExtent->iPosY = pstObj->stLayout.iPosY+(ITEM_HEIGHT(pstObj->pstFontRes)*(pstObj->iVisibleItems-1));
+				pstItemExtent->iY = pstObj->stLayout.iY+(ITEM_HEIGHT(pstObj->pstFontRes)*(pstObj->iVisibleItems-1));
 				pstItemExtent->iHeight = (0==pstObj->iItemPaintOffset)?(pstObj->stLayout.iHeight%ITEM_HEIGHT(pstObj->pstFontRes)):(ITEM_HEIGHT(pstObj->pstFontRes));
 				/* Correct last visible item height when items area height is an integer multiple of item height. */
 				pstItemExtent->iHeight = (0==pstItemExtent->iHeight)?ITEM_HEIGHT(pstObj->pstFontRes):pstItemExtent->iHeight;
 			}
 			else if((0 != pstObj->iItemPaintOffset) && (iSelection == pstObj->iPageStartIndex))
 			{
-				pstItemExtent->iPosY = pstObj->stLayout.iPosY;
+				pstItemExtent->iY = pstObj->stLayout.iY;
 				pstItemExtent->iHeight = ITEM_HEIGHT(pstObj->pstFontRes)+pstObj->iItemPaintOffset;
 			}
 			else
 			{
-				pstItemExtent->iPosY = pstObj->stLayout.iPosY+((iSelection - pstObj->iPageStartIndex)*ITEM_HEIGHT(pstObj->pstFontRes))+pstObj->iItemPaintOffset;
+				pstItemExtent->iY = pstObj->stLayout.iY+((iSelection - pstObj->iPageStartIndex)*ITEM_HEIGHT(pstObj->pstFontRes))+pstObj->iItemPaintOffset;
 				pstItemExtent->iHeight = ITEM_HEIGHT(pstObj->pstFontRes);
 			}
 		}

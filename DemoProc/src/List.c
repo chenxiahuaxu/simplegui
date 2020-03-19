@@ -34,7 +34,8 @@ static SGUI_ITEMS_ITEM		s_arrstListItems[] =		{	{SCR1_LIST_ITEM1, NULL},
 															{SCR1_LIST_ITEM3, NULL},
 															{SCR1_LIST_ITEM4, NULL},
 															{SCR1_LIST_ITEM5, NULL},
-															{SCR1_LIST_ITEM6, NULL}
+															{SCR1_LIST_ITEM6, NULL},
+															{SCR1_LIST_ITEM7, NULL}
 														};
 static SGUI_LIST_STRUCT		s_stDemoListObject = 		{0x00};
 
@@ -62,8 +63,8 @@ HMI_ENGINE_RESULT HMI_DemoList_Initialize(SGUI_SCR_DEV* pstDeviceIF)
     // Initialize list data.
     SGUI_SystemIF_MemorySet(&s_stDemoListObject, 0x00, sizeof(SGUI_LIST_STRUCT));
     // Title and font size must set before initialize list object.
-    s_stDemoListObject.stLayout.iPosX = 0;
-    s_stDemoListObject.stLayout.iPosY = 0;
+    s_stDemoListObject.stLayout.iX = 0;
+    s_stDemoListObject.stLayout.iY = 0;
     s_stDemoListObject.stLayout.iWidth = pstDeviceIF->stSize.iWidth;
     s_stDemoListObject.stLayout.iHeight = pstDeviceIF->stSize.iHeight;
     s_stDemoListObject.szTitle = SCR1_TITLE;
@@ -202,6 +203,11 @@ HMI_ENGINE_RESULT HMI_DemoList_PostProcess(SGUI_SCR_DEV* pstDeviceIF, HMI_ENGINE
 			case 5:
 			{
 				HMI_SwitchScreen(HMI_SCREEN_ID_DEMO_TEXT_NOTICE, SCR7_NOTICE_TEXT);
+				break;
+			}
+			case 6:
+			{
+				HMI_SwitchScreen(HMI_SCREEN_ID_DEMO_CURVE, NULL);
 				break;
 			}
 			default:

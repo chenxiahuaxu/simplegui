@@ -44,15 +44,15 @@ class wxLCDBase
 		bool					m_bGridVisible;
 		unsigned int**			m_ppuiDisplayBuffer;
 		wxCriticalSection		m_clsDisplayBufferCS;
-		void					(wxLCDBase::*m_pfDrawPoint)(wxDC& clsDCObject, int iPosX, int iPosY, const wxSize& clsPixelSize);
+		void					(wxLCDBase::*m_pfDrawPoint)(wxDC& clsDCObject, int iX, int iY, const wxSize& clsPixelSize);
 		bool					m_bIsOK;
 		int						m_iBorderWidth;
 
 		bool					_initialize(void);
 		void					_getBestSize(wxSize& clsBestSize) const;
-		inline void				_drawPointSinglePixel(wxDC& clsDCObject, int iPosX, int iPosY, const wxSize& clsPixelSize);
-		inline void				_drawPointMultiplePixel(wxDC& clsDCObject, int iPosX, int iPosY, const wxSize& clsPixelSize);
-		inline void				_drawPointMultiplePixelWithGrid(wxDC& clsDCObject, int iPosX, int uiPosY, const wxSize& clsPixelSize);
+		inline void				_drawPointSinglePixel(wxDC& clsDCObject, int iX, int iY, const wxSize& clsPixelSize);
+		inline void				_drawPointMultiplePixel(wxDC& clsDCObject, int iX, int iY, const wxSize& clsPixelSize);
+		inline void				_drawPointMultiplePixelWithGrid(wxDC& clsDCObject, int iX, int uiY, const wxSize& clsPixelSize);
 		inline void				_releaseDC(wxMemoryDC& clsCDCObject)		{clsCDCObject.SetBrush(wxNullBrush); clsCDCObject.SetPen(wxNullPen);}
 		inline void				_prepareDC(wxMemoryDC& clsCDCObject)		{clsCDCObject.SetBrush(m_clsBrush); clsCDCObject.SetPen(m_clsPen);}
 		inline void				_releaseDC(wxClientDC& clsCDCObject)		{clsCDCObject.SetBrush(wxNullBrush); clsCDCObject.SetPen(wxNullPen);}
@@ -88,9 +88,9 @@ class wxLCDBase
 		bool					GetGridVisibled(void) const;
 		void					SetGridColor(const wxColor& clsColor);
 		wxColor&				GetGridColor(void);
-		void					SetPixelUnitColor(int iPosX, int iPosY, const wxColor& clsColor, bool bRefreshNow = false);
-		void					DrawPixel(int iPosX, int iPosY, wxColor& clsColor);
-		unsigned int			GetPixelUnitColor(int iPosX, int iPosY);
+		void					SetPixelUnitColor(int iX, int iY, const wxColor& clsColor, bool bRefreshNow = false);
+		void					DrawPixel(int iX, int iY, wxColor& clsColor);
+		unsigned int			GetPixelUnitColor(int iX, int iY);
 		void					RefreshDisplay(void);
 		void					SetDisplayBuffer(wxColour& clsNewColour);
 		void					ReplaceColour(const wxColour& clsOldColour, const wxColour& clsNewColour);

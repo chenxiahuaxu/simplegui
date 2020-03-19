@@ -73,8 +73,8 @@ void SGUI_Menu_Repaint(SGUI_SCR_DEV* pstDeviceIF, SGUI_MENU_STRUCT* pstObj)
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	stIconInnerPos.iPosX =		0;
-	stIconInnerPos.iPosY =		0;
+	stIconInnerPos.iX =		0;
+	stIconInnerPos.iY =		0;
 
 	/*----------------------------------*/
 	/* Process							*/
@@ -82,22 +82,22 @@ void SGUI_Menu_Repaint(SGUI_SCR_DEV* pstDeviceIF, SGUI_MENU_STRUCT* pstObj)
 	if(NULL != pstObj)
 	{
 		/* Clear list item display area. */
-		SGUI_Basic_DrawRectangle(pstDeviceIF, pstObj->stLayout.iPosX, pstObj->stLayout.iPosY, pstObj->stLayout.iWidth, pstObj->stLayout.iHeight, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
+		SGUI_Basic_DrawRectangle(pstDeviceIF, pstObj->stLayout.iX, pstObj->stLayout.iY, pstObj->stLayout.iWidth, pstObj->stLayout.iHeight, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
 		// Paint items.
 		SGUI_ItemsBase_FitLayout(&(pstObj->stItems));
 		SGUI_ItemsBase_Repaint(pstDeviceIF, &(pstObj->stItems));
 		/* Paint arrow icon. */
 		stIconArea.iWidth = 5;
 		stIconArea.iHeight = 3;
-		stIconArea.iPosX = pstObj->stLayout.iPosX+((pstObj->stLayout.iWidth-stIconArea.iWidth)/2);
+		stIconArea.iX = pstObj->stLayout.iX+((pstObj->stLayout.iWidth-stIconArea.iWidth)/2);
 		if(pstObj->stItems.iPageStartIndex != 0)
 		{
-			stIconArea.iPosY = pstObj->stLayout.iPosY+1;
+			stIconArea.iY = pstObj->stLayout.iY+1;
             SGUI_Basic_DrawBitMap(pstDeviceIF, &stIconArea, &stIconInnerPos, &SGUI_MENU_ICON_MOVEUP, SGUI_DRAW_NORMAL);
 		}
 		if(pstObj->stItems.iPageEndIndex < (pstObj->stItems.iCount-1))
 		{
-			stIconArea.iPosY = RECT_Y_END(pstObj->stItems.stLayout)+1;
+			stIconArea.iY = RECT_Y_END(pstObj->stItems.stLayout)+1;
 			SGUI_Basic_DrawBitMap(pstDeviceIF, &stIconArea, &stIconInnerPos, &SGUI_MENU_ICON_MOVEDOWN, SGUI_DRAW_NORMAL);
 		}
 	}
@@ -120,12 +120,12 @@ void SGUI_Menu_Layout(SGUI_MENU_STRUCT* pstObj, const SGUI_RECT* cpstNewLayout)
 	/*----------------------------------*/
 	if((NULL != pstObj) && (NULL != cpstNewLayout))
 	{
-		pstObj->stLayout.iPosX = cpstNewLayout->iPosX;
-		pstObj->stLayout.iPosY = cpstNewLayout->iPosY;
+		pstObj->stLayout.iX = cpstNewLayout->iX;
+		pstObj->stLayout.iY = cpstNewLayout->iY;
 		pstObj->stLayout.iWidth = cpstNewLayout->iWidth;
 		pstObj->stLayout.iHeight = cpstNewLayout->iHeight;
-		pstObj->stItems.stLayout.iPosX = pstObj->stLayout.iPosX+1;
-		pstObj->stItems.stLayout.iPosY = pstObj->stLayout.iPosY+SGUI_MENU_ICON_MOVEUP.iHeight+1;
+		pstObj->stItems.stLayout.iX = pstObj->stLayout.iX+1;
+		pstObj->stItems.stLayout.iY = pstObj->stLayout.iY+SGUI_MENU_ICON_MOVEUP.iHeight+1;
 		pstObj->stItems.stLayout.iWidth = pstObj->stLayout.iWidth-2;
 		pstObj->stItems.stLayout.iHeight = pstObj->stLayout.iHeight-(SGUI_MENU_ICON_MOVEUP.iHeight+SGUI_MENU_ICON_MOVEDOWN.iHeight+2);
 	}
@@ -166,20 +166,20 @@ void SGUI_Menu_PopupSubMenu(SGUI_SCR_DEV* pstDeviceIF, SGUI_MENU_STRUCT* pstObj,
 		iFullHeight = pstObj->stItems.iCount*ITEM_HEIGHT(pstObj->pstFontRes);
 		iFullHeight = iFullHeight+SGUI_MENU_ICON_MOVEUP.iHeight+SGUI_MENU_ICON_MOVEDOWN.iHeight+2;
 
-		stLayout.iPosX = RECT_X_END(*cpstParentItemLayout)+1;
-		iVisibleHeight = pstDeviceIF->stSize.iHeight-cpstParentItemLayout->iPosY-1;
-		if((iVisibleHeight < iFullHeight) && (cpstParentItemLayout->iPosY > (pstDeviceIF->stSize.iHeight/2)))
+		stLayout.iX = RECT_X_END(*cpstParentItemLayout)+1;
+		iVisibleHeight = pstDeviceIF->stSize.iHeight-cpstParentItemLayout->iY-1;
+		if((iVisibleHeight < iFullHeight) && (cpstParentItemLayout->iY > (pstDeviceIF->stSize.iHeight/2)))
 		{
-			iVisibleHeight = cpstParentItemLayout->iPosY+cpstParentItemLayout->iHeight+1;
-			stLayout.iPosY = iVisibleHeight-iFullHeight-1;
-			if(stLayout.iPosY<0)
+			iVisibleHeight = cpstParentItemLayout->iY+cpstParentItemLayout->iHeight+1;
+			stLayout.iY = iVisibleHeight-iFullHeight-1;
+			if(stLayout.iY<0)
 			{
-				stLayout.iPosY = 0;
+				stLayout.iY = 0;
 			}
 		}
 		else
 		{
-			stLayout.iPosY = cpstParentItemLayout->iPosY;
+			stLayout.iY = cpstParentItemLayout->iY;
 		}
 		stLayout.iWidth = cpstParentItemLayout->iWidth+2;
 		if(iFullHeight > iVisibleHeight)

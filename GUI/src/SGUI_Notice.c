@@ -46,26 +46,26 @@ SGUI_SIZE SGUI_Notice_Repaint(SGUI_SCR_DEV* pstDeviceIF, SGUI_NOTICT_BOX* pstObj
 	if((NULL != pstObject) && (NULL != pstObject->cszNoticeText))
 	{
 		// Draw edgeNOTICE_BOX_MARGIN
-		SGUI_Basic_DrawRectangle(pstDeviceIF, pstObject->stLayout.iPosX, pstObject->stLayout.iPosY, pstObject->stLayout.iWidth, pstObject->stLayout.iHeight, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
+		SGUI_Basic_DrawRectangle(pstDeviceIF, pstObject->stLayout.iX, pstObject->stLayout.iY, pstObject->stLayout.iWidth, pstObject->stLayout.iHeight, SGUI_COLOR_FRGCLR, SGUI_COLOR_BKGCLR);
 
-		stTextDisplayArea.iPosY = pstObject->stLayout.iPosY+2;
+		stTextDisplayArea.iY = pstObject->stLayout.iY+2;
 		stTextDisplayArea.iHeight = pstObject->stLayout.iHeight-4;
 		if(NULL == pstObject->pstIcon)
 		{
-			stTextDisplayArea.iPosX = pstObject->stLayout.iPosX+2;
+			stTextDisplayArea.iX = pstObject->stLayout.iX+2;
 			stTextDisplayArea.iWidth = pstObject->stLayout.iWidth-4;
 		}
 		else
 		{
-			stTextDisplayArea.iPosX = pstObject->stLayout.iPosX+pstObject->pstIcon->iWidth+4;
+			stTextDisplayArea.iX = pstObject->stLayout.iX+pstObject->pstIcon->iWidth+4;
 			stTextDisplayArea.iWidth = pstObject->stLayout.iWidth-pstObject->pstIcon->iWidth-6;
 
-			stIconDisplayArea.iPosX = pstObject->stLayout.iPosX+2;
-			stIconDisplayArea.iPosY = pstObject->stLayout.iPosY+2;
+			stIconDisplayArea.iX = pstObject->stLayout.iX+2;
+			stIconDisplayArea.iY = pstObject->stLayout.iY+2;
 			stIconDisplayArea.iWidth = pstObject->pstIcon->iWidth;
 			stIconDisplayArea.iHeight = pstObject->pstIcon->iHeight;
-			stIconPosition.iPosX = 0;
-			stIconPosition.iPosY = 0;
+			stIconPosition.iX = 0;
+			stIconPosition.iY = 0;
 			// Paint icon.
 			SGUI_Basic_DrawBitMap(pstDeviceIF, &stIconDisplayArea, &stIconPosition, pstObject->pstIcon, SGUI_DRAW_NORMAL);
 		}
@@ -82,8 +82,8 @@ void SGUI_Notice_FitArea(SGUI_SCR_DEV* pstDeviceIF, SGUI_RECT* pstFitArea)
 	/*----------------------------------*/
 	if((NULL != pstDeviceIF) && (NULL != pstFitArea))
 	{
-		pstFitArea->iPosX = SGUI_NOTICE_MARGIN;
-		pstFitArea->iPosY = SGUI_NOTICE_MARGIN;
+		pstFitArea->iX = SGUI_NOTICE_MARGIN;
+		pstFitArea->iY = SGUI_NOTICE_MARGIN;
 		pstFitArea->iWidth = pstDeviceIF->stSize.iWidth-(SGUI_NOTICE_MARGIN<<1);
 		pstFitArea->iHeight = pstDeviceIF->stSize.iHeight-(SGUI_NOTICE_MARGIN<<1);
 	}

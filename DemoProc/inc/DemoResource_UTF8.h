@@ -10,6 +10,7 @@
 #define SCR1_LIST_ITEM4					("实时曲线")
 #define SCR1_LIST_ITEM5					("菜单")
 #define SCR1_LIST_ITEM6					("消息框")
+#define SCR1_LIST_ITEM7					("调整曲线")
 
 /* Screen 2: Basic Paint*/
 /* No text used. */

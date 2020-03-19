@@ -72,8 +72,8 @@ HMI_ENGINE_RESULT HMI_DemoMenu_Initialize(SGUI_SCR_DEV* pstDeviceIF)
 	/*----------------------------------*/
 	/* Initialize						*/
 	/*----------------------------------*/
-	stLayout.iPosX =		0;
-	stLayout.iPosY =		0;
+	stLayout.iX =		0;
+	stLayout.iY =		0;
 	stLayout.iWidth = 		48;
 	stLayout.iHeight =		60;
 
@@ -166,7 +166,7 @@ HMI_ENGINE_RESULT HMI_DemoMenu_ProcessEvent(SGUI_SCR_DEV* pstDeviceIF, const HMI
 						if(s_pstActivedMenu->stLayout.iWidth > 0)
 						{
 							/* Cleanup sub-menu display. */
-							SGUI_Basic_DrawRectangle(pstDeviceIF, s_pstActivedMenu->stLayout.iPosX, s_pstActivedMenu->stLayout.iPosY, s_pstActivedMenu->stLayout.iWidth, s_pstActivedMenu->stLayout.iHeight, SGUI_COLOR_BKGCLR, SGUI_COLOR_BKGCLR);
+							SGUI_Basic_DrawRectangle(pstDeviceIF, s_pstActivedMenu->stLayout.iX, s_pstActivedMenu->stLayout.iY, s_pstActivedMenu->stLayout.iWidth, s_pstActivedMenu->stLayout.iHeight, SGUI_COLOR_BKGCLR, SGUI_COLOR_BKGCLR);
 							s_pstActivedMenu->stLayout.iWidth = 0;
 							s_pstActivedMenu = &s_stDemoMenuObject;
 						}
