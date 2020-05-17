@@ -16,7 +16,7 @@
 #### 2.1. 下载Code::Blocks  
 
 &emsp;&emsp;请访问[Code::Blocks下载页面](http://www.codeblocks.org/downloads)下载Code::Blocks集成开发环境的最新发布版本。  
->![01-Codeblocks下载页面](/images/CodeBlocks2003DownLoad.png) 
+><p align='center'><img src='images/CodeBlocks2003DownLoad.png' title='01-Codeblocks下载页面' style='max-width:800px'></img></p> 
 >
 >![02-Codeblocks下载链接](/images/CodeBlocksReleaseSelect.png)  
 
