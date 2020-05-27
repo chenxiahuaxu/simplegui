@@ -14,10 +14,10 @@
 				<Option compiler="gcc" />
 				<Option projectLinkerOptionsRelation="2" />
 				<Compiler>
-					<Add directory="$(#wxBin)/lib/gcc_x86_dll/mswu" />
+					<Add directory="$(#wx)/lib/gcc_x86_dll/mswu" />
 				</Compiler>
 				<ResourceCompiler>
-					<Add directory="$(#wxBin)/lib/gcc_x86_dll/mswu" />
+					<Add directory="$(#wx)/lib/gcc_x86_dll/mswu" />
 				</ResourceCompiler>
 				<Linker>
 					<Add library="libwxmsw30u_core.a" />
@@ -28,7 +28,7 @@
 					<Add library="libwxtiff.a" />
 					<Add library="libiconv.a" />
 					<Add directory="../../Library/lib32" />
-					<Add directory="$(#wxBin)/lib/gcc_x86_dll" />
+					<Add directory="$(#wx)/lib/gcc_x86_dll" />
 				</Linker>
 			</Target>
 			<Target title="x64">
@@ -39,10 +39,10 @@
 				<Option compiler="gcc" />
 				<Option projectLinkerOptionsRelation="2" />
 				<Compiler>
-					<Add directory="$(#wxBin)/lib/gcc_x64_dll/mswu" />
+					<Add directory="$(#wx)/lib/gcc_x64_dll/mswu" />
 				</Compiler>
 				<ResourceCompiler>
-					<Add directory="$(#wxBin)/lib/gcc_x64_dll/mswu" />
+					<Add directory="$(#wx)/lib/gcc_x64_dll/mswu" />
 				</ResourceCompiler>
 				<Linker>
 					<Add library="libwxmsw30u_core.a" />
@@ -53,7 +53,7 @@
 					<Add library="libwxtiff.a" />
 					<Add library="libiconv64.a" />
 					<Add directory="../../Library/lib64" />
-					<Add directory="$(#wxBin)/lib/gcc_x64_dll" />
+					<Add directory="$(#wx)/lib/gcc_x64_dll" />
 				</Linker>
 			</Target>
 		</Build>
@@ -68,7 +68,7 @@
 			<Add option="-D__WXMSW__" />
 			<Add option="-DWXUSINGDLL" />
 			<Add option="-DwxUSE_UNICODE" />
-			<Add directory="$(#wxBin)/include" />
+			<Add directory="$(#wx)/include" />
 			<Add directory="../../Application/inc" />
 			<Add directory="../../Common/inc" />
 			<Add directory="../../Library/inc" />
@@ -83,7 +83,7 @@
 			<Add directory="../../../DemoProc/inc" />
 		</Compiler>
 		<ResourceCompiler>
-			<Add directory="$(#wxBin)/include" />
+			<Add directory="$(#wx)/include" />
 		</ResourceCompiler>
 		<Linker>
 			<Add option="-O3" />
