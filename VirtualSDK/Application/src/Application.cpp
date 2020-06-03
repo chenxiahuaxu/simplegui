@@ -33,7 +33,7 @@ bool Application::OnInit(void)
 	// Register image media handle.
 	wxInitAllImageHandlers();
 	// Read virtual device parameter.
-	SetDefaultParameterData(&g_stParameters);
+	SetLCDPanelParameter(&g_stParameters);
 	// Create main frame instance.
 	m_pclsMainFrame = LCDFrame::GetInstance();
 	if(NULL != m_pclsMainFrame)

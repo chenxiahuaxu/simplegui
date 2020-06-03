@@ -178,16 +178,16 @@
 &emsp;&emsp;至此wxWidgets的开发环境搭建并校验完成。  
 
 ## 4. 常见错误  
-#### 4.1. 编译错误：error: cannot find -lwxmsw30ud
+#### 4.1. 编译错误：error: cannot find -lwxmsw30ud  
 
 &emsp;&emsp;**原因：**这个错误是libwxmsw30ud.a库文件找不到所致，通常是由于创建wxWidgets工程时，选择了“wxWidgets is built as a monolithic library”选项，而部署的wxWidgets为官方提供的Release版本，因为wxWidgets的官方Release版本并不提供monolithic模式的库文件。  
 
 &emsp;&emsp;**解决方式：**解决这个错误有两个方法，第一种方法是下载wxWidgets的源代码，自行编译monolithic版本的库文件。第二种方法是重新建立工程，注意取消掉“wxWidgets is built as a monolithic library”选项，或者直接修改工程的库链接选项，移除monolithic版本库的引用，添加非monolithic版本库的引用。  
 
-#### 4.2. 编译错误：error: wx/setup.h: No such file or directory
+#### 4.2. 编译错误：error: wx/setup.h: No such file or directory  
 
-&emsp;&emsp;此错误多出现在wxWidgets的platform.h头文件中，错误为找不到一个名为"setup.h"的头文件。
-&emsp;&emsp;这个错误多见于没有使用CodeBlocks的wxWidgets工程向导生成的工程中，或者更换wxWidgets库、更换编译器后。在wxWidgets中，这个头文件有两个，一个位于include/wx/msw下，另一个位于lib/gcc_dll/mswu/wx下，这两个文件的内容是一致的。而在CodeBlocks工程向导中生成的wxWidgets工程，包含的通常都是后者的位置，而后者的位置通常都不是固定的，lib/gcc_dll/mswu/wx这个路径中，“gcc_dll”这个文件夹名称经常发生变化，比如如果用wxWidgets源码进行编译，那么视生成库的类型不同（静态库或动态库），这个文件夹名为“gcc_lib”或“gcc_dll”，如果是从wxWidgets主页下载的Release版本，则会添加编译器名标记，比如面向TDM-5.1.0编译器的库就是gcc510_dll，如果是64位的库的话，还会添加x64字样，变成gcc510_x64_dll。同理，本文档中示例的面向MinGW-w64 8.1.0版本的库64位版，下载并解压后，库的路径事实上是lib/gcc810_x64_dll。顺便再强调一下，wxWIdgets官方发布的Release版只有动态库，没有静态的，所以都是dll。  
+&emsp;&emsp;此错误多出现在wxWidgets的platform.h头文件中，错误为找不到一个名为"setup.h"的头文件。  
+&emsp;&emsp;这个错误多见于没有使用CodeBlocks的wxWidgets工程向导生成的工程中，或者更换wxWidgets库、更换编译器后。在wxWidgets中，这个头文件有两个，一个位于include/wx/msw下，另一个位于lib/gcc_dll/mswu/wx下，这两个文件的内容是一致的。而在CodeBlocks工程向导中生成的wxWidgets工程，包含的通常都是后者的位置，而后者的位置通常都不是固定的，lib/gcc_dll/mswu/wx这个路径中，“gcc_dll”这个文件夹名称经常发生变化，比如如果用wxWidgets源码进行编译，那么视生成库的类型不同（静态库或动态库），这个文件夹名为“gcc_lib”或“gcc_dll”，如果是从wxWidgets主页下载的Release版本，则会添加编译器名标记，比如面向TDM-5.1.0编译器的库就是gcc510_dll，如果是64位的库的话，还会添加x64字样，变成gcc510_x64_dll。同理，本文档中示例的面向MinGW-w64 8.1.0版本的库64位版，下载并解压后，库的路径事实上是lib/gcc810_x64_dll。顺便再强调一下，wxWidgets官方发布的Release版只有动态库，没有静态的，所以都是dll。  
 &emsp;&emsp;所以，再出现这个错误时，请点击“Project”菜单下的“Build options菜单”，进入编译选项。
 ><p align='center'><img src='images/A1/QA01.png' title='编译选项菜单' style='max-width:800px'></img></p>  
 

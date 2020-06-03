@@ -12,7 +12,7 @@
 PixelPanelParameter			g_stParameters;
 
 
-void SetDefaultParameterData(PixelPanelParameter* pstParameter)
+void SetLCDPanelParameter(PixelPanelParameter* pstParameter)
 {
 	if(NULL != pstParameter)
 	{

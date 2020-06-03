@@ -12,17 +12,22 @@
 //=======================================================================//
 #define _TRANS_TEXT(STR)								_(STR)
 
-// OLED
-
-#define LCD_COLOR_OBJ_PIX						    	(0xFFF8FE99)
-#define LCD_COLOR_OBJ_BKG						    	(0xFF2C1916)
-#define LCD_COLOR_OBJ_GRID						    	(0xFF482F0C)
-
+// Blue OLED
+/*
+#define LCD_COLOR_OBJ_PIX						    	(0xFFF9EA22)
+#define LCD_COLOR_OBJ_BKG						    	(0xFF342628)
+#define LCD_COLOR_OBJ_GRID						    	(0xFF2A2835)
+*/
+// Blue LCD
 /*
 #define LCD_COLOR_OBJ_PIX						    	(0xFFFEF159)
 #define LCD_COLOR_OBJ_BKG						    	(0xFFFF3C24)
 #define LCD_COLOR_OBJ_GRID						    	(0xFFCC1209)
 */
+// Yellow LCD
+#define LCD_COLOR_OBJ_PIX						    	(0xFF258562)
+#define LCD_COLOR_OBJ_BKG						    	(0xFF2BEEDE)
+#define LCD_COLOR_OBJ_GRID						    	(0xFF38E3D0)
 
 #define PARAM_DEFAULT_PIXEL_NUM_H                       (128)
 #define PARAM_DEFAULT_PIXEL_NUM_V                       (64)
@@ -56,6 +61,6 @@ extern PixelPanelParameter			g_stParameters;
 //=======================================================================//
 //= Public function declaration.									    =//
 //=======================================================================//
-void SetDefaultParameterData(PixelPanelParameter* pstParameter);
+void SetLCDPanelParameter(PixelPanelParameter* pstParameter);
 
 #endif // _INCLUDE_LCD_COMMON_H_
